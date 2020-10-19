@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { graphql } from 'gatsby';
-import { Helmet } from 'react-helmet';
+import { graphql, PageProps } from 'gatsby';
 
 import Article from '../components/Article';
 import Page from '../components/Page';
+import { ArticleNode } from '../types';
 
 export const pageQuery = graphql`
     query ArticleTemplateQuery($id: String!) {
@@ -26,6 +26,15 @@ export const pageQuery = graphql`
     }
 `;
 
+type ArticleTemplateProps = PageProps<{
+    contentfulArticle: ArticleNode;
+    site: {
+        siteMetadata: {
+            title: string;
+        };
+    };
+}>;
+
 const ArticleTemplate = ({
     data: {
         contentfulArticle: { content, createdAt, tags, title },
@@ -33,10 +42,8 @@ const ArticleTemplate = ({
             siteMetadata: { title: siteTitle },
         },
     },
-    location,
-}) => (
-    <Page location={location}>
-        <Helmet title={`${title} | ${siteTitle}`} />
+}: ArticleTemplateProps) => (
+    <Page title={`${title} | ${siteTitle}`}>
         <Article
             content={content}
             createdAt={createdAt}

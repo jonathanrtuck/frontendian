@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { graphql } from 'gatsby';
-import { Helmet } from 'react-helmet';
+import { graphql, PageProps } from 'gatsby';
 
 import Page from '../components/Page';
 import Tags from '../components/Tags';
+import { Tag } from '../types';
 
 export const pageQuery = graphql`
     query TagsPageQuery {
@@ -19,6 +19,17 @@ export const pageQuery = graphql`
     }
 `;
 
+type TagsPageProps = PageProps<{
+    allContentfulArticle: {
+        distinct: Tag[];
+    };
+    site: {
+        siteMetadata: {
+            title: string;
+        };
+    };
+}>;
+
 const TagsPage = ({
     data: {
         allContentfulArticle: { distinct: tags },
@@ -26,10 +37,8 @@ const TagsPage = ({
             siteMetadata: { title: siteTitle },
         },
     },
-    location,
-}) => (
-    <Page location={location}>
-        <Helmet title={`Tags | ${siteTitle}`} />
+}: TagsPageProps) => (
+    <Page title={`Tags | ${siteTitle}`}>
         <main>
             <header>
                 <h1>Tags</h1>

@@ -3,8 +3,8 @@ const path = require('path');
 
 exports.createPages = ({ graphql, actions: { createPage } }) =>
     new Promise((resolve, reject) => {
-        const articleTemplate = path.resolve('./src/templates/article.js');
-        const tagTemplate = path.resolve('./src/templates/tag.js');
+        const articleTemplate = path.resolve('./src/templates/article.tsx');
+        const tagTemplate = path.resolve('./src/templates/tag.tsx');
 
         resolve(
             graphql(

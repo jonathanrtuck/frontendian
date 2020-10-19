@@ -1,0 +1,20 @@
+export type ArticleEdge = {
+    node: ArticleNode;
+};
+
+export type ArticleNode = {
+    content?: {
+        childMarkdownRemark: {
+            html: string;
+        };
+    };
+    contentfulid?: string;
+    createdAt: string;
+    description?: {
+        description: string;
+    };
+    tags: Tag[];
+    title: string;
+};
+
+export type Tag = string;

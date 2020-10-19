@@ -2,7 +2,13 @@ import React from 'react';
 
 import { Link } from 'gatsby';
 
-const Articles = ({ articles }) => (
+import { ArticleEdge } from '../types';
+
+type ArticlesProps = {
+    articles: ArticleEdge[];
+};
+
+const Articles = ({ articles }: ArticlesProps) => (
     <div>
         {articles.map(
             ({

@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { graphql, Link } from 'gatsby';
-import { Helmet } from 'react-helmet';
+import { graphql, Link, PageProps } from 'gatsby';
 
 import Articles from '../components/Articles';
 import Page from '../components/Page';
 import Tags from '../components/Tags';
+import { ArticleEdge, Tag } from '../types';
 
 export const pageQuery = graphql`
     query IndexPageQuery {
@@ -31,6 +31,18 @@ export const pageQuery = graphql`
     }
 `;
 
+type IndexPageProps = PageProps<{
+    allContentfulArticle: {
+        distinct: Tag[];
+        edges: ArticleEdge[];
+    };
+    site: {
+        siteMetadata: {
+            title: string;
+        };
+    };
+}>;
+
 const IndexPage = ({
     data: {
         allContentfulArticle: { distinct: tags, edges: articles },
@@ -38,10 +50,8 @@ const IndexPage = ({
             siteMetadata: { title: siteTitle },
         },
     },
-    location,
-}) => (
-    <Page location={location}>
-        <Helmet title={siteTitle} />
+}: IndexPageProps) => (
+    <Page title={siteTitle}>
         <main>
             <section>
                 <header>

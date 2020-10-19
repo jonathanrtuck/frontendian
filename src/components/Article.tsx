@@ -2,7 +2,11 @@ import React from 'react';
 
 import { Link } from 'gatsby';
 
-const Article = ({ content, createdAt, tags, title }) => (
+import { ArticleNode } from '../types';
+
+type ArticleProps = ArticleNode;
+
+const Article = ({ content, createdAt, tags, title }: ArticleProps) => (
     <article>
         <header>
             <h1>{title}</h1>
