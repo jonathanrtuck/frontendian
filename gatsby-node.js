@@ -3,17 +3,18 @@ const path = require('path');
 
 exports.createPages = ({ graphql, actions: { createPage } }) =>
     new Promise((resolve, reject) => {
-        const articleTemplate = path.resolve('./src/templates/article.js');
+        const articleTemplate = path.resolve('./src/templates/Article.js');
+        const tagTemplate = path.resolve('./src/templates/Tag.js');
 
         resolve(
             graphql(
                 `
                     {
                         allContentfulArticle {
+                            distinct(field: tags)
                             edges {
                                 node {
                                     contentfulid
-                                    title
                                 }
                             }
                         }
@@ -26,6 +27,18 @@ exports.createPages = ({ graphql, actions: { createPage } }) =>
                     reject(errors);
                 }
 
+                // create page for each tag
+                data.allContentfulArticle.distinct.forEach((tag) => {
+                    createPage({
+                        component: tagTemplate,
+                        context: {
+                            tag,
+                        },
+                        path: `/tags/${tag}`,
+                    });
+                });
+
+                // create page for each article
                 data.allContentfulArticle.edges.forEach(
                     ({ node: { contentfulid: id } }) => {
                         createPage({
@@ -33,7 +46,7 @@ exports.createPages = ({ graphql, actions: { createPage } }) =>
                             context: {
                                 id,
                             },
-                            path: id,
+                            path: `/articles/${id}`,
                         });
                     },
                 );

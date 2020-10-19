@@ -1,16 +1,14 @@
 import React from 'react';
 
-import { graphql, Link } from 'gatsby';
+import { graphql } from 'gatsby';
 import { Helmet } from 'react-helmet';
 
 import Articles from '../components/Articles';
 import Page from '../components/Page';
-import Tags from '../components/Tags';
 
 export const pageQuery = graphql`
-    query IndexPageQuery {
+    query ArticlesPageQuery {
         allContentfulArticle(sort: { fields: [createdAt], order: DESC }) {
-            distinct(field: tags)
             edges {
                 node {
                     contentfulid
@@ -31,9 +29,9 @@ export const pageQuery = graphql`
     }
 `;
 
-const IndexPage = ({
+const ArticlesPage = ({
     data: {
-        allContentfulArticle: { distinct: tags, edges: articles },
+        allContentfulArticle: { edges: articles },
         site: {
             siteMetadata: { title: siteTitle },
         },
@@ -41,26 +39,14 @@ const IndexPage = ({
     location,
 }) => (
     <Page location={location}>
-        <Helmet title={siteTitle} />
+        <Helmet title={`Articles | ${siteTitle}`} />
         <main>
-            <section>
-                <header>
-                    <h1>
-                        <Link to="/articles">Articles</Link>
-                    </h1>
-                </header>
-                <Articles articles={articles} />
-            </section>
-            <section>
-                <header>
-                    <h1>
-                        <Link to="/tags">Tags</Link>
-                    </h1>
-                </header>
-                <Tags tags={tags} />
-            </section>
+            <header>
+                <h1>Articles</h1>
+            </header>
+            <Articles articles={articles} />
         </main>
     </Page>
 );
 
-export default IndexPage;
+export default ArticlesPage;

@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { graphql } from 'gatsby';
+import { graphql, Link } from 'gatsby';
 import { Helmet } from 'react-helmet';
 
+import Article from '../components/Article';
 import Page from '../components/Page';
 
 export const pageQuery = graphql`
-    query ArticleById($id: String!) {
+    query ArticleTemplateQuery($id: String!) {
         contentfulArticle(contentfulid: { eq: $id }) {
             content {
                 childMarkdownRemark {
@@ -14,6 +15,7 @@ export const pageQuery = graphql`
                 }
             }
             createdAt(formatString: "MMMM Do, YYYY")
+            tags
             title
         }
         site {
@@ -24,9 +26,9 @@ export const pageQuery = graphql`
     }
 `;
 
-const Article = ({
+const ArticleTemplate = ({
     data: {
-        contentfulArticle: { content, createdAt, title },
+        contentfulArticle: { content, createdAt, tags, title },
         site: {
             siteMetadata: { title: siteTitle },
         },
@@ -35,18 +37,13 @@ const Article = ({
 }) => (
     <Page location={location}>
         <Helmet title={`${title} | ${siteTitle}`} />
-        <article>
-            <header>
-                <h1>{title}</h1>
-                <small>{createdAt}</small>
-            </header>
-            <div
-                dangerouslySetInnerHTML={{
-                    __html: content.childMarkdownRemark.html,
-                }}
-            />
-        </article>
+        <Article
+            content={content}
+            createdAt={createdAt}
+            tags={tags}
+            title={title}
+        />
     </Page>
 );
 
-export default Article;
+export default ArticleTemplate;
