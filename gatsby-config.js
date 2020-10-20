@@ -26,6 +26,7 @@ if (!spaceId || !accessToken) {
 module.exports = {
     pathPrefix: '/frontendian',
     plugins: [
+        'gatsby-theme-material-ui',
         'gatsby-transformer-remark',
         'gatsby-plugin-react-helmet',
         {
