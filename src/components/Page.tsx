@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { Helmet } from 'react-helmet';
 
 import Header from './Header';
-
-import './Page.css';
 
 type PageProps = {
     children: ReactNode;
@@ -13,9 +13,12 @@ type PageProps = {
 
 const Page = ({ children, title }: PageProps) => (
     <>
-        <Helmet title={title} />
-        <Header />
-        {children}
+        <CssBaseline />
+        <Container maxWidth="md">
+            <Helmet title={title} />
+            <Header />
+            {children}
+        </Container>
     </>
 );
 
