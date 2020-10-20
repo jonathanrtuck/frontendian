@@ -1,9 +1,14 @@
 import { createMuiTheme } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
-    //   palette: {
-    //     type: 'dark',
-    //   },
+    palette: {
+        primary: {
+            dark: grey[900],
+            light: grey[100],
+            main: grey[500],
+        },
+    },
 });
 
 export default theme;

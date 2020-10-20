@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Box, Container, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
 
 import Articles from '../components/Articles';
@@ -58,12 +59,16 @@ const TagTemplate = ({
     pageContext: { tag },
 }: TagTemplateProps) => (
     <Page title={`${tag} | ${siteTitle}`}>
-        <main>
-            <header>
-                <h1>{tag}</h1>
-            </header>
-            <Articles articles={articles} />
-        </main>
+        <Container component="main" maxWidth="md">
+            <Box marginY={4}>
+                <header>
+                    <Typography color="textPrimary" component="h1" variant="h3">
+                        {tag}
+                    </Typography>
+                </header>
+                <Articles articles={articles} />
+            </Box>
+        </Container>
     </Page>
 );
 

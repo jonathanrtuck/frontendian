@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Container } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
 
 import Page from '../components/Page';
@@ -30,11 +31,11 @@ const NotFoundPage = ({
     },
 }: NotFoundPageProps) => (
     <Page title={`Not Found | ${siteTitle}`}>
-        <main>
+        <Container component="main" maxWidth="md">
             <header>
                 <h1>Page Not Found</h1>
             </header>
-        </main>
+        </Container>
     </Page>
 );
 

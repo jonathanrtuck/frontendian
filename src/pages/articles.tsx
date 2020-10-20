@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Box, Container, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
 
 import Articles from '../components/Articles';
@@ -49,12 +50,16 @@ const ArticlesPage = ({
     },
 }: ArticlesPageProps) => (
     <Page title={`Articles | ${siteTitle}`}>
-        <main>
-            <header>
-                <h1>Articles</h1>
-            </header>
-            <Articles articles={articles} />
-        </main>
+        <Container component="main" maxWidth="md">
+            <Box marginY={4}>
+                <header>
+                    <Typography color="textPrimary" component="h1" variant="h3">
+                        Articles
+                    </Typography>
+                </header>
+                <Articles articles={articles} />
+            </Box>
+        </Container>
     </Page>
 );
 

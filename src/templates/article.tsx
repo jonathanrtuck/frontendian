@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Box, Container } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
 
 import Article from '../components/Article';
@@ -44,12 +45,16 @@ const ArticleTemplate = ({
     },
 }: ArticleTemplateProps) => (
     <Page title={`${title} | ${siteTitle}`}>
-        <Article
-            content={content}
-            createdAt={createdAt}
-            tags={tags}
-            title={title}
-        />
+        <Container component="article" maxWidth="md">
+            <Box marginY={4}>
+                <Article
+                    content={content}
+                    createdAt={createdAt}
+                    tags={tags}
+                    title={title}
+                />
+            </Box>
+        </Container>
     </Page>
 );
 

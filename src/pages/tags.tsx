@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Box, Container, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
 
 import Page from '../components/Page';
@@ -39,12 +40,16 @@ const TagsPage = ({
     },
 }: TagsPageProps) => (
     <Page title={`Tags | ${siteTitle}`}>
-        <main>
-            <header>
-                <h1>Tags</h1>
-            </header>
-            <Tags tags={tags} />
-        </main>
+        <Container component="main" maxWidth="md">
+            <Box marginY={4}>
+                <header>
+                    <Typography color="textPrimary" component="h1" variant="h3">
+                        Tags
+                    </Typography>
+                </header>
+                <Tags tags={tags} />
+            </Box>
+        </Container>
     </Page>
 );
 

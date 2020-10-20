@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Link } from 'gatsby';
+import { List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import { Link } from 'gatsby-theme-material-ui';
 
 import { ArticleEdge } from '../types';
 
@@ -9,7 +10,7 @@ type ArticlesProps = {
 };
 
 const Articles = ({ articles }: ArticlesProps) => (
-    <div>
+    <List>
         {articles.map(
             ({
                 node: {
@@ -19,18 +20,43 @@ const Articles = ({ articles }: ArticlesProps) => (
                     title,
                 },
             }) => (
-                <article key={id}>
-                    <header>
-                        <h2>
-                            <Link to={`/articles/${id}`}>{title}</Link>
-                        </h2>
-                        <small>{createdAt}</small>
-                    </header>
-                    <p>{description}</p>
-                </article>
+                <ListItem
+                    button
+                    component={Link}
+                    key={id}
+                    to={`/articles/${id}`}
+                    underline="none"
+                >
+                    <article>
+                        <ListItemText
+                            primary={
+                                <>
+                                    <Typography
+                                        color="textPrimary"
+                                        component="h2"
+                                        variant="h5"
+                                    >
+                                        {title}
+                                    </Typography>
+                                    <Typography
+                                        color="textSecondary"
+                                        component="small"
+                                        variant="overline"
+                                    >
+                                        {createdAt}
+                                    </Typography>
+                                </>
+                            }
+                            primaryTypographyProps={{
+                                component: 'header',
+                            }}
+                            secondary={description}
+                        />
+                    </article>
+                </ListItem>
             ),
         )}
-    </div>
+    </List>
 );
 
 export default Articles;

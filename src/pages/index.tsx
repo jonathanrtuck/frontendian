@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { graphql, Link, PageProps } from 'gatsby';
+import { Box, Container, Typography } from '@material-ui/core';
+import { graphql, PageProps } from 'gatsby';
+import { Link } from 'gatsby-theme-material-ui';
 
 import Articles from '../components/Articles';
 import Page from '../components/Page';
@@ -52,24 +54,38 @@ const IndexPage = ({
     },
 }: IndexPageProps) => (
     <Page title={siteTitle}>
-        <main>
-            <section>
+        <Container component="main" maxWidth="md">
+            <Box component="section" marginY={4}>
                 <header>
-                    <h1>
-                        <Link to="/articles">Articles</Link>
-                    </h1>
+                    <Typography component="h1">
+                        <Link
+                            color="textPrimary"
+                            to="/articles"
+                            underline="none"
+                            variant="h3"
+                        >
+                            Articles
+                        </Link>
+                    </Typography>
                 </header>
                 <Articles articles={articles} />
-            </section>
-            <section>
+            </Box>
+            <Box component="section" marginY={4}>
                 <header>
-                    <h1>
-                        <Link to="/tags">Tags</Link>
-                    </h1>
+                    <Typography component="h1">
+                        <Link
+                            color="textPrimary"
+                            to="/tags"
+                            underline="none"
+                            variant="h3"
+                        >
+                            Tags
+                        </Link>
+                    </Typography>
                 </header>
                 <Tags tags={tags} />
-            </section>
-        </main>
+            </Box>
+        </Container>
     </Page>
 );
 

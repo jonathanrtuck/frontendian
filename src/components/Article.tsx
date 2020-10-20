@@ -1,30 +1,35 @@
 import React from 'react';
 
-import { Link } from 'gatsby';
+import { Box, Typography } from '@material-ui/core';
 
+import Tags from '../components/Tags';
 import { ArticleNode } from '../types';
 
 type ArticleProps = ArticleNode;
 
 const Article = ({ content, createdAt, tags, title }: ArticleProps) => (
-    <article>
-        <header>
-            <h1>{title}</h1>
-            <small>{createdAt}</small>
-        </header>
+    <>
+        <Box component="header" marginBottom={6}>
+            <Typography color="textPrimary" component="h1" variant="h3">
+                {title}
+            </Typography>
+            <Typography
+                color="textSecondary"
+                component="small"
+                variant="subtitle1"
+            >
+                {createdAt}
+            </Typography>
+        </Box>
         <div
             dangerouslySetInnerHTML={{
                 __html: content.childMarkdownRemark.html,
             }}
         />
-        <footer>
-            {tags.sort().map((tag) => (
-                <Link key={tag} rel="tag" to={`/tags/${tag}`}>
-                    {tag}
-                </Link>
-            ))}
-        </footer>
-    </article>
+        <Box component="footer" marginTop={8}>
+            <Tags tags={tags} />
+        </Box>
+    </>
 );
 
 export default Article;
