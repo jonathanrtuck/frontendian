@@ -38,18 +38,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type IndexPageProps = PageProps<{
-    allContentfulArticle: {
-        distinct: Tag[];
-        edges: ArticleEdge[];
-    };
-}>;
-
 const IndexPage = ({
     data: {
         allContentfulArticle: { distinct: tags, edges: articles },
     },
-}: IndexPageProps) => {
+}: PageProps<{
+    allContentfulArticle: {
+        distinct: Tag[];
+        edges: ArticleEdge[];
+    };
+}>) => {
     const classes = useStyles();
 
     return (

@@ -3,18 +3,20 @@ export type ArticleEdge = {
 };
 
 export type ArticleNode = {
-    content?: {
+    content: {
         childMdx: {
             body: string;
         };
     };
-    contentfulid?: string;
+    contentfulid: ID;
     createdAt: string;
-    description?: {
+    description: {
         description: string;
     };
     tags: Tag[];
     title: string;
 };
+
+export type ID = string;
 
 export type Tag = string;

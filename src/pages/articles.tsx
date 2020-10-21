@@ -26,17 +26,15 @@ export const pageQuery = graphql`
     }
 `;
 
-type ArticlesPageProps = PageProps<{
-    allContentfulArticle: {
-        edges: ArticleEdge[];
-    };
-}>;
-
 const ArticlesPage = ({
     data: {
         allContentfulArticle: { edges: articles },
     },
-}: ArticlesPageProps) => (
+}: PageProps<{
+    allContentfulArticle: {
+        edges: ArticleEdge[];
+    };
+}>) => (
     <Page title="Articles">
         <Helmet>
             <meta name="description" content="List of all articles" />

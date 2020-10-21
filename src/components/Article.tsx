@@ -15,9 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type ArticleProps = ArticleNode;
-
-const Article = ({ content, createdAt, tags, title }: ArticleProps) => {
+const Article = ({ content, createdAt, tags, title }: Partial<ArticleNode>) => {
     const classes = useStyles();
 
     return (

@@ -13,13 +13,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type PageProps = {
+const Page = ({
+    children,
+    component = 'main',
+    title,
+}: {
     children: ReactNode;
     component?: ElementType;
     title?: string;
-};
-
-const Page = ({ children, component = 'main', title }: PageProps) => {
+}) => {
     const classes = useStyles();
     const siteTitle = useSiteTitle();
 

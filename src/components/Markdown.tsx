@@ -27,11 +27,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type MdxProps = {
-    content: string;
-};
-
-const Markdown = ({ content }: MdxProps) => {
+const Markdown = ({ content }: { content: string }) => {
     const classes = useStyles();
 
     return (

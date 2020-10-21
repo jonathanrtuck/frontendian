@@ -29,7 +29,12 @@ export const pageQuery = graphql`
     }
 `;
 
-type TagTemplateProps = PageProps<
+const TagTemplate = ({
+    data: {
+        allContentfulArticle: { edges: articles },
+    },
+    pageContext: { tag },
+}: PageProps<
     {
         allContentfulArticle: {
             edges: ArticleEdge[];
@@ -38,14 +43,7 @@ type TagTemplateProps = PageProps<
     {
         tag: string;
     }
->;
-
-const TagTemplate = ({
-    data: {
-        allContentfulArticle: { edges: articles },
-    },
-    pageContext: { tag },
-}: TagTemplateProps) => (
+>) => (
     <Page title={tag}>
         <Helmet>
             <meta

@@ -22,17 +22,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type TagsPageProps = PageProps<{
-    allContentfulArticle: {
-        distinct: Tag[];
-    };
-}>;
-
 const TagsPage = ({
     data: {
         allContentfulArticle: { distinct: tags },
     },
-}: TagsPageProps) => {
+}: PageProps<{
+    allContentfulArticle: {
+        distinct: Tag[];
+    };
+}>) => {
     const classes = useStyles();
 
     return (

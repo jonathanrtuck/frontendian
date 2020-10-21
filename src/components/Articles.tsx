@@ -5,11 +5,7 @@ import { Link } from 'gatsby-theme-material-ui';
 
 import { ArticleEdge } from '../types';
 
-type ArticlesProps = {
-    articles: ArticleEdge[];
-};
-
-const Articles = ({ articles }: ArticlesProps) => (
+const Articles = ({ articles }: { articles: ArticleEdge[] }) => (
     <List>
         {articles.map(
             ({

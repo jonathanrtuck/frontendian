@@ -21,12 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type TagsProps = {
-    className?: string;
-    tags: Tag[];
-};
-
-const Tags = ({ className, tags }: TagsProps) => {
+const Tags = ({ className, tags }: { className?: string; tags: Tag[] }) => {
     const classes = useStyles();
 
     return (

@@ -25,15 +25,13 @@ export const pageQuery = graphql`
     }
 `;
 
-type ArticleTemplateProps = PageProps<{
-    contentfulArticle: ArticleNode;
-}>;
-
 const ArticleTemplate = ({
     data: {
         contentfulArticle: { content, createdAt, description, tags, title },
     },
-}: ArticleTemplateProps) => (
+}: PageProps<{
+    contentfulArticle: Partial<ArticleNode>;
+}>) => (
     <Page component="article" title={title}>
         <Helmet>
             <meta name="description" content={description.description} />
