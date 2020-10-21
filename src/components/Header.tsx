@@ -38,7 +38,6 @@ const Header = () => {
                     </Link>
                 </Typography>
                 <a
-                    aria-label=""
                     className={classes.link}
                     href="https://github.com/jonathanrtuck/frontendian"
                     rel="external"
