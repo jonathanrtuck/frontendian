@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Container, Typography } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
 import { Link } from 'gatsby-theme-material-ui';
 
@@ -25,37 +25,35 @@ export const pageQuery = graphql`
                 }
             }
         }
-        site {
-            siteMetadata {
-                title
-            }
-        }
     }
 `;
+
+const useStyles = makeStyles((theme) => ({
+    tags: {
+        marginTop: theme.spacing(2),
+    },
+    tagsSection: {
+        marginTop: theme.spacing(4),
+    },
+}));
 
 type IndexPageProps = PageProps<{
     allContentfulArticle: {
         distinct: Tag[];
         edges: ArticleEdge[];
     };
-    site: {
-        siteMetadata: {
-            title: string;
-        };
-    };
 }>;
 
 const IndexPage = ({
     data: {
         allContentfulArticle: { distinct: tags, edges: articles },
-        site: {
-            siteMetadata: { title: siteTitle },
-        },
     },
-}: IndexPageProps) => (
-    <Page title={siteTitle}>
-        <Container component="main" maxWidth="md">
-            <Box component="section" marginY={4}>
+}: IndexPageProps) => {
+    const classes = useStyles();
+
+    return (
+        <Page>
+            <section>
                 <header>
                     <Typography component="h1">
                         <Link
@@ -69,8 +67,8 @@ const IndexPage = ({
                     </Typography>
                 </header>
                 <Articles articles={articles} />
-            </Box>
-            <Box component="section" marginY={4}>
+            </section>
+            <section className={classes.tagsSection}>
                 <header>
                     <Typography component="h1">
                         <Link
@@ -83,10 +81,10 @@ const IndexPage = ({
                         </Link>
                     </Typography>
                 </header>
-                <Tags tags={tags} />
-            </Box>
-        </Container>
-    </Page>
-);
+                <Tags className={classes.tags} tags={tags} />
+            </section>
+        </Page>
+    );
+};
 
 export default IndexPage;

@@ -1,41 +1,14 @@
 import React from 'react';
 
-import { Container } from '@material-ui/core';
-import { graphql, PageProps } from 'gatsby';
+import { Typography } from '@material-ui/core';
 
 import Page from '../components/Page';
 
-export const pageQuery = graphql`
-    query NotFoundPageQuery {
-        site {
-            siteMetadata {
-                title
-            }
-        }
-    }
-`;
-
-type NotFoundPageProps = PageProps<{
-    site: {
-        siteMetadata: {
-            title: string;
-        };
-    };
-}>;
-
-const NotFoundPage = ({
-    data: {
-        site: {
-            siteMetadata: { title: siteTitle },
-        },
-    },
-}: NotFoundPageProps) => (
-    <Page title={`Not Found | ${siteTitle}`}>
-        <Container component="main" maxWidth="md">
-            <header>
-                <h1>Page Not Found</h1>
-            </header>
-        </Container>
+const NotFoundPage = () => (
+    <Page title="Not Found">
+        <Typography color="textPrimary" component="h1" variant="h3">
+            Page Not Found
+        </Typography>
     </Page>
 );
 

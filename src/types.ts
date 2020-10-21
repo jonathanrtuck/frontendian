@@ -4,8 +4,8 @@ export type ArticleEdge = {
 
 export type ArticleNode = {
     content?: {
-        childMarkdownRemark: {
-            html: string;
+        childMdx: {
+            body: string;
         };
     };
     contentfulid?: string;

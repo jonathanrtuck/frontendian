@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Container, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
 
 import Articles from '../components/Articles';
@@ -25,11 +25,6 @@ export const pageQuery = graphql`
                 }
             }
         }
-        site {
-            siteMetadata {
-                title
-            }
-        }
     }
 `;
 
@@ -37,11 +32,6 @@ type TagTemplateProps = PageProps<
     {
         allContentfulArticle: {
             edges: ArticleEdge[];
-        };
-        site: {
-            siteMetadata: {
-                title: string;
-            };
         };
     },
     {
@@ -52,23 +42,16 @@ type TagTemplateProps = PageProps<
 const TagTemplate = ({
     data: {
         allContentfulArticle: { edges: articles },
-        site: {
-            siteMetadata: { title: siteTitle },
-        },
     },
     pageContext: { tag },
 }: TagTemplateProps) => (
-    <Page title={`${tag} | ${siteTitle}`}>
-        <Container component="main" maxWidth="md">
-            <Box marginY={4}>
-                <header>
-                    <Typography color="textPrimary" component="h1" variant="h3">
-                        {tag}
-                    </Typography>
-                </header>
-                <Articles articles={articles} />
-            </Box>
-        </Container>
+    <Page title={tag}>
+        <header>
+            <Typography color="textPrimary" component="h1" variant="h3">
+                {tag}
+            </Typography>
+        </header>
+        <Articles articles={articles} />
     </Page>
 );
 

@@ -26,15 +26,15 @@ if (!spaceId || !accessToken) {
 module.exports = {
     pathPrefix: '/frontendian',
     plugins: [
-        'gatsby-theme-material-ui',
-        'gatsby-transformer-remark',
+        'gatsby-plugin-mdx',
         'gatsby-plugin-react-helmet',
         {
             resolve: 'gatsby-source-contentful',
             options: contentfulConfig,
         },
+        'gatsby-theme-material-ui',
     ],
     siteMetadata: {
-        title: 'Frontendian',
+        title: 'frontendian',
     },
 };

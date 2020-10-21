@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Container, Typography } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
 
 import Page from '../components/Page';
@@ -12,45 +12,38 @@ export const pageQuery = graphql`
         allContentfulArticle {
             distinct(field: tags)
         }
-        site {
-            siteMetadata {
-                title
-            }
-        }
     }
 `;
+
+const useStyles = makeStyles((theme) => ({
+    tags: {
+        marginTop: theme.spacing(2),
+    },
+}));
 
 type TagsPageProps = PageProps<{
     allContentfulArticle: {
         distinct: Tag[];
-    };
-    site: {
-        siteMetadata: {
-            title: string;
-        };
     };
 }>;
 
 const TagsPage = ({
     data: {
         allContentfulArticle: { distinct: tags },
-        site: {
-            siteMetadata: { title: siteTitle },
-        },
     },
-}: TagsPageProps) => (
-    <Page title={`Tags | ${siteTitle}`}>
-        <Container component="main" maxWidth="md">
-            <Box marginY={4}>
-                <header>
-                    <Typography color="textPrimary" component="h1" variant="h3">
-                        Tags
-                    </Typography>
-                </header>
-                <Tags tags={tags} />
-            </Box>
-        </Container>
-    </Page>
-);
+}: TagsPageProps) => {
+    const classes = useStyles();
+
+    return (
+        <Page title="Tags">
+            <header>
+                <Typography color="textPrimary" component="h1" variant="h3">
+                    Tags
+                </Typography>
+            </header>
+            <Tags className={classes.tags} tags={tags} />
+        </Page>
+    );
+};
 
 export default TagsPage;

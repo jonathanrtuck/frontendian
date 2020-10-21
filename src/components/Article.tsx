@@ -1,35 +1,45 @@
 import React from 'react';
 
-import { Box, Typography } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 
+import Markdown from '../components/Markdown';
 import Tags from '../components/Tags';
 import { ArticleNode } from '../types';
 
+const useStyles = makeStyles((theme) => ({
+    footer: {
+        marginTop: theme.spacing(8),
+    },
+    header: {
+        marginBottom: theme.spacing(6),
+    },
+}));
+
 type ArticleProps = ArticleNode;
 
-const Article = ({ content, createdAt, tags, title }: ArticleProps) => (
-    <>
-        <Box component="header" marginBottom={6}>
-            <Typography color="textPrimary" component="h1" variant="h3">
-                {title}
-            </Typography>
-            <Typography
-                color="textSecondary"
-                component="small"
-                variant="subtitle1"
-            >
-                {createdAt}
-            </Typography>
-        </Box>
-        <div
-            dangerouslySetInnerHTML={{
-                __html: content.childMarkdownRemark.html,
-            }}
-        />
-        <Box component="footer" marginTop={8}>
-            <Tags tags={tags} />
-        </Box>
-    </>
-);
+const Article = ({ content, createdAt, tags, title }: ArticleProps) => {
+    const classes = useStyles();
+
+    return (
+        <>
+            <header className={classes.header}>
+                <Typography color="textPrimary" component="h1" variant="h3">
+                    {title}
+                </Typography>
+                <Typography
+                    color="textSecondary"
+                    component="small"
+                    variant="subtitle1"
+                >
+                    {createdAt}
+                </Typography>
+            </header>
+            <Markdown content={content.childMdx.body} />
+            <footer className={classes.footer}>
+                <Tags tags={tags} />
+            </footer>
+        </>
+    );
+};
 
 export default Article;
