@@ -6,19 +6,26 @@ import { MDXProvider } from '@mdx-js/react';
 import { paramCase } from 'change-case';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 
-const useStyles = makeStyles({
-    aIcon: {
-        fontSize: '.75em',
-        marginLeft: '.1em',
-        verticalAlign: 'top',
+const useStyles = makeStyles((theme) => ({
+    heading: {
+        '&:hover $headingLink': {
+            display: 'inline-block',
+        },
     },
     headingIcon: {
         verticalAlign: 'middle',
     },
     headingLink: {
         color: 'inherit',
+        display: 'none',
+        marginLeft: theme.spacing(1),
     },
-});
+    linkIcon: {
+        fontSize: '.75em',
+        marginLeft: '.1em',
+        verticalAlign: 'top',
+    },
+}));
 
 type MdxProps = {
     content: string;
@@ -40,7 +47,7 @@ const Markdown = ({ content }: MdxProps) => {
                         variant="inherit"
                     >
                         {children}
-                        <OpenInNewOutlined className={classes.aIcon} />
+                        <OpenInNewOutlined className={classes.linkIcon} />
                     </Typography>
                 ),
                 h2: ({ children }) => {
@@ -48,6 +55,7 @@ const Markdown = ({ content }: MdxProps) => {
 
                     return (
                         <Typography
+                            className={classes.heading}
                             color="textPrimary"
                             component="h2"
                             gutterBottom
@@ -66,6 +74,7 @@ const Markdown = ({ content }: MdxProps) => {
 
                     return (
                         <Typography
+                            className={classes.heading}
                             color="textPrimary"
                             component="h3"
                             gutterBottom
@@ -84,6 +93,7 @@ const Markdown = ({ content }: MdxProps) => {
 
                     return (
                         <Typography
+                            className={classes.heading}
                             color="textPrimary"
                             component="h4"
                             gutterBottom
