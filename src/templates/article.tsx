@@ -15,7 +15,7 @@ export const pageQuery = graphql`
                     body
                 }
             }
-            createdAt(formatString: "MMMM Do, YYYY")
+            createdAt(formatString: "LL", locale: "en-US")
             description {
                 description
             }

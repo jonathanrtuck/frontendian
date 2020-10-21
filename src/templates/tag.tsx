@@ -17,7 +17,7 @@ export const pageQuery = graphql`
             edges {
                 node {
                     contentfulid
-                    createdAt(formatString: "MMMM Do, YYYY")
+                    createdAt(formatString: "LL", locale: "en-US")
                     description {
                         description
                     }
