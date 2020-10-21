@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { makeStyles, Typography } from '@material-ui/core';
-import { OpenInNewOutlined } from '@material-ui/icons';
+import { Link, OpenInNewOutlined } from '@material-ui/icons';
 import { MDXProvider } from '@mdx-js/react';
+import { paramCase } from 'change-case';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 
 const useStyles = makeStyles({
@@ -10,6 +11,12 @@ const useStyles = makeStyles({
         fontSize: '.75em',
         marginLeft: '.1em',
         verticalAlign: 'top',
+    },
+    headingIcon: {
+        verticalAlign: 'middle',
+    },
+    headingLink: {
+        color: 'inherit',
     },
 });
 
@@ -36,36 +43,60 @@ const Markdown = ({ content }: MdxProps) => {
                         <OpenInNewOutlined className={classes.aIcon} />
                     </Typography>
                 ),
-                h2: ({ children }) => (
-                    <Typography
-                        color="textPrimary"
-                        component="h2"
-                        gutterBottom
-                        variant="h4"
-                    >
-                        {children}
-                    </Typography>
-                ),
-                h3: ({ children }) => (
-                    <Typography
-                        color="textPrimary"
-                        component="h3"
-                        gutterBottom
-                        variant="h5"
-                    >
-                        {children}
-                    </Typography>
-                ),
-                h4: ({ children }) => (
-                    <Typography
-                        color="textPrimary"
-                        component="h4"
-                        gutterBottom
-                        variant="h6"
-                    >
-                        {children}
-                    </Typography>
-                ),
+                h2: ({ children }) => {
+                    const id = paramCase(children);
+
+                    return (
+                        <Typography
+                            color="textPrimary"
+                            component="h2"
+                            gutterBottom
+                            id={id}
+                            variant="h4"
+                        >
+                            {children}
+                            <a className={classes.headingLink} href={`#${id}`}>
+                                <Link className={classes.headingIcon} />
+                            </a>
+                        </Typography>
+                    );
+                },
+                h3: ({ children }) => {
+                    const id = paramCase(children);
+
+                    return (
+                        <Typography
+                            color="textPrimary"
+                            component="h3"
+                            gutterBottom
+                            id={id}
+                            variant="h5"
+                        >
+                            {children}
+                            <a className={classes.headingLink} href={`#${id}`}>
+                                <Link className={classes.headingIcon} />
+                            </a>
+                        </Typography>
+                    );
+                },
+                h4: ({ children }) => {
+                    const id = paramCase(children);
+
+                    return (
+                        <Typography
+                            color="textPrimary"
+                            component="h4"
+                            gutterBottom
+                            id={id}
+                            variant="h6"
+                        >
+                            {children}
+                            <a className={classes.headingLink} href={`#${id}`}>
+                                <Link className={classes.headingIcon} />
+                            </a>
+                        </Typography>
+                    );
+                },
                 li: ({ children }) => (
                     <Typography
                         color="textPrimary"
