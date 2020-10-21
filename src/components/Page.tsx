@@ -25,7 +25,12 @@ const Page = ({ children, component = 'main', title }: PageProps) => {
 
     return (
         <>
-            <Helmet title={title ? `${title} ・ ${siteTitle}` : siteTitle} />
+            <Helmet
+                htmlAttributes={{
+                    lang: 'en',
+                }}
+                title={title ? `${title} ・ ${siteTitle}` : siteTitle}
+            />
             <Header />
             <Container
                 className={classes.container}

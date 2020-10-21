@@ -20,39 +20,39 @@ const Articles = ({ articles }: ArticlesProps) => (
                     title,
                 },
             }) => (
-                <ListItem
-                    button
-                    component={Link}
-                    key={id}
-                    to={`/articles/${id}`}
-                    underline="none"
-                >
-                    <article>
-                        <ListItemText
-                            primary={
-                                <>
-                                    <Typography
-                                        color="textPrimary"
-                                        component="h2"
-                                        variant="h5"
-                                    >
-                                        {title}
-                                    </Typography>
-                                    <Typography
-                                        color="textSecondary"
-                                        component="small"
-                                        variant="overline"
-                                    >
-                                        {createdAt}
-                                    </Typography>
-                                </>
-                            }
-                            primaryTypographyProps={{
-                                component: 'header',
-                            }}
-                            secondary={description}
-                        />
-                    </article>
+                <ListItem button component="li" key={id} role="listitem">
+                    <Link
+                        aria-label={title}
+                        to={`/articles/${id}`}
+                        underline="none"
+                    >
+                        <article>
+                            <ListItemText
+                                primary={
+                                    <>
+                                        <Typography
+                                            color="textPrimary"
+                                            component="h2"
+                                            variant="h5"
+                                        >
+                                            {title}
+                                        </Typography>
+                                        <Typography
+                                            color="textSecondary"
+                                            component="small"
+                                            variant="overline"
+                                        >
+                                            {createdAt}
+                                        </Typography>
+                                    </>
+                                }
+                                primaryTypographyProps={{
+                                    component: 'header',
+                                }}
+                                secondary={description}
+                            />
+                        </article>
+                    </Link>
                 </ListItem>
             ),
         )}

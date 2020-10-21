@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Box } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
+import { Helmet } from 'react-helmet';
 
 import Article from '../components/Article';
 import Page from '../components/Page';
@@ -16,6 +16,9 @@ export const pageQuery = graphql`
                 }
             }
             createdAt(formatString: "MMMM Do, YYYY")
+            description {
+                description
+            }
             tags
             title
         }
@@ -28,13 +31,17 @@ type ArticleTemplateProps = PageProps<{
 
 const ArticleTemplate = ({
     data: {
-        contentfulArticle: { content, createdAt, tags, title },
+        contentfulArticle: { content, createdAt, description, tags, title },
     },
 }: ArticleTemplateProps) => (
     <Page component="article" title={title}>
+        <Helmet>
+            <meta name="description" content={description.description} />
+        </Helmet>
         <Article
             content={content}
             createdAt={createdAt}
+            description={description}
             tags={tags}
             title={title}
         />

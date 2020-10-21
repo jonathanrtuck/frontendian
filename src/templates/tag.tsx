@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Box, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
+import { Helmet } from 'react-helmet';
 
 import Articles from '../components/Articles';
 import Page from '../components/Page';
@@ -46,6 +47,12 @@ const TagTemplate = ({
     pageContext: { tag },
 }: TagTemplateProps) => (
     <Page title={tag}>
+        <Helmet>
+            <meta
+                name="description"
+                content={`List of articles tagged with ${tag}`}
+            />
+        </Helmet>
         <header>
             <Typography color="textPrimary" component="h1" variant="h3">
                 {tag}

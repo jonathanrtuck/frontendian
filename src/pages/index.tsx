@@ -3,6 +3,7 @@ import React from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
 import { Link } from 'gatsby-theme-material-ui';
+import { Helmet } from 'react-helmet';
 
 import Articles from '../components/Articles';
 import Page from '../components/Page';
@@ -53,6 +54,12 @@ const IndexPage = ({
 
     return (
         <Page>
+            <Helmet>
+                <meta
+                    name="description"
+                    content="List of all articles and all tags"
+                />
+            </Helmet>
             <section>
                 <header>
                     <Typography component="h1">

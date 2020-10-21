@@ -2,6 +2,7 @@ import React from 'react';
 
 import { makeStyles, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
+import { Helmet } from 'react-helmet';
 
 import Page from '../components/Page';
 import Tags from '../components/Tags';
@@ -36,6 +37,9 @@ const TagsPage = ({
 
     return (
         <Page title="Tags">
+            <Helmet>
+                <meta name="description" content="List of all tags" />
+            </Helmet>
             <header>
                 <Typography color="textPrimary" component="h1" variant="h3">
                     Tags
