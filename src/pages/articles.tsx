@@ -6,21 +6,19 @@ import { Helmet } from 'react-helmet';
 
 import Articles from '../components/Articles';
 import Page from '../components/Page';
-import { ArticleEdge } from '../types';
+import { Article } from '../types';
 
 export const pageQuery = graphql`
     query ArticlesPageQuery {
         allContentfulArticle(sort: { fields: [createdAt], order: DESC }) {
-            edges {
-                node {
-                    contentfulid
-                    createdAt(formatString: "LL", locale: "en-US")
-                    description {
-                        description
-                    }
-                    tags
-                    title
+            nodes {
+                createdAt
+                description {
+                    description
                 }
+                id: contentfulid
+                tags
+                title
             }
         }
     }
@@ -28,11 +26,11 @@ export const pageQuery = graphql`
 
 const ArticlesPage = ({
     data: {
-        allContentfulArticle: { edges: articles },
+        allContentfulArticle: { nodes: articles },
     },
 }: PageProps<{
     allContentfulArticle: {
-        edges: ArticleEdge[];
+        nodes: Partial<Article>[];
     };
 }>) => (
     <Page title="Articles">

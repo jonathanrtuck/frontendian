@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     heading: {
         flexGrow: 1,
     },
-    headingLink: {
+    heading__link: {
         color: '#fff',
         fontWeight: 300,
     },
@@ -29,7 +29,7 @@ const Header = () => {
             <Toolbar>
                 <Typography className={classes.heading} component="h1">
                     <Link
-                        className={classes.headingLink}
+                        className={classes.heading__link}
                         to="/"
                         underline="none"
                         variant="h4"

@@ -3,19 +3,13 @@ import React from 'react';
 import { List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { Link } from 'gatsby-theme-material-ui';
 
-import { ArticleEdge } from '../types';
+import { Article } from '../types';
+import { getFormattedDate } from '../utils';
 
-const Articles = ({ articles }: { articles: ArticleEdge[] }) => (
+const Articles = ({ articles }: { articles: Partial<Article>[] }) => (
     <List>
         {articles.map(
-            ({
-                node: {
-                    contentfulid: id,
-                    createdAt,
-                    description: { description },
-                    title,
-                },
-            }) => (
+            ({ createdAt, description: { description }, id, title }) => (
                 <ListItem button component="li" key={id} role="listitem">
                     <Link
                         aria-label={title}
@@ -38,7 +32,9 @@ const Articles = ({ articles }: { articles: ArticleEdge[] }) => (
                                             component="small"
                                             variant="overline"
                                         >
-                                            {createdAt}
+                                            <time dateTime={createdAt}>
+                                                {getFormattedDate(createdAt)}
+                                            </time>
                                         </Typography>
                                     </>
                                 }

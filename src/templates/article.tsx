@@ -5,43 +5,60 @@ import { Helmet } from 'react-helmet';
 
 import Article from '../components/Article';
 import Page from '../components/Page';
-import { ArticleNode } from '../types';
+import { Article as ArticleType } from '../types';
 
 export const pageQuery = graphql`
     query ArticleTemplateQuery($id: String!) {
         contentfulArticle(contentfulid: { eq: $id }) {
+            author {
+                email
+                familyName
+                givenName
+                id: contentfulid
+            }
             content {
                 childMdx {
                     body
                 }
             }
-            createdAt(formatString: "LL", locale: "en-US")
+            createdAt
             description {
                 description
             }
             tags
             title
+            updatedAt
         }
     }
 `;
 
 const ArticleTemplate = ({
     data: {
-        contentfulArticle: { content, createdAt, description, tags, title },
+        contentfulArticle: {
+            author,
+            content,
+            createdAt,
+            description,
+            tags,
+            title,
+            updatedAt,
+        },
     },
 }: PageProps<{
-    contentfulArticle: Partial<ArticleNode>;
+    contentfulArticle: Partial<ArticleType>;
 }>) => (
     <Page component="article" title={title}>
         <Helmet>
             <meta name="description" content={description.description} />
         </Helmet>
         <Article
+            author={author}
             content={content}
             createdAt={createdAt}
             description={description}
             tags={tags}
             title={title}
+            updatedAt={updatedAt}
         />
     </Page>
 );

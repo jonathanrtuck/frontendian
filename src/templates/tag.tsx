@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet';
 
 import Articles from '../components/Articles';
 import Page from '../components/Page';
-import { ArticleEdge } from '../types';
+import { Article } from '../types';
 
 export const pageQuery = graphql`
     query TagTemplateQuery($tag: String!) {
@@ -14,16 +14,13 @@ export const pageQuery = graphql`
             filter: { tags: { eq: $tag } }
             sort: { fields: [createdAt], order: DESC }
         ) {
-            edges {
-                node {
-                    contentfulid
-                    createdAt(formatString: "LL", locale: "en-US")
-                    description {
-                        description
-                    }
-                    tags
-                    title
+            nodes {
+                createdAt
+                description {
+                    description
                 }
+                id: contentfulid
+                title
             }
         }
     }
@@ -31,13 +28,13 @@ export const pageQuery = graphql`
 
 const TagTemplate = ({
     data: {
-        allContentfulArticle: { edges: articles },
+        allContentfulArticle: { nodes: articles },
     },
     pageContext: { tag },
 }: PageProps<
     {
         allContentfulArticle: {
-            edges: ArticleEdge[];
+            nodes: Article[];
         };
     },
     {

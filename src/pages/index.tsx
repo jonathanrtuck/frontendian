@@ -6,46 +6,71 @@ import { Link } from 'gatsby-theme-material-ui';
 import { Helmet } from 'react-helmet';
 
 import Articles from '../components/Articles';
+import Authors from '../components/Authors';
 import Page from '../components/Page';
 import Tags from '../components/Tags';
-import { ArticleEdge, Tag } from '../types';
+import { Article, Author, ID, Tag } from '../types';
 
 export const pageQuery = graphql`
     query IndexPageQuery {
         allContentfulArticle(sort: { fields: [createdAt], order: DESC }) {
-            distinct(field: tags)
-            edges {
-                node {
-                    contentfulid
-                    createdAt(formatString: "LL", locale: "en-US")
-                    description {
-                        description
-                    }
-                    tags
-                    title
+            nodes {
+                createdAt
+                description {
+                    description
                 }
+                id: contentfulid
+                tags
+                title
             }
+        }
+        allContentfulAuthor {
+            nodes {
+                familyName
+                givenName
+                id: contentfulid
+            }
+        }
+        authors: allContentfulArticle {
+            distinct(field: author___contentfulid)
+        }
+        tags: allContentfulArticle {
+            distinct(field: tags)
         }
     }
 `;
 
 const useStyles = makeStyles((theme) => ({
     tags: {
-        marginTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+        paddingTop: theme.spacing(2),
     },
-    tagsSection: {
-        marginTop: theme.spacing(4),
+    section: {
+        '& + &': {
+            marginTop: theme.spacing(4),
+        },
     },
 }));
 
 const IndexPage = ({
     data: {
-        allContentfulArticle: { distinct: tags, edges: articles },
+        allContentfulArticle: { nodes: articles },
+        allContentfulAuthor: { nodes: authors },
+        authors: { distinct: distinctAuthors },
+        tags: { distinct: distinctTags },
     },
 }: PageProps<{
     allContentfulArticle: {
+        nodes: Partial<Article>[];
+    };
+    allContentfulAuthor: {
+        nodes: Partial<Author>[];
+    };
+    authors: {
+        distinct: ID[];
+    };
+    tags: {
         distinct: Tag[];
-        edges: ArticleEdge[];
     };
 }>) => {
     const classes = useStyles();
@@ -55,10 +80,10 @@ const IndexPage = ({
             <Helmet>
                 <meta
                     name="description"
-                    content="List of all articles and all tags"
+                    content="Articles about frontend development"
                 />
             </Helmet>
-            <section>
+            <section className={classes.section}>
                 <header>
                     <Typography component="h1">
                         <Link
@@ -71,9 +96,9 @@ const IndexPage = ({
                         </Link>
                     </Typography>
                 </header>
-                <Articles articles={articles} />
+                <Articles articles={articles.slice(0, 8)} />
             </section>
-            <section className={classes.tagsSection}>
+            <section className={classes.section}>
                 <header>
                     <Typography component="h1">
                         <Link
@@ -86,7 +111,26 @@ const IndexPage = ({
                         </Link>
                     </Typography>
                 </header>
-                <Tags className={classes.tags} tags={tags} />
+                <Tags className={classes.tags} tags={distinctTags} />
+            </section>
+            <section className={classes.section}>
+                <header>
+                    <Typography component="h1">
+                        <Link
+                            color="textPrimary"
+                            to="/authors"
+                            underline="none"
+                            variant="h3"
+                        >
+                            Authors
+                        </Link>
+                    </Typography>
+                </header>
+                <Authors
+                    authors={distinctAuthors.map((authorId) =>
+                        authors.find(({ id }) => id === authorId),
+                    )}
+                />
             </section>
         </Page>
     );

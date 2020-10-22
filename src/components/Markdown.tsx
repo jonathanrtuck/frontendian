@@ -12,21 +12,25 @@ const useStyles = makeStyles((theme) => ({
             display: 'inline-block',
         },
     },
-    headingIcon: {
+    heading__icon: {
         verticalAlign: 'middle',
     },
-    headingLink: {
+    heading__link: {
         color: 'inherit',
         display: 'none',
         marginLeft: theme.spacing(1),
     },
-    linkIcon: {
+    link: {},
+    link__icon: {
         fontSize: '.75em',
         marginLeft: '.1em',
         verticalAlign: 'top',
     },
 }));
 
+/**
+ * @see https://mdxjs.com/table-of-components
+ */
 const Markdown = ({ content }: { content: string }) => {
     const classes = useStyles();
 
@@ -36,6 +40,7 @@ const Markdown = ({ content }: { content: string }) => {
                 // @todo determine if external link
                 a: ({ children, href }) => (
                     <Typography
+                        className={classes.link}
                         color="textPrimary"
                         component="a"
                         href={href}
@@ -43,9 +48,11 @@ const Markdown = ({ content }: { content: string }) => {
                         variant="inherit"
                     >
                         {children}
-                        <OpenInNewOutlined className={classes.linkIcon} />
+                        <OpenInNewOutlined className={classes.link__icon} />
                     </Typography>
                 ),
+                // blockquote
+                // code
                 h2: ({ children }) => {
                     const id = paramCase(children);
 
@@ -59,8 +66,11 @@ const Markdown = ({ content }: { content: string }) => {
                             variant="h4"
                         >
                             {children}
-                            <a className={classes.headingLink} href={`#${id}`}>
-                                <Link className={classes.headingIcon} />
+                            <a
+                                className={classes.heading__link}
+                                href={`#${id}`}
+                            >
+                                <Link className={classes.heading__icon} />
                             </a>
                         </Typography>
                     );
@@ -78,8 +88,11 @@ const Markdown = ({ content }: { content: string }) => {
                             variant="h5"
                         >
                             {children}
-                            <a className={classes.headingLink} href={`#${id}`}>
-                                <Link className={classes.headingIcon} />
+                            <a
+                                className={classes.heading__link}
+                                href={`#${id}`}
+                            >
+                                <Link className={classes.heading__icon} />
                             </a>
                         </Typography>
                     );
@@ -97,12 +110,17 @@ const Markdown = ({ content }: { content: string }) => {
                             variant="h6"
                         >
                             {children}
-                            <a className={classes.headingLink} href={`#${id}`}>
-                                <Link className={classes.headingIcon} />
+                            <a
+                                className={classes.heading__link}
+                                href={`#${id}`}
+                            >
+                                <Link className={classes.heading__icon} />
                             </a>
                         </Typography>
                     );
                 },
+                // hr
+                // inlineCode
                 li: ({ children }) => (
                     <Typography
                         color="textPrimary"
@@ -122,6 +140,7 @@ const Markdown = ({ content }: { content: string }) => {
                         {children}
                     </Typography>
                 ),
+                // pre - background - card, grey, no shadow
             }}
         >
             <MDXRenderer>{content}</MDXRenderer>
