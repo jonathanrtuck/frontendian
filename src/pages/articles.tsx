@@ -17,7 +17,6 @@ export const pageQuery = graphql`
                     description
                 }
                 id: contentfulid
-                tags
                 title
             }
         }

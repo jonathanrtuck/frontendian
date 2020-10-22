@@ -11,7 +11,6 @@ export const pageQuery = graphql`
     query ArticleTemplateQuery($id: String!) {
         contentfulArticle(contentfulid: { eq: $id }) {
             author {
-                email
                 familyName
                 givenName
                 id: contentfulid

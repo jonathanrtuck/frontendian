@@ -6,7 +6,7 @@ import { Link } from 'gatsby-theme-material-ui';
 import Markdown from '../components/Markdown';
 import Tags from '../components/Tags';
 import { Article as ArticleType } from '../types';
-import { getFormattedDate } from '../utils';
+import { getAuthorName, getFormattedDate } from '../utils';
 
 const useStyles = makeStyles((theme) => ({
     footer: {
@@ -112,7 +112,7 @@ const Article = ({
                             rel="author"
                             to={`/authors/${author.id}`}
                         >
-                            {`${author.givenName} ${author.familyName}`}
+                            {getAuthorName(author)}
                         </Link>
                     </Typography>
                 </dl>

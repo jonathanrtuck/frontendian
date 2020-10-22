@@ -4,17 +4,18 @@ import { List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { Link } from 'gatsby-theme-material-ui';
 
 import { Author } from '../types';
+import { getAuthorName } from '../utils';
 
 const Authors = ({ authors }: { authors: Partial<Author>[] }) => (
     <List>
-        {authors.map(({ familyName, givenName, id }) => {
-            const authorName = `${givenName} ${familyName}`;
+        {authors.map((author) => {
+            const authorName = getAuthorName(author);
 
             return (
-                <ListItem button component="li" key={id} role="listitem">
+                <ListItem button component="li" key={author.id} role="listitem">
                     <Link
                         aria-label={authorName}
-                        to={`/authors/${id}`}
+                        to={`/authors/${author.id}`}
                         underline="none"
                     >
                         <article>

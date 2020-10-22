@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet';
 import Articles from '../components/Articles';
 import Page from '../components/Page';
 import { Article, Author } from '../types';
+import { getAuthorName } from '../utils';
 
 export const pageQuery = graphql`
     query AuthorTemplateQuery($id: String!) {
@@ -30,7 +31,7 @@ const AuthorTemplate = ({
     data: {
         allContentfulArticle: { nodes: articles },
     },
-    pageContext: { familyName, givenName },
+    pageContext: author,
 }: PageProps<
     {
         allContentfulArticle: {
@@ -39,7 +40,7 @@ const AuthorTemplate = ({
     },
     Partial<Author>
 >) => {
-    const authorName = `${givenName} ${familyName}`;
+    const authorName = getAuthorName(author);
 
     return (
         <Page title={authorName}>
