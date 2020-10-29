@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { makeStyles, Typography } from '@material-ui/core';
-import { Link, OpenInNewOutlined } from '@material-ui/icons';
+import { Link as LinkIcon, OpenInNewOutlined } from '@material-ui/icons';
 import { MDXProvider } from '@mdx-js/react';
 import { paramCase } from 'change-case';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
+import { Link } from 'gatsby-theme-material-ui';
 
 const useStyles = makeStyles((theme) => ({
     heading: {
@@ -38,19 +39,37 @@ const Markdown = ({ content }: { content: string }) => {
         <MDXProvider
             components={{
                 // @todo determine if external link
-                a: ({ children, href }) => (
-                    <Typography
-                        className={classes.link}
-                        color="textPrimary"
-                        component="a"
-                        href={href}
-                        rel="external"
-                        variant="inherit"
-                    >
-                        {children}
-                        <OpenInNewOutlined className={classes.link__icon} />
-                    </Typography>
-                ),
+                a: ({ children, href }) => {
+                    if (href.startsWith('/')) {
+                        return (
+                            <Typography
+                                className={classes.link}
+                                color="textPrimary"
+                                component={Link}
+                                rel="internal"
+                                to={href}
+                                underline="always"
+                                variant="inherit"
+                            >
+                                {children}
+                            </Typography>
+                        );
+                    }
+
+                    return (
+                        <Typography
+                            className={classes.link}
+                            color="textPrimary"
+                            component="a"
+                            href={href}
+                            rel="external"
+                            variant="inherit"
+                        >
+                            {children}
+                            <OpenInNewOutlined className={classes.link__icon} />
+                        </Typography>
+                    );
+                },
                 // blockquote
                 // code
                 h2: ({ children }) => {
@@ -70,7 +89,7 @@ const Markdown = ({ content }: { content: string }) => {
                                 className={classes.heading__link}
                                 href={`#${id}`}
                             >
-                                <Link className={classes.heading__icon} />
+                                <LinkIcon className={classes.heading__icon} />
                             </a>
                         </Typography>
                     );
