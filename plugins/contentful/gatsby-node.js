@@ -1,6 +1,7 @@
 const axios = require('axios');
+const path = require('path');
 
-const pluginName = 'contentful';
+const pluginName = path.basename(path.resolve(__dirname));
 
 const error = (str) => {
     console.error('\x1b[31m%s\x1b[0m', '\nerror', str);
@@ -14,9 +15,11 @@ exports.sourceNodes = (
     { accessToken, spaceId },
 ) => {
     if (!accessToken || !spaceId) {
-        return error(
+        error(
             `you must provide a spaceId and accessToken in the ${pluginName} plugin options in gatsby-config.js`,
         );
+
+        return;
     }
 
     return axios({
@@ -130,7 +133,7 @@ exports.sourceNodes = (
             success('create contentful content nodes');
         })
         .catch(() => {
-            throw new Error(
+            error(
                 `cannot get content from contentful. have you provided the correct spaceId and accessToken in the ${pluginName} plugin in gatsby-config.js?`,
             );
         });
