@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { graphql, PageProps } from 'gatsby';
 import { Helmet } from 'react-helmet';
@@ -9,56 +9,37 @@ import { Article as ArticleType } from '../types';
 
 export const pageQuery = graphql`
     query ArticleTemplateQuery($id: String!) {
-        contentfulArticle(contentfulid: { eq: $id }) {
-            author {
-                familyName
-                givenName
-                id: contentfulid
-            }
-            content {
-                childMdx {
-                    body
+        article(meta: { id: { eq: $id } }) {
+            content
+            description
+            meta {
+                author {
+                    familyName
+                    givenName
+                    meta {
+                        id
+                    }
                 }
+                id
+                publishedAt
+                updatedAt
+                tags
             }
-            createdAt
-            description {
-                description
-            }
-            tags
             title
-            updatedAt
         }
     }
 `;
 
 const ArticleTemplate = ({
-    data: {
-        contentfulArticle: {
-            author,
-            content,
-            createdAt,
-            description,
-            tags,
-            title,
-            updatedAt,
-        },
-    },
+    data: { article },
 }: PageProps<{
-    contentfulArticle: Partial<ArticleType>;
-}>) => (
-    <Page component="article" title={title}>
+    article: Partial<ArticleType>;
+}>): ReactElement => (
+    <Page component="article" title={article.title}>
         <Helmet>
-            <meta name="description" content={description.description} />
+            <meta name="description" content={article.description} />
         </Helmet>
-        <Article
-            author={author}
-            content={content}
-            createdAt={createdAt}
-            description={description}
-            tags={tags}
-            title={title}
-            updatedAt={updatedAt}
-        />
+        <Article {...article} />
     </Page>
 );
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { makeStyles, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
@@ -10,8 +10,8 @@ import { Tag } from '../types';
 
 export const pageQuery = graphql`
     query TagsPageQuery {
-        allContentfulArticle {
-            distinct(field: tags)
+        tags: allArticle {
+            distinct(field: meta___tags)
         }
     }
 `;
@@ -24,13 +24,13 @@ const useStyles = makeStyles((theme) => ({
 
 const TagsPage = ({
     data: {
-        allContentfulArticle: { distinct: tags },
+        tags: { distinct: tags },
     },
 }: PageProps<{
-    allContentfulArticle: {
+    tags: {
         distinct: Tag[];
     };
-}>) => {
+}>): ReactElement => {
     const classes = useStyles();
 
     return (

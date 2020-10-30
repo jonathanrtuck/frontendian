@@ -1,25 +1,22 @@
 export type Article = {
-    author: Author;
-    content: {
-        childMdx: {
-            body: string;
-        };
+    content: string;
+    description: string;
+    meta: {
+        author: Author;
+        id: ID;
+        publishedAt: Iso8601;
+        tags: Tag[];
+        updatedAt: Iso8601;
     };
-    createdAt: Iso8601;
-    description: {
-        description: string;
-    };
-    id: ID;
-    tags: Tag[];
     title: string;
-    updatedAt: Iso8601;
 };
 
 export type Author = {
-    email: Email;
     familyName: string;
     givenName: string;
-    id: ID;
+    meta: {
+        id: ID;
+    };
 };
 
 export type Email = string;

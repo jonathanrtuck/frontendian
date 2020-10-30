@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { AppBar, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
@@ -21,7 +21,7 @@ const useStyles = makeStyles({
     },
 });
 
-const Header = () => {
+const Header = (): ReactElement => {
     const classes = useStyles();
 
     return (

@@ -1,0 +1,17 @@
+{
+    "dependencies": {
+        "axios": "^0.21.0"
+    },
+    "devDependencies": {},
+    "keywords": [
+        "gatsby",
+        "gatsby-plugin",
+        "gatsby-source-plugin"
+    ],
+    "license": "MIT",
+    "name": "contentful",
+    "peerDependencies": {
+        "gatsby": "^2.12.1"
+    },
+    "version": "0.0.1"
+}

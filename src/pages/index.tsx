@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { makeStyles, Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
@@ -13,28 +13,32 @@ import { Article, Author, ID, Tag } from '../types';
 
 export const pageQuery = graphql`
     query IndexPageQuery {
-        allContentfulArticle(sort: { fields: [createdAt], order: DESC }) {
+        articles: allArticle(
+            sort: { fields: [meta___publishedAt], order: DESC }
+        ) {
             nodes {
-                createdAt
-                description {
-                    description
+                description
+                meta {
+                    id
+                    publishedAt
                 }
-                id: contentfulid
                 title
             }
         }
-        allContentfulAuthor {
+        authors: allAuthor {
             nodes {
                 familyName
                 givenName
-                id: contentfulid
+                meta {
+                    id
+                }
             }
         }
-        authors: allContentfulArticle {
-            distinct(field: author___contentfulid)
+        authorIds: allArticle {
+            distinct(field: meta___author___meta___id)
         }
-        tags: allContentfulArticle {
-            distinct(field: tags)
+        tags: allArticle {
+            distinct(field: meta___tags)
         }
     }
 `;
@@ -53,25 +57,25 @@ const useStyles = makeStyles((theme) => ({
 
 const IndexPage = ({
     data: {
-        allContentfulArticle: { nodes: articles },
-        allContentfulAuthor: { nodes: authors },
-        authors: { distinct: distinctAuthors },
+        articles: { nodes: articles },
+        authors: { nodes: authors },
+        authorIds: { distinct: distinctAuthorIds },
         tags: { distinct: distinctTags },
     },
 }: PageProps<{
-    allContentfulArticle: {
+    articles: {
         nodes: Partial<Article>[];
     };
-    allContentfulAuthor: {
-        nodes: Partial<Author>[];
-    };
     authors: {
+        nodes: Author[];
+    };
+    authorIds: {
         distinct: ID[];
     };
     tags: {
         distinct: Tag[];
     };
-}>) => {
+}>): ReactElement => {
     const classes = useStyles();
 
     return (
@@ -126,8 +130,8 @@ const IndexPage = ({
                     </Typography>
                 </header>
                 <Authors
-                    authors={distinctAuthors.map((authorId) =>
-                        authors.find(({ id }) => id === authorId),
+                    authors={distinctAuthorIds.map((authorId) =>
+                        authors.find(({ meta: { id } }) => id === authorId),
                     )}
                 />
             </section>

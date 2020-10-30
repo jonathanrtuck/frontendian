@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
@@ -10,16 +10,16 @@ import { Article } from '../types';
 
 export const pageQuery = graphql`
     query TagTemplateQuery($tag: String!) {
-        allContentfulArticle(
-            filter: { tags: { eq: $tag } }
-            sort: { fields: [createdAt], order: DESC }
+        allArticle(
+            filter: { meta: { tags: { eq: $tag } } }
+            sort: { fields: [meta___publishedAt], order: DESC }
         ) {
             nodes {
-                createdAt
-                description {
-                    description
+                description
+                meta {
+                    id
+                    publishedAt
                 }
-                id: contentfulid
                 title
             }
         }
@@ -28,19 +28,19 @@ export const pageQuery = graphql`
 
 const TagTemplate = ({
     data: {
-        allContentfulArticle: { nodes: articles },
+        allArticle: { nodes: articles },
     },
     pageContext: { tag },
 }: PageProps<
     {
-        allContentfulArticle: {
+        allArticle: {
             nodes: Article[];
         };
     },
     {
         tag: string;
     }
->) => (
+>): ReactElement => (
     <Page title={tag}>
         <Helmet>
             <meta

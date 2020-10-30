@@ -11,38 +11,18 @@ exports.createPages = ({ graphql, actions: { createPage } }) =>
             graphql(
                 `
                     {
-                        allContentfulArticle {
-                            nodes {
-                                author {
-                                    familyName
-                                    givenName
-                                    id: contentfulid
-                                }
-                                createdAt
-                                description {
-                                    description
-                                }
-                                id: contentfulid
-                                tags
-                                title
-                            }
+                        articlesIds: allArticle {
+                            distinct(field: meta___id)
                         }
-                        allContentfulAuthor {
-                            nodes {
-                                familyName
-                                givenName
-                                id: contentfulid
-                            }
+                        authorIds: allArticle {
+                            distinct(field: meta___author___meta___id)
                         }
-                        authors: allContentfulArticle {
-                            distinct(field: author___contentfulid)
-                        }
-                        tags: allContentfulArticle {
-                            distinct(field: tags)
+                        tags: allArticle {
+                            distinct(field: meta___tags)
                         }
                     }
                 `,
-            ).then(({ data, errors }) => {
+            ).then(({ data: { articlesIds, authorIds, tags }, errors }) => {
                 if (errors) {
                     console.log(errors);
 
@@ -50,27 +30,29 @@ exports.createPages = ({ graphql, actions: { createPage } }) =>
                 }
 
                 // create page for each article
-                data.allContentfulArticle.nodes.forEach((article) => {
+                articlesIds.distinct.forEach((id) => {
                     createPage({
                         component: articleTemplate,
-                        context: article,
-                        path: `/articles/${article.id}`,
+                        context: {
+                            id,
+                        },
+                        path: `/articles/${id}`,
                     });
                 });
 
                 // create page for each author
-                data.authors.distinct.forEach((author) => {
+                authorIds.distinct.forEach((id) => {
                     createPage({
                         component: authorTemplate,
-                        context: data.allContentfulAuthor.nodes.find(
-                            ({ id }) => id === author,
-                        ),
-                        path: `/authors/${author}`,
+                        context: {
+                            id,
+                        },
+                        path: `/authors/${id}`,
                     });
                 });
 
                 // create page for each tag
-                data.tags.distinct.forEach((tag) => {
+                tags.distinct.forEach((tag) => {
                     createPage({
                         component: tagTemplate,
                         context: {

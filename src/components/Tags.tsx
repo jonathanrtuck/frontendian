@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { Chip, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
@@ -7,27 +7,33 @@ import { Link } from 'gatsby-theme-material-ui';
 import { Tag } from '../types';
 
 const useStyles = makeStyles((theme) => ({
-    tag: {
+    listitem: {
         display: 'inline-block',
 
         '& + &': {
             marginLeft: theme.spacing(1),
         },
     },
-    tags: {
+    root: {
         listStyle: 'none',
         margin: 0,
         padding: 0,
     },
 }));
 
-const Tags = ({ className, tags }: { className?: string; tags: Tag[] }) => {
+const Tags = ({
+    className,
+    tags,
+}: {
+    className?: string;
+    tags: Tag[];
+}): ReactElement => {
     const classes = useStyles();
 
     return (
-        <ul className={clsx(className, classes.tags)}>
+        <ul className={clsx(className, classes.root)}>
             {tags.sort().map((tag) => (
-                <li className={classes.tag} key={tag}>
+                <li className={classes.listitem} key={tag}>
                     <Chip
                         clickable
                         component={Link}

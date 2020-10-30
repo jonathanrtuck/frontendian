@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
@@ -10,13 +10,15 @@ import { Article } from '../types';
 
 export const pageQuery = graphql`
     query ArticlesPageQuery {
-        allContentfulArticle(sort: { fields: [createdAt], order: DESC }) {
+        articles: allArticle(
+            sort: { fields: [meta___publishedAt], order: DESC }
+        ) {
             nodes {
-                createdAt
-                description {
-                    description
+                description
+                meta {
+                    id
+                    publishedAt
                 }
-                id: contentfulid
                 title
             }
         }
@@ -25,13 +27,13 @@ export const pageQuery = graphql`
 
 const ArticlesPage = ({
     data: {
-        allContentfulArticle: { nodes: articles },
+        articles: { nodes: articles },
     },
 }: PageProps<{
-    allContentfulArticle: {
+    articles: {
         nodes: Partial<Article>[];
     };
-}>) => (
+}>): ReactElement => (
     <Page title="Articles">
         <Helmet>
             <meta name="description" content="List of all articles" />

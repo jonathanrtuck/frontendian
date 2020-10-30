@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { makeStyles, Typography } from '@material-ui/core';
 import { Link } from 'gatsby-theme-material-ui';
@@ -37,13 +37,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Article = ({
-    author,
     content,
-    createdAt,
-    tags,
+    meta: { author, publishedAt, tags, updatedAt },
     title,
-    updatedAt,
-}: Partial<ArticleType>) => {
+}: Partial<ArticleType>): ReactElement => {
     const classes = useStyles();
 
     return (
@@ -67,8 +64,8 @@ const Article = ({
                         component="dd"
                         variant="subtitle1"
                     >
-                        <time dateTime={createdAt}>
-                            {getFormattedDate(createdAt)}
+                        <time dateTime={publishedAt}>
+                            {getFormattedDate(publishedAt)}
                         </time>
                     </Typography>
                     {updatedAt && (
@@ -110,14 +107,14 @@ const Article = ({
                         <Link
                             color="inherit"
                             rel="author"
-                            to={`/authors/${author.id}`}
+                            to={`/authors/${author.meta.id}`}
                         >
                             {getAuthorName(author)}
                         </Link>
                     </Typography>
                 </dl>
             </header>
-            <Markdown content={content.childMdx.body} />
+            <Markdown content={content} />
             <footer className={classes.footer}>
                 <Tags tags={tags} />
             </footer>

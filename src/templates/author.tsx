@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
@@ -11,17 +11,24 @@ import { getAuthorName } from '../utils';
 
 export const pageQuery = graphql`
     query AuthorTemplateQuery($id: String!) {
-        allContentfulArticle(
-            filter: { author: { contentfulid: { eq: $id } } }
-            sort: { fields: [createdAt], order: DESC }
+        articles: allArticle(
+            filter: { meta: { author: { meta: { id: { eq: $id } } } } }
+            sort: { fields: [meta___publishedAt], order: DESC }
         ) {
             nodes {
-                createdAt
-                description {
-                    description
+                description
+                meta {
+                    id
+                    publishedAt
                 }
-                id: contentfulid
                 title
+            }
+        }
+        author(meta: { id: { eq: $id } }) {
+            familyName
+            givenName
+            meta {
+                id
             }
         }
     }
@@ -29,17 +36,15 @@ export const pageQuery = graphql`
 
 const AuthorTemplate = ({
     data: {
-        allContentfulArticle: { nodes: articles },
+        articles: { nodes: articles },
+        author,
     },
-    pageContext: author,
-}: PageProps<
-    {
-        allContentfulArticle: {
-            nodes: Partial<Article>[];
-        };
-    },
-    Partial<Author>
->) => {
+}: PageProps<{
+    articles: {
+        nodes: Partial<Article>[];
+    };
+    author: Author;
+}>): ReactElement => {
     const authorName = getAuthorName(author);
 
     return (

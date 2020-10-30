@@ -1,4 +1,4 @@
-import React, { ElementType, ReactNode } from 'react';
+import React, { ElementType, ReactElement, ReactNode } from 'react';
 
 import { Container, makeStyles } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
@@ -21,7 +21,7 @@ const Page = ({
     children: ReactNode;
     component?: ElementType;
     title?: string;
-}) => {
+}): ReactElement => {
     const classes = useStyles();
     const siteTitle = useSiteTitle();
 

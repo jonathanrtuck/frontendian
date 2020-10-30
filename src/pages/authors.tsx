@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { Typography } from '@material-ui/core';
 import { graphql, PageProps } from 'gatsby';
@@ -10,14 +10,16 @@ import { Author, ID } from '../types';
 
 export const pageQuery = graphql`
     query AuthorsPageQuery {
-        allContentfulArticle {
-            distinct(field: author___contentfulid)
+        authorIds: allArticle {
+            distinct(field: meta___author___meta___id)
         }
-        allContentfulAuthor {
+        authors: allAuthor {
             nodes {
                 familyName
                 givenName
-                id: contentfulid
+                meta {
+                    id
+                }
             }
         }
     }
@@ -25,17 +27,17 @@ export const pageQuery = graphql`
 
 const AuthorsPage = ({
     data: {
-        allContentfulArticle: { distinct: authorIds },
-        allContentfulAuthor: { nodes: authors },
+        authorIds: { distinct: authorIds },
+        authors: { nodes: authors },
     },
 }: PageProps<{
-    allContentfulArticle: {
+    authorIds: {
         distinct: ID[];
     };
-    allContentfulAuthor: {
+    authors: {
         nodes: Author[];
     };
-}>) => (
+}>): ReactElement => (
     <Page title="Authors">
         <Helmet>
             <meta name="description" content="List of all authors" />
@@ -47,7 +49,7 @@ const AuthorsPage = ({
         </header>
         <Authors
             authors={authorIds.map((authorId) =>
-                authors.find(({ id }) => id === authorId),
+                authors.find(({ meta: { id } }) => id === authorId),
             )}
         />
     </Page>

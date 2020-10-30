@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { createElement, PropsWithChildren, ReactElement } from 'react';
 
 import { makeStyles, Typography } from '@material-ui/core';
 import { Link as LinkIcon, OpenInNewOutlined } from '@material-ui/icons';
-import { MDXProvider } from '@mdx-js/react';
 import { paramCase } from 'change-case';
-import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { Link } from 'gatsby-theme-material-ui';
+import { onlyText } from 'react-children-utilities';
+import rehype2react from 'rehype-react';
+import markdown from 'remark-parse';
+import remark2rehype from 'remark-rehype';
+import unified from 'unified';
 
 const useStyles = makeStyles((theme) => ({
     heading: {
-        '&:hover $headingLink': {
+        '&:hover $heading__link': {
             display: 'inline-block',
         },
     },
@@ -29,17 +32,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-/**
- * @see https://mdxjs.com/table-of-components
- */
-const Markdown = ({ content }: { content: string }) => {
+const Markdown = ({ content }: { content: string }): ReactElement => {
     const classes = useStyles();
 
-    return (
-        <MDXProvider
-            components={{
-                // @todo determine if external link
-                a: ({ children, href }) => {
+    const processor = unified()
+        .use(markdown)
+        .use(remark2rehype)
+        .use(rehype2react, {
+            components: {
+                a: ({
+                    children,
+                    href,
+                }: PropsWithChildren<{ href: string }>) => {
                     if (href.startsWith('/')) {
                         return (
                             <Typography
@@ -72,8 +76,8 @@ const Markdown = ({ content }: { content: string }) => {
                 },
                 // blockquote
                 // code
-                h2: ({ children }) => {
-                    const id = paramCase(children);
+                h2: ({ children }: PropsWithChildren<{}>) => {
+                    const id = paramCase(onlyText(children));
 
                     return (
                         <Typography
@@ -94,8 +98,8 @@ const Markdown = ({ content }: { content: string }) => {
                         </Typography>
                     );
                 },
-                h3: ({ children }) => {
-                    const id = paramCase(children);
+                h3: ({ children }: PropsWithChildren<{}>) => {
+                    const id = paramCase(onlyText(children));
 
                     return (
                         <Typography
@@ -111,13 +115,13 @@ const Markdown = ({ content }: { content: string }) => {
                                 className={classes.heading__link}
                                 href={`#${id}`}
                             >
-                                <Link className={classes.heading__icon} />
+                                <LinkIcon className={classes.heading__icon} />
                             </a>
                         </Typography>
                     );
                 },
-                h4: ({ children }) => {
-                    const id = paramCase(children);
+                h4: ({ children }: PropsWithChildren<{}>) => {
+                    const id = paramCase(onlyText(children));
 
                     return (
                         <Typography
@@ -133,14 +137,14 @@ const Markdown = ({ content }: { content: string }) => {
                                 className={classes.heading__link}
                                 href={`#${id}`}
                             >
-                                <Link className={classes.heading__icon} />
+                                <LinkIcon className={classes.heading__icon} />
                             </a>
                         </Typography>
                     );
                 },
                 // hr
                 // inlineCode
-                li: ({ children }) => (
+                li: ({ children }: PropsWithChildren<{}>) => (
                     <Typography
                         color="textPrimary"
                         component="li"
@@ -149,7 +153,7 @@ const Markdown = ({ content }: { content: string }) => {
                         {children}
                     </Typography>
                 ),
-                p: ({ children }) => (
+                p: ({ children }: PropsWithChildren<{}>) => (
                     <Typography
                         color="textPrimary"
                         component="p"
@@ -160,11 +164,11 @@ const Markdown = ({ content }: { content: string }) => {
                     </Typography>
                 ),
                 // pre - background - card, grey, no shadow
-            }}
-        >
-            <MDXRenderer>{content}</MDXRenderer>
-        </MDXProvider>
-    );
+            },
+            createElement,
+        });
+
+    return <>{processor.processSync(content).result}</>;
 };
 
 export default Markdown;
