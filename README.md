@@ -1,13 +1,3 @@
 # frontendian
 
-```
-npm run dev
-```
-
-```
-npm run build
-```
-
-```
-npm run serve
-```
+this will describe what this site is…

@@ -1,0 +1,19 @@
+.root {
+  cursor: url("/public/cursors/Text.svg"), text;
+  display: block;
+  font-family: var(--font-family--monospace);
+  min-height: 100%;
+  padding: 0.5rem;
+  resize: none;
+  width: 100%;
+}
+
+.input {
+}
+
+.input:focus {
+  outline: 0;
+}
+
+.markdown {
+}
