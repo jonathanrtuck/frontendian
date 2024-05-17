@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 
 import {
-  APPLICATION_TRACKER_ID,
+  APPLICATION_TRACKER,
   DEFAULT_WINDOW,
   UNTITLED_WINDOW_TITLE,
 } from "consts";
@@ -29,7 +29,7 @@ export const stateReducer = (state: State, action: Action): State => {
             const application = prevState.applications.find(
               (application) => application.id === id
             );
-            const isTracker = application?.id === APPLICATION_TRACKER_ID;
+            const isTracker = application?.id === APPLICATION_TRACKER.id;
             const windowIds = application?.windowIds ?? [];
 
             return {
@@ -63,7 +63,7 @@ export const stateReducer = (state: State, action: Action): State => {
             const isLastApplicationWindow =
               applicationWithWindow?.windowIds.length === 1;
             const isTracker =
-              applicationWithWindow?.id === APPLICATION_TRACKER_ID;
+              applicationWithWindow?.id === APPLICATION_TRACKER.id;
 
             return {
               ...prevState,

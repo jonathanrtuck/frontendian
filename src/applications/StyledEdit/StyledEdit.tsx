@@ -14,7 +14,11 @@ import Markdown from "react-markdown";
 
 import { StateContext } from "contexts";
 import { Menubaritem, useMenubar } from "hooks";
-import { ApplicationComponentProps, ApplicationComponentRef } from "types";
+import {
+  ApplicationComponentProps,
+  ApplicationComponentRef,
+  MimeType,
+} from "types";
 
 import styles from "./StyledEdit.module.css";
 
@@ -133,7 +137,7 @@ export const StyledEdit = forwardRef<
     error,
     isPending,
   } = useQuery({
-    enabled: Boolean(file?.url),
+    enabled: file?.type === MimeType.TextMarkdown && Boolean(file?.url),
     queryFn: file?.url
       ? () => fetch(file.url).then((response) => response.text())
       : undefined,

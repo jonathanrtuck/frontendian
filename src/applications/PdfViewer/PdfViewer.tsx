@@ -8,7 +8,11 @@ import {
 
 import { StateContext } from "contexts";
 import { Menubaritem, useMenubar } from "hooks";
-import { ApplicationComponentProps, ApplicationComponentRef } from "types";
+import {
+  ApplicationComponentProps,
+  ApplicationComponentRef,
+  MimeType,
+} from "types";
 
 import styles from "./PdfViewer.module.css";
 
@@ -83,7 +87,7 @@ export const PdfViewer = forwardRef<
 
   useMenubar(menubaritems);
 
-  if (file?.type !== "application/pdf") {
+  if (file?.type !== MimeType.ApplicationPdf) {
     return null;
   }
 

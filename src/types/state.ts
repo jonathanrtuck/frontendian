@@ -33,11 +33,11 @@ export type File = {
 } & (
   | {
       height: number;
-      type: "application/pdf";
+      type: MimeType.ApplicationPdf;
       width: number;
     }
   | {
-      type: "text/markdown";
+      type: MimeType.TextMarkdown;
     }
 );
 
