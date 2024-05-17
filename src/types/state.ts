@@ -17,6 +17,7 @@ export type Application = {
 
 export type ApplicationComponentProps = {
   file?: File;
+  onClose(): void;
   window: Window;
 } & HTMLAttributes<HTMLElement> &
   RefAttributes<ApplicationComponentRef>;
@@ -31,6 +32,7 @@ export type File = {
   url: URL;
 } & (
   | {
+      height: number;
       type: "application/pdf";
       width: number;
     }

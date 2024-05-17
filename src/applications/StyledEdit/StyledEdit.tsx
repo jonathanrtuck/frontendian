@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import Markdown from "react-markdown";
 
+import { useMenubar } from "hooks";
 import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 
 import styles from "./StyledEdit.module.css";
@@ -12,7 +13,7 @@ import styles from "./StyledEdit.module.css";
 export const StyledEdit = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ file, window }, ref) => {
+>(({ file, onClose }, ref) => {
   const inputRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(
@@ -26,6 +27,18 @@ export const StyledEdit = forwardRef<
     }),
     []
   );
+
+  useMenubar([
+    {
+      items: [
+        {
+          onClick: onClose,
+          title: "Quit",
+        },
+      ],
+      title: "File",
+    },
+  ]);
 
   const { data, error, isPending } = useQuery({
     enabled: Boolean(file?.url),

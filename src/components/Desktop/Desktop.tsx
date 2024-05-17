@@ -127,9 +127,9 @@ export const Desktop: FunctionComponent<{}> = () => {
             }}
             title={obj.title}
             type="button">
-            <div aria-hidden className={styles.icon} role="presentation">
+            <span aria-hidden className={styles.icon} role="presentation">
               {icon}
-            </div>
+            </span>
             <label className={styles.label}>{obj.title}</label>
           </button>
         );

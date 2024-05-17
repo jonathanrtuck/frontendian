@@ -75,11 +75,12 @@ export const INITIAL_STATE: State = {
   files: [
     FILE_ABOUT,
     {
+      height: 990 * 2, // numPages
       id: "file-resume",
       title: "Résumé",
       type: "application/pdf",
       url: `${process.env.PUBLIC_URL}/files/resume.pdf`,
-      width: 800,
+      width: 765, // 11/8.5 ratio
     },
   ],
   openApplicationIds: [APPLICATION_TRACKER_ID, "application-styled-edit"],

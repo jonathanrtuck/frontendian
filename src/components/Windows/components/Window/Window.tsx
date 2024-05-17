@@ -260,7 +260,7 @@ export const Window: FunctionComponent<{
                 {window.title}
               </h1>
               <button
-                aria-label="close"
+                aria-label="Close"
                 className={clsx(
                   styles.nondraggable,
                   styles.button,
@@ -274,10 +274,11 @@ export const Window: FunctionComponent<{
                     type: "CLOSE",
                   });
                 }}
+                title="Close"
                 type="button"
               />
               <button
-                aria-label="zoom"
+                aria-label="Zoom"
                 className={clsx(
                   styles.nondraggable,
                   styles.button,
@@ -291,6 +292,7 @@ export const Window: FunctionComponent<{
                     type: window.zoomed ? "UNZOOM" : "ZOOM",
                   });
                 }}
+                title="Zoom"
                 type="button"
               />
             </header>
@@ -322,6 +324,14 @@ export const Window: FunctionComponent<{
             <MenubarContext.Provider value={setMenuitems}>
               <Component
                 file={file}
+                onClose={() => {
+                  dispatch({
+                    payload: {
+                      ids: [window.id],
+                    },
+                    type: "CLOSE",
+                  });
+                }}
                 ref={applicationFocusRef}
                 window={window}
               />

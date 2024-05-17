@@ -316,7 +316,7 @@
   position: absolute;
   right: var(--window-padding);
   width: calc(var(--window_scrollbar-size) + var(--border-width));
-  z-index: 1;
+  z-index: 3;
 }
 
 .zoomed .resizeHandle {

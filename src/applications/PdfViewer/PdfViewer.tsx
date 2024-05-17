@@ -1,38 +1,59 @@
-import { forwardRef, useState } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 
+import { useMenubar } from "hooks";
 import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
+import styles from "./PdfViewer.module.css";
 
-// @see https://www.npmjs.com/package/react-pdf#configure-pdfjs-worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
-// @todo handle loading
 export const PdfViewer = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ file, window }, ref) => {
-  const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+>(({ file, onClose }, ref) => {
+  const rootRef = useRef<HTMLIFrameElement>(null);
 
-  if (!file) {
+  useImperativeHandle(
+    ref,
+    () => ({
+      focus: rootRef.current
+        ? () => {
+            rootRef.current?.focus();
+          }
+        : undefined,
+    }),
+    []
+  );
+
+  useMenubar([
+    {
+      items: [
+        {
+          onClick: () => {
+            rootRef.current?.contentWindow?.print();
+          },
+          title: "Print",
+        },
+        null,
+        {
+          onClick: onClose,
+          title: "Quit",
+        },
+      ],
+      title: "File",
+    },
+  ]);
+
+  if (file?.type !== "application/pdf") {
     return null;
   }
 
   return (
-    <div>
-      <Document
-        externalLinkTarget="_blank"
-        file={file.url}
-        loading={"loading…"}
-        onLoadSuccess={({ numPages }) => {
-          setPageNumbers(Array.from(new Array(numPages), (_, i) => i + 1));
-        }}>
-        {pageNumbers.map((i) => (
-          <Page key={i} pageNumber={i} width={window.width} />
-        ))}
-      </Document>
-    </div>
+    <iframe
+      className={styles.root}
+      height={file.height}
+      ref={rootRef}
+      src={`${file.url}#toolbar=0&navpanes=0`} // hide chrome's chrome
+      title={file.title}
+      width={file.width}
+    />
   );
 });
