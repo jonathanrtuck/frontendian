@@ -195,6 +195,7 @@ export const Window: FunctionComponent<{
         }}
         width={outerWidth}>
         <section
+          aria-labelledby={`${window.id}__title`}
           className={clsx(styles.root, {
             [styles.zoomed]: window.zoomed,
           })}
@@ -266,7 +267,10 @@ export const Window: FunctionComponent<{
                 }
               }}
               ref={headerRef}>
-              <h1 className={styles.title} title={window.title}>
+              <h1
+                className={styles.title}
+                id={`${window.id}__title`}
+                title={window.title}>
                 {window.title}
               </h1>
               <button

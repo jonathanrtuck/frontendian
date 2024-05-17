@@ -6,7 +6,7 @@ import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 export const Teapot = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ onClose }) => {
+>(({ onClose }, ref) => {
   const menubaritems = useMemo<Menubaritem[]>(
     () => [
       {

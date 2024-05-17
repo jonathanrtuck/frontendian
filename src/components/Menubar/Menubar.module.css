@@ -89,6 +89,16 @@
   outline: 0;
 }
 
+.menuitem[role="menuitemcheckbox"]::before,
+.menuitem[role="menuitemradio"]::before {
+  content: "";
+  font-size: 0.625rem;
+  width: 0.75rem;
+}
+.menuitem[aria-checked="true"]::before {
+  content: "✔️";
+}
+
 .menuitem[aria-disabled="true"] {
   color: var(--text-color--disabled);
 }

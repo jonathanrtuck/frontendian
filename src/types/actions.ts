@@ -58,10 +58,16 @@ export type ActionMove = {
 };
 
 export type ActionOpen = {
-  payload: {
-    ids: ID[];
-    type: "application" | "file";
-  };
+  payload:
+    | {
+        ids: ID[];
+        type: "application";
+      }
+    | {
+        ids: ID[];
+        type: "file";
+        windowId?: ID;
+      };
   type: "OPEN";
 };
 

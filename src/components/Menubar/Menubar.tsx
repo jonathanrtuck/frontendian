@@ -14,9 +14,11 @@ export type Separator = null;
 
 export type Menuitem =
   | {
+      checked?: boolean;
       icon?: ReactElement;
       onClick?(): void; // menuitem will be disabled if this is not defined
       title: string;
+      type?: "checkbox" | "radio";
     }
   | Separator;
 
@@ -246,48 +248,62 @@ export const Menubar = forwardRef<
             <menu
               className={clsx(classes?.menu, styles.menu)}
               hidden={!isExpanded}>
-              {items.map((item, i) =>
-                item ? (
-                  <li
-                    aria-disabled={!item.onClick}
-                    aria-label={item.title}
-                    className={clsx(classes?.menuitem, styles.menuitem)}
-                    key={item.title}
-                    onClick={() => {
-                      resetFocus();
-                      item.onClick?.();
-                    }}
-                    onKeyDown={({ key }) => {
-                      switch (key) {
-                        case "Enter":
-                        case " ":
-                          resetFocus();
-                          item.onClick?.();
-                          break;
+              {items.map((item, i) => {
+                if (item) {
+                  const isCheckbox = item.type === "checkbox";
+                  const isRadio = item.type === "radio";
+
+                  return (
+                    <li
+                      aria-checked={
+                        isCheckbox || isRadio ? item.checked : undefined
                       }
-                    }}
-                    role="menuitem"
-                    tabIndex={-1}>
-                    {item.icon && (
-                      <span
-                        aria-hidden
-                        className={clsx(classes?.icon, styles.icon)}
-                        role="presentation">
-                        {item.icon}
-                      </span>
-                    )}
-                    <label className={clsx(classes?.label, styles.label)}>
-                      {item.title}
-                    </label>
-                  </li>
-                ) : (
+                      aria-disabled={!item.onClick}
+                      aria-label={item.title}
+                      className={clsx(classes?.menuitem, styles.menuitem)}
+                      key={item.title}
+                      onClick={() => {
+                        resetFocus();
+                        item.onClick?.();
+                      }}
+                      onKeyDown={({ key }) => {
+                        switch (key) {
+                          case "Enter":
+                          case " ":
+                            resetFocus();
+                            item.onClick?.();
+                            break;
+                        }
+                      }}
+                      role={
+                        (isCheckbox && "menuitemcheckbox") ||
+                        (isRadio && "menuitemradio") ||
+                        "menuitem"
+                      }
+                      tabIndex={-1}>
+                      {item.icon && (
+                        <span
+                          aria-hidden
+                          className={clsx(classes?.icon, styles.icon)}
+                          role="presentation">
+                          {item.icon}
+                        </span>
+                      )}
+                      <label className={clsx(classes?.label, styles.label)}>
+                        {item.title}
+                      </label>
+                    </li>
+                  );
+                }
+
+                return (
                   <li
                     className={clsx(classes?.separator, styles.separator)}
                     key={`separator-${i}`}
                     role="separator"
                   />
-                )
-              )}
+                );
+              })}
             </menu>
           </li>
         );

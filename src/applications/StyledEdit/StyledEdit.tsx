@@ -1,6 +1,14 @@
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
-import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
+import {
+  forwardRef,
+  useDeferredValue,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Markdown from "react-markdown";
 
 import { Menubaritem, useMenubar } from "hooks";
@@ -14,7 +22,7 @@ export const StyledEdit = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
 >(({ file, onClose }, ref) => {
-  const inputRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useImperativeHandle(
     ref,
@@ -28,6 +36,13 @@ export const StyledEdit = forwardRef<
     []
   );
 
+  const [input, setInput] = useState<string>("");
+  const [view, setView] = useState<"markdown" | "preview">(
+    file ? "preview" : "markdown"
+  );
+
+  const deferredInput = useDeferredValue<string>(input);
+
   const menubaritems = useMemo<Menubaritem[]>(
     () => [
       {
@@ -39,13 +54,44 @@ export const StyledEdit = forwardRef<
         ],
         title: "File",
       },
+      {
+        items: [
+          {
+            checked: view === "markdown",
+            onClick:
+              view === "markdown"
+                ? undefined
+                : () => {
+                    setView("markdown");
+                  },
+            title: "Markdown",
+            type: "radio",
+          },
+          {
+            checked: view === "preview",
+            onClick:
+              view === "preview"
+                ? undefined
+                : () => {
+                    setView("preview");
+                  },
+            title: "Preview",
+            type: "radio",
+          },
+        ],
+        title: "View",
+      },
     ],
-    [onClose]
+    [onClose, view]
   );
 
   useMenubar(menubaritems);
 
-  const { data, error, isPending } = useQuery({
+  const {
+    data = "",
+    error,
+    isPending,
+  } = useQuery({
     enabled: Boolean(file?.url),
     queryFn: file?.url
       ? () => fetch(file.url).then((response) => response.text())
@@ -53,28 +99,43 @@ export const StyledEdit = forwardRef<
     queryKey: [file?.url],
   });
 
-  if (!file?.url) {
+  useEffect(() => {
+    if (!isPending && !error && data) {
+      setInput(data);
+    }
+  }, [data, error, isPending]);
+
+  useEffect(() => {
+    if (view === "markdown") {
+      inputRef.current?.focus();
+    }
+  }, [view]);
+
+  if (file && isPending) {
+    return <span>loading…</span>;
+  }
+
+  if (file && error) {
+    return <span>error…</span>;
+  }
+
+  if (view === "markdown") {
     return (
-      <div
+      <textarea
         className={clsx(styles.root, styles.input)}
-        contentEditable
+        onInput={(e) => {
+          setInput((e.target as HTMLTextAreaElement).value);
+        }}
         ref={inputRef}
         tabIndex={0}
+        value={input}
       />
     );
   }
 
-  if (isPending) {
-    return <span>loading…</span>;
-  }
-
-  if (error) {
-    return <span>error…</span>;
-  }
-
   return (
-    <Markdown className={clsx(styles.root, styles.markdown)}>
-      {data ?? ""}
-    </Markdown>
+    <samp className={clsx(styles.root, styles.markdown)}>
+      <Markdown>{deferredInput}</Markdown>
+    </samp>
   );
 });
