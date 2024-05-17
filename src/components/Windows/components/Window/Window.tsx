@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import {
   FunctionComponent,
+  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -80,6 +81,15 @@ export const Window: FunctionComponent<{
     () => window.width + windowChromeSize,
     [window.width, windowChromeSize]
   );
+
+  const onClose = useCallback(() => {
+    dispatch({
+      payload: {
+        ids: [window.id],
+      },
+      type: "CLOSE",
+    });
+  }, [dispatch, window.id]);
 
   useEffect(() => {
     if (
@@ -324,14 +334,7 @@ export const Window: FunctionComponent<{
             <MenubarContext.Provider value={setMenuitems}>
               <Component
                 file={file}
-                onClose={() => {
-                  dispatch({
-                    payload: {
-                      ids: [window.id],
-                    },
-                    type: "CLOSE",
-                  });
-                }}
+                onClose={onClose}
                 ref={applicationFocusRef}
                 window={window}
               />

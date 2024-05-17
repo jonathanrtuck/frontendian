@@ -1,6 +1,6 @@
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 
-import { useMenubar } from "hooks";
+import { Menubaritem, useMenubar } from "hooks";
 import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 
 import styles from "./PdfViewer.module.css";
@@ -11,36 +11,31 @@ export const PdfViewer = forwardRef<
 >(({ file, onClose }, ref) => {
   const rootRef = useRef<HTMLIFrameElement>(null);
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      focus: rootRef.current
-        ? () => {
-            rootRef.current?.focus();
-          }
-        : undefined,
-    }),
-    []
+  const menubaritems = useMemo<Menubaritem[]>(
+    () => [
+      {
+        items: [
+          {
+            onClick: () => {
+              rootRef.current?.contentWindow?.print();
+            },
+            title: "Print",
+          },
+          null,
+          {
+            onClick: onClose,
+            title: "Quit",
+          },
+        ],
+        title: "File",
+      },
+    ],
+    [onClose]
   );
 
-  useMenubar([
-    {
-      items: [
-        {
-          onClick: () => {
-            rootRef.current?.contentWindow?.print();
-          },
-          title: "Print",
-        },
-        null,
-        {
-          onClick: onClose,
-          title: "Quit",
-        },
-      ],
-      title: "File",
-    },
-  ]);
+  useImperativeHandle(ref, () => ({}), []);
+
+  useMenubar(menubaritems);
 
   if (file?.type !== "application/pdf") {
     return null;

@@ -1,47 +1,52 @@
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
 
-import { useMenubar } from "hooks";
+import { Menubaritem, useMenubar } from "hooks";
 import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 
 export const Teapot = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
 >(({ onClose }) => {
-  useMenubar([
-    {
-      items: [
-        {
-          onClick: () => {},
-          title: "New",
-        },
-        {
-          title: "Open…",
-        },
-        null,
-        {
-          onClick: onClose,
-          title: "Quit",
-        },
-      ],
-      title: "File",
-    },
-    {
-      items: [],
-      title: "Settings",
-    },
-    {
-      items: [
-        {
-          title: "One",
-        },
-        {
-          onClick: () => {},
-          title: "A Long Titled Menubaritem",
-        },
-      ],
-      title: "Lights",
-    },
-  ]);
+  const menubaritems = useMemo<Menubaritem[]>(
+    () => [
+      {
+        items: [
+          {
+            onClick: () => {},
+            title: "New",
+          },
+          {
+            title: "Open…",
+          },
+          null,
+          {
+            onClick: onClose,
+            title: "Quit",
+          },
+        ],
+        title: "File",
+      },
+      {
+        items: [],
+        title: "Settings",
+      },
+      {
+        items: [
+          {
+            title: "One",
+          },
+          {
+            onClick: () => {},
+            title: "A Long Titled Menubaritem",
+          },
+        ],
+        title: "Lights",
+      },
+    ],
+    [onClose]
+  );
+
+  useMenubar(menubaritems);
 
   return (
     <div

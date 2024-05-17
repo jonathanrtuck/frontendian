@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import Markdown from "react-markdown";
 
-import { useMenubar } from "hooks";
+import { Menubaritem, useMenubar } from "hooks";
 import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 
 import styles from "./StyledEdit.module.css";
@@ -28,17 +28,22 @@ export const StyledEdit = forwardRef<
     []
   );
 
-  useMenubar([
-    {
-      items: [
-        {
-          onClick: onClose,
-          title: "Quit",
-        },
-      ],
-      title: "File",
-    },
-  ]);
+  const menubaritems = useMemo<Menubaritem[]>(
+    () => [
+      {
+        items: [
+          {
+            onClick: onClose,
+            title: "Quit",
+          },
+        ],
+        title: "File",
+      },
+    ],
+    [onClose]
+  );
+
+  useMenubar(menubaritems);
 
   const { data, error, isPending } = useQuery({
     enabled: Boolean(file?.url),
