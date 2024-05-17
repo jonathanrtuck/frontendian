@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import {
   FunctionComponent,
-  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -52,6 +51,13 @@ export const Window: FunctionComponent<{
 
   const hasMenubar = menuitems.length !== 0;
 
+  const application = useMemo<Application>(
+    () =>
+      state.applications.find(({ windowIds }) =>
+        windowIds.includes(window.id)
+      ) as Application,
+    [state.applications, window.id]
+  );
   const file = useMemo<File | undefined>(
     () =>
       window.fileId
@@ -81,15 +87,6 @@ export const Window: FunctionComponent<{
     () => window.width + windowChromeSize,
     [window.width, windowChromeSize]
   );
-
-  const onClose = useCallback(() => {
-    dispatch({
-      payload: {
-        ids: [window.id],
-      },
-      type: "CLOSE",
-    });
-  }, [dispatch, window.id]);
 
   useEffect(() => {
     if (
@@ -284,6 +281,7 @@ export const Window: FunctionComponent<{
                   dispatch({
                     payload: {
                       ids: [window.id],
+                      type: "window",
                     },
                     type: "CLOSE",
                   });
@@ -337,8 +335,8 @@ export const Window: FunctionComponent<{
             }>
             <MenubarContext.Provider value={setMenuitems}>
               <Component
+                application={application}
                 file={file}
-                onClose={onClose}
                 ref={applicationFocusRef}
                 window={window}
               />

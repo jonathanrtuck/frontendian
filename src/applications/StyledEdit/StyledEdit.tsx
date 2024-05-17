@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   forwardRef,
   useDeferredValue,
+  useContext,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -11,6 +12,7 @@ import {
 } from "react";
 import Markdown from "react-markdown";
 
+import { StateContext } from "contexts";
 import { Menubaritem, useMenubar } from "hooks";
 import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 
@@ -21,7 +23,9 @@ import styles from "./StyledEdit.module.css";
 export const StyledEdit = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ file, onClose }, ref) => {
+>(({ application, file, window }, ref) => {
+  const [, dispatch] = useContext(StateContext);
+
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useImperativeHandle(
@@ -48,7 +52,44 @@ export const StyledEdit = forwardRef<
       {
         items: [
           {
-            onClick: onClose,
+            onClick: () => {
+              dispatch({
+                payload: {
+                  applicationId: application.id,
+                  type: "window",
+                },
+                type: "OPEN",
+              });
+            },
+            title: "New",
+          },
+          {
+            title: "Open",
+          },
+          null,
+          {
+            onClick: () => {
+              dispatch({
+                payload: {
+                  ids: [window.id],
+                  type: "window",
+                },
+                type: "CLOSE",
+              });
+            },
+            title: "Close",
+          },
+          null,
+          {
+            onClick: () => {
+              dispatch({
+                payload: {
+                  ids: [application.id],
+                  type: "application",
+                },
+                type: "CLOSE",
+              });
+            },
             title: "Quit",
           },
         ],
@@ -82,7 +123,7 @@ export const StyledEdit = forwardRef<
         title: "View",
       },
     ],
-    [onClose, view]
+    [application.id, dispatch, view, window.id]
   );
 
   useMenubar(menubaritems);

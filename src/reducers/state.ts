@@ -1,6 +1,10 @@
 import { v4 as uuid } from "uuid";
 
-import { APPLICATION_TRACKER_ID, DEFAULT_WINDOW } from "consts";
+import {
+  APPLICATION_TRACKER_ID,
+  DEFAULT_WINDOW,
+  UNTITLED_WINDOW_TITLE,
+} from "consts";
 import { Action, State } from "types";
 import { getFirstOpenWindowPosition } from "utils";
 
@@ -19,40 +23,76 @@ export const stateReducer = (state: State, action: Action): State => {
         ),
       };
     case "CLOSE":
-      return action.payload.ids.reduce((prevState: State, id) => {
-        const applicationWithWindow = prevState.applications.find(
-          ({ windowIds }) => windowIds.includes(id)
-        );
-        const isLastApplicationWindow =
-          applicationWithWindow?.windowIds.length === 1;
-        const isTracker = applicationWithWindow?.id === APPLICATION_TRACKER_ID;
+      switch (action.payload.type) {
+        case "application":
+          return action.payload.ids.reduce((prevState: State, id) => {
+            const application = prevState.applications.find(
+              (application) => application.id === id
+            );
+            const isTracker = application?.id === APPLICATION_TRACKER_ID;
+            const windowIds = application?.windowIds ?? [];
 
-        return {
-          ...prevState,
-          applications: prevState.applications.map((application) => {
-            if (application === applicationWithWindow) {
-              return {
-                ...application,
-                windowIds: application.windowIds.filter(
-                  (windowId) => windowId !== id
-                ),
-              };
-            }
+            return {
+              ...prevState,
+              applications: prevState.applications.map((application) =>
+                application.id === id
+                  ? {
+                      ...application,
+                      windowIds: [],
+                    }
+                  : application
+              ),
+              openApplicationIds: !isTracker
+                ? prevState.openApplicationIds.filter(
+                    (applicationId) => applicationId !== id
+                  )
+                : prevState.openApplicationIds,
+              stackingOrder: prevState.stackingOrder.filter(
+                (windowId) => windowId !== id
+              ),
+              windows: prevState.windows.filter(
+                (window) => !windowIds.includes(window.id)
+              ),
+            };
+          }, state);
+        case "window":
+          return action.payload.ids.reduce((prevState: State, id) => {
+            const applicationWithWindow = prevState.applications.find(
+              ({ windowIds }) => windowIds.includes(id)
+            );
+            const isLastApplicationWindow =
+              applicationWithWindow?.windowIds.length === 1;
+            const isTracker =
+              applicationWithWindow?.id === APPLICATION_TRACKER_ID;
 
-            return application;
-          }),
-          openApplicationIds:
-            isLastApplicationWindow && !isTracker
-              ? prevState.openApplicationIds.filter(
-                  (applicationId) => applicationId !== applicationWithWindow?.id
-                )
-              : prevState.openApplicationIds,
-          stackingOrder: prevState.stackingOrder.filter(
-            (windowId) => windowId !== id
-          ),
-          windows: prevState.windows.filter((window) => window.id !== id),
-        };
-      }, state);
+            return {
+              ...prevState,
+              applications: prevState.applications.map((application) =>
+                application === applicationWithWindow
+                  ? {
+                      ...application,
+                      windowIds: application.windowIds.filter(
+                        (windowId) => windowId !== id
+                      ),
+                    }
+                  : application
+              ),
+              openApplicationIds:
+                isLastApplicationWindow && !isTracker
+                  ? prevState.openApplicationIds.filter(
+                      (applicationId) =>
+                        applicationId !== applicationWithWindow?.id
+                    )
+                  : prevState.openApplicationIds,
+              stackingOrder: prevState.stackingOrder.filter(
+                (windowId) => windowId !== id
+              ),
+              windows: prevState.windows.filter((window) => window.id !== id),
+            };
+          }, state);
+        default:
+          return state;
+      }
     case "FOCUS":
     case "SHOW":
       return {
@@ -187,13 +227,10 @@ export const stateReducer = (state: State, action: Action): State => {
                   focused: true,
                   id: windowId,
                   title:
-                    window?.title ??
+                    window?.title ||
                     prevState.files.find((file) => file.id === window?.fileId)
-                      ?.title ??
-                    prevState.applications.find(
-                      (application) => application.id === id
-                    )?.title ??
-                    "Untitled",
+                      ?.title ||
+                    UNTITLED_WINDOW_TITLE,
                   x: windowPosition,
                   y: windowPosition,
                 },
@@ -289,19 +326,62 @@ export const stateReducer = (state: State, action: Action): State => {
                   fileId: file.id,
                   focused: true,
                   id: windowId,
-                  title:
-                    window?.title ??
-                    file.title ??
-                    prevState.applications.find(
-                      (application) => application.id === applicationId
-                    )?.title ??
-                    "Untitled",
+                  title: window?.title || file.title || UNTITLED_WINDOW_TITLE,
                   x: windowPosition,
                   y: windowPosition,
                 },
               ],
             };
           }, state);
+        case "window":
+          if ("applicationId" in action.payload) {
+            const { applicationId } = action.payload;
+            const application = state.applications.find(
+              (application) => application.id === applicationId
+            );
+
+            if (!application) {
+              return state;
+            }
+
+            const isApplicationOpen =
+              state.openApplicationIds.includes(applicationId);
+            const window = application?.getWindow?.();
+            const windowId = uuid();
+            const windowPosition = getFirstOpenWindowPosition(state.windows);
+
+            return {
+              ...state,
+              applications: state.applications.map((application) =>
+                application.id === applicationId
+                  ? {
+                      ...application,
+                      windowIds: [...application.windowIds, windowId],
+                    }
+                  : application
+              ),
+              openApplicationIds: isApplicationOpen
+                ? state.openApplicationIds
+                : [...state.openApplicationIds, applicationId],
+              windows: [
+                ...state.windows.map((window) => ({
+                  ...window,
+                  focused: false,
+                })),
+                {
+                  ...DEFAULT_WINDOW,
+                  ...window,
+                  focused: true,
+                  id: windowId,
+                  title: window?.title || UNTITLED_WINDOW_TITLE,
+                  x: windowPosition,
+                  y: windowPosition,
+                },
+              ],
+            };
+          }
+
+          return state;
         default:
           return state;
       }
@@ -325,13 +405,7 @@ export const stateReducer = (state: State, action: Action): State => {
           action.payload.ids.includes(window.id)
             ? {
                 ...window,
-                title:
-                  action.payload.value ??
-                  state.files.find(({ id }) => id === window.fileId)?.title ??
-                  state.applications.find(({ windowIds }) =>
-                    windowIds.includes(window.id)
-                  )?.title ??
-                  "Untitled",
+                title: action.payload.value || UNTITLED_WINDOW_TITLE,
               }
             : window
         ),

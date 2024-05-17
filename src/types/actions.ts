@@ -23,6 +23,7 @@ export type ActionBlur = {
 export type ActionClose = {
   payload: {
     ids: ID[];
+    type: "application" | "window";
   };
   type: "CLOSE";
 };
@@ -67,6 +68,10 @@ export type ActionOpen = {
         ids: ID[];
         type: "file";
         windowId?: ID;
+      }
+    | {
+        applicationId: ID;
+        type: "window";
       };
   type: "OPEN";
 };

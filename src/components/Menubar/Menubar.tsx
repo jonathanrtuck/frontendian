@@ -168,7 +168,7 @@ export const Menubar = forwardRef<
             aria-haspopup="menu"
             aria-label={title}
             className={clsx(classes?.menubaritem, styles.menubaritem)}
-            key={title}
+            key={`${title}-${i}`}
             onClick={
               isDisabled
                 ? undefined
@@ -261,7 +261,7 @@ export const Menubar = forwardRef<
                       aria-disabled={!item.onClick}
                       aria-label={item.title}
                       className={clsx(classes?.menuitem, styles.menuitem)}
-                      key={item.title}
+                      key={`${item.title}-${i}`}
                       onClick={() => {
                         resetFocus();
                         item.onClick?.();

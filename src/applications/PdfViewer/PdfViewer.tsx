@@ -1,5 +1,12 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
+import {
+  forwardRef,
+  useContext,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 
+import { StateContext } from "contexts";
 import { Menubaritem, useMenubar } from "hooks";
 import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 
@@ -8,7 +15,9 @@ import styles from "./PdfViewer.module.css";
 export const PdfViewer = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ file, onClose }, ref) => {
+>(({ application, file, window }, ref) => {
+  const [, dispatch] = useContext(StateContext);
+
   const rootRef = useRef<HTMLIFrameElement>(null);
 
   const menubaritems = useMemo<Menubaritem[]>(
@@ -17,20 +26,57 @@ export const PdfViewer = forwardRef<
         items: [
           {
             onClick: () => {
+              dispatch({
+                payload: {
+                  applicationId: application.id,
+                  type: "window",
+                },
+                type: "OPEN",
+              });
+            },
+            title: "New",
+          },
+          {
+            title: "Open",
+          },
+          null,
+          {
+            onClick: () => {
+              dispatch({
+                payload: {
+                  ids: [window.id],
+                  type: "window",
+                },
+                type: "CLOSE",
+              });
+            },
+            title: "Close",
+          },
+          null,
+          {
+            onClick: () => {
               rootRef.current?.contentWindow?.print();
             },
             title: "Print",
           },
           null,
           {
-            onClick: onClose,
+            onClick: () => {
+              dispatch({
+                payload: {
+                  ids: [application.id],
+                  type: "application",
+                },
+                type: "CLOSE",
+              });
+            },
             title: "Quit",
           },
         ],
         title: "File",
       },
     ],
-    [onClose]
+    [application.id, dispatch, window.id]
   );
 
   useImperativeHandle(ref, () => ({}), []);

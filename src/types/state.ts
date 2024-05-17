@@ -16,8 +16,8 @@ export type Application = {
 };
 
 export type ApplicationComponentProps = {
+  application: Application;
   file?: File;
-  onClose(): void;
   window: Window;
 } & HTMLAttributes<HTMLElement> &
   RefAttributes<ApplicationComponentRef>;

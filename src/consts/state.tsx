@@ -39,6 +39,7 @@ export const INITIAL_STATE: State = {
       Component: PdfViewer,
       getWindow: (file) => ({
         height: 600,
+        title: file?.title || "PDF Viewer",
         width: file && "width" in file ? file?.width : DEFAULT_WINDOW.width,
       }),
       id: "application-pdf-viewer",
@@ -47,9 +48,6 @@ export const INITIAL_STATE: State = {
     },
     {
       Component: StyledEdit,
-      getWindow: (file) => ({
-        title: file?.title ?? "Untitled",
-      }),
       id: "application-styled-edit",
       title: "Styled Edit",
       windowIds: [],
@@ -58,6 +56,7 @@ export const INITIAL_STATE: State = {
       Component: Teapot,
       getWindow: () => ({
         height: 300,
+        title: "Teapot",
         width: 300,
       }),
       id: "application-teapot",
@@ -110,3 +109,5 @@ export const INITIAL_STATE: State = {
   },
   windows: [],
 };
+
+export const UNTITLED_WINDOW_TITLE = "Untitled";

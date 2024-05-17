@@ -1,26 +1,29 @@
-import { forwardRef, useMemo } from "react";
+import { forwardRef, useContext, useMemo } from "react";
 
+import { StateContext } from "contexts";
 import { Menubaritem, useMenubar } from "hooks";
 import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 
 export const Teapot = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ onClose }, ref) => {
+>(({ application }, ref) => {
+  const [, dispatch] = useContext(StateContext);
+
   const menubaritems = useMemo<Menubaritem[]>(
     () => [
       {
         items: [
           {
-            onClick: () => {},
-            title: "New",
-          },
-          {
-            title: "Open…",
-          },
-          null,
-          {
-            onClick: onClose,
+            onClick: () => {
+              dispatch({
+                payload: {
+                  ids: [application.id],
+                  type: "application",
+                },
+                type: "CLOSE",
+              });
+            },
             title: "Quit",
           },
         ],
@@ -43,7 +46,7 @@ export const Teapot = forwardRef<
         title: "Lights",
       },
     ],
-    [onClose]
+    [application.id, dispatch]
   );
 
   useMenubar(menubaritems);

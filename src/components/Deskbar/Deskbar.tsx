@@ -111,7 +111,8 @@ export const Deskbar: FunctionComponent<{}> = () => {
                 onClick: () => {
                   dispatch({
                     payload: {
-                      ids: windowIds,
+                      ids: [id],
+                      type: "application",
                     },
                     type: "CLOSE",
                   });
