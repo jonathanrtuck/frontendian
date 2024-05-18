@@ -27,7 +27,7 @@
   background-color: var(--window-background-color);
   border-width: var(--border-width);
   color: rgb(0, 0, 0);
-  cursor: url("/public/cursors/Grab.svg"), grab;
+  cursor: var(--cursor--grab);
   flex-direction: column;
   left: 0;
   margin: var(--window_header-height) 0 0;
@@ -41,7 +41,7 @@
 }
 
 .root:active {
-  cursor: url("/public/cursors/Grabbing.svg"), grabbing;
+  cursor: var(--cursor--grabbing);
 }
 
 .root:focus-within {
@@ -113,7 +113,7 @@
 }
 
 .button {
-  cursor: url("/public/cursors/Pointer.svg"), default;
+  cursor: var(--cursor--default);
   height: calc(var(--window_header-height) - (var(--window-padding) * 2));
   flex: 0 0 calc(var(--window_header-height) - (var(--window-padding) * 2));
   width: calc(var(--window_header-height) - (var(--window-padding) * 2));
@@ -200,7 +200,7 @@
     rgb(209, 209, 209)
   );
   border-width: var(--border-width) var(--border-width) 0;
-  cursor: url("/public/cursors/Pointer.svg"), default;
+  cursor: var(--cursor--default);
 }
 
 .menubar {
@@ -211,7 +211,7 @@
   background-color: rgb(255, 255, 255);
   border-width: var(--border-width);
   box-sizing: content-box;
-  cursor: url("/public/cursors/Pointer.svg"), default;
+  cursor: var(--cursor--default);
   flex-grow: 1;
   overflow: scroll;
 }

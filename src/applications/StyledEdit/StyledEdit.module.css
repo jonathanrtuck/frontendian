@@ -1,5 +1,5 @@
 .root {
-  cursor: url("/public/cursors/Text.svg"), text;
+  cursor: var(--cursor--text);
   display: block;
   font-family: var(--font-family--monospace);
   min-height: 100%;
@@ -16,4 +16,20 @@
 }
 
 .markdown {
+}
+
+.markdown code {
+  background-color: rgb(222, 222, 222);
+  border-radius: 0.25rem;
+  padding: 0 0.25rem;
+}
+
+.markdown h1 {
+  border-width: 0 0 var(--border-width);
+  margin: 0 0 2.5rem;
+  padding: 0.75rem 0;
+}
+
+.markdown h2 {
+  margin: 2.5rem 0 0;
 }
