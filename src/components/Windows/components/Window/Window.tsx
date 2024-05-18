@@ -27,9 +27,7 @@ const MIN_WINDOW_HEIGHT = 100;
 const MIN_WINDOW_WIDTH = 100;
 
 // @see https://github.com/react-grid-layout/react-draggable/issues/749#issuecomment-2098538949
-// @todo add prop(s) for menubar/toolbar (header)
 // @todo listen for root element's `font-size` changes
-// @todo pass a ref down to Component and use it for focusing instead of Window itself
 export const Window: FunctionComponent<{
   Component: Application["Component"];
   stackingIndex: number;

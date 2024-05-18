@@ -1,4 +1,5 @@
 export * from "./Graphics";
+export * from "./Minesweeper";
 export * from "./Network";
 export * from "./Pdf";
 export * from "./Resize";

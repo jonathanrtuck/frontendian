@@ -1,13 +1,32 @@
-import { PdfViewer, StyledEdit, Teapot, Tracker } from "applications";
 import {
-  Pdf as PdfIcon,
+  Minesweeper,
+  PdfViewer,
+  StyledEdit,
+  Teapot,
+  Tracker,
+} from "applications";
+import {
   Graphics as GraphicsIcon,
+  Minesweeper as MinesweeperIcon,
+  Pdf as PdfIcon,
   StyledEdit as StyledEditIcon,
   Teapot as TeapotIcon,
   Text as TextIcon,
   Tracker as TrackerIcon,
 } from "icons";
 import { Application, File, MimeType, State, Window } from "types";
+
+export const APPLICATION_MINESWEEPER: Application = {
+  Component: Minesweeper,
+  getWindow: () => ({
+    height: 300,
+    title: "Minesweeper",
+    width: 300,
+  }),
+  id: "application-minesweeper",
+  title: "Minesweeper",
+  windowIds: [],
+};
 
 export const APPLICATION_PDF_VIEWER: Application = {
   Component: PdfViewer,
@@ -80,6 +99,7 @@ export const FILE_RESUME: File = {
 
 export const INITIAL_STATE: State = {
   applications: [
+    APPLICATION_MINESWEEPER,
     APPLICATION_PDF_VIEWER,
     APPLICATION_STYLED_EDIT,
     APPLICATION_TEAPOT,
@@ -90,6 +110,9 @@ export const INITIAL_STATE: State = {
   openApplicationIds: [APPLICATION_TRACKER.id],
   stackingOrder: [DESKBAR_ID],
   types: {
+    [APPLICATION_MINESWEEPER.id]: {
+      icon: <MinesweeperIcon />,
+    },
     [APPLICATION_PDF_VIEWER.id]: {
       icon: <GraphicsIcon />,
     },

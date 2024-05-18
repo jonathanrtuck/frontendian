@@ -16,6 +16,11 @@ import {
 
 import styles from "./PdfViewer.module.css";
 
+/**
+ * it is impossible to detect focus within a different browsing context (e.g.
+ * iframe), so Window component incorrectly fires a "BLUR" event when focus
+ * moves into this iframe. 🤷‍♂️😣
+ */
 export const PdfViewer = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
