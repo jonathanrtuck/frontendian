@@ -1,0 +1,72 @@
+.square {
+  appearance: none;
+  border: 0.1875rem solid transparent;
+  box-sizing: border-box;
+  height: 1.5rem;
+  padding: 0;
+  position: relative;
+  text-align: center;
+  width: 1.5rem;
+}
+
+.button {
+  background-color: var(--minesweeper-background-color);
+  border-color: currentColor;
+  border-style: outset;
+}
+
+.button:not(.gameOver):not(.flag):active {
+  border-color: transparent;
+  border-style: solid;
+}
+
+.button.flag.gameOver:not(.mine)::after {
+  bottom: 0;
+  content: "❌";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.mine.revealed {
+  background-color: red;
+}
+
+.number {
+  border: 0.5px solid gray;
+  display: inline-block;
+  font-family: var(--font-family--mine-sweeper);
+}
+
+.number-1 {
+  color: blue;
+}
+
+.number-2 {
+  color: green;
+}
+
+.number-3 {
+  color: red;
+}
+
+.number-4 {
+  color: purple;
+}
+
+.number-5 {
+  color: maroon;
+}
+
+.number-6 {
+  color: teal;
+}
+
+.number-7 {
+  color: black;
+}
+
+.number-8 {
+  color: gray;
+}

@@ -19,9 +19,9 @@ import { Application, File, MimeType, State, Window } from "types";
 export const APPLICATION_MINESWEEPER: Application = {
   Component: Minesweeper,
   getWindow: () => ({
-    height: 300,
+    height: 311,
     title: "Minesweeper",
-    width: 300,
+    width: 244,
   }),
   id: "application-minesweeper",
   title: "Minesweeper",
@@ -105,7 +105,7 @@ export const INITIAL_STATE: State = {
     APPLICATION_TEAPOT,
     APPLICATION_TRACKER,
   ],
-  desktop: [FILE_RESUME.id, APPLICATION_TEAPOT.id],
+  desktop: [FILE_RESUME.id],
   files: [FILE_ABOUT, FILE_RESUME],
   openApplicationIds: [APPLICATION_TRACKER.id],
   stackingOrder: [DESKBAR_ID],

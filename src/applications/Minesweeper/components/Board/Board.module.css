@@ -1,0 +1,73 @@
+.root {
+  background-color: var(--minesweeper-background-color);
+  border: 0.1875rem outset;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  user-select: none;
+}
+
+.header {
+  align-items: center;
+  border: 0.1875rem inset;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.number {
+  background-color: black;
+  color: red;
+  font-family: var(--font-family--digital-dismay);
+  font-size: 3rem;
+  line-height: 0.8;
+  height: 2.25rem;
+  padding: 0 0 0 0.125rem;
+  text-align: center;
+  width: 4rem;
+}
+
+.reset {
+  background-color: var(--minesweeper-background-color);
+  border: 0.1875rem outset;
+  font-size: 1.75rem;
+  line-height: 1;
+  padding: 0;
+  text-align: center;
+}
+
+.reset::after {
+  content: "😀";
+  vertical-align: middle;
+}
+
+.reset:active {
+  border-style: inset;
+}
+
+.reset:active::after {
+  content: "🙂";
+}
+
+.lost::after {
+  content: "😵";
+}
+
+.won::after {
+  content: "😎";
+}
+
+.grid {
+  border: 0.1875rem inset;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.row {
+  display: flex;
+  gap: 0;
+  height: 1.5rem;
+}

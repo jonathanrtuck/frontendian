@@ -1,19 +1,65 @@
-import { forwardRef, useContext, useMemo } from "react";
+import {
+  forwardRef,
+  Reducer,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from "react";
 
+import { Board } from "./components/Board";
+import { BEGINNER_STATE } from "./constants";
+import { reducer } from "./state";
+import { Action, State } from "./types";
+import { APPLICATION_MINESWEEPER } from "consts";
 import { StateContext } from "contexts";
 import { Menubaritem, useMenubar } from "hooks";
 import { ApplicationComponentProps, ApplicationComponentRef } from "types";
 
+import styles from "./Minesweeper.module.css";
+
+// @see https://github.com/jonathanrtuck/minesweeper
 export const Minesweeper = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ application }, ref) => {
+>(({ application, window: { id: windowId } }, ref) => {
   const [, dispatch] = useContext(StateContext);
+
+  const intervalRef = useRef<number>(0);
+
+  const [gameState, gameDispatch] = useReducer<Reducer<State, Action>>(
+    reducer,
+    BEGINNER_STATE
+  );
 
   const menubaritems = useMemo<Menubaritem[]>(
     () => [
       {
         items: [
+          {
+            onClick: () => {
+              const newWindow = APPLICATION_MINESWEEPER.getWindow?.();
+
+              // reset window dimensions
+              if (newWindow?.height && newWindow?.width) {
+                dispatch({
+                  payload: {
+                    height: newWindow.height,
+                    ids: [windowId],
+                    width: newWindow.width,
+                  },
+                  type: "RESIZE",
+                });
+              }
+
+              gameDispatch({
+                type: "reset",
+              });
+            },
+            title: "New",
+          },
+          null,
           {
             onClick: () => {
               dispatch({
@@ -30,10 +76,41 @@ export const Minesweeper = forwardRef<
         title: "File",
       },
     ],
-    [application.id, dispatch]
+    [application.id, dispatch, windowId]
   );
 
   useMenubar(menubaritems);
 
-  return <h1>minesweeper…</h1>;
+  useEffect(() => {
+    if (gameState.elapsedTime === 1) {
+      intervalRef.current = window.setInterval(() => {
+        gameDispatch({
+          type: "tick",
+        });
+      }, 1000);
+    }
+
+    if (gameState.elapsedTime === 0 || gameState.elapsedTime === 999) {
+      window.clearInterval(intervalRef.current);
+    }
+  }, [gameState.elapsedTime]);
+
+  useEffect(() => {
+    if (gameState.isLost || gameState.isWon) {
+      window.clearInterval(intervalRef.current);
+    }
+  }, [gameState]);
+
+  useEffect(
+    () => () => {
+      window.clearInterval(intervalRef.current);
+    },
+    []
+  );
+
+  return (
+    <div className={styles.root}>
+      <Board dispatch={gameDispatch} state={gameState} />
+    </div>
+  );
 });
