@@ -1,15 +1,49 @@
 import clsx from "clsx";
 import {
+  createContext,
+  Dispatch,
   forwardRef,
   HTMLAttributes,
+  ReactElement,
+  SetStateAction,
+  useContext,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
 
-import { Menubaritem } from "./types";
-
 import styles from "./Menubar.module.css";
+
+export type Menuitem =
+  | {
+      checked?: boolean;
+      icon?: ReactElement;
+      onClick?(): void; // menuitem will be disabled if this is not defined
+      title: string;
+      type?: "checkbox" | "radio";
+    }
+  | Separator;
+
+export type Menubaritem = {
+  icon?: ReactElement;
+  items: Menuitem[]; // menubaritem will be disabled if this is empty
+  title: string;
+};
+
+export type Separator = null;
+
+export const MenubarContext = createContext<
+  Dispatch<SetStateAction<Menubaritem[]>>
+>(() => []);
+
+export const useMenubar = (menuitems: Menubaritem[]) => {
+  const setMenuitems = useContext(MenubarContext);
+
+  useEffect(() => {
+    setMenuitems(menuitems);
+  }, [menuitems, setMenuitems]);
+};
 
 export const Menubar = forwardRef<
   HTMLElement,
