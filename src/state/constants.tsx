@@ -1,4 +1,4 @@
-import { File, MimeType, State, Window } from "./types";
+import { State, Window } from "./types";
 import {
   APPLICATION_MINESWEEPER,
   APPLICATION_PDF_VIEWER,
@@ -6,7 +6,9 @@ import {
   APPLICATION_TEAPOT,
   APPLICATION_TRACKER,
 } from "applications";
+import { FILE_ABOUT, FILE_RESUME } from "files";
 import { Pdf, Text } from "icons";
+import { MimeType } from "types";
 
 export const DEFAULT_WINDOW: Omit<Window, "id" | "title" | "x" | "y"> = {
   focused: true,
@@ -22,32 +24,6 @@ export const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
 export const DEFAULT_WINDOW_POSITION_OFFSET = 96;
 
 export const DESKBAR_ID = "deskbar";
-
-export const EMPTY_STATE: State = {
-  applications: [],
-  desktop: [],
-  files: [],
-  openApplicationIds: [],
-  stackingOrder: [],
-  types: {},
-  windows: [],
-};
-
-export const FILE_ABOUT: File = {
-  id: "file-about",
-  title: "About frontendian",
-  type: MimeType.TextMarkdown,
-  url: "https://raw.githubusercontent.com/jonathanrtuck/frontendian/main/README.md",
-};
-
-export const FILE_RESUME: File = {
-  height: 990 * 2, // numPages
-  id: "file-resume",
-  title: "Résumé",
-  type: MimeType.ApplicationPdf,
-  url: `${process.env.PUBLIC_URL}/files/resume.pdf`,
-  width: 765, // 11/8.5 ratio
-};
 
 export const INITIAL_STATE: State = {
   applications: [

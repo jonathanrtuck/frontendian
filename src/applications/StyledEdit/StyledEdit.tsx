@@ -14,13 +14,13 @@ import Markdown from "react-markdown";
 
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { StyledEdit as Icon } from "icons";
+import { StateContext } from "state/context";
 import {
   Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
-  MimeType,
-  StateContext,
-} from "state";
+} from "state/types";
+import { MimeType } from "types";
 
 import styles from "./StyledEdit.module.css";
 

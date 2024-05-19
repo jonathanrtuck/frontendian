@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import { DEFAULT_WINDOW, UNTITLED_WINDOW_TITLE } from "./constants";
 import { Action, State } from "./types";
 import { getFirstOpenWindowPosition } from "./utils";
-import { APPLICATION_TRACKER } from "applications/Tracker";
+import { APPLICATION_TRACKER } from "applications";
 
 export const stateReducer = (state: State, action: Action): State => {
   switch (action.type) {

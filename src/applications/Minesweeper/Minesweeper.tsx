@@ -14,12 +14,12 @@ import { reducer } from "./state";
 import { Action, State } from "./types";
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { Minesweeper as Icon } from "icons";
+import { StateContext } from "state/context";
 import {
   Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
-  StateContext,
-} from "state";
+} from "state/types";
 
 import styles from "./Minesweeper.module.css";
 

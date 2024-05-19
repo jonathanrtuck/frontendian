@@ -8,14 +8,14 @@ import {
 
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { Graphics as Icon } from "icons";
+import { StateContext } from "state/context";
 import {
   Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
   File,
-  MimeType,
-  StateContext,
-} from "state";
+} from "state/types";
+import { MimeType } from "types";
 
 import styles from "./PdfViewer.module.css";
 

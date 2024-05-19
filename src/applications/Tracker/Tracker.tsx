@@ -5,7 +5,7 @@ import {
   Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
-} from "state";
+} from "state/types";
 
 const Tracker = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
   (props, ref) => null

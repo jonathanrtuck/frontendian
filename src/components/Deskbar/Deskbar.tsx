@@ -9,16 +9,11 @@ import {
 } from "react";
 
 import { Calendar } from "./components/Calendar";
-import { APPLICATION_TRACKER } from "applications/Tracker";
+import { APPLICATION_TRACKER } from "applications";
 import { Menubar, Menubaritem } from "components/Menubar";
+import { FILE_ABOUT } from "files";
 import { Network, WindowHidden, WindowVisible } from "icons";
-import {
-  Application,
-  DESKBAR_ID,
-  FILE_ABOUT,
-  StateContext,
-  Window,
-} from "state";
+import { Application, DESKBAR_ID, StateContext, Window } from "state";
 
 import styles from "./Deskbar.module.css";
 

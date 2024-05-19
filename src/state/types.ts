@@ -5,6 +5,8 @@ import {
   RefAttributes,
 } from "react";
 
+import { ID, MimeType, URL } from "types";
+
 export type Action =
   | ActionBlur
   | ActionClose
@@ -154,13 +156,6 @@ export type File = {
     }
 );
 
-export type ID = string;
-
-export enum MimeType {
-  ApplicationPdf = "application/pdf",
-  TextMarkdown = "text/markdown",
-}
-
 export type State = {
   applications: Application[]; // the order is used as the display order in the Deskbar logo Menu
   desktop: ID[]; // the order is used as the display order on the Desktop
@@ -180,8 +175,6 @@ export type Types = Partial<
     }
   >
 >;
-
-export type URL = string;
 
 export type Window = {
   fileId?: ID;

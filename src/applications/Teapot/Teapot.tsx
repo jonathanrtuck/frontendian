@@ -9,12 +9,12 @@ import {
 import { main } from "./Teapot.weblgl";
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { Teapot as Icon } from "icons";
+import { StateContext } from "state/context";
 import {
   Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
-  StateContext,
-} from "state";
+} from "state/types";
 
 import styles from "./Teapot.module.css";
 

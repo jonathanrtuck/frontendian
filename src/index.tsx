@@ -14,9 +14,9 @@ import { Deskbar } from "components/Deskbar";
 import { Desktop } from "components/Desktop";
 import { Window } from "components/Window";
 import reportWebVitals from "reportWebVitals";
+import { FILE_ABOUT } from "files";
 import {
   Action,
-  FILE_ABOUT,
   INITIAL_STATE,
   State,
   StateContext,
