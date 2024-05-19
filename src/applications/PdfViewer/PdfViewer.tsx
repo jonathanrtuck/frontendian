@@ -7,9 +7,12 @@ import {
 } from "react";
 
 import { Menubaritem, useMenubar } from "components/Menubar";
+import { Graphics as Icon } from "icons";
 import {
+  Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
+  File,
   MimeType,
   StateContext,
 } from "state";
@@ -21,7 +24,7 @@ import styles from "./PdfViewer.module.css";
  * iframe), so Window component incorrectly fires a "BLUR" event when focus
  * moves into this iframe. 🤷‍♂️😣
  */
-export const PdfViewer = forwardRef<
+const PdfViewer = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
 >(({ application, file, window }, ref) => {
@@ -107,3 +110,16 @@ export const PdfViewer = forwardRef<
     />
   );
 });
+
+export const APPLICATION_PDF_VIEWER: Application = {
+  Component: PdfViewer,
+  getWindow: (file: File) => ({
+    height: 600,
+    title: file?.title || "PDF Viewer",
+    width: file && "width" in file ? file?.width : undefined,
+  }),
+  icon: <Icon />,
+  id: "application-pdf-viewer",
+  title: "PDF Viewer",
+  windowIds: [],
+};

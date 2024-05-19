@@ -122,6 +122,7 @@ export type ActionZoom = {
 export type Application = {
   Component: ForwardRefExoticComponent<ApplicationComponentProps>;
   getWindow?(file?: File): Partial<Window>;
+  icon: ReactElement;
   id: ID;
   title: string;
   windowIds: ID[];
@@ -170,12 +171,14 @@ export type State = {
   windows: Window[];
 };
 
-export type Types = Record<
-  ID | MimeType,
-  {
-    application?: ID;
-    icon: ReactElement;
-  }
+export type Types = Partial<
+  Record<
+    MimeType,
+    {
+      application?: ID;
+      icon: ReactElement;
+    }
+  >
 >;
 
 export type URL = string;

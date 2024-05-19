@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 
+import { File } from "icons";
 import { StateContext } from "state";
 
 import styles from "./Desktop.module.css";
@@ -109,7 +110,9 @@ export const Desktop: FunctionComponent<{}> = () => {
         }
 
         const isApplication = "windowIds" in obj;
-        const icon = state.types[isApplication ? id : obj.type].icon;
+        const icon = isApplication
+          ? obj.icon
+          : state.types[obj.type]?.icon ?? <File />;
 
         return (
           <button

@@ -9,11 +9,11 @@ import {
 } from "react";
 
 import { Calendar } from "./components/Calendar";
+import { APPLICATION_TRACKER } from "applications/Tracker";
 import { Menubar, Menubaritem } from "components/Menubar";
 import { Network, WindowHidden, WindowVisible } from "icons";
 import {
   Application,
-  APPLICATION_TRACKER,
   DESKBAR_ID,
   FILE_ABOUT,
   StateContext,
@@ -42,13 +42,12 @@ export const Deskbar: FunctionComponent<{}> = () => {
   const applicationMenubaritems = useMemo<Menubaritem[]>(
     () =>
       openApplications
-        .map(({ id, title, windowIds }) => {
+        .map(({ icon, id, title, windowIds }) => {
           const menubaritem = {
-            icon: state.types[id]?.icon,
+            icon,
             items: [],
             title,
           };
-
           const hasWindows = windowIds.length !== 0;
 
           if (!hasWindows) {
@@ -128,7 +127,7 @@ export const Deskbar: FunctionComponent<{}> = () => {
           };
         })
         .filter(Boolean) as Menubaritem[],
-    [dispatch, openApplications, state.types, state.windows]
+    [dispatch, openApplications, state.windows]
   );
   const logoMenubaritems = useMemo<Menubaritem[]>(
     () => [
@@ -149,8 +148,8 @@ export const Deskbar: FunctionComponent<{}> = () => {
           null,
           ...state.applications
             .filter(({ id }) => id !== APPLICATION_TRACKER.id)
-            .map(({ id, title }) => ({
-              icon: state.types[id]?.icon,
+            .map(({ icon, id, title }) => ({
+              icon,
               onClick: () => {
                 dispatch({
                   payload: {
@@ -166,7 +165,7 @@ export const Deskbar: FunctionComponent<{}> = () => {
         title: "frontendian",
       },
     ],
-    [dispatch, state.applications, state.types]
+    [dispatch, state.applications]
   );
 
   const setTime = useCallback((date: Date) => {

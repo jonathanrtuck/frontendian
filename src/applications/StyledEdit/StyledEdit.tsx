@@ -13,7 +13,9 @@ import {
 import Markdown from "react-markdown";
 
 import { Menubaritem, useMenubar } from "components/Menubar";
+import { StyledEdit as Icon } from "icons";
 import {
+  Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
   MimeType,
@@ -24,7 +26,7 @@ import styles from "./StyledEdit.module.css";
 
 // @todo handle loading styles
 // @todo handle error styles
-export const StyledEdit = forwardRef<
+const StyledEdit = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
 >(({ application, file, window }, ref) => {
@@ -184,3 +186,11 @@ export const StyledEdit = forwardRef<
     </samp>
   );
 });
+
+export const APPLICATION_STYLED_EDIT: Application = {
+  Component: StyledEdit,
+  icon: <Icon />,
+  id: "application-styled-edit",
+  title: "Styled Edit",
+  windowIds: [],
+};

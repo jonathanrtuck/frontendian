@@ -8,7 +8,9 @@ import {
 
 import { main } from "./Teapot.weblgl";
 import { Menubaritem, useMenubar } from "components/Menubar";
+import { Teapot as Icon } from "icons";
 import {
+  Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
   StateContext,
@@ -16,44 +18,56 @@ import {
 
 import styles from "./Teapot.module.css";
 
-export const Teapot = forwardRef<
-  ApplicationComponentRef,
-  ApplicationComponentProps
->(({ application }, ref) => {
-  const [, dispatch] = useContext(StateContext);
+const Teapot = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
+  ({ application }, ref) => {
+    const [, dispatch] = useContext(StateContext);
 
-  const rootRef = useRef<HTMLCanvasElement>(null);
+    const rootRef = useRef<HTMLCanvasElement>(null);
 
-  const menubaritems = useMemo<Menubaritem[]>(
-    () => [
-      {
-        items: [
-          {
-            onClick: () => {
-              dispatch({
-                payload: {
-                  ids: [application.id],
-                  type: "application",
-                },
-                type: "CLOSE",
-              });
+    const menubaritems = useMemo<Menubaritem[]>(
+      () => [
+        {
+          items: [
+            {
+              onClick: () => {
+                dispatch({
+                  payload: {
+                    ids: [application.id],
+                    type: "application",
+                  },
+                  type: "CLOSE",
+                });
+              },
+              title: "Quit",
             },
-            title: "Quit",
-          },
-        ],
-        title: "File",
-      },
-    ],
-    [application.id, dispatch]
-  );
+          ],
+          title: "File",
+        },
+      ],
+      [application.id, dispatch]
+    );
 
-  useMenubar(menubaritems);
+    useMenubar(menubaritems);
 
-  useLayoutEffect(() => {
-    if (rootRef.current) {
-      main(rootRef.current);
-    }
-  });
+    useLayoutEffect(() => {
+      if (rootRef.current) {
+        main(rootRef.current);
+      }
+    });
 
-  return <canvas className={styles.root} ref={rootRef} />;
-});
+    return <canvas className={styles.root} ref={rootRef} />;
+  }
+);
+
+export const APPLICATION_TEAPOT: Application = {
+  Component: Teapot,
+  getWindow: () => ({
+    height: 300,
+    title: "Teapot",
+    width: 300,
+  }),
+  icon: <Icon />,
+  id: "application-teapot",
+  title: "Teapot",
+  windowIds: [],
+};

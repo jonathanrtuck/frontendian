@@ -1,8 +1,20 @@
 import { forwardRef } from "react";
 
-import { ApplicationComponentProps, ApplicationComponentRef } from "state";
-
-export const Tracker = forwardRef<
+import { Tracker as Icon } from "icons";
+import {
+  Application,
+  ApplicationComponentProps,
   ApplicationComponentRef,
-  ApplicationComponentProps
->((props, ref) => null);
+} from "state";
+
+const Tracker = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
+  (props, ref) => null
+);
+
+export const APPLICATION_TRACKER: Application = {
+  Component: Tracker,
+  icon: <Icon />,
+  id: "application-tracker",
+  title: "Tracker",
+  windowIds: [],
+};

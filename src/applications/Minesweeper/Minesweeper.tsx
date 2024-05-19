@@ -13,8 +13,9 @@ import { BEGINNER_STATE } from "./constants";
 import { reducer } from "./state";
 import { Action, State } from "./types";
 import { Menubaritem, useMenubar } from "components/Menubar";
+import { Minesweeper as Icon } from "icons";
 import {
-  APPLICATION_MINESWEEPER,
+  Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
   StateContext,
@@ -23,7 +24,7 @@ import {
 import styles from "./Minesweeper.module.css";
 
 // @see https://github.com/jonathanrtuck/minesweeper
-export const Minesweeper = forwardRef<
+const Minesweeper = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
 >(({ application, window: { id: windowId } }, ref) => {
@@ -117,3 +118,16 @@ export const Minesweeper = forwardRef<
     </div>
   );
 });
+
+export const APPLICATION_MINESWEEPER: Application = {
+  Component: Minesweeper,
+  getWindow: () => ({
+    height: 311,
+    title: "Minesweeper",
+    width: 244,
+  }),
+  icon: <Icon />,
+  id: "application-minesweeper",
+  title: "Minesweeper",
+  windowIds: [],
+};

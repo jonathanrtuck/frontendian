@@ -1,3 +1,4 @@
+export * from "./File";
 export * from "./Graphics";
 export * from "./Minesweeper";
 export * from "./Network";
