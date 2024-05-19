@@ -10,10 +10,15 @@ import {
 
 import { Calendar } from "./components/Calendar";
 import { Menubar, Menubaritem } from "components/Menubar";
-import { APPLICATION_TRACKER, DESKBAR_ID, FILE_ABOUT } from "consts";
-import { StateContext } from "contexts";
 import { Network, WindowHidden, WindowVisible } from "icons";
-import { Application, Window } from "types";
+import {
+  Application,
+  APPLICATION_TRACKER,
+  DESKBAR_ID,
+  FILE_ABOUT,
+  StateContext,
+  Window,
+} from "state";
 
 import styles from "./Deskbar.module.css";
 

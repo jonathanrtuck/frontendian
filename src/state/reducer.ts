@@ -4,9 +4,9 @@ import {
   APPLICATION_TRACKER,
   DEFAULT_WINDOW,
   UNTITLED_WINDOW_TITLE,
-} from "consts";
-import { Action, State } from "types";
-import { getFirstOpenWindowPosition } from "utils";
+} from "./constants";
+import { Action, State } from "./types";
+import { getFirstOpenWindowPosition } from "./utils";
 
 export const stateReducer = (state: State, action: Action): State => {
   switch (action.type) {

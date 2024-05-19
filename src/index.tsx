@@ -12,12 +12,16 @@ import { createRoot } from "react-dom/client";
 
 import { Deskbar } from "components/Deskbar";
 import { Desktop } from "components/Desktop";
-import { Windows } from "components/Windows";
-import { FILE_ABOUT, INITIAL_STATE } from "consts";
-import { StateContext } from "contexts";
-import { stateReducer } from "reducers";
-import { Action, State } from "types";
+import { Window } from "components/Window";
 import reportWebVitals from "reportWebVitals";
+import {
+  Action,
+  FILE_ABOUT,
+  INITIAL_STATE,
+  State,
+  StateContext,
+  stateReducer,
+} from "state";
 
 import "./index.css";
 
@@ -64,7 +68,21 @@ const Ui: FunctionComponent<{}> = () => {
     <StateContext.Provider value={value}>
       <Desktop />
       <Deskbar />
-      <Windows />
+      {state.windows.map((window) => {
+        const application = state.applications.find(({ windowIds }) =>
+          windowIds.includes(window.id)
+        );
+        const stackingIndex = state.stackingOrder.indexOf(window.id);
+
+        return application ? (
+          <Window
+            Component={application?.Component}
+            key={window.id}
+            stackingIndex={stackingIndex}
+            window={window}
+          />
+        ) : null;
+      })}
     </StateContext.Provider>
   );
 };

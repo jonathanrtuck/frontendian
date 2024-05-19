@@ -7,9 +7,12 @@ import {
 } from "react";
 
 import { main } from "./Teapot.weblgl";
-import { StateContext } from "contexts";
-import { Menubaritem, useMenubar } from "hooks";
-import { ApplicationComponentProps, ApplicationComponentRef } from "types";
+import { Menubaritem, useMenubar } from "components/Menubar";
+import {
+  ApplicationComponentProps,
+  ApplicationComponentRef,
+  StateContext,
+} from "state";
 
 import styles from "./Teapot.module.css";
 

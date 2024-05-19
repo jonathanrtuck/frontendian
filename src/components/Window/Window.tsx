@@ -11,15 +11,15 @@ import {
 import Draggable, { ControlPosition, DraggableBounds } from "react-draggable";
 import { Resizable } from "react-resizable";
 
-import { Menubar, Menubaritem } from "components/Menubar";
-import { MenubarContext, StateContext } from "contexts";
+import { Menubar, MenubarContext, Menubaritem } from "components/Menubar";
 import { Resize } from "icons";
 import {
   Application,
   ApplicationComponentRef,
   File,
+  StateContext,
   Window as WindowType,
-} from "types";
+} from "state";
 
 import styles from "./Window.module.css";
 

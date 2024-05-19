@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 
-import { StateContext } from "contexts";
+import { StateContext } from "state";
 
 import styles from "./Desktop.module.css";
 

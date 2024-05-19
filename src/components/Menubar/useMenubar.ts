@@ -1,9 +1,7 @@
 import { useContext, useEffect } from "react";
 
-import { Menubaritem } from "components/Menubar";
-import { MenubarContext } from "contexts";
-
-export type { Menubaritem } from "components/Menubar";
+import { MenubarContext } from "./context";
+import { Menubaritem } from "./types";
 
 export const useMenubar = (menuitems: Menubaritem[]) => {
   const setMenuitems = useContext(MenubarContext);

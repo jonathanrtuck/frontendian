@@ -12,10 +12,13 @@ import { Board } from "./components/Board";
 import { BEGINNER_STATE } from "./constants";
 import { reducer } from "./state";
 import { Action, State } from "./types";
-import { APPLICATION_MINESWEEPER } from "consts";
-import { StateContext } from "contexts";
-import { Menubaritem, useMenubar } from "hooks";
-import { ApplicationComponentProps, ApplicationComponentRef } from "types";
+import { Menubaritem, useMenubar } from "components/Menubar";
+import {
+  APPLICATION_MINESWEEPER,
+  ApplicationComponentProps,
+  ApplicationComponentRef,
+  StateContext,
+} from "state";
 
 import styles from "./Minesweeper.module.css";
 

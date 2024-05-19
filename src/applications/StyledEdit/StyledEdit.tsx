@@ -12,13 +12,13 @@ import {
 } from "react";
 import Markdown from "react-markdown";
 
-import { StateContext } from "contexts";
-import { Menubaritem, useMenubar } from "hooks";
+import { Menubaritem, useMenubar } from "components/Menubar";
 import {
   ApplicationComponentProps,
   ApplicationComponentRef,
   MimeType,
-} from "types";
+  StateContext,
+} from "state";
 
 import styles from "./StyledEdit.module.css";
 

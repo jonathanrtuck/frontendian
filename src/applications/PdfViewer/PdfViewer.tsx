@@ -6,13 +6,13 @@ import {
   useRef,
 } from "react";
 
-import { StateContext } from "contexts";
-import { Menubaritem, useMenubar } from "hooks";
+import { Menubaritem, useMenubar } from "components/Menubar";
 import {
   ApplicationComponentProps,
   ApplicationComponentRef,
   MimeType,
-} from "types";
+  StateContext,
+} from "state";
 
 import styles from "./PdfViewer.module.css";
 

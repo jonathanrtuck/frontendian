@@ -1,3 +1,4 @@
+import { Application, File, MimeType, State, Window } from "./types";
 import {
   Minesweeper,
   PdfViewer,
@@ -14,7 +15,6 @@ import {
   Text as TextIcon,
   Tracker as TrackerIcon,
 } from "icons";
-import { Application, File, MimeType, State, Window } from "types";
 
 export const APPLICATION_MINESWEEPER: Application = {
   Component: Minesweeper,
@@ -80,6 +80,16 @@ export const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
 export const DEFAULT_WINDOW_POSITION_OFFSET = 96;
 
 export const DESKBAR_ID = "deskbar";
+
+export const EMPTY_STATE: State = {
+  applications: [],
+  desktop: [],
+  files: [],
+  openApplicationIds: [],
+  stackingOrder: [],
+  types: {},
+  windows: [],
+};
 
 export const FILE_ABOUT: File = {
   id: "file-about",

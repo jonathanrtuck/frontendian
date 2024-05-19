@@ -2,31 +2,14 @@ import clsx from "clsx";
 import {
   forwardRef,
   HTMLAttributes,
-  ReactElement,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
 
+import { Menubaritem } from "./types";
+
 import styles from "./Menubar.module.css";
-
-export type Separator = null;
-
-export type Menuitem =
-  | {
-      checked?: boolean;
-      icon?: ReactElement;
-      onClick?(): void; // menuitem will be disabled if this is not defined
-      title: string;
-      type?: "checkbox" | "radio";
-    }
-  | Separator;
-
-export type Menubaritem = {
-  icon?: ReactElement;
-  items: Menuitem[]; // menubaritem will be disabled if this is empty
-  title: string;
-};
 
 export const Menubar = forwardRef<
   HTMLElement,
