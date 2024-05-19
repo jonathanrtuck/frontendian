@@ -217,7 +217,7 @@ export const Deskbar: FunctionComponent<{}> = () => {
         }
       }}
       ref={rootRef}
-      role="menubar"
+      role="banner"
       style={{
         zIndex: state.stackingOrder.indexOf(DESKBAR_ID),
       }}>
@@ -232,16 +232,20 @@ export const Deskbar: FunctionComponent<{}> = () => {
       />
       <div className={styles.tray}>
         <ul className={styles.icons}>
-          <Network className={styles.icon} />
+          <li className={styles.icon}>
+            <Network />
+          </li>
         </ul>
         <time
           aria-expanded={isCalendarOpen}
           aria-haspopup="menu"
+          aria-live="off"
           className={styles.clock}
           onClick={() => {
             setIsCalendarOpen(true);
           }}
           ref={clockRef}
+          role="button"
         />
       </div>
       <Menubar
