@@ -13,7 +13,6 @@ import {
   Application,
   ApplicationComponentProps,
   ApplicationComponentRef,
-  File,
 } from "state/types";
 import { MimeType } from "types";
 
@@ -113,11 +112,22 @@ const PdfViewer = forwardRef<
 
 export const APPLICATION_PDF_VIEWER: Application = {
   Component: PdfViewer,
-  getWindow: (file: File) => ({
-    height: 600,
-    title: file?.title || "PDF Viewer",
-    width: file && "width" in file ? file?.width : undefined,
-  }),
+  getWindow: (file) => {
+    const width = file && "width" in file ? file?.width : undefined;
+    const window = {
+      height: 600,
+      title: file?.title || "PDF Viewer",
+    };
+
+    if (width) {
+      return {
+        ...window,
+        width,
+      };
+    }
+
+    return window;
+  },
   icon: <Icon />,
   id: "application-pdf-viewer",
   title: "PDF Viewer",
