@@ -30,7 +30,19 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "no-console": "warn",
+      "react/jsx-sort-props": "warn",
+      "sort-keys": [
+        "warn",
+        "asc",
+        {
+          "caseSensitive": false,
+          "natural": true
+        }
+      ]
+    }
   },
   "browserslist": {
     "development": [

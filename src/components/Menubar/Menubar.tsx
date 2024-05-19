@@ -162,7 +162,6 @@ export const Menubar = forwardRef<
         setIsKeyboardNavigation(false);
       }}
       onKeyDown={({ currentTarget, key }) => {
-        console.debug("keydown…");
         setIsKeyboardNavigation(true);
 
         switch (key) {

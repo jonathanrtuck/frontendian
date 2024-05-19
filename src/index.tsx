@@ -35,6 +35,7 @@ const Ui: FunctionComponent<{}> = () => {
   const dispatch = useCallback(
     (action: Action) => {
       if (IS_DEBUG_MODE) {
+        // eslint-disable-next-line no-console
         console.debug("action", action);
       }
 
@@ -50,6 +51,7 @@ const Ui: FunctionComponent<{}> = () => {
 
   useEffect(() => {
     if (IS_DEBUG_MODE) {
+      // eslint-disable-next-line no-console
       console.debug("state", state);
     }
   }, [state]);
@@ -98,4 +100,5 @@ createRoot(document.body).render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// eslint-disable-next-line no-console
 reportWebVitals(IS_DEBUG_MODE ? console.debug : undefined);

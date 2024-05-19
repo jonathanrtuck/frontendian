@@ -102,9 +102,9 @@ export const Graphics: FunctionComponent<
         d="M2 16C2 16 26 2.87 30 6.87C34 10.87 34 14 34 14L33 15L28 9L18 13V18L2 28V16z"
         fill="none"
         stroke="#000000"
-        strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeWidth="4"
         transform="matrix(0.6888,0,0,0.6888,7.7273,5.5494)"
       />
       <path
@@ -116,9 +116,9 @@ export const Graphics: FunctionComponent<
         d="M46 36C46 36 54 22 58 20C62 18 62 29 62 29L61 31L58 26L53 34L52 46L45 55L26 46C26 46 25 38 22 36C19 34 18 42 18 42L2 34V17L46 36z"
         fill="none"
         stroke="#000000"
-        strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeWidth="4"
         transform="matrix(0.6888,0,0,0.6888,7.7273,5.5494)"
       />
       <path

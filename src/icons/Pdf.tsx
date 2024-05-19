@@ -135,8 +135,8 @@ export const Pdf: FunctionComponent<
         d="M30 16V2C30 2 36 4 41 4C45 4 53 2 58 2V16C53 16 45 18 41 18C36 18 30 16 30 16z"
         fill="none"
         stroke="#010101"
-        strokeWidth="4"
         strokeLinejoin="round"
+        strokeWidth="4"
       />
       <path
         d="M30 16V2C30 2 36 4 41 4C45 4 53 2 58 2V16C53 16 45 18 41 18C36 18 30 16 30 16z"
@@ -146,9 +146,9 @@ export const Pdf: FunctionComponent<
         d="M50 14V7H54 M33 14V7C33 7 37 6 37 9C37 12 34 11 34 11 M41 7V14C41 14 46 15 46 12C46 12 46 10.3 46 9C46 6 41 7 41 7z M50 11H53"
         fill="none"
         stroke="#ffffff"
-        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeWidth="2"
       />
     </svg>
   );

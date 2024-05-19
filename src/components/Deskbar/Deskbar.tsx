@@ -222,11 +222,11 @@ export const Deskbar: FunctionComponent<{}> = () => {
         zIndex: state.stackingOrder.indexOf(DESKBAR_ID),
       }}>
       <Menubar
+        className={styles.logo}
         classes={{
           label: styles.logoLabel,
           menubaritem: styles.logoMenubaritem,
         }}
-        className={styles.logo}
         items={logoMenubaritems}
         orientation="vertical"
       />

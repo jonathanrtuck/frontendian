@@ -50,8 +50,8 @@ export const Square: FunctionComponent<{
               });
             }
       }
-      type="button"
-      tabIndex={0}>
+      tabIndex={0}
+      type="button">
       {isRevealedMine && "💣"}
       {hasFlag && (isLost && !hasMine ? "💣" : "🚩")}
       {isWon && hasMine && "🚩"}

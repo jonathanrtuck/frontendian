@@ -215,8 +215,8 @@ export const Window: FunctionComponent<{
               });
             }
           }}
-          role="dialog"
           ref={rootRef}
+          role="dialog"
           style={{
             zIndex: stackingIndex,
           }}

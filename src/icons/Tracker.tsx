@@ -143,8 +143,8 @@ export const Tracker: FunctionComponent<
         d="M20 16C16 22 16 26 16 30C16 34 18 36 18 36V50C18 50 10 56 20 56C28 56 24 38 24 38L32 42V54C32 54 20 62 34 62C42 62 36 34 36 34L40 30C40 30 44 34 46 34C48 34 50 34 50 34L52 40C52 40 44 46 56 46C64 46 54 30 54 30H52C52 30 52 24 52 20C52 16.81 50.72 11.81 46.16 8.08C58 16 58 2 58 2C58 2 52 10 42 6C36.12 3.65 24 10 20 16z"
         fill="none"
         stroke="#000000"
-        strokeWidth="4"
         strokeLinejoin="round"
+        strokeWidth="4"
       />
       <path
         d="M32 17L16 29V31C16 31 19 31 21 33C23 35 24 38 24 38L32 42V54C32 54 20 62 34 62C42 62 36 34 36 34C36 34 38 28 38 26C38 24 36.33 19.7 32 17z"
@@ -175,8 +175,8 @@ export const Tracker: FunctionComponent<
         d="M16 6C16 6 13 4 8 6C2.74 8.1 2 14 2 14L12 12L16 6z"
         fill="none"
         stroke="#000000"
-        strokeWidth="4"
         strokeLinejoin="round"
+        strokeWidth="4"
       />
       <path
         d="M16 6C16 6 13 4 8 6C2.74 8.1 2 14 2 14L12 12L16 6z"
@@ -187,8 +187,8 @@ export const Tracker: FunctionComponent<
            M20 6C23.93 7.3 27 9.47 28.09 12.5L21 15C22 17 23.05 24.03 23.05 24.03C19.76 26.41 15.5 28 12 28C6 28 4.46 24.13 6 18C8 10 11.51 3.17 20 6z"
         fill="none"
         stroke="#000000"
-        strokeWidth="4"
         strokeLinejoin="round"
+        strokeWidth="4"
       />
       <path
         d="M20 6C23.93 7.3 27 9.47 28.09 12.5L21 15C22 17 23.05 24.03 23.05 24.03C19.76 26.41 15.5 28 12 28C6 28 4.46 24.13 6 18C8 10 11.51 3.17 20 6z"
