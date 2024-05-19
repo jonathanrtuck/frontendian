@@ -33,7 +33,7 @@
   width: 100%;
 }
 
-.button:focus-within {
+.button:focus {
   outline: 0;
 }
 
@@ -53,6 +53,6 @@
   white-space: nowrap;
 }
 
-.button:focus-within .label {
+.button:focus .label {
   background-color: rgba(0, 0, 0, 0.4);
 }

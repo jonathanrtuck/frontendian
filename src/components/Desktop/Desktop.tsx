@@ -125,6 +125,7 @@ export const Desktop: FunctionComponent<{}> = () => {
                 type: "OPEN",
               });
             }}
+            tabIndex={0}
             title={obj.title}
             type="button">
             <span aria-hidden className={styles.icon} role="presentation">
