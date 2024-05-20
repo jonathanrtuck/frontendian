@@ -101,7 +101,6 @@ const StyledEdit = forwardRef<
             },
             title: "Close",
           },
-          null,
           {
             onClick: () => {
               dispatch({

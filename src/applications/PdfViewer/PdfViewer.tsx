@@ -69,6 +69,13 @@ const PdfViewer = forwardRef<
           null,
           {
             onClick: () => {
+              rootRef.current?.contentWindow?.print();
+            },
+            title: "Print…",
+          },
+          null,
+          {
+            onClick: () => {
               dispatch({
                 payload: {
                   ids: [window.id],
@@ -79,14 +86,6 @@ const PdfViewer = forwardRef<
             },
             title: "Close",
           },
-          null,
-          {
-            onClick: () => {
-              rootRef.current?.contentWindow?.print();
-            },
-            title: "Print",
-          },
-          null,
           {
             onClick: () => {
               dispatch({
