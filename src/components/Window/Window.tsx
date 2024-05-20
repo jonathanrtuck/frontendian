@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import Draggable, { ControlPosition, DraggableBounds } from "react-draggable";
+import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
 
 import { Menubar, MenubarContext, Menubaritem } from "components/Menubar";
@@ -40,6 +40,7 @@ export const Window: FunctionComponent<{
   const headerRef = useRef<HTMLElement>(null);
   const menubarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
+  const touchRef = useRef<number>(0);
 
   const [currentOuterWidth, setCurrentOuterWidth] = useState<number>(0);
   const [headerWidth, setHeaderWidth] = useState<number>(0);
@@ -48,6 +49,8 @@ export const Window: FunctionComponent<{
   const [windowChromeSize, setWindowChromeSize] = useState<number>(0);
 
   const hasMenubar = menuitems.length !== 0;
+  const outerHeight = window.height + windowChromeSize;
+  const outerWidth = window.width + windowChromeSize;
 
   const application = useMemo<Application>(
     () =>
@@ -62,28 +65,6 @@ export const Window: FunctionComponent<{
         ? state.files.find(({ id }) => id === window.fileId)
         : undefined,
     [state.files, window.fileId]
-  );
-  const headerBounds = useMemo<DraggableBounds>(
-    () => ({
-      left: 0,
-      right: currentOuterWidth - headerWidth,
-    }),
-    [currentOuterWidth, headerWidth]
-  );
-  const headerPosition = useMemo<ControlPosition>(
-    () => ({
-      x: Math.max(Math.min(window.headerX, currentOuterWidth - headerWidth), 0),
-      y: 0,
-    }),
-    [currentOuterWidth, headerWidth, window.headerX]
-  );
-  const outerHeight = useMemo<number>(
-    () => window.height + windowChromeSize,
-    [window.height, windowChromeSize]
-  );
-  const outerWidth = useMemo<number>(
-    () => window.width + windowChromeSize,
-    [window.width, windowChromeSize]
   );
 
   useEffect(() => {
@@ -150,15 +131,20 @@ export const Window: FunctionComponent<{
         }
       }}
       onStop={(_, { x, y }) => {
-        dispatch({
-          payload: {
-            ids: [window.id],
-            type: "window",
-            x,
-            y,
-          },
-          type: "MOVE",
-        });
+        if (x !== window.x || y !== window.y) {
+          dispatch({
+            payload: {
+              ids: [window.id],
+              type: "window",
+              x,
+              y,
+            },
+            type: "MOVE",
+          });
+
+          // reset double click check after releasing
+          touchRef.current = 0;
+        }
       }}
       position={{
         x: window.x,
@@ -220,10 +206,13 @@ export const Window: FunctionComponent<{
           style={{
             zIndex: stackingIndex,
           }}
-          tabIndex={-1}>
+          tabIndex={0}>
           <Draggable
             axis="x"
-            bounds={headerBounds}
+            bounds={{
+              left: 0,
+              right: currentOuterWidth - headerWidth,
+            }}
             nodeRef={headerRef}
             onStart={({ shiftKey }) => {
               if (shiftKey) {
@@ -235,16 +224,27 @@ export const Window: FunctionComponent<{
               }
             }}
             onStop={(_, { x }) => {
-              dispatch({
-                payload: {
-                  ids: [window.id],
-                  type: "header",
-                  x,
-                },
-                type: "MOVE",
-              });
+              if (x !== window.headerX) {
+                dispatch({
+                  payload: {
+                    ids: [window.id],
+                    type: "header",
+                    x,
+                  },
+                  type: "MOVE",
+                });
+
+                // reset double click check after releasing
+                touchRef.current = 0;
+              }
             }}
-            position={headerPosition}>
+            position={{
+              x: Math.max(
+                Math.min(window.headerX, currentOuterWidth - headerWidth),
+                0
+              ),
+              y: 0,
+            }}>
             <header
               className={styles.header}
               onDoubleClick={(e) => {
@@ -261,6 +261,24 @@ export const Window: FunctionComponent<{
                   });
                 }
               }}
+              onPointerUp={(e) => {
+                const now = Date.now();
+                const isButton = (e.target as HTMLElement)?.classList.contains(
+                  styles.button
+                );
+                const isDoubleClick = now - touchRef.current < 500;
+
+                if (isDoubleClick && !isButton) {
+                  dispatch({
+                    payload: {
+                      ids: [window.id],
+                    },
+                    type: "HIDE",
+                  });
+                }
+
+                touchRef.current = now;
+              }}
               ref={headerRef}>
               <h1
                 className={styles.title}
@@ -275,7 +293,7 @@ export const Window: FunctionComponent<{
                   styles.button,
                   styles.close
                 )}
-                onClick={() => {
+                onPointerUp={() => {
                   dispatch({
                     payload: {
                       ids: [window.id],
@@ -294,7 +312,7 @@ export const Window: FunctionComponent<{
                   styles.button,
                   styles.zoom
                 )}
-                onClick={() => {
+                onPointerUp={() => {
                   dispatch({
                     payload: {
                       ids: [window.id],

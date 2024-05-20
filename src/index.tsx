@@ -13,8 +13,8 @@ import { createRoot } from "react-dom/client";
 import { Deskbar } from "components/Deskbar";
 import { Desktop } from "components/Desktop";
 import { Window } from "components/Window";
-import reportWebVitals from "reportWebVitals";
 import { FILE_README_MD } from "files";
+import reportWebVitals from "reportWebVitals";
 import {
   Action,
   INITIAL_STATE,
@@ -27,6 +27,9 @@ import "./index.css";
 
 const IS_DEBUG_MODE = false;
 const QUERY_CLIENT = new QueryClient();
+
+// eslint-disable-next-line no-console
+reportWebVitals(IS_DEBUG_MODE ? console.debug : undefined);
 
 // @todo add ErrorBoundary
 const App: FunctionComponent<{}> = () => {
@@ -96,9 +99,3 @@ createRoot(document.body).render(
     </QueryClientProvider>
   </StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// eslint-disable-next-line no-console
-reportWebVitals(IS_DEBUG_MODE ? console.debug : undefined);

@@ -1,5 +1,25 @@
 import { mat4 } from "gl-matrix";
 
+// vertices
+const INDICES = [
+  0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14,
+  15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23,
+];
+
+const POSITIONS = [
+  -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1,
+  -1, -1, -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, -1, -1, 1, -1,
+  1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, -1, -1, -1, -1, -1, 1,
+  -1, 1, 1, -1, 1, -1,
+];
+
+// normals
+const VERTEX_NORMALS = [
+  0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+  1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 1, 0,
+  0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,
+];
+
 const drawScene = (
   gl: any,
   programInfo: any,
@@ -32,9 +52,38 @@ const drawScene = (
   mat4.invert(normalMatrix, modelViewMatrix);
   mat4.transpose(normalMatrix, normalMatrix);
 
-  setColorAttribute(gl, buffers, programInfo);
-  setNormalAttribute(gl, buffers, programInfo);
-  setPositionAttribute(gl, buffers, programInfo);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+  gl.vertexAttribPointer(
+    programInfo.attribLocations.vertexColor,
+    4,
+    gl.FLOAT,
+    false,
+    0,
+    0
+  );
+  gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal);
+  gl.vertexAttribPointer(
+    programInfo.attribLocations.vertexNormal,
+    3,
+    gl.FLOAT,
+    false,
+    0,
+    0
+  );
+  gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+  gl.vertexAttribPointer(
+    programInfo.attribLocations.vertexPosition,
+    3,
+    gl.FLOAT,
+    false,
+    0,
+    0
+  );
+  gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
   gl.useProgram(programInfo.program);
@@ -54,18 +103,43 @@ const drawScene = (
     normalMatrix
   );
 
-  const vertexCount = 36;
-  const type = gl.UNSIGNED_SHORT;
-  const offset = 0;
-
-  gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
+  gl.drawElements(gl.TRIANGLES, INDICES.length, gl.UNSIGNED_SHORT, 0);
 };
 
 const initBuffers = (gl: any) => {
-  const colorBuffer = initColorBuffer(gl);
-  const indexBuffer = initIndexBuffer(gl);
-  const normalBuffer = initNormalBuffer(gl);
-  const positionBuffer = initPositionBuffer(gl);
+  const colorBuffer = gl.createBuffer();
+  const indexBuffer = gl.createBuffer();
+  const normalBuffer = gl.createBuffer();
+  const positionBuffer = gl.createBuffer();
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  // flatMap of [r, g, b, a] for each vertex
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array(
+      new Array(24)
+        .fill(undefined)
+        .reduce((acc) => acc.concat([1, 0, 0, 1]), [])
+    ),
+    gl.STATIC_DRAW
+  );
+
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+  gl.bufferData(
+    gl.ELEMENT_ARRAY_BUFFER,
+    new Uint16Array(INDICES),
+    gl.STATIC_DRAW
+  );
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array(VERTEX_NORMALS),
+    gl.STATIC_DRAW
+  );
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(POSITIONS), gl.STATIC_DRAW);
 
   return {
     color: colorBuffer,
@@ -73,75 +147,6 @@ const initBuffers = (gl: any) => {
     normal: normalBuffer,
     position: positionBuffer,
   };
-};
-
-const initColorBuffer = (gl: any) => {
-  // flatMap of [r, g, b, a] for each vertex
-  const colors = new Array(24)
-    .fill(undefined)
-    .reduce((acc) => acc.concat([1, 0, 0, 1]), []);
-  const colorBuffer = gl.createBuffer();
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
-  return colorBuffer;
-};
-
-const initIndexBuffer = (gl: any) => {
-  const indexBuffer = gl.createBuffer();
-
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-  const indices = [
-    0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14,
-    15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23,
-  ];
-
-  gl.bufferData(
-    gl.ELEMENT_ARRAY_BUFFER,
-    new Uint16Array(indices),
-    gl.STATIC_DRAW
-  );
-
-  return indexBuffer;
-};
-
-const initNormalBuffer = (gl: any) => {
-  const normalBuffer = gl.createBuffer();
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-
-  const vertexNormals = [
-    0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1,
-    0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
-    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,
-  ];
-
-  gl.bufferData(
-    gl.ARRAY_BUFFER,
-    new Float32Array(vertexNormals),
-    gl.STATIC_DRAW
-  );
-
-  return normalBuffer;
-};
-
-const initPositionBuffer = (gl: any) => {
-  const positionBuffer = gl.createBuffer();
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-  const positions = [
-    -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1,
-    -1, -1, -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, -1, -1, 1,
-    -1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, -1, -1, -1, -1,
-    -1, 1, -1, 1, 1, -1, 1, -1,
-  ];
-
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-  return positionBuffer;
 };
 
 const initShaderProgram = (gl: any, vsSource: any, fsSource: any) => {
@@ -236,7 +241,7 @@ export const main = (canvas: HTMLCanvasElement) => {
   let deltaTime = 0;
   let then = 0;
 
-  const render = (now: any) => {
+  const render = (now: number) => {
     now *= 0.001;
     deltaTime = now - then;
     then = now;
@@ -249,61 +254,4 @@ export const main = (canvas: HTMLCanvasElement) => {
   };
 
   requestAnimationFrame(render);
-};
-
-const setColorAttribute = (gl: any, buffers: any, programInfo: any) => {
-  const numComponents = 4;
-  const type = gl.FLOAT;
-  const normalize = false;
-  const stride = 0;
-  const offset = 0;
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
-  gl.vertexAttribPointer(
-    programInfo.attribLocations.vertexColor,
-    numComponents,
-    type,
-    normalize,
-    stride,
-    offset
-  );
-  gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
-};
-
-const setNormalAttribute = (gl: any, buffers: any, programInfo: any) => {
-  const numComponents = 3;
-  const type = gl.FLOAT;
-  const normalize = false;
-  const stride = 0;
-  const offset = 0;
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal);
-  gl.vertexAttribPointer(
-    programInfo.attribLocations.vertexNormal,
-    numComponents,
-    type,
-    normalize,
-    stride,
-    offset
-  );
-  gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
-};
-
-const setPositionAttribute = (gl: any, buffers: any, programInfo: any) => {
-  const numComponents = 3;
-  const type = gl.FLOAT;
-  const normalize = false;
-  const stride = 0;
-  const offset = 0;
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-  gl.vertexAttribPointer(
-    programInfo.attribLocations.vertexPosition,
-    numComponents,
-    type,
-    normalize,
-    stride,
-    offset
-  );
-  gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 };
