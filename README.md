@@ -17,7 +17,6 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 
 ## Todo
 
-- Open files from windowʼs `Menubar`
 - Finish the *Teapot* application
 - Test in *Edge* and *iOS*
 - Fix *PDF Viewer* window focus when interacting with the PDF
