@@ -34,6 +34,10 @@
   );
 }
 
+.logoLabel {
+  flex-grow: 0;
+}
+
 .logoMenubaritem[aria-haspopup="menu"] > .logoLabel {
   font-size: 1rem;
   letter-spacing: 0.0625rem;

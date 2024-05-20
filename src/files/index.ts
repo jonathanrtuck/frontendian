@@ -1,2 +1,2 @@
-export * from "./about";
-export * from "./resume";
+export * from "./README.md";
+export * from "./resume.pdf";

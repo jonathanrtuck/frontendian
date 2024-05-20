@@ -1,9 +1,9 @@
 import { File } from "state/types";
 import { MimeType } from "types";
 
-export const FILE_RESUME: File = {
+export const FILE_RESUME_PDF: File = {
   height: 990 * 2, // numPages
-  id: "file-resume",
+  id: "file-resume.pdf",
   title: "Résumé",
   type: MimeType.ApplicationPdf,
   url: `${process.env.PUBLIC_URL}/files/resume.pdf`,

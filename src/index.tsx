@@ -14,7 +14,7 @@ import { Deskbar } from "components/Deskbar";
 import { Desktop } from "components/Desktop";
 import { Window } from "components/Window";
 import reportWebVitals from "reportWebVitals";
-import { FILE_ABOUT } from "files";
+import { FILE_README_MD } from "files";
 import {
   Action,
   INITIAL_STATE,
@@ -29,7 +29,7 @@ const IS_DEBUG_MODE = false;
 const QUERY_CLIENT = new QueryClient();
 
 // @todo add ErrorBoundary
-const Ui: FunctionComponent<{}> = () => {
+const App: FunctionComponent<{}> = () => {
   const [state, _dispatch] = useReducer(stateReducer, INITIAL_STATE);
 
   const dispatch = useCallback(
@@ -59,7 +59,7 @@ const Ui: FunctionComponent<{}> = () => {
   useEffect(() => {
     dispatch({
       payload: {
-        ids: [FILE_ABOUT.id],
+        ids: [FILE_README_MD.id],
         type: "file",
       },
       type: "OPEN",
@@ -92,7 +92,7 @@ const Ui: FunctionComponent<{}> = () => {
 createRoot(document.body).render(
   <StrictMode>
     <QueryClientProvider client={QUERY_CLIENT}>
-      <Ui />
+      <App />
     </QueryClientProvider>
   </StrictMode>
 );

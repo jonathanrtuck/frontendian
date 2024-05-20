@@ -6,7 +6,7 @@ import {
   APPLICATION_TEAPOT,
   APPLICATION_TRACKER,
 } from "applications";
-import { FILE_ABOUT, FILE_RESUME } from "files";
+import { FILE_README_MD, FILE_RESUME_PDF } from "files";
 import { Pdf, Text } from "icons";
 import { MimeType } from "types";
 
@@ -33,8 +33,8 @@ export const INITIAL_STATE: State = {
     APPLICATION_TEAPOT,
     APPLICATION_TRACKER,
   ],
-  desktop: [FILE_RESUME.id],
-  files: [FILE_ABOUT, FILE_RESUME],
+  desktop: [FILE_RESUME_PDF.id],
+  files: [FILE_README_MD, FILE_RESUME_PDF],
   openApplicationIds: [APPLICATION_TRACKER.id],
   stackingOrder: [DESKBAR_ID],
   types: {

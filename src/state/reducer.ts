@@ -288,9 +288,36 @@ export const stateReducer = (state: State, action: Action): State => {
               return prevState;
             }
 
-            const window = state.applications
+            const newWindow = state.applications
               .find((application) => application.id === applicationId)
               ?.getWindow?.(file);
+            const existingWindowId = (action.payload as any).windowId;
+
+            // if opening file in an existing window
+            if (existingWindowId) {
+              const existingWindow = prevState.windows.find(
+                (window) => window.id === existingWindowId
+              );
+
+              if (existingWindow) {
+                return {
+                  ...prevState,
+                  windows: [
+                    ...prevState.windows.map((window) => ({
+                      ...window,
+                      fileId: file.id,
+                      focused: window.id === existingWindowId,
+                      height: newWindow?.height ?? window.height,
+                      title: newWindow?.title ?? window.title,
+                      width: newWindow?.width ?? window.width,
+                    })),
+                  ],
+                };
+              }
+
+              return prevState;
+            }
+
             const windowId = uuid();
             const windowPosition = getFirstOpenWindowPosition(
               prevState.windows
@@ -319,11 +346,12 @@ export const stateReducer = (state: State, action: Action): State => {
                 })),
                 {
                   ...DEFAULT_WINDOW,
-                  ...window,
+                  ...newWindow,
                   fileId: file.id,
                   focused: true,
                   id: windowId,
-                  title: window?.title || file.title || UNTITLED_WINDOW_TITLE,
+                  title:
+                    newWindow?.title || file.title || UNTITLED_WINDOW_TITLE,
                   x: windowPosition,
                   y: windowPosition,
                 },

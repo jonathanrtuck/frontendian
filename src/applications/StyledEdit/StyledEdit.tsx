@@ -15,6 +15,7 @@ import Markdown from "react-markdown";
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { StyledEdit as Icon } from "icons";
 import { StateContext } from "state/context";
+import { getFilesByApplicationId } from "state/selectors";
 import {
   Application,
   ApplicationComponentProps,
@@ -30,7 +31,7 @@ const StyledEdit = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
 >(({ application, file, window }, ref) => {
-  const [, dispatch] = useContext(StateContext);
+  const [state, dispatch] = useContext(StateContext);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -70,6 +71,21 @@ const StyledEdit = forwardRef<
             title: "New",
           },
           {
+            items: getFilesByApplicationId(state, application.id).map(
+              ({ id, title }) => ({
+                onClick: () => {
+                  dispatch({
+                    payload: {
+                      ids: [id],
+                      type: "file",
+                      windowId: window.id,
+                    },
+                    type: "OPEN",
+                  });
+                },
+                title,
+              })
+            ),
             title: "Open",
           },
           null,
@@ -129,8 +145,14 @@ const StyledEdit = forwardRef<
         title: "View",
       },
     ],
-    [application.id, dispatch, view, window.id]
+    [application.id, dispatch, state, view, window.id]
   );
+  const inputLines = useMemo<string[]>(() => input.split("\n"), [input]);
+  const numInputCols = useMemo<number>(
+    () => Math.max(...inputLines.map((line) => line.length)),
+    [inputLines]
+  );
+  const numInputRows = useMemo<number>(() => inputLines.length, [inputLines]);
 
   useMenubar(menubaritems);
 
@@ -153,6 +175,10 @@ const StyledEdit = forwardRef<
   }, [data, error, isPending]);
 
   useEffect(() => {
+    setView(file ? "preview" : "markdown");
+  }, [file]);
+
+  useEffect(() => {
     if (view === "markdown") {
       inputRef.current?.focus();
     }
@@ -170,10 +196,17 @@ const StyledEdit = forwardRef<
     return (
       <textarea
         className={clsx(styles.root, styles.input)}
+        cols={numInputCols}
         onInput={(e) => {
           setInput((e.target as HTMLTextAreaElement).value);
         }}
         ref={inputRef}
+        rows={numInputRows}
+        style={
+          {
+            // height: inputHeight,
+          }
+        }
         tabIndex={0}
         value={input}
       />

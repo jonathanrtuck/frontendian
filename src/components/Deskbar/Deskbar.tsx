@@ -11,7 +11,7 @@ import {
 import { Calendar } from "./components/Calendar";
 import { APPLICATION_TRACKER } from "applications";
 import { Menubar, Menubaritem } from "components/Menubar";
-import { FILE_ABOUT } from "files";
+import { FILE_README_MD } from "files";
 import { Network, WindowHidden, WindowVisible } from "icons";
 import { Application, DESKBAR_ID, StateContext, Window } from "state";
 
@@ -132,13 +132,13 @@ export const Deskbar: FunctionComponent<{}> = () => {
             onClick: () => {
               dispatch({
                 payload: {
-                  ids: [FILE_ABOUT.id],
+                  ids: [FILE_README_MD.id],
                   type: "file",
                 },
                 type: "OPEN",
               });
             },
-            title: FILE_ABOUT.title,
+            title: FILE_README_MD.title,
           },
           null,
           ...state.applications

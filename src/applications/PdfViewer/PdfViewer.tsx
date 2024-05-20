@@ -9,6 +9,7 @@ import {
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { Graphics as Icon } from "icons";
 import { StateContext } from "state/context";
+import { getFilesByApplicationId } from "state/selectors";
 import {
   Application,
   ApplicationComponentProps,
@@ -20,14 +21,14 @@ import styles from "./PdfViewer.module.css";
 
 /**
  * it is impossible to detect focus within a different browsing context (e.g.
- * iframe), so Window component incorrectly fires a "BLUR" event when focus
+ * iframe), so `Window` component incorrectly fires a "BLUR" event when focus
  * moves into this iframe. 🤷‍♂️😣
  */
 const PdfViewer = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
 >(({ application, file, window }, ref) => {
-  const [, dispatch] = useContext(StateContext);
+  const [state, dispatch] = useContext(StateContext);
 
   const rootRef = useRef<HTMLIFrameElement>(null);
 
@@ -48,6 +49,21 @@ const PdfViewer = forwardRef<
             title: "New",
           },
           {
+            items: getFilesByApplicationId(state, application.id).map(
+              ({ id, title }) => ({
+                onClick: () => {
+                  dispatch({
+                    payload: {
+                      ids: [id],
+                      type: "file",
+                      windowId: window.id,
+                    },
+                    type: "OPEN",
+                  });
+                },
+                title,
+              })
+            ),
             title: "Open",
           },
           null,
@@ -87,7 +103,7 @@ const PdfViewer = forwardRef<
         title: "File",
       },
     ],
-    [application.id, dispatch, window.id]
+    [application.id, dispatch, state, window.id]
   );
 
   useImperativeHandle(ref, () => ({}), []);

@@ -15,11 +15,20 @@ import {
 
 import styles from "./Menubar.module.css";
 
+// menuitem will be disabled if `items` is empty or not defined AND `onClick` is not defined
+// submenuitem will be disabled if `onClick` is not defined
 export type Menuitem =
   | {
       checked?: boolean;
       icon?: ReactElement;
-      onClick?(): void; // menuitem will be disabled if this is not defined
+      items?: {
+        checked?: boolean;
+        icon?: ReactElement;
+        onClick?(): void;
+        title: string;
+        type?: "checkbox" | "radio";
+      }[];
+      onClick?(): void;
       title: string;
       type?: "checkbox" | "radio";
     }
@@ -56,6 +65,8 @@ export const Menubar = forwardRef<
       menuitem?: string;
       root?: string;
       separator?: string;
+      submenu?: string;
+      submenuitem?: string;
     };
     items: Menubaritem[];
     orientation?: "horizontal" | "vertical";
@@ -70,80 +81,12 @@ export const Menubar = forwardRef<
 
   const [expandedMenubaritemIndex, setExpandedMenubaritemIndex] =
     useState<number>(-1);
+  const [expandedMenuitemIndex, setExpandedMenuitemIndex] =
+    useState<number>(-1);
   const [isKeyboardNavigation, setIsKeyboardNavigation] =
     useState<boolean>(false);
 
   const hasOpenMenu = expandedMenubaritemIndex !== -1;
-
-  const expandNextMenubaritem = () => {
-    const menubaritems = getFocusableMenubaritems();
-    const prevMenubaritem = getFocusedMenubaritem();
-
-    if (menubaritems && prevMenubaritem) {
-      const prevIndex = menubaritems.indexOf(prevMenubaritem);
-
-      if (prevIndex !== -1) {
-        const index = prevIndex === menubaritems.length - 1 ? 0 : prevIndex + 1;
-
-        setExpandedMenubaritemIndex(index);
-      }
-    }
-  };
-  const expandPrevMenubaritem = () => {
-    const menubaritems = getFocusableMenubaritems();
-    const prevMenubaritem = getFocusedMenubaritem();
-
-    if (menubaritems && prevMenubaritem) {
-      const prevIndex = menubaritems.indexOf(prevMenubaritem);
-
-      if (prevIndex !== -1) {
-        const index = prevIndex === 0 ? menubaritems.length - 1 : prevIndex - 1;
-
-        setExpandedMenubaritemIndex(index);
-      }
-    }
-  };
-  const focusNextMenubaritem = () => {
-    const menubaritems = getFocusableMenubaritems();
-    const prevMenubaritem = getFocusedMenubaritem();
-
-    if (menubaritems && prevMenubaritem) {
-      const prevIndex = menubaritems.indexOf(prevMenubaritem);
-
-      if (prevIndex !== -1) {
-        const index = prevIndex === menubaritems.length - 1 ? 0 : prevIndex + 1;
-
-        menubaritems[index].focus();
-      }
-    }
-  };
-  const focusPrevMenubaritem = () => {
-    const menubaritems = getFocusableMenubaritems();
-    const prevMenubaritem = getFocusedMenubaritem();
-
-    if (menubaritems && prevMenubaritem) {
-      const prevIndex = menubaritems.indexOf(prevMenubaritem);
-
-      if (prevIndex !== -1) {
-        const index = prevIndex === 0 ? menubaritems.length - 1 : prevIndex - 1;
-
-        menubaritems[index].focus();
-      }
-    }
-  };
-  const getFocusableMenubaritems = () =>
-    Array.from(
-      rootRef.current?.querySelectorAll(
-        `.${styles.menubaritem}:not([aria-disabled="true"])`
-      ) ?? []
-    ) as HTMLElement[];
-  const getFocusedMenubaritem = () =>
-    rootRef.current?.querySelector(
-      `.${styles.menubaritem}:focus`
-    ) as HTMLElement;
-  const resetFocus = () => {
-    getFocusableMenubaritems()[0]?.focus();
-  };
 
   return (
     <menu
@@ -156,16 +99,23 @@ export const Menubar = forwardRef<
       onBlur={({ relatedTarget }) => {
         if (rootRef.current && !rootRef.current.contains(relatedTarget)) {
           setExpandedMenubaritemIndex(-1);
+          setExpandedMenuitemIndex(-1);
         }
       }}
       onClick={() => {
         setIsKeyboardNavigation(false);
+
+        // reset focus
+        (
+          Array.from(
+            rootRef.current?.querySelectorAll(
+              `.${styles.menubaritem}:not([aria-disabled="true"])`
+            ) ?? []
+          ) as HTMLElement[]
+        )[0]?.focus();
       }}
       onKeyDown={({ currentTarget, key }) => {
         setIsKeyboardNavigation(true);
-
-        switch (key) {
-        }
       }}
       onMouseEnter={() => {
         setIsKeyboardNavigation(false);
@@ -173,81 +123,29 @@ export const Menubar = forwardRef<
       ref={rootRef}
       role="menubar">
       {items.map(({ icon, items, title }, i) => {
-        const isDisabled = items.length === 0;
-        const isExpanded = i === expandedMenubaritemIndex;
+        const hasMenu = items.length !== 0;
+        const isMenuExpanded = i === expandedMenubaritemIndex;
         const isFirstItem = i === 0;
 
         return (
           <li
-            aria-disabled={isDisabled}
-            aria-expanded={isExpanded}
+            aria-disabled={!hasMenu}
+            aria-expanded={isMenuExpanded}
             aria-haspopup="menu"
             aria-label={title}
             className={clsx(classes?.menubaritem, styles.menubaritem)}
             key={`${title}-${i}`}
-            onClick={
-              isDisabled
-                ? undefined
-                : () => {
-                    setExpandedMenubaritemIndex(isExpanded ? -1 : i);
-                  }
-            }
-            onKeyDown={
-              isDisabled
-                ? undefined
-                : ({ key }) => {
-                    switch (key) {
-                      case "ArrowDown":
-                        if (orientation === "vertical") {
-                          focusNextMenubaritem();
-                        } else {
-                          setExpandedMenubaritemIndex(isExpanded ? -1 : i);
-                          // focus first menuitem
-                        }
-                        break;
-                      case "ArrowLeft":
-                        if (orientation === "horizontal") {
-                          if (isExpanded) {
-                            expandPrevMenubaritem();
-                          }
+            onClick={() => {
+              if (hasMenu) {
+                setExpandedMenubaritemIndex(isMenuExpanded ? -1 : i);
+              }
 
-                          focusPrevMenubaritem();
-                        }
-                        break;
-                      case "ArrowRight":
-                        if (orientation === "horizontal") {
-                          if (isExpanded) {
-                            expandNextMenubaritem();
-                          }
-
-                          focusNextMenubaritem();
-                        } else {
-                          setExpandedMenubaritemIndex(isExpanded ? -1 : i);
-                        }
-                        break;
-                      case "ArrowUp":
-                        if (orientation === "vertical") {
-                          focusPrevMenubaritem();
-                        }
-                        break;
-                      case "Enter":
-                      case " ":
-                        setExpandedMenubaritemIndex(isExpanded ? -1 : i);
-                        break;
-                      case "Escape":
-                        break;
-                    }
-                  }
-            }
-            onMouseEnter={
-              isDisabled
-                ? undefined
-                : () => {
-                    if (hasOpenMenu) {
-                      setExpandedMenubaritemIndex(i);
-                    }
-                  }
-            }
+              setExpandedMenuitemIndex(-1);
+            }}
+            onMouseEnter={() => {
+              setExpandedMenubaritemIndex(hasMenu && hasOpenMenu ? i : -1);
+              setExpandedMenuitemIndex(-1);
+            }}
             role="menuitem"
             tabIndex={isFirstItem ? 0 : -1}>
             {icon && (
@@ -263,33 +161,30 @@ export const Menubar = forwardRef<
             </label>
             <menu
               className={clsx(classes?.menu, styles.menu)}
-              hidden={!isExpanded}>
-              {items.map((item, i) => {
+              hidden={!isMenuExpanded}>
+              {items.map((item, j) => {
                 if (item) {
+                  const hasSubmenu =
+                    Boolean(item.items) && item.items?.length !== 0;
                   const isCheckbox = item.type === "checkbox";
                   const isRadio = item.type === "radio";
+                  const isSubmenuExpanded = j === expandedMenuitemIndex;
 
                   return (
                     <li
                       aria-checked={
                         isCheckbox || isRadio ? item.checked : undefined
                       }
-                      aria-disabled={!item.onClick}
+                      aria-disabled={!item.onClick && !hasSubmenu}
+                      aria-expanded={isSubmenuExpanded}
                       aria-label={item.title}
-                      className={clsx(classes?.menuitem, styles.menuitem)}
-                      key={`${item.title}-${i}`}
-                      onClick={() => {
-                        resetFocus();
-                        item.onClick?.();
-                      }}
-                      onKeyDown={({ key }) => {
-                        switch (key) {
-                          case "Enter":
-                          case " ":
-                            resetFocus();
-                            item.onClick?.();
-                            break;
-                        }
+                      className={clsx(classes?.menuitem, styles.menuitem, {
+                        [styles.hasSubmenu]: hasSubmenu,
+                      })}
+                      key={`${item.title}-${j}`}
+                      onClick={item.onClick}
+                      onMouseEnter={() => {
+                        setExpandedMenuitemIndex(hasSubmenu ? j : -1);
                       }}
                       role={
                         (isCheckbox && "menuitemcheckbox") ||
@@ -308,6 +203,76 @@ export const Menubar = forwardRef<
                       <label className={clsx(classes?.label, styles.label)}>
                         {item.title}
                       </label>
+                      {hasSubmenu && (
+                        <menu
+                          className={clsx(
+                            classes?.menu,
+                            classes?.submenu,
+                            styles.menu,
+                            styles.submenu
+                          )}
+                          hidden={!isSubmenuExpanded}>
+                          {item.items?.map((subitem, k) => {
+                            if (subitem) {
+                              const isCheckbox = subitem.type === "checkbox";
+                              const isRadio = subitem.type === "radio";
+
+                              return (
+                                <li
+                                  aria-checked={
+                                    isCheckbox || isRadio
+                                      ? subitem.checked
+                                      : undefined
+                                  }
+                                  aria-disabled={!subitem.onClick}
+                                  aria-label={subitem.title}
+                                  className={clsx(
+                                    classes?.menuitem,
+                                    styles.menuitem
+                                  )}
+                                  key={`${subitem.title}-${k}`}
+                                  onClick={subitem.onClick}
+                                  role={
+                                    (isCheckbox && "menuitemcheckbox") ||
+                                    (isRadio && "menuitemradio") ||
+                                    "menuitem"
+                                  }
+                                  tabIndex={-1}>
+                                  {subitem.icon && (
+                                    <span
+                                      aria-hidden
+                                      className={clsx(
+                                        classes?.icon,
+                                        styles.icon
+                                      )}
+                                      role="presentation">
+                                      {subitem.icon}
+                                    </span>
+                                  )}
+                                  <label
+                                    className={clsx(
+                                      classes?.label,
+                                      styles.label
+                                    )}>
+                                    {subitem.title}
+                                  </label>
+                                </li>
+                              );
+                            }
+
+                            return (
+                              <li
+                                className={clsx(
+                                  classes?.separator,
+                                  styles.separator
+                                )}
+                                key={`separator-${k}`}
+                                role="separator"
+                              />
+                            );
+                          })}
+                        </menu>
+                      )}
                     </li>
                   );
                 }
@@ -315,7 +280,10 @@ export const Menubar = forwardRef<
                 return (
                   <li
                     className={clsx(classes?.separator, styles.separator)}
-                    key={`separator-${i}`}
+                    key={`separator-${j}`}
+                    onMouseEnter={() => {
+                      setExpandedMenuitemIndex(-1);
+                    }}
                     role="separator"
                   />
                 );

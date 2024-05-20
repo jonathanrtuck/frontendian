@@ -3,9 +3,10 @@
   display: block;
   font-family: var(--font-family--monospace);
   min-height: 100%;
+  min-width: 100%;
+  overflow: hidden;
   padding: 0.5rem;
   resize: none;
-  width: 100%;
 }
 
 .input {
