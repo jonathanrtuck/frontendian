@@ -6,7 +6,7 @@ import {
   useRef,
 } from "react";
 
-import { main } from "./Teapot.weblgl";
+import { main } from "./weblgl";
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { Teapot as Icon } from "icons";
 import { StateContext } from "state/context";
@@ -18,6 +18,7 @@ import {
 
 import styles from "./Teapot.module.css";
 
+// @see https://en.wikipedia.org/wiki/Utah_teapot
 const Teapot = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
   ({ application }, ref) => {
     const [, dispatch] = useContext(StateContext);

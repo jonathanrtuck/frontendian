@@ -17,8 +17,7 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 
 ## Todo
 
-- Finish the [*Teapot*](https://en.wikipedia.org/wiki/Utah_teapot) application
 - Test in *Edge* and *iOS*
+- [Handle `Menubar` keyboard navigation](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
 - Fix *PDF Viewer* window focus when interacting with the PDF
   - This may not be possible 😔
-- [Handle `Menubar` keyboard navigation](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
