@@ -158,7 +158,7 @@ export const stateReducer = (state: State, action: Action): State => {
       switch (action.payload.type) {
         case "application":
           return action.payload.ids.reduce((prevState: State, id) => {
-            const application = state.applications.find(
+            const application = prevState.applications.find(
               (application) => application.id === id
             );
 
@@ -171,19 +171,21 @@ export const stateReducer = (state: State, action: Action): State => {
             // if the application is already open, raise and focus its first visible window
             if (isApplicationOpen) {
               const firstVisibleWindow = application.windowIds
-                .map((id) => state.windows.find((window) => window.id === id))
+                .map((id) =>
+                  prevState.windows.find((window) => window.id === id)
+                )
                 .find((window) => window && !window.hidden);
 
               if (firstVisibleWindow) {
                 return {
                   ...prevState,
                   stackingOrder: [
-                    ...state.stackingOrder.filter(
+                    ...prevState.stackingOrder.filter(
                       (id) => id !== firstVisibleWindow.id
                     ),
                     firstVisibleWindow.id,
                   ],
-                  windows: state.windows.map((window) => ({
+                  windows: prevState.windows.map((window) => ({
                     ...window,
                     focused: window.id === firstVisibleWindow.id,
                   })),
@@ -236,13 +238,13 @@ export const stateReducer = (state: State, action: Action): State => {
           }, state);
         case "file":
           return action.payload.ids.reduce((prevState: State, id) => {
-            const file = state.files.find((file) => file.id === id);
+            const file = prevState.files.find((file) => file.id === id);
 
             if (!file) {
               return prevState;
             }
 
-            const isFileOpen = state.windows.some(
+            const isFileOpen = prevState.windows.some(
               ({ fileId }) => fileId === file.id
             );
 
@@ -266,12 +268,12 @@ export const stateReducer = (state: State, action: Action): State => {
                   return {
                     ...prevState,
                     stackingOrder: [
-                      ...state.stackingOrder.filter(
+                      ...prevState.stackingOrder.filter(
                         (id) => id !== fileWindow.id
                       ),
                       fileWindow.id,
                     ],
-                    windows: state.windows.map((window) => ({
+                    windows: prevState.windows.map((window) => ({
                       ...window,
                       focused: window.id === fileWindow.id,
                     })),
@@ -282,13 +284,13 @@ export const stateReducer = (state: State, action: Action): State => {
               return prevState;
             }
 
-            const applicationId = state.types[file.type]?.application;
+            const applicationId = prevState.types[file.type]?.application;
 
             if (!applicationId) {
               return prevState;
             }
 
-            const newWindow = state.applications
+            const newWindow = prevState.applications
               .find((application) => application.id === applicationId)
               ?.getWindow?.(file);
             const existingWindowId = (action.payload as any).windowId;
@@ -302,16 +304,21 @@ export const stateReducer = (state: State, action: Action): State => {
               if (existingWindow) {
                 return {
                   ...prevState,
-                  windows: [
-                    ...prevState.windows.map((window) => ({
-                      ...window,
-                      fileId: file.id,
-                      focused: window.id === existingWindowId,
-                      height: newWindow?.height ?? window.height,
-                      title: newWindow?.title ?? window.title,
-                      width: newWindow?.width ?? window.width,
-                    })),
-                  ],
+                  windows: prevState.windows.map((window) =>
+                    window.id === existingWindowId
+                      ? {
+                          ...window,
+                          fileId: file.id,
+                          focused: true,
+                          height: newWindow?.height ?? window.height,
+                          title: newWindow?.title ?? window.title,
+                          width: newWindow?.width ?? window.width,
+                        }
+                      : {
+                          ...window,
+                          focused: false,
+                        }
+                  ),
                 };
               }
 
