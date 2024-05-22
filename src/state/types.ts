@@ -133,9 +133,14 @@ export type Application = {
 export type ApplicationComponentProps = {
   application: Application;
   file?: File;
-  window: Window;
-} & HTMLAttributes<HTMLElement> &
-  RefAttributes<ApplicationComponentRef>;
+  onClose(): void;
+  onNew(): void;
+  onOpen(fileId: ID): void;
+  onQuit(): void;
+  onResize(height: number, width: number): void;
+  openableFiles: File[];
+  windowId: ID;
+} & RefAttributes<ApplicationComponentRef>;
 
 export type ApplicationComponentRef = {
   focus?(): void;

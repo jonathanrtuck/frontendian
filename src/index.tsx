@@ -79,10 +79,10 @@ const App: FunctionComponent<{}> = () => {
 
         return application ? (
           <Window
+            {...window}
             Component={application?.Component}
             key={window.id}
             stackingIndex={stackingIndex}
-            window={window}
           />
         ) : null;
       })}

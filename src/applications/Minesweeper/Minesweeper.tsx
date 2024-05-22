@@ -1,16 +1,8 @@
 import clsx from "clsx";
-import {
-  forwardRef,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { Minesweeper as Icon } from "icons";
-import { StateContext } from "state/context";
 import {
   Application,
   ApplicationComponentProps,
@@ -189,9 +181,7 @@ const DEFAULT_STATE: Record<
 const Minesweeper = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ application, window: { id: windowId } }, ref) => {
-  const [, dispatch] = useContext(StateContext);
-
+>(({ onQuit, onResize }, ref) => {
   const intervalRef = useRef<number>(0);
 
   const [elapsedTime, setElapsedTime] = useState<number>(0);
@@ -216,15 +206,7 @@ const Minesweeper = forwardRef<
       {
         items: [
           {
-            onClick: () => {
-              dispatch({
-                payload: {
-                  ids: [application.id],
-                  type: "application",
-                },
-                type: "CLOSE",
-              });
-            },
+            onClick: onQuit,
             title: "Quit",
           },
         ],
@@ -234,19 +216,12 @@ const Minesweeper = forwardRef<
         items: [
           {
             onClick: () => {
-              // reset window dimensions
-              dispatch({
-                payload: {
-                  height: DEFAULT_STATE[level].height,
-                  ids: [windowId],
-                  width: DEFAULT_STATE[level].width,
-                },
-                type: "RESIZE",
-              });
-
               setElapsedTime(0);
               setFlagsRemaining(DEFAULT_STATE[level].flagsRemaining);
               setSquares(DEFAULT_STATE[level].squares);
+
+              // reset window dimensions
+              onResize(DEFAULT_STATE[level].height, DEFAULT_STATE[level].width);
             },
             title: "New",
           },
@@ -254,20 +229,18 @@ const Minesweeper = forwardRef<
           {
             checked: level === Level.Beginner,
             onClick: () => {
-              // update window dimensions
-              dispatch({
-                payload: {
-                  height: DEFAULT_STATE[Level.Beginner].height,
-                  ids: [windowId],
-                  width: DEFAULT_STATE[Level.Beginner].width,
-                },
-                type: "RESIZE",
-              });
+              if (level !== Level.Beginner) {
+                setElapsedTime(0);
+                setFlagsRemaining(DEFAULT_STATE[Level.Beginner].flagsRemaining);
+                setLevel(Level.Beginner);
+                setSquares(DEFAULT_STATE[Level.Beginner].squares);
 
-              setElapsedTime(0);
-              setFlagsRemaining(DEFAULT_STATE[Level.Beginner].flagsRemaining);
-              setLevel(Level.Beginner);
-              setSquares(DEFAULT_STATE[Level.Beginner].squares);
+                // update window dimensions
+                onResize(
+                  DEFAULT_STATE[Level.Beginner].height,
+                  DEFAULT_STATE[Level.Beginner].width
+                );
+              }
             },
             title: "Beginner",
             type: "radio",
@@ -275,22 +248,20 @@ const Minesweeper = forwardRef<
           {
             checked: level === Level.Intermediate,
             onClick: () => {
-              // update window dimensions
-              dispatch({
-                payload: {
-                  height: DEFAULT_STATE[Level.Intermediate].height,
-                  ids: [windowId],
-                  width: DEFAULT_STATE[Level.Intermediate].width,
-                },
-                type: "RESIZE",
-              });
+              if (level !== Level.Intermediate) {
+                setElapsedTime(0);
+                setFlagsRemaining(
+                  DEFAULT_STATE[Level.Intermediate].flagsRemaining
+                );
+                setLevel(Level.Intermediate);
+                setSquares(DEFAULT_STATE[Level.Intermediate].squares);
 
-              setElapsedTime(0);
-              setFlagsRemaining(
-                DEFAULT_STATE[Level.Intermediate].flagsRemaining
-              );
-              setLevel(Level.Intermediate);
-              setSquares(DEFAULT_STATE[Level.Intermediate].squares);
+                // update window dimensions
+                onResize(
+                  DEFAULT_STATE[Level.Intermediate].height,
+                  DEFAULT_STATE[Level.Intermediate].width
+                );
+              }
             },
             title: "Intermediate",
             type: "radio",
@@ -298,20 +269,18 @@ const Minesweeper = forwardRef<
           {
             checked: level === Level.Expert,
             onClick: () => {
-              // update window dimensions
-              dispatch({
-                payload: {
-                  height: DEFAULT_STATE[Level.Expert].height,
-                  ids: [windowId],
-                  width: DEFAULT_STATE[Level.Expert].width,
-                },
-                type: "RESIZE",
-              });
+              if (level !== Level.Expert) {
+                setElapsedTime(0);
+                setFlagsRemaining(DEFAULT_STATE[Level.Expert].flagsRemaining);
+                setLevel(Level.Expert);
+                setSquares(DEFAULT_STATE[Level.Expert].squares);
 
-              setElapsedTime(0);
-              setFlagsRemaining(DEFAULT_STATE[Level.Expert].flagsRemaining);
-              setLevel(Level.Expert);
-              setSquares(DEFAULT_STATE[Level.Expert].squares);
+                // update window dimensions
+                onResize(
+                  DEFAULT_STATE[Level.Expert].height,
+                  DEFAULT_STATE[Level.Expert].width
+                );
+              }
             },
             title: "Expert",
             type: "radio",
@@ -320,7 +289,7 @@ const Minesweeper = forwardRef<
         title: "Game",
       },
     ],
-    [application.id, dispatch, level, windowId]
+    [level, onQuit, onResize]
   );
 
   useMenubar(menubaritems);

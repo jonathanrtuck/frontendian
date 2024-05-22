@@ -1,15 +1,7 @@
-import {
-  forwardRef,
-  useContext,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from "react";
+import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { Graphics as Icon } from "icons";
-import { StateContext } from "state/context";
-import { getFilesByApplicationId } from "state/selectors";
 import {
   Application,
   ApplicationComponentProps,
@@ -27,9 +19,7 @@ import styles from "./PdfViewer.module.css";
 const PdfViewer = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ application, file, window }, ref) => {
-  const [state, dispatch] = useContext(StateContext);
-
+>(({ file, onClose, onNew, onOpen, onQuit, openableFiles }, ref) => {
   const rootRef = useRef<HTMLIFrameElement>(null);
 
   const menubaritems = useMemo<Menubaritem[]>(
@@ -37,33 +27,16 @@ const PdfViewer = forwardRef<
       {
         items: [
           {
-            onClick: () => {
-              dispatch({
-                payload: {
-                  applicationId: application.id,
-                  type: "window",
-                },
-                type: "OPEN",
-              });
-            },
+            onClick: onNew,
             title: "New",
           },
           {
-            items: getFilesByApplicationId(state, application.id).map(
-              ({ id, title }) => ({
-                onClick: () => {
-                  dispatch({
-                    payload: {
-                      ids: [id],
-                      type: "file",
-                      windowId: window.id,
-                    },
-                    type: "OPEN",
-                  });
-                },
-                title,
-              })
-            ),
+            items: openableFiles.map(({ id, title }) => ({
+              onClick: () => {
+                onOpen(id);
+              },
+              title,
+            })),
             title: "Open",
           },
           null,
@@ -75,34 +48,18 @@ const PdfViewer = forwardRef<
           },
           null,
           {
-            onClick: () => {
-              dispatch({
-                payload: {
-                  ids: [window.id],
-                  type: "window",
-                },
-                type: "CLOSE",
-              });
-            },
+            onClick: onClose,
             title: "Close",
           },
           {
-            onClick: () => {
-              dispatch({
-                payload: {
-                  ids: [application.id],
-                  type: "application",
-                },
-                type: "CLOSE",
-              });
-            },
+            onClick: onQuit,
             title: "Quit",
           },
         ],
         title: "File",
       },
     ],
-    [application.id, dispatch, state, window.id]
+    [onClose, onNew, onOpen, onQuit, openableFiles]
   );
 
   useImperativeHandle(ref, () => ({}), []);
@@ -128,20 +85,18 @@ const PdfViewer = forwardRef<
 export const APPLICATION_PDF_VIEWER: Application = {
   Component: PdfViewer,
   getWindow: (file) => {
-    const width = file && "width" in file ? file?.width : undefined;
     const window = {
       height: 600,
       title: file?.title || "PDF Viewer",
     };
+    const width = file && "width" in file ? file?.width : undefined;
 
-    if (width) {
-      return {
-        ...window,
-        width,
-      };
-    }
-
-    return window;
+    return width
+      ? {
+          ...window,
+          width,
+        }
+      : window;
   },
   icon: <Icon />,
   id: "application-pdf-viewer",

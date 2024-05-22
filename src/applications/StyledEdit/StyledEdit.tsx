@@ -2,7 +2,6 @@ import clsx from "clsx";
 import {
   forwardRef,
   useDeferredValue,
-  useContext,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -13,8 +12,6 @@ import Markdown from "react-markdown";
 
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { StyledEdit as Icon } from "icons";
-import { StateContext } from "state/context";
-import { getFilesByApplicationId } from "state/selectors";
 import {
   Application,
   ApplicationComponentProps,
@@ -29,9 +26,7 @@ import styles from "./StyledEdit.module.css";
 const StyledEdit = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ application, file, window }, ref) => {
-  const [state, dispatch] = useContext(StateContext);
-
+>(({ file, onClose, onNew, onOpen, onQuit, openableFiles }, ref) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useImperativeHandle(
@@ -63,58 +58,25 @@ const StyledEdit = forwardRef<
       {
         items: [
           {
-            onClick: () => {
-              dispatch({
-                payload: {
-                  applicationId: application.id,
-                  type: "window",
-                },
-                type: "OPEN",
-              });
-            },
+            onClick: onNew,
             title: "New",
           },
           {
-            items: getFilesByApplicationId(state, application.id).map(
-              ({ id, title }) => ({
-                onClick: () => {
-                  dispatch({
-                    payload: {
-                      ids: [id],
-                      type: "file",
-                      windowId: window.id,
-                    },
-                    type: "OPEN",
-                  });
-                },
-                title,
-              })
-            ),
+            items: openableFiles.map(({ id, title }) => ({
+              onClick: () => {
+                onOpen(id);
+              },
+              title,
+            })),
             title: "Open",
           },
           null,
           {
-            onClick: () => {
-              dispatch({
-                payload: {
-                  ids: [window.id],
-                  type: "window",
-                },
-                type: "CLOSE",
-              });
-            },
+            onClick: onClose,
             title: "Close",
           },
           {
-            onClick: () => {
-              dispatch({
-                payload: {
-                  ids: [application.id],
-                  type: "application",
-                },
-                type: "CLOSE",
-              });
-            },
+            onClick: onQuit,
             title: "Quit",
           },
         ],
@@ -148,7 +110,7 @@ const StyledEdit = forwardRef<
         title: "View",
       },
     ],
-    [application.id, dispatch, state, view, window.id]
+    [onClose, onNew, onOpen, onQuit, openableFiles, view]
   );
   const inputLines = useMemo<string[]>(() => input.split("\n"), [input]);
   const numInputCols = useMemo<number>(

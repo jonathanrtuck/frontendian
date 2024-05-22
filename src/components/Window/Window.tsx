@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import {
   FunctionComponent,
+  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -20,6 +21,7 @@ import {
   StateContext,
   Window as WindowType,
 } from "state";
+import { ID } from "types";
 
 import styles from "./Window.module.css";
 
@@ -28,11 +30,26 @@ const MIN_WINDOW_WIDTH = 100;
 
 // @see https://github.com/react-grid-layout/react-draggable/issues/749#issuecomment-2098538949
 // @todo listen for root element's `font-size` changes
-export const Window: FunctionComponent<{
-  Component: Application["Component"];
-  stackingIndex: number;
-  window: WindowType;
-}> = ({ Component, stackingIndex, window }) => {
+export const Window: FunctionComponent<
+  WindowType & {
+    Component: Application["Component"];
+    stackingIndex: number;
+  }
+> = ({
+  Component,
+  fileId,
+  focused,
+  headerX,
+  height,
+  hidden,
+  id,
+  stackingIndex,
+  title,
+  width,
+  x,
+  y,
+  zoomed,
+}) => {
   const [state, dispatch] = useContext(StateContext);
 
   const applicationFocusRef = useRef<ApplicationComponentRef>(null);
@@ -49,27 +66,92 @@ export const Window: FunctionComponent<{
   const [windowChromeSize, setWindowChromeSize] = useState<number>(0);
 
   const hasMenubar = menuitems.length !== 0;
-  const outerHeight = window.height + windowChromeSize;
-  const outerWidth = window.width + windowChromeSize;
+  const outerHeight = height + windowChromeSize;
+  const outerWidth = width + windowChromeSize;
 
   const application = useMemo<Application>(
     () =>
       state.applications.find(({ windowIds }) =>
-        windowIds.includes(window.id)
+        windowIds.includes(id)
       ) as Application,
-    [state.applications, window.id]
+    [id, state.applications]
   );
   const file = useMemo<File | undefined>(
+    () => (fileId ? state.files.find(({ id }) => id === fileId) : undefined),
+    [fileId, state.files]
+  );
+  const openableFiles = useMemo<File[]>(
     () =>
-      window.fileId
-        ? state.files.find(({ id }) => id === window.fileId)
-        : undefined,
-    [state.files, window.fileId]
+      Object.entries(state.types)
+        .filter(
+          ([, { application: applicationId }]) =>
+            applicationId === application.id
+        )
+        .reduce(
+          (acc: File[], [type]) =>
+            acc.concat(state.files.filter((file) => file.type === type)),
+          []
+        ),
+    [application.id, state.files, state.types]
+  );
+
+  const onClose = useCallback(() => {
+    dispatch({
+      payload: {
+        ids: [id],
+        type: "window",
+      },
+      type: "CLOSE",
+    });
+  }, [dispatch, id]);
+  const onNew = useCallback(() => {
+    dispatch({
+      payload: {
+        applicationId: application.id,
+        type: "window",
+      },
+      type: "OPEN",
+    });
+  }, [application.id, dispatch]);
+  const onOpen = useCallback(
+    (fileId: ID) => {
+      dispatch({
+        payload: {
+          ids: [fileId],
+          type: "file",
+          windowId: id,
+        },
+        type: "OPEN",
+      });
+    },
+    [dispatch, id]
+  );
+  const onQuit = useCallback(() => {
+    dispatch({
+      payload: {
+        ids: [application.id],
+        type: "application",
+      },
+      type: "CLOSE",
+    });
+  }, [application.id, dispatch]);
+  const onResize = useCallback(
+    (height: number, width: number) => {
+      dispatch({
+        payload: {
+          height,
+          ids: [id],
+          width,
+        },
+        type: "RESIZE",
+      });
+    },
+    [dispatch, id]
   );
 
   useEffect(() => {
     if (
-      window.focused &&
+      focused &&
       rootRef.current &&
       !rootRef.current.contains(document.activeElement)
     ) {
@@ -79,7 +161,7 @@ export const Window: FunctionComponent<{
         rootRef.current.focus();
       }
     }
-  }, [window.focused]);
+  }, [focused]);
 
   useEffect(() => {
     if (hasMenubar && contentRef.current && menubarRef.current) {
@@ -111,11 +193,9 @@ export const Window: FunctionComponent<{
 
   useLayoutEffect(() => {
     setCurrentOuterWidth(
-      window.zoomed
-        ? rootRef.current?.getBoundingClientRect().width ?? 0
-        : outerWidth
+      zoomed ? rootRef.current?.getBoundingClientRect().width ?? 0 : outerWidth
     );
-  }, [outerWidth, window.zoomed]);
+  }, [outerWidth, zoomed]);
 
   return (
     <Draggable
@@ -123,18 +203,18 @@ export const Window: FunctionComponent<{
       defaultClassName={styles.draggable}
       defaultClassNameDragged={styles.dragged}
       defaultClassNameDragging={styles.dragging}
-      disabled={window.zoomed}
+      disabled={zoomed}
       nodeRef={rootRef}
       onStart={({ shiftKey }) => {
         if (shiftKey) {
           return false;
         }
       }}
-      onStop={(_, { x, y }) => {
-        if (x !== window.x || y !== window.y) {
+      onStop={(_, data) => {
+        if (data.x !== x || data.y !== y) {
           dispatch({
             payload: {
-              ids: [window.id],
+              ids: [id],
               type: "window",
               x,
               y,
@@ -147,8 +227,8 @@ export const Window: FunctionComponent<{
         }
       }}
       position={{
-        x: window.x,
-        y: window.y,
+        x,
+        y,
       }}>
       <Resizable
         handle={
@@ -168,7 +248,7 @@ export const Window: FunctionComponent<{
           dispatch({
             payload: {
               height: size.height - windowChromeSize,
-              ids: [window.id],
+              ids: [id],
               width: size.width - windowChromeSize,
             },
             type: "RESIZE",
@@ -176,16 +256,16 @@ export const Window: FunctionComponent<{
         }}
         width={outerWidth}>
         <section
-          aria-labelledby={`${window.id}__title`}
+          aria-labelledby={`${id}__title`}
           className={clsx(styles.root, {
-            [styles.zoomed]: window.zoomed,
+            [styles.zoomed]: zoomed,
           })}
-          hidden={window.hidden}
+          hidden={hidden}
           onBlur={({ relatedTarget }) => {
             if (!rootRef.current?.contains(relatedTarget)) {
               dispatch({
                 payload: {
-                  ids: [window.id],
+                  ids: [id],
                 },
                 type: "BLUR",
               });
@@ -195,7 +275,7 @@ export const Window: FunctionComponent<{
             if (!relatedTarget || !rootRef.current?.contains(relatedTarget)) {
               dispatch({
                 payload: {
-                  ids: [window.id],
+                  ids: [id],
                 },
                 type: "FOCUS",
               });
@@ -224,10 +304,10 @@ export const Window: FunctionComponent<{
               }
             }}
             onStop={(_, { x }) => {
-              if (x !== window.headerX) {
+              if (x !== headerX) {
                 dispatch({
                   payload: {
-                    ids: [window.id],
+                    ids: [id],
                     type: "header",
                     x,
                   },
@@ -240,7 +320,7 @@ export const Window: FunctionComponent<{
             }}
             position={{
               x: Math.max(
-                Math.min(window.headerX, currentOuterWidth - headerWidth),
+                Math.min(headerX, currentOuterWidth - headerWidth),
                 0
               ),
               y: 0,
@@ -255,7 +335,7 @@ export const Window: FunctionComponent<{
                 if (!isButton) {
                   dispatch({
                     payload: {
-                      ids: [window.id],
+                      ids: [id],
                     },
                     type: "HIDE",
                   });
@@ -271,7 +351,7 @@ export const Window: FunctionComponent<{
                 if (isDoubleClick && !isButton) {
                   dispatch({
                     payload: {
-                      ids: [window.id],
+                      ids: [id],
                     },
                     type: "HIDE",
                   });
@@ -280,11 +360,8 @@ export const Window: FunctionComponent<{
                 touchRef.current = now;
               }}
               ref={headerRef}>
-              <h1
-                className={styles.title}
-                id={`${window.id}__title`}
-                title={window.title}>
-                {window.title}
+              <h1 className={styles.title} id={`${id}__title`} title={title}>
+                {title}
               </h1>
               <button
                 aria-label="Close"
@@ -296,7 +373,7 @@ export const Window: FunctionComponent<{
                 onPointerUp={() => {
                   dispatch({
                     payload: {
-                      ids: [window.id],
+                      ids: [id],
                       type: "window",
                     },
                     type: "CLOSE",
@@ -315,9 +392,9 @@ export const Window: FunctionComponent<{
                 onPointerUp={() => {
                   dispatch({
                     payload: {
-                      ids: [window.id],
+                      ids: [id],
                     },
-                    type: window.zoomed ? "UNZOOM" : "ZOOM",
+                    type: zoomed ? "UNZOOM" : "ZOOM",
                   });
                 }}
                 title="Zoom"
@@ -342,19 +419,25 @@ export const Window: FunctionComponent<{
             )}
             ref={contentRef}
             style={
-              window.zoomed
+              zoomed
                 ? undefined
                 : {
-                    height: `calc(${window.height}px + var(--window_scrollbar-size))`,
-                    width: `calc(${window.width}px + var(--window_scrollbar-size))`,
+                    height: `calc(${height}px + var(--window_scrollbar-size))`,
+                    width: `calc(${width}px + var(--window_scrollbar-size))`,
                   }
             }>
             <MenubarContext.Provider value={setMenuitems}>
               <Component
                 application={application}
                 file={file}
+                onClose={onClose}
+                onNew={onNew}
+                onOpen={onOpen}
+                onQuit={onQuit}
+                onResize={onResize}
+                openableFiles={openableFiles}
                 ref={applicationFocusRef}
-                window={window}
+                windowId={id}
               />
             </MenubarContext.Provider>
           </div>
