@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Dispatch,
   FunctionComponent,
@@ -26,7 +25,6 @@ import {
 import "./index.css";
 
 const IS_DEBUG_MODE = false;
-const QUERY_CLIENT = new QueryClient();
 
 // eslint-disable-next-line no-console
 reportWebVitals(IS_DEBUG_MODE ? console.debug : undefined);
@@ -94,8 +92,6 @@ const App: FunctionComponent<{}> = () => {
 
 createRoot(document.body).render(
   <StrictMode>
-    <QueryClientProvider client={QUERY_CLIENT}>
-      <App />
-    </QueryClientProvider>
+    <App />
   </StrictMode>
 );

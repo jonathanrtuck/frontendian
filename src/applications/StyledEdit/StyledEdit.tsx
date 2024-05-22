@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { useQuery } from "@tanstack/react-query";
 import {
   forwardRef,
   useDeferredValue,
@@ -47,9 +46,14 @@ const StyledEdit = forwardRef<
     []
   );
 
+  const [fileContent, setFileContent] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [view, setView] = useState<"markdown" | "preview">(
-    file ? "preview" : "markdown"
+    file?.type === MimeType.TextMarkdown && Boolean(file?.url)
+      ? "preview"
+      : "markdown"
   );
 
   const deferredInput = useDeferredValue<string>(input);
@@ -155,26 +159,47 @@ const StyledEdit = forwardRef<
 
   useMenubar(menubaritems);
 
-  const {
-    data = "",
-    error,
-    isPending,
-  } = useQuery({
-    enabled: file?.type === MimeType.TextMarkdown && Boolean(file?.url),
-    queryFn: file?.url
-      ? () => fetch(file.url).then((response) => response.text())
-      : undefined,
-    queryKey: [file?.url],
-  });
-
   useEffect(() => {
-    if (!isPending && !error && data) {
-      setInput(data);
+    if (file?.type === MimeType.TextMarkdown && Boolean(file?.url)) {
+      const controller = new AbortController();
+
+      setError(null);
+      setIsLoading(true);
+
+      fetch(file.url, {
+        signal: controller.signal,
+      })
+        .then((response) => response.text())
+        .then(setFileContent)
+        .catch((error) => {
+          if (error.name !== "AbortError") {
+            setError(error.message);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+
+      return () => {
+        controller.abort();
+
+        setIsLoading(false);
+      };
     }
-  }, [data, error, isPending]);
+  }, [file]);
 
   useEffect(() => {
-    setView(file ? "preview" : "markdown");
+    if (!isLoading && !error && fileContent) {
+      setInput(fileContent);
+    }
+  }, [error, fileContent, isLoading]);
+
+  useEffect(() => {
+    setView(
+      file?.type === MimeType.TextMarkdown && Boolean(file?.url)
+        ? "preview"
+        : "markdown"
+    );
   }, [file]);
 
   useEffect(() => {
@@ -183,11 +208,11 @@ const StyledEdit = forwardRef<
     }
   }, [view]);
 
-  if (file && isPending) {
+  if (isLoading) {
     return <span>loading…</span>;
   }
 
-  if (file && error) {
+  if (error) {
     return <span>error…</span>;
   }
 
@@ -201,11 +226,6 @@ const StyledEdit = forwardRef<
         }}
         ref={inputRef}
         rows={numInputRows}
-        style={
-          {
-            // height: inputHeight,
-          }
-        }
         tabIndex={0}
         value={input}
       />
