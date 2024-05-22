@@ -216,8 +216,8 @@ export const Window: FunctionComponent<
             payload: {
               ids: [id],
               type: "window",
-              x,
-              y,
+              x: data.x,
+              y: data.y,
             },
             type: "MOVE",
           });
