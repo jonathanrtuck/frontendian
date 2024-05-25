@@ -183,6 +183,7 @@ export type Types = Partial<
 
 export type Window = {
   fileId?: ID;
+  fixedSize: boolean;
   focused: boolean;
   headerX: number;
   height: number;

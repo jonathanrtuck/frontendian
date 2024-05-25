@@ -11,6 +11,7 @@ import { Pdf, Text } from "icons";
 import { MimeType } from "types";
 
 export const DEFAULT_WINDOW: Omit<Window, "id" | "title" | "x" | "y"> = {
+  fixedSize: false,
   focused: true,
   headerX: 0,
   height: 450,

@@ -83,7 +83,6 @@
   border-width: var(--border-width) var(--border-width) 0;
   bottom: 100%;
   display: flex;
-  gap: 1rem;
   height: var(--window-height);
   left: 0;
   margin: 0 calc(var(--border-width) * -1);
@@ -104,7 +103,7 @@
 .title {
   flex: 0 1 auto;
   font-size: 1rem;
-  margin: 0;
+  margin: 0 1rem;
   order: 2;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -319,6 +318,7 @@
   z-index: 3;
 }
 
+.fixedSize .resizeHandle,
 .zoomed .resizeHandle {
   color: transparent;
   pointer-events: none;

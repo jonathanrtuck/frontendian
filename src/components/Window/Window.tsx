@@ -38,6 +38,7 @@ export const Window: FunctionComponent<
 > = ({
   Component,
   fileId,
+  fixedSize,
   focused,
   headerX,
   height,
@@ -232,28 +233,36 @@ export const Window: FunctionComponent<
       }}>
       <Resizable
         handle={
-          <Resize
-            aria-hidden
-            className={clsx(styles.nondraggable, styles.resizeHandle)}
-            role="presentation"
-          />
+          fixedSize ? undefined : (
+            <Resize
+              aria-hidden
+              className={clsx(styles.nondraggable, styles.resizeHandle)}
+              role="presentation"
+            />
+          )
         }
         height={outerHeight}
         minConstraints={[
           Math.max(MIN_WINDOW_WIDTH, menubarWidth),
           MIN_WINDOW_HEIGHT,
         ]}
-        onResize={(_, { size }) => {
-          setHeaderWidth(headerRef.current?.getBoundingClientRect().width ?? 0);
-          dispatch({
-            payload: {
-              height: size.height - windowChromeSize,
-              ids: [id],
-              width: size.width - windowChromeSize,
-            },
-            type: "RESIZE",
-          });
-        }}
+        onResize={
+          fixedSize
+            ? undefined
+            : (_, { size }) => {
+                setHeaderWidth(
+                  headerRef.current?.getBoundingClientRect().width ?? 0
+                );
+                dispatch({
+                  payload: {
+                    height: size.height - windowChromeSize,
+                    ids: [id],
+                    width: size.width - windowChromeSize,
+                  },
+                  type: "RESIZE",
+                });
+              }
+        }
         width={outerWidth}>
         <section
           aria-labelledby={`${id}__title`}
@@ -382,24 +391,26 @@ export const Window: FunctionComponent<
                 title="Close"
                 type="button"
               />
-              <button
-                aria-label="Zoom"
-                className={clsx(
-                  styles.nondraggable,
-                  styles.button,
-                  styles.zoom
-                )}
-                onPointerUp={() => {
-                  dispatch({
-                    payload: {
-                      ids: [id],
-                    },
-                    type: zoomed ? "UNZOOM" : "ZOOM",
-                  });
-                }}
-                title="Zoom"
-                type="button"
-              />
+              {!fixedSize && (
+                <button
+                  aria-label="Zoom"
+                  className={clsx(
+                    styles.nondraggable,
+                    styles.button,
+                    styles.zoom
+                  )}
+                  onPointerUp={() => {
+                    dispatch({
+                      payload: {
+                        ids: [id],
+                      },
+                      type: zoomed ? "UNZOOM" : "ZOOM",
+                    });
+                  }}
+                  title="Zoom"
+                  type="button"
+                />
+              )}
             </header>
           </Draggable>
           {hasMenubar && (
@@ -412,18 +423,20 @@ export const Window: FunctionComponent<
             </nav>
           )}
           <div
-            className={clsx(
-              styles.nondraggable,
-              styles.content,
-              styles.scrollbar
-            )}
+            className={clsx(styles.nondraggable, styles.content, {
+              [styles.scrollbar]: !fixedSize,
+            })}
             ref={contentRef}
             style={
               zoomed
                 ? undefined
                 : {
-                    height: `calc(${height}px + var(--window_scrollbar-size))`,
-                    width: `calc(${width}px + var(--window_scrollbar-size))`,
+                    height: fixedSize
+                      ? height
+                      : `calc(${height}px + var(--window_scrollbar-size))`,
+                    width: fixedSize
+                      ? width
+                      : `calc(${width}px + var(--window_scrollbar-size))`,
                   }
             }>
             <MenubarContext.Provider value={setMenuitems}>

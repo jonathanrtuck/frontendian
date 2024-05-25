@@ -488,6 +488,7 @@ const Minesweeper = forwardRef<
 export const APPLICATION_MINESWEEPER: Application = {
   Component: Minesweeper,
   getWindow: () => ({
+    fixedSize: true,
     height: DEFAULT_STATE[Level.Beginner].height,
     title: "Minesweeper",
     width: DEFAULT_STATE[Level.Beginner].width,
