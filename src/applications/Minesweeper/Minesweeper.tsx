@@ -274,10 +274,6 @@ const Minesweeper = forwardRef<
     if (elapsedTime === 0 || elapsedTime === 999) {
       window.clearInterval(intervalRef.current);
     }
-
-    return () => {
-      window.clearInterval(intervalRef.current);
-    };
   }, [elapsedTime]);
 
   useEffect(() => {
@@ -285,6 +281,13 @@ const Minesweeper = forwardRef<
       window.clearInterval(intervalRef.current);
     }
   }, [isLost, isWon]);
+
+  useEffect(
+    () => () => {
+      window.clearInterval(intervalRef.current);
+    },
+    []
+  );
 
   return (
     <div
