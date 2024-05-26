@@ -89,7 +89,7 @@ export const APPLICATION_PDF_VIEWER: Application = {
       height: 600,
       title: file?.title || "PDF Viewer",
     };
-    const width = file && "width" in file ? file?.width : undefined;
+    const width = file && "width" in file ? file.width : undefined;
 
     return width
       ? {

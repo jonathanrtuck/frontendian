@@ -1,15 +1,6 @@
 .root {
   --minesweeper-background-color: silver;
 
-  align-items: center;
-  background-color: var(--minesweeper-background-color);
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-}
-
-.board {
   background-color: var(--minesweeper-background-color);
   border: 0.1875rem outset;
   display: flex;

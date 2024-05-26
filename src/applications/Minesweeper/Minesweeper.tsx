@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 
-import { Menubaritem, useMenubar } from "components/Menubar";
+import { Menubaritem, Menuitem, useMenubar } from "components/Menubar";
 import { Minesweeper as Icon } from "icons";
 import {
   Application,
@@ -136,6 +136,8 @@ const revealSquare = (
   return nextSquares;
 };
 
+const DEFAULT_LEVEL = Level.Beginner;
+
 const DEFAULT_STATE: Record<
   Level,
   {
@@ -177,6 +179,12 @@ const DEFAULT_STATE: Record<
   },
 };
 
+const LEVELS: [lvl: Level, title: string][] = [
+  [Level.Beginner, "Beginner"],
+  [Level.Intermediate, "Intermediate"],
+  [Level.Expert, "Expert"],
+];
+
 // @see https://github.com/jonathanrtuck/minesweeper
 const Minesweeper = forwardRef<
   ApplicationComponentRef,
@@ -186,9 +194,9 @@ const Minesweeper = forwardRef<
 
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [flagsRemaining, setFlagsRemaining] = useState<number>(10);
-  const [level, setLevel] = useState<Level>(Level.Beginner);
+  const [level, setLevel] = useState<Level>(DEFAULT_LEVEL);
   const [squares, setSquares] = useState<Square[][]>(
-    DEFAULT_STATE[Level.Beginner].squares
+    DEFAULT_STATE[DEFAULT_LEVEL].squares
   );
 
   const isLost = useMemo<boolean>(
@@ -226,65 +234,27 @@ const Minesweeper = forwardRef<
             title: "New",
           },
           null,
-          {
-            checked: level === Level.Beginner,
-            onClick: () => {
-              if (level !== Level.Beginner) {
-                setElapsedTime(0);
-                setFlagsRemaining(DEFAULT_STATE[Level.Beginner].flagsRemaining);
-                setLevel(Level.Beginner);
-                setSquares(DEFAULT_STATE[Level.Beginner].squares);
+          ...LEVELS.map(
+            ([lvl, title]: [Level, string]): Menuitem => ({
+              checked: level === lvl,
+              onClick: () => {
+                if (level !== lvl) {
+                  const { flagsRemaining, height, squares, width } =
+                    DEFAULT_STATE[lvl];
 
-                // update window dimensions
-                onResize(
-                  DEFAULT_STATE[Level.Beginner].height,
-                  DEFAULT_STATE[Level.Beginner].width
-                );
-              }
-            },
-            title: "Beginner",
-            type: "radio",
-          },
-          {
-            checked: level === Level.Intermediate,
-            onClick: () => {
-              if (level !== Level.Intermediate) {
-                setElapsedTime(0);
-                setFlagsRemaining(
-                  DEFAULT_STATE[Level.Intermediate].flagsRemaining
-                );
-                setLevel(Level.Intermediate);
-                setSquares(DEFAULT_STATE[Level.Intermediate].squares);
+                  setElapsedTime(0);
+                  setFlagsRemaining(flagsRemaining);
+                  setLevel(lvl);
+                  setSquares(squares);
 
-                // update window dimensions
-                onResize(
-                  DEFAULT_STATE[Level.Intermediate].height,
-                  DEFAULT_STATE[Level.Intermediate].width
-                );
-              }
-            },
-            title: "Intermediate",
-            type: "radio",
-          },
-          {
-            checked: level === Level.Expert,
-            onClick: () => {
-              if (level !== Level.Expert) {
-                setElapsedTime(0);
-                setFlagsRemaining(DEFAULT_STATE[Level.Expert].flagsRemaining);
-                setLevel(Level.Expert);
-                setSquares(DEFAULT_STATE[Level.Expert].squares);
-
-                // update window dimensions
-                onResize(
-                  DEFAULT_STATE[Level.Expert].height,
-                  DEFAULT_STATE[Level.Expert].width
-                );
-              }
-            },
-            title: "Expert",
-            type: "radio",
-          },
+                  // update window dimensions
+                  onResize(height, width);
+                }
+              },
+              title,
+              type: "radio",
+            })
+          ),
         ],
         title: "Game",
       },
@@ -304,6 +274,10 @@ const Minesweeper = forwardRef<
     if (elapsedTime === 0 || elapsedTime === 999) {
       window.clearInterval(intervalRef.current);
     }
+
+    return () => {
+      window.clearInterval(intervalRef.current);
+    };
   }, [elapsedTime]);
 
   useEffect(() => {
@@ -312,174 +286,165 @@ const Minesweeper = forwardRef<
     }
   }, [isLost, isWon]);
 
-  useEffect(
-    () => () => {
-      window.clearInterval(intervalRef.current);
-    },
-    []
-  );
-
   return (
-    <div className={styles.root}>
-      <div
-        className={styles.board}
-        onContextMenu={(e) => {
-          e.preventDefault();
-        }}>
-        <header className={styles.header}>
-          <data className={styles.ticker} value={flagsRemaining}>
-            {flagsRemaining.toString().padStart(3, "0")}
-          </data>
-          <button
-            aria-label="Reset"
-            className={clsx(styles.reset, {
-              [styles.lost]: isLost,
-              [styles.won]: isWon,
-            })}
-            onClick={() => {
-              setElapsedTime(0);
-              setFlagsRemaining(DEFAULT_STATE[level].flagsRemaining);
-              setSquares(DEFAULT_STATE[level].squares);
-            }}
-            type="reset"
-          />
-          <time className={styles.ticker} dateTime={`PT${elapsedTime}S`}>
-            {elapsedTime.toString().padStart(3, "0")}
-          </time>
-        </header>
-        <div className={styles.grid}>
-          {squares.map((row, rowIndex) => (
-            <div className={styles.row} key={rowIndex}>
-              {row.map((_, columnIndex) => {
-                const { hasFlag, hasMine, isRevealed, numAdjacentMines } =
-                  squares[rowIndex][columnIndex];
-                const coordinates: Coordinates = [rowIndex, columnIndex];
-                const isFlagged = squares[rowIndex][columnIndex].hasFlag;
-                const isGameOver = isLost || isWon;
-                const isRevealedMine = isLost && hasMine && !hasFlag;
+    <div
+      className={styles.root}
+      onContextMenu={(e) => {
+        e.preventDefault();
+      }}>
+      <header className={styles.header}>
+        <data className={styles.ticker} value={flagsRemaining}>
+          {flagsRemaining.toString().padStart(3, "0")}
+        </data>
+        <button
+          aria-label="Reset"
+          className={clsx(styles.reset, {
+            [styles.lost]: isLost,
+            [styles.won]: isWon,
+          })}
+          onClick={() => {
+            setElapsedTime(0);
+            setFlagsRemaining(DEFAULT_STATE[level].flagsRemaining);
+            setSquares(DEFAULT_STATE[level].squares);
+          }}
+          type="reset"
+        />
+        <time className={styles.ticker} dateTime={`PT${elapsedTime}S`}>
+          {elapsedTime.toString().padStart(3, "0")}
+        </time>
+      </header>
+      <div className={styles.grid}>
+        {squares.map((row, rowIndex) => (
+          <div className={styles.row} key={rowIndex}>
+            {row.map((_, columnIndex) => {
+              const { hasFlag, hasMine, isRevealed, numAdjacentMines } =
+                squares[rowIndex][columnIndex];
+              const coordinates: Coordinates = [rowIndex, columnIndex];
+              const isFlagged = squares[rowIndex][columnIndex].hasFlag;
+              const isGameOver = isLost || isWon;
+              const isRevealedMine = isLost && hasMine && !hasFlag;
 
-                return (
-                  <button
-                    aria-disabled={isRevealed || isGameOver}
-                    className={clsx(styles.square, {
-                      [styles[`number-${numAdjacentMines}`]]: isRevealed,
-                      [styles.button]: !isRevealed && !isRevealedMine,
-                      [styles.flag]: hasFlag,
-                      [styles.gameOver]: isGameOver,
-                      [styles.mine]: hasMine,
-                      [styles.number]: isRevealed,
-                      [styles.revealed]: isRevealed,
-                    })}
-                    key={columnIndex}
-                    onClick={
-                      isRevealed || isGameOver || hasFlag
-                        ? undefined
-                        : () => {
-                            if (elapsedTime === 0) {
-                              const mineCoordinates = getMineCoordinates(
+              return (
+                <button
+                  aria-disabled={isRevealed || isGameOver}
+                  className={clsx(styles.square, {
+                    [styles[`number-${numAdjacentMines}`]]: isRevealed,
+                    [styles.button]: !isRevealed && !isRevealedMine,
+                    [styles.flag]: hasFlag,
+                    [styles.gameOver]: isGameOver,
+                    [styles.mine]: hasMine,
+                    [styles.number]: isRevealed,
+                    [styles.revealed]: isRevealed,
+                  })}
+                  key={columnIndex}
+                  onClick={
+                    isRevealed || isGameOver || hasFlag
+                      ? undefined
+                      : () => {
+                          if (elapsedTime === 0) {
+                            const mineCoordinates = getMineCoordinates(
+                              DEFAULT_STATE[level].numRows,
+                              DEFAULT_STATE[level].numColumns,
+                              DEFAULT_STATE[level].numMines,
+                              coordinates
+                            );
+
+                            // start timer
+                            setElapsedTime(1);
+                            // set mines
+                            setSquares((prevState) => {
+                              const squaresWithMines = prevState.map(
+                                (row, rowIndex) =>
+                                  row.map((square, columnIndex) => ({
+                                    ...square,
+                                    hasMine: mineCoordinates.some(
+                                      isEqualCoordinates([
+                                        rowIndex,
+                                        columnIndex,
+                                      ])
+                                    ),
+                                  }))
+                              );
+                              const nextSquares = squaresWithMines.map(
+                                (row, rowIndex) =>
+                                  row.map((square, columnIndex) => ({
+                                    ...square,
+                                    numAdjacentMines:
+                                      getAdjacentSquareCoordinates(
+                                        DEFAULT_STATE[level].numRows,
+                                        DEFAULT_STATE[level].numColumns,
+                                        [rowIndex, columnIndex]
+                                      )
+                                        .map(
+                                          ([rowIndex, columnIndex]) =>
+                                            squaresWithMines[rowIndex][
+                                              columnIndex
+                                            ]
+                                        )
+                                        .reduce(
+                                          (acc, { hasMine }) =>
+                                            acc + (hasMine ? 1 : 0),
+                                          0
+                                        ),
+                                  }))
+                              );
+
+                              return revealSquare(
                                 DEFAULT_STATE[level].numRows,
                                 DEFAULT_STATE[level].numColumns,
-                                DEFAULT_STATE[level].numMines,
+                                nextSquares,
                                 coordinates
                               );
-
-                              // start timer
-                              setElapsedTime(1);
-                              // set mines
-                              setSquares((prevState) => {
-                                const squaresWithMines = prevState.map(
-                                  (row, rowIndex) =>
-                                    row.map((square, columnIndex) => ({
-                                      ...square,
-                                      hasMine: mineCoordinates.some(
-                                        isEqualCoordinates([
-                                          rowIndex,
-                                          columnIndex,
-                                        ])
-                                      ),
-                                    }))
-                                );
-                                const nextSquares = squaresWithMines.map(
-                                  (row, rowIndex) =>
-                                    row.map((square, columnIndex) => ({
-                                      ...square,
-                                      numAdjacentMines:
-                                        getAdjacentSquareCoordinates(
-                                          DEFAULT_STATE[level].numRows,
-                                          DEFAULT_STATE[level].numColumns,
-                                          [rowIndex, columnIndex]
-                                        )
-                                          .map(
-                                            ([rowIndex, columnIndex]) =>
-                                              squaresWithMines[rowIndex][
-                                                columnIndex
-                                              ]
-                                          )
-                                          .reduce(
-                                            (acc, { hasMine }) =>
-                                              acc + (hasMine ? 1 : 0),
-                                            0
-                                          ),
-                                    }))
-                                );
-
-                                return revealSquare(
-                                  DEFAULT_STATE[level].numRows,
-                                  DEFAULT_STATE[level].numColumns,
-                                  nextSquares,
-                                  coordinates
-                                );
-                              });
-                            } else {
-                              setSquares((prevState) =>
-                                revealSquare(
-                                  DEFAULT_STATE[level].numRows,
-                                  DEFAULT_STATE[level].numColumns,
-                                  prevState,
-                                  coordinates
-                                )
-                              );
-                            }
+                            });
+                          } else {
+                            setSquares((prevState) =>
+                              revealSquare(
+                                DEFAULT_STATE[level].numRows,
+                                DEFAULT_STATE[level].numColumns,
+                                prevState,
+                                coordinates
+                              )
+                            );
                           }
-                    }
-                    onContextMenu={
-                      isRevealed || isGameOver
-                        ? undefined
-                        : () => {
-                            if (flagsRemaining !== 0) {
-                              setFlagsRemaining(
-                                (prevState) => prevState + (isFlagged ? 1 : -1)
-                              );
-                              setSquares((prevState) =>
-                                prevState.map((row, i) =>
-                                  row.map((square, j) =>
-                                    i === rowIndex && j === columnIndex
-                                      ? {
-                                          ...square,
-                                          hasFlag: !isFlagged,
-                                        }
-                                      : square
-                                  )
+                        }
+                  }
+                  onContextMenu={
+                    isRevealed || isGameOver
+                      ? undefined
+                      : () => {
+                          if (flagsRemaining !== 0) {
+                            setFlagsRemaining(
+                              (prevState) => prevState + (isFlagged ? 1 : -1)
+                            );
+                            setSquares((prevState) =>
+                              prevState.map((row, i) =>
+                                row.map((square, j) =>
+                                  i === rowIndex && j === columnIndex
+                                    ? {
+                                        ...square,
+                                        hasFlag: !isFlagged,
+                                      }
+                                    : square
                                 )
-                              );
-                            }
+                              )
+                            );
                           }
-                    }
-                    tabIndex={0}
-                    type="button">
-                    {isRevealedMine && "💣"}
-                    {hasFlag && (isLost && !hasMine ? "💣" : "🚩")}
-                    {isWon && hasMine && "🚩"}
-                    {isRevealed &&
-                      !isRevealedMine &&
-                      numAdjacentMines !== 0 &&
-                      numAdjacentMines}
-                  </button>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+                        }
+                  }
+                  tabIndex={0}
+                  type="button">
+                  {isRevealedMine && "💣"}
+                  {hasFlag && (isLost && !hasMine ? "💣" : "🚩")}
+                  {isWon && hasMine && "🚩"}
+                  {isRevealed &&
+                    !isRevealedMine &&
+                    numAdjacentMines !== 0 &&
+                    numAdjacentMines}
+                </button>
+              );
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -489,9 +454,9 @@ export const APPLICATION_MINESWEEPER: Application = {
   Component: Minesweeper,
   getWindow: () => ({
     fixedSize: true,
-    height: DEFAULT_STATE[Level.Beginner].height,
+    height: DEFAULT_STATE[DEFAULT_LEVEL].height,
     title: "Minesweeper",
-    width: DEFAULT_STATE[Level.Beginner].width,
+    width: DEFAULT_STATE[DEFAULT_LEVEL].width,
   }),
   icon: <Icon />,
   id: "application-minesweeper",
