@@ -1,9 +1,4 @@
-import {
-  ForwardRefExoticComponent,
-  HTMLAttributes,
-  ReactElement,
-  RefAttributes,
-} from "react";
+import { ForwardRefExoticComponent, ReactElement, RefAttributes } from "react";
 
 import { ID, MimeType, URL } from "types";
 
