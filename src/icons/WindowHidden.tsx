@@ -1,14 +1,9 @@
-import {
-  forwardRef,
-  FunctionComponent,
-  RefAttributes,
-  SVGAttributes,
-} from "react";
+import { forwardRef, SVGAttributes } from "react";
 
-export const WindowHidden: FunctionComponent<
-  RefAttributes<SVGSVGElement> &
-    SVGAttributes<SVGSVGElement> & { handleAxis?: any }
-> = forwardRef(({ handleAxis, ...props }, ref) => (
+export const WindowHidden = forwardRef<
+  SVGSVGElement,
+  SVGAttributes<SVGSVGElement>
+>((props, ref) => (
   <svg
     ref={ref}
     version="1.1"
