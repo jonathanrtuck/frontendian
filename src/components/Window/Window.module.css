@@ -51,23 +51,12 @@
 
 .zoomed {
   cursor: unset;
-  /* these styles need `!important` in order to override the inline styles */
-  height: calc(100% - var(--window_header-height)) !important;
-  transform: none !important;
-  width: calc(100% - var(--deskbar-width)) !important;
+  height: calc(100% - var(--window_header-height));
+  width: calc(100% - var(--deskbar-width));
 }
 
 .zoomed:active {
   cursor: unset;
-}
-
-.draggable {
-}
-
-.dragging {
-}
-
-.dragged {
 }
 
 .nondraggable {
