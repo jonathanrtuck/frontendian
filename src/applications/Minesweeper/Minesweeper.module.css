@@ -2,21 +2,22 @@
   --minesweeper-background-color: silver;
 
   background-color: var(--minesweeper-background-color);
-  border: 0.1875rem outset;
+  border: var(--minesweeper-border-size) outset;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  gap: var(--minesweeper-padding-size);
+  padding: var(--minesweeper-padding-size);
   user-select: none;
 }
 
 .header {
   align-items: center;
-  border: 0.1875rem inset;
+  border: var(--minesweeper-border-size) inset;
   display: flex;
+  gap: var(--minesweeper-padding-size);
+  height: var(--minesweeper-header-height);
   justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  padding: var(--minesweeper-padding-size);
 }
 
 .ticker {
@@ -33,7 +34,7 @@
 
 .reset {
   background-color: var(--minesweeper-background-color);
-  border: 0.1875rem outset;
+  border: var(--minesweeper-border-size) outset;
   font-size: 1.75rem;
   line-height: 1;
   padding: 0;
@@ -62,7 +63,7 @@
 }
 
 .grid {
-  border: 0.1875rem inset;
+  border: var(--minesweeper-border-size) inset;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -71,18 +72,17 @@
 .row {
   display: flex;
   gap: 0;
-  height: 1.5rem;
 }
 
 .square {
   appearance: none;
-  border: 0.1875rem solid transparent;
+  border: var(--minesweeper-border-size) solid transparent;
   box-sizing: border-box;
-  height: 1.5rem;
+  height: var(--minesweeper-square-size);
   padding: 0;
   position: relative;
   text-align: center;
-  width: 1.5rem;
+  width: var(--minesweeper-square-size);
 }
 
 .button {

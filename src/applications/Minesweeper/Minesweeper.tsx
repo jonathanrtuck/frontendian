@@ -1,5 +1,13 @@
 import clsx from "clsx";
-import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Menubaritem, Menuitem, useMenubar } from "components/Menubar";
 import { Minesweeper as Icon } from "icons";
@@ -136,6 +144,11 @@ const revealSquare = (
   return nextSquares;
 };
 
+const BORDER_SIZE = 16 * 0.1875; // 0.1875rem
+const HEADER_HEIGHT = 16 * 3.75; // 3.75rem
+const PADDING_SIZE = 16 * 0.5; // 0.5rem
+const SQUARE_SIZE = 16 * 1.5; // 1.5rem
+
 const DEFAULT_LEVEL = Level.Beginner;
 
 const DEFAULT_STATE: Record<
@@ -152,30 +165,33 @@ const DEFAULT_STATE: Record<
 > = {
   [Level.Beginner]: {
     flagsRemaining: 10,
-    height: 24 * 9 + 95,
+    height:
+      SQUARE_SIZE * 9 + (BORDER_SIZE * 4 + PADDING_SIZE * 3 + HEADER_HEIGHT),
     numColumns: 9,
     numMines: 10,
     numRows: 9,
     squares: getInitialSquares(9, 9),
-    width: 24 * 9 + 28,
+    width: SQUARE_SIZE * 9 + (BORDER_SIZE * 4 + PADDING_SIZE * 2),
   },
   [Level.Intermediate]: {
     flagsRemaining: 40,
-    height: 24 * 16 + 95,
+    height:
+      SQUARE_SIZE * 16 + (BORDER_SIZE * 4 + PADDING_SIZE * 3 + HEADER_HEIGHT),
     numColumns: 16,
     numMines: 40,
     numRows: 16,
     squares: getInitialSquares(16, 16),
-    width: 24 * 16 + 28,
+    width: SQUARE_SIZE * 16 + (BORDER_SIZE * 4 + PADDING_SIZE * 2),
   },
   [Level.Expert]: {
     flagsRemaining: 99,
-    height: 24 * 16 + 95,
+    height:
+      SQUARE_SIZE * 16 + (BORDER_SIZE * 4 + PADDING_SIZE * 3 + HEADER_HEIGHT),
     numColumns: 30,
     numMines: 99,
     numRows: 16,
     squares: getInitialSquares(16, 30),
-    width: 24 * 30 + 28,
+    width: SQUARE_SIZE * 30 + (BORDER_SIZE * 4 + PADDING_SIZE * 2),
   },
 };
 
@@ -191,6 +207,9 @@ const Minesweeper = forwardRef<
   ApplicationComponentProps
 >(({ onQuit, onResize }, ref) => {
   const intervalRef = useRef<number>(0);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useImperativeHandle(ref, () => ({}), []);
 
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [flagsRemaining, setFlagsRemaining] = useState<number>(10);
@@ -289,12 +308,32 @@ const Minesweeper = forwardRef<
     []
   );
 
+  useLayoutEffect(() => {
+    rootRef.current?.style.setProperty(
+      "--minesweeper-border-size",
+      `${BORDER_SIZE}px`
+    );
+    rootRef.current?.style.setProperty(
+      "--minesweeper-header-height",
+      `${HEADER_HEIGHT}px`
+    );
+    rootRef.current?.style.setProperty(
+      "--minesweeper-padding-size",
+      `${PADDING_SIZE}px`
+    );
+    rootRef.current?.style.setProperty(
+      "--minesweeper-square-size",
+      `${SQUARE_SIZE}px`
+    );
+  }, []);
+
   return (
     <div
       className={styles.root}
       onContextMenu={(e) => {
         e.preventDefault();
-      }}>
+      }}
+      ref={rootRef}>
       <header className={styles.header}>
         <data className={styles.ticker} value={flagsRemaining}>
           {flagsRemaining.toString().padStart(3, "0")}

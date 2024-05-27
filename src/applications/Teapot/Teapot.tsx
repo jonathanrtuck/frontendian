@@ -1,4 +1,10 @@
-import { forwardRef, useLayoutEffect, useMemo, useRef } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 
 import { main } from "./weblgl";
 import { Menubaritem, useMenubar } from "components/Menubar";
@@ -15,6 +21,8 @@ import styles from "./Teapot.module.css";
 const Teapot = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
   ({ onQuit }, ref) => {
     const rootRef = useRef<HTMLCanvasElement>(null);
+
+    useImperativeHandle(ref, () => ({}), []);
 
     const menubaritems = useMemo<Menubaritem[]>(
       () => [
@@ -33,7 +41,7 @@ const Teapot = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
 
     useMenubar(menubaritems);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
       if (rootRef.current) {
         main(rootRef.current);
       }
