@@ -75,14 +75,15 @@ const App: FunctionComponent<{}> = () => {
         const application = state.applications.find(({ windowIds }) =>
           windowIds.includes(window.id)
         );
-        const stackingIndex = state.stackingOrder.indexOf(window.id);
 
         return application ? (
           <Window
-            {...window}
             Component={application?.Component}
             key={window.id}
-            stackingIndex={stackingIndex}
+            style={{
+              zIndex: state.stackingOrder.indexOf(window.id),
+            }}
+            {...window}
           />
         ) : null;
       })}

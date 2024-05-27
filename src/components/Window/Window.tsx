@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import {
   FunctionComponent,
+  HTMLAttributes,
   useCallback,
   useContext,
   useEffect,
@@ -23,15 +24,15 @@ import { ID } from "types";
 
 import styles from "./Window.module.css";
 
-const MIN_WINDOW_HEIGHT = 100;
-const MIN_WINDOW_WIDTH = 100;
+const DEFAULT_SCROLLBAR_SIZE = 16 * 1; // 1rem
+const MIN_WINDOW_HEIGHT = 16 * 7; // 7rem
+const MIN_WINDOW_WIDTH = 16 * 7; // 7rem
 
 // @todo listen for root element's `font-size` changes
 export const Window: FunctionComponent<
   WindowType & {
     Component: Application["Component"];
-    stackingIndex: number;
-  }
+  } & HTMLAttributes<HTMLElement>
 > = ({
   Component,
   fileId,
@@ -41,7 +42,7 @@ export const Window: FunctionComponent<
   height,
   hidden,
   id,
-  stackingIndex,
+  style,
   title,
   width,
   x,
@@ -50,28 +51,30 @@ export const Window: FunctionComponent<
 }) => {
   const [state, dispatch] = useContext(StateContext);
 
+  // elements
   const applicationFocusRef = useRef<ApplicationComponentRef>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const draggingFromRef = useRef<[x: number, y: number] | undefined>(undefined);
+  const headerRef = useRef<HTMLElement>(null);
+  const menubarRef = useRef<HTMLElement>(null);
+  const resizeHandleRef = useRef<SVGSVGElement>(null);
+  const rootRef = useRef<HTMLElement>(null);
+
+  // values
+  const draggingFromRef = useRef<
+    [screenX: number, screenY: number] | undefined
+  >(undefined);
   const draggingHeaderFromRef = useRef<number | undefined>(undefined);
   const heightRef = useRef<number>(height);
   const headerLeftRef = useRef<number>(headerX);
-  const headerRef = useRef<HTMLElement>(null);
   const leftRef = useRef<number>(x);
-  const menubarRef = useRef<HTMLElement>(null);
-  const resizeHandleRef = useRef<SVGSVGElement>(null);
-  const resizingFromRef = useRef<[height: number, width: number] | undefined>(
-    undefined
-  );
-  const rootRef = useRef<HTMLElement>(null);
+  const resizingFromRef = useRef<
+    [screenX: number, screenY: number] | undefined
+  >(undefined);
   const topRef = useRef<number>(y);
   const touchRef = useRef<number>(0);
   const widthRef = useRef<number>(width);
 
   const [menuitems, setMenuitems] = useState<Menubaritem[]>([]);
-  const [scrollbarSize, setScrollbarSize] = useState<number>(0);
-
-  const hasMenubar = menuitems.length !== 0;
 
   const application = useMemo<Application>(
     () =>
@@ -98,35 +101,37 @@ export const Window: FunctionComponent<
         ),
     [application.id, state.files, state.types]
   );
+  const scrollbarSize = useMemo<number>(
+    () => (fixedSize ? 0 : DEFAULT_SCROLLBAR_SIZE),
+    [fixedSize]
+  );
 
   const onDragMove = useCallback(
     (e: MouseEvent | TouchEvent) => {
-      if (draggingFromRef.current !== undefined && rootRef.current) {
+      const headerElement = headerRef.current;
+      const rootElement = rootRef.current;
+
+      if (draggingFromRef.current !== undefined && rootElement) {
         const [fromX, fromY] = draggingFromRef.current;
         const { screenX, screenY } = e as MouseEvent;
 
         leftRef.current = x + (screenX - fromX);
         topRef.current = y + (screenY - fromY);
 
-        requestAnimationFrame(() => {
-          if (rootRef.current) {
-            rootRef.current.style.left = `${leftRef.current}px`;
-            rootRef.current.style.top = `${topRef.current}px`;
-          }
-        });
+        rootElement.style.left = `${leftRef.current}px`;
+        rootElement.style.top = `${topRef.current}px`;
       }
 
       if (
         draggingHeaderFromRef.current !== undefined &&
-        rootRef.current &&
-        headerRef.current
+        rootElement &&
+        headerElement
       ) {
         const { screenX } = e as MouseEvent;
         const offset = screenX - draggingHeaderFromRef.current;
-        const maxX =
-          rootRef.current.offsetWidth - headerRef.current.offsetWidth;
+        const maxX = rootElement.offsetWidth - headerElement.offsetWidth;
 
-        if (headerRef.current.style.left === "auto") {
+        if (headerElement.style.left === "auto") {
           headerLeftRef.current = Math.max(maxX + offset, 0);
         } else {
           headerLeftRef.current = Math.min(
@@ -135,57 +140,42 @@ export const Window: FunctionComponent<
           );
         }
 
-        requestAnimationFrame(() => {
-          if (headerRef.current) {
-            headerRef.current.style.left = `${headerLeftRef.current}px`;
-            headerRef.current.style.right = "auto";
-          }
-        });
+        headerElement.style.left = `${headerLeftRef.current}px`;
+        headerElement.style.right = "auto";
       }
     },
     [headerX, x, y]
   );
-  const onDragEnd = useCallback(
-    (e: MouseEvent | TouchEvent) => {
-      if (draggingFromRef.current !== undefined) {
-        draggingFromRef.current = undefined;
-        document.body.style.userSelect = "unset";
+  const onDragEnd = useCallback(() => {
+    if (draggingFromRef.current !== undefined) {
+      draggingFromRef.current = undefined;
+      document.body.style.userSelect = "unset";
 
-        document.removeEventListener("mousemove", onDragMove);
-        document.removeEventListener("mouseup", onDragEnd);
-        rootRef.current?.removeEventListener("touchend", onDragEnd);
+      dispatch({
+        payload: {
+          ids: [id],
+          type: "window",
+          x: leftRef.current,
+          y: topRef.current,
+        },
+        type: "MOVE",
+      });
+    }
 
-        dispatch({
-          payload: {
-            ids: [id],
-            type: "window",
-            x: leftRef.current,
-            y: topRef.current,
-          },
-          type: "MOVE",
-        });
-      }
+    if (draggingHeaderFromRef.current !== undefined) {
+      draggingHeaderFromRef.current = undefined;
+      document.body.style.userSelect = "unset";
 
-      if (draggingHeaderFromRef.current !== undefined) {
-        draggingHeaderFromRef.current = undefined;
-        document.body.style.userSelect = "unset";
-
-        document.removeEventListener("mousemove", onDragMove);
-        document.removeEventListener("mouseup", onDragEnd);
-        rootRef.current?.removeEventListener("touchend", onDragEnd);
-
-        dispatch({
-          payload: {
-            ids: [id],
-            type: "header",
-            x: headerLeftRef.current,
-          },
-          type: "MOVE",
-        });
-      }
-    },
-    [dispatch, id, onDragMove]
-  );
+      dispatch({
+        payload: {
+          ids: [id],
+          type: "header",
+          x: headerLeftRef.current,
+        },
+        type: "MOVE",
+      });
+    }
+  }, [dispatch, id]);
   const onDragStart = useCallback(
     (e: MouseEvent | TouchEvent) => {
       const { screenX, screenY } = e as MouseEvent;
@@ -209,10 +199,6 @@ export const Window: FunctionComponent<
 
         document.body.style.userSelect = "none";
         draggingHeaderFromRef.current = screenX;
-
-        document.addEventListener("mousemove", onDragMove);
-        document.addEventListener("mouseup", onDragEnd);
-        rootRef.current?.addEventListener("touchend", onDragEnd);
       } else {
         if (zoomed || draggingFromRef.current !== undefined) {
           return;
@@ -220,24 +206,31 @@ export const Window: FunctionComponent<
 
         document.body.style.userSelect = "none";
         draggingFromRef.current = [screenX, screenY];
-
-        document.addEventListener("mousemove", onDragMove);
-        document.addEventListener("mouseup", onDragEnd);
-        rootRef.current?.addEventListener("touchend", onDragEnd);
       }
     },
-    [onDragEnd, onDragMove, zoomed]
+    [zoomed]
   );
   const onResizeMove = useCallback(
     (e: MouseEvent | TouchEvent) => {
+      const contentElement = contentRef.current;
+      const headerElement = headerRef.current;
+      const menubarElement = menubarRef.current;
+      const rootElement = rootRef.current;
+
       if (
         resizingFromRef.current &&
-        rootRef.current &&
-        menubarRef.current &&
-        contentRef.current
+        contentElement &&
+        headerElement &&
+        menubarElement &&
+        rootElement
       ) {
         const [fromX, fromY] = resizingFromRef.current;
         const { screenX, screenY } = e as MouseEvent;
+        const isHeaderOverflowing =
+          headerX + headerElement.offsetWidth >
+          widthRef.current +
+            rootElement.offsetWidth -
+            contentElement.clientWidth;
 
         heightRef.current = Math.max(
           MIN_WINDOW_HEIGHT,
@@ -245,36 +238,17 @@ export const Window: FunctionComponent<
         );
         widthRef.current = Math.max(
           Math.max(MIN_WINDOW_WIDTH, width + (screenX - fromX)),
-          menubarRef.current.offsetWidth +
-            rootRef.current.offsetWidth -
-            contentRef.current.clientWidth -
+          menubarElement.offsetWidth +
+            rootElement.offsetWidth -
+            contentElement.clientWidth -
             scrollbarSize
         );
-
-        requestAnimationFrame(() => {
-          if (contentRef.current) {
-            contentRef.current.style.height = `${
-              heightRef.current + scrollbarSize
-            }px`;
-            contentRef.current.style.width = `${
-              widthRef.current + scrollbarSize
-            }px`;
-          }
-
-          if (rootRef.current && headerRef.current && contentRef.current) {
-            const nextOuterWidth =
-              widthRef.current +
-              rootRef.current.offsetWidth -
-              contentRef.current.clientWidth;
-            const isHeaderOverflowing =
-              headerX + headerRef.current.offsetWidth > nextOuterWidth;
-
-            headerRef.current.style.left = isHeaderOverflowing
-              ? "auto"
-              : `${headerLeftRef.current}px`;
-            headerRef.current.style.right = isHeaderOverflowing ? "0" : "auto";
-          }
-        });
+        contentElement.style.height = `${heightRef.current + scrollbarSize}px`;
+        contentElement.style.width = `${widthRef.current + scrollbarSize}px`;
+        headerElement.style.left = isHeaderOverflowing
+          ? "auto"
+          : `${headerLeftRef.current}px`;
+        headerElement.style.right = isHeaderOverflowing ? "0" : "auto";
       }
     },
     [headerX, height, scrollbarSize, width]
@@ -283,10 +257,6 @@ export const Window: FunctionComponent<
     if (resizingFromRef.current) {
       resizingFromRef.current = undefined;
       document.body.style.userSelect = "unset";
-
-      document.removeEventListener("mousemove", onResizeMove);
-      document.removeEventListener("mouseup", onResizeEnd);
-      rootRef.current?.removeEventListener("touchend", onResizeEnd);
 
       dispatch({
         payload: {
@@ -297,7 +267,7 @@ export const Window: FunctionComponent<
         type: "RESIZE",
       });
     }
-  }, [dispatch, id, onResizeMove]);
+  }, [dispatch, id]);
   const onResizeStart = useCallback(
     (e: MouseEvent | TouchEvent) => {
       if (!resizingFromRef.current && !zoomed) {
@@ -307,17 +277,14 @@ export const Window: FunctionComponent<
           e.preventDefault();
         }
 
-        document.addEventListener("mousemove", onResizeMove);
-        document.addEventListener("mouseup", onResizeEnd);
-        rootRef.current?.addEventListener("touchend", onResizeEnd);
-
         document.body.style.userSelect = "none";
         resizingFromRef.current = [screenX, screenY];
       }
     },
-    [onResizeEnd, onResizeMove, zoomed]
+    [zoomed]
   );
 
+  // these are passed down to the application component
   const onClose = useCallback(() => {
     dispatch({
       payload: {
@@ -386,55 +353,7 @@ export const Window: FunctionComponent<
     }
   }, [focused]);
 
-  useLayoutEffect(() => {
-    if (hasMenubar && contentRef.current && menubarRef.current) {
-      const { borderLeftWidth, borderRightWidth } = getComputedStyle(
-        contentRef.current
-      );
-      const bordersWidth =
-        parseInt(borderLeftWidth, 10) + parseInt(borderRightWidth, 10);
-
-      // @todo if window is already smaller than menubar width, call `onResize`
-      setScrollbarSize(
-        contentRef.current.offsetWidth -
-          contentRef.current.clientWidth -
-          bordersWidth
-      );
-    }
-  }, [hasMenubar]);
-
-  useLayoutEffect(() => {
-    if (rootRef.current && headerRef.current && contentRef.current) {
-      const nextOuterWidth =
-        widthRef.current +
-        scrollbarSize +
-        rootRef.current.offsetWidth -
-        contentRef.current.clientWidth;
-      const isHeaderOverflowing =
-        headerLeftRef.current + headerRef.current.offsetWidth > nextOuterWidth;
-
-      headerRef.current.style.left =
-        !zoomed && isHeaderOverflowing ? "auto" : `${headerLeftRef.current}px`;
-      headerRef.current.style.right =
-        !zoomed && isHeaderOverflowing ? "0" : "auto";
-    }
-  }, [scrollbarSize, zoomed]);
-
-  useLayoutEffect(() => {
-    leftRef.current = x;
-    topRef.current = y;
-
-    if (contentRef.current) {
-      contentRef.current.style.height = zoomed
-        ? "unset"
-        : `${heightRef.current + scrollbarSize}px`;
-      contentRef.current.style.width = zoomed
-        ? "unset"
-        : `${widthRef.current + scrollbarSize}px`;
-    }
-  }, [scrollbarSize, x, y, zoomed]);
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     const rootElement = rootRef.current;
 
     if (rootElement) {
@@ -448,7 +367,84 @@ export const Window: FunctionComponent<
         rootElement.removeEventListener("touchstart", onDragStart);
       };
     }
-  }, [onDragMove, onDragEnd, onDragStart]);
+  }, [onDragStart]);
+
+  useEffect(() => {
+    document.addEventListener("mousemove", onDragMove);
+
+    return () => {
+      document.removeEventListener("mousemove", onDragMove);
+    };
+  }, [onDragMove]);
+
+  useEffect(() => {
+    const rootElement = rootRef.current;
+
+    document.addEventListener("mouseup", onDragEnd);
+
+    if (rootElement) {
+      rootElement.addEventListener("touchend", onDragEnd);
+
+      return () => {
+        document.removeEventListener("mouseup", onDragEnd);
+        rootElement.removeEventListener("touchend", onDragEnd);
+      };
+    }
+
+    return () => {
+      document.removeEventListener("mouseup", onDragEnd);
+    };
+  }, [onDragEnd]);
+
+  useEffect(() => {
+    const resizeHandleElement = resizeHandleRef.current;
+
+    if (resizeHandleElement && !fixedSize) {
+      resizeHandleElement.addEventListener("mousedown", onResizeStart);
+      resizeHandleElement.addEventListener("touchstart", onResizeStart, {
+        passive: false,
+      });
+
+      return () => {
+        resizeHandleElement.removeEventListener("mousedown", onResizeStart);
+        resizeHandleElement.removeEventListener("touchstart", onResizeStart);
+      };
+    }
+  }, [fixedSize, onResizeStart]);
+
+  useEffect(() => {
+    document.addEventListener("mousemove", onResizeMove);
+
+    return () => {
+      document.removeEventListener("mousemove", onResizeMove);
+    };
+  }, [onResizeMove]);
+
+  useEffect(() => {
+    const rootElement = rootRef.current;
+
+    document.addEventListener("mouseup", onResizeEnd);
+
+    if (rootElement) {
+      rootElement.addEventListener("touchend", onResizeEnd);
+
+      return () => {
+        document.removeEventListener("mouseup", onResizeEnd);
+        rootElement.removeEventListener("touchend", onResizeEnd);
+      };
+    }
+
+    return () => {
+      document.removeEventListener("mouseup", onResizeEnd);
+    };
+  }, [onResizeEnd]);
+
+  useLayoutEffect(() => {
+    document.documentElement.style.setProperty(
+      "--window_scrollbar-size",
+      `${DEFAULT_SCROLLBAR_SIZE}px`
+    );
+  }, []);
 
   useLayoutEffect(() => {
     heightRef.current = height;
@@ -475,20 +471,35 @@ export const Window: FunctionComponent<
   }, [height, scrollbarSize, width]);
 
   useLayoutEffect(() => {
-    const resizeHandleElement = resizeHandleRef.current;
+    const rootElement = rootRef.current;
 
-    if (resizeHandleElement && !fixedSize) {
-      resizeHandleElement.addEventListener("mousedown", onResizeStart);
-      resizeHandleElement.addEventListener("touchstart", onResizeStart, {
-        passive: false,
-      });
+    leftRef.current = x;
+    topRef.current = y;
 
-      return () => {
-        resizeHandleElement.removeEventListener("mousedown", onResizeStart);
-        resizeHandleElement.removeEventListener("touchstart", onResizeStart);
-      };
+    if (rootElement) {
+      rootElement.style.left = `${x}px`;
+      rootElement.style.top = `${y}px`;
     }
-  }, [fixedSize, onDragMove, onDragEnd, onDragStart, onResizeStart]);
+  }, [x, y]);
+
+  useLayoutEffect(() => {
+    if (rootRef.current && headerRef.current && contentRef.current) {
+      const nextOuterWidth =
+        widthRef.current +
+        scrollbarSize +
+        rootRef.current.offsetWidth -
+        contentRef.current.clientWidth;
+      const isHeaderOverflowing =
+        headerLeftRef.current + headerRef.current.offsetWidth > nextOuterWidth;
+
+      if (!zoomed) {
+        headerRef.current.style.left = isHeaderOverflowing
+          ? "auto"
+          : `${headerLeftRef.current}px`;
+        headerRef.current.style.right = isHeaderOverflowing ? "0" : "auto";
+      }
+    }
+  }, [scrollbarSize, zoomed]);
 
   return (
     <section
@@ -519,11 +530,7 @@ export const Window: FunctionComponent<
       }}
       ref={rootRef}
       role="dialog"
-      style={{
-        left: zoomed ? 0 : x,
-        top: zoomed ? 0 : y,
-        zIndex: stackingIndex,
-      }}
+      style={style}
       tabIndex={0}>
       <header
         className={styles.header}
@@ -599,7 +606,7 @@ export const Window: FunctionComponent<
           />
         )}
       </header>
-      {hasMenubar && (
+      {menuitems.length !== 0 && (
         <nav className={clsx(styles.nondraggable, styles.nav)}>
           <Menubar
             className={styles.menubar}

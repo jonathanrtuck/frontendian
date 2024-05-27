@@ -20,7 +20,6 @@
   --window_button-border-color: rgb(173, 136, 0);
   --window_button-border-radius: 0.125rem;
   --window_header-height: 1.5rem;
-  --window_scrollbar-size: 1rem;
 }
 
 .root {
@@ -29,11 +28,9 @@
   color: rgb(0, 0, 0);
   cursor: var(--cursor--grab);
   flex-direction: column;
-  left: 0;
   margin: var(--window_header-height) 0 0;
   padding: var(--window-padding);
   position: fixed;
-  top: 0;
 }
 
 .root:not([hidden]) {
@@ -50,9 +47,11 @@
 }
 
 .zoomed {
+  bottom: 0;
   cursor: unset;
-  height: calc(100% - var(--window_header-height));
-  width: calc(100% - var(--deskbar-width));
+  left: 0 !important;
+  right: var(--deskbar-width) !important;
+  top: 0 !important;
 }
 
 .zoomed:active {
@@ -202,6 +201,12 @@
   cursor: var(--cursor--default);
   flex-grow: 1;
   overflow: scroll;
+}
+
+.zoomed .content {
+  box-sizing: border-box;
+  height: 100% !important;
+  width: 100% !important;
 }
 
 .scrollbar::-webkit-scrollbar {
