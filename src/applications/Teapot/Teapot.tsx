@@ -19,7 +19,7 @@ import styles from "./Teapot.module.css";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
 const Teapot = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
-  ({ onQuit }, ref) => {
+  ({ onAbout, onQuit }, ref) => {
     const rootRef = useRef<HTMLCanvasElement>(null);
 
     useImperativeHandle(ref, () => ({}), []);
@@ -35,8 +35,17 @@ const Teapot = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
           ],
           title: "File",
         },
+        {
+          items: [
+            {
+              onClick: onAbout,
+              title: `About ${APPLICATION_TEAPOT.title}…`,
+            },
+          ],
+          title: "Help",
+        },
       ],
-      [onQuit]
+      [onAbout, onQuit]
     );
 
     useMenubar(menubaritems);
@@ -52,6 +61,14 @@ const Teapot = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
 );
 
 export const APPLICATION_TEAPOT: Application = {
+  about: (
+    <>
+      <p>
+        WebGL rendering of the{" "}
+        <a href="https://en.wikipedia.org/wiki/Utah_teapot">Utah Teapot</a>.
+      </p>
+    </>
+  ),
   Component: Teapot,
   getWindow: () => ({
     height: 300,

@@ -19,7 +19,7 @@ import styles from "./PdfViewer.module.css";
 const PdfViewer = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ file, onClose, onNew, onOpen, onQuit, openableFiles }, ref) => {
+>(({ file, onAbout, onClose, onNew, onOpen, onQuit, openableFiles }, ref) => {
   const rootRef = useRef<HTMLIFrameElement>(null);
 
   const menubaritems = useMemo<Menubaritem[]>(
@@ -58,8 +58,17 @@ const PdfViewer = forwardRef<
         ],
         title: "File",
       },
+      {
+        items: [
+          {
+            onClick: onAbout,
+            title: `About ${APPLICATION_PDF_VIEWER.title}…`,
+          },
+        ],
+        title: "Help",
+      },
     ],
-    [onClose, onNew, onOpen, onQuit, openableFiles]
+    [onAbout, onClose, onNew, onOpen, onQuit, openableFiles]
   );
 
   useImperativeHandle(ref, () => ({}), []);
@@ -83,6 +92,23 @@ const PdfViewer = forwardRef<
 });
 
 export const APPLICATION_PDF_VIEWER: Application = {
+  about: (
+    <>
+      <p>
+        Renders <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a> in an{" "}
+        <a href="https://html.spec.whatwg.org/#the-iframe-element">iframe</a>.
+      </p>
+      <p>
+        Documents can be printed from the <b>File</b> menu.
+      </p>
+      <h4>Notes</h4>
+      <p>
+        For security reasons, the parent document does not have access to the
+        iframe's embedded browsing context. Thus, it is impossible for this{" "}
+        <code>Window</code> to determine if the embedded document has focus 😔.
+      </p>
+    </>
+  ),
   Component: PdfViewer,
   getWindow: (file) => {
     const window = {

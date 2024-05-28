@@ -26,7 +26,7 @@ import styles from "./StyledEdit.module.css";
 const StyledEdit = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ file, onClose, onNew, onOpen, onQuit, openableFiles }, ref) => {
+>(({ file, onAbout, onClose, onNew, onOpen, onQuit, openableFiles }, ref) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useImperativeHandle(
@@ -109,8 +109,17 @@ const StyledEdit = forwardRef<
         ],
         title: "View",
       },
+      {
+        items: [
+          {
+            onClick: onAbout,
+            title: `About ${APPLICATION_STYLED_EDIT.title}…`,
+          },
+        ],
+        title: "Help",
+      },
     ],
-    [onClose, onNew, onOpen, onQuit, openableFiles, view]
+    [onAbout, onClose, onNew, onOpen, onQuit, openableFiles, view]
   );
   const inputLines = useMemo<string[]>(() => input.split("\n"), [input]);
   const numInputCols = useMemo<number>(
@@ -202,9 +211,20 @@ const StyledEdit = forwardRef<
 });
 
 export const APPLICATION_STYLED_EDIT: Application = {
+  about: (
+    <>
+      <p>
+        Edit and preview{" "}
+        <a href="https://en.wikipedia.org/wiki/Markdown">markdown</a>.
+      </p>
+      <p>
+        <b>View</b> can be toggled in the menu.
+      </p>
+    </>
+  ),
   Component: StyledEdit,
   icon: <Icon />,
   id: "application-styled-edit",
-  title: "Styled Edit",
+  title: "StyledEdit",
   windowIds: [],
 };

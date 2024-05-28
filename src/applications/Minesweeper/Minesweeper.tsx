@@ -207,7 +207,7 @@ const LEVELS: [lvl: Level, title: string][] = [
 const Minesweeper = forwardRef<
   ApplicationComponentRef,
   ApplicationComponentProps
->(({ onQuit, onResize }, ref) => {
+>(({ onAbout, onQuit, onResize }, ref) => {
   const intervalRef = useRef<number>(0);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -279,8 +279,17 @@ const Minesweeper = forwardRef<
         ],
         title: "Game",
       },
+      {
+        items: [
+          {
+            onClick: onAbout,
+            title: `About ${APPLICATION_MINESWEEPER.title}…`,
+          },
+        ],
+        title: "Help",
+      },
     ],
-    [level, onQuit, onResize]
+    [level, onAbout, onQuit, onResize]
   );
 
   useMenubar(menubaritems);
@@ -485,6 +494,22 @@ const Minesweeper = forwardRef<
 });
 
 export const APPLICATION_MINESWEEPER: Application = {
+  about: (
+    <>
+      <p>
+        Recreation of{" "}
+        <a href="https://en.wikipedia.org/wiki/Minesweeper_(video_game)">
+          Minesweeper
+        </a>
+        .
+      </p>
+      <p>
+        Difficulty can be selected from the <b>Game</b> menu.
+      </p>
+      <h4>Notes</h4>
+      <p>Custom boards not yet supported.</p>
+    </>
+  ),
   Component: Minesweeper,
   getWindow: () => ({
     fixedSize: true,

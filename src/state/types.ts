@@ -117,6 +117,7 @@ export type ActionZoom = {
 };
 
 export type Application = {
+  about?: ReactElement;
   Component: ForwardRefExoticComponent<ApplicationComponentProps>;
   getWindow?(file?: File): Partial<Window>;
   icon: ReactElement;
@@ -128,6 +129,7 @@ export type Application = {
 export type ApplicationComponentProps = {
   application: Application;
   file?: File;
+  onAbout(): void;
   onClose(): void;
   onNew(): void;
   onOpen(fileId: ID): void;

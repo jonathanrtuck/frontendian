@@ -12,6 +12,7 @@ import {
   useState,
 } from "react";
 
+import { Button } from "components/Button";
 import { Menubar, MenubarContext, Menubaritem } from "components/Menubar";
 import { Resize } from "icons";
 import {
@@ -57,6 +58,7 @@ export const Window: FunctionComponent<
   // elements
   const applicationFocusRef = useRef<ApplicationComponentRef>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const menubarRef = useRef<HTMLElement>(null);
   const resizeHandleRef = useRef<SVGSVGElement>(null);
@@ -77,6 +79,7 @@ export const Window: FunctionComponent<
   const touchRef = useRef<number>(0);
   const widthRef = useRef<number>(width);
 
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [menuitems, setMenuitems] = useState<Menubaritem[]>([]);
 
   const application = useMemo<Application>(
@@ -287,6 +290,9 @@ export const Window: FunctionComponent<
   );
 
   // these are passed down to the application component
+  const onAbout = useCallback(() => {
+    setIsDialogOpen(true);
+  }, []);
   const onClose = useCallback(() => {
     dispatch({
       payload: {
@@ -611,34 +617,59 @@ export const Window: FunctionComponent<
           />
         )}
       </header>
+      {application.about && (
+        <dialog
+          className={clsx(styles.nondraggable, styles.dialog)}
+          open={isDialogOpen}
+          ref={dialogRef}>
+          {application.about}
+          <footer>
+            <Button
+              formMethod="dialog"
+              onClick={() => {
+                setIsDialogOpen(false);
+              }}
+              type="reset">
+              OK
+            </Button>
+          </footer>
+        </dialog>
+      )}
       {menuitems.length !== 0 && (
         <nav className={clsx(styles.nondraggable, styles.nav)}>
           <Menubar
-            className={styles.menubar}
+            className={clsx(styles.menubar, {
+              [styles.inert]: isDialogOpen,
+            })}
             items={menuitems}
             ref={menubarRef}
           />
         </nav>
       )}
       <div
-        className={clsx(styles.nondraggable, styles.content, {
-          [styles.scrollbar]: !fixedSize,
-        })}
+        className={clsx(styles.nondraggable, styles.contentWrapper)}
         ref={contentRef}>
-        <MenubarContext.Provider value={setMenuitems}>
-          <Component
-            application={application}
-            file={file}
-            onClose={onClose}
-            onNew={onNew}
-            onOpen={onOpen}
-            onQuit={onQuit}
-            onResize={onResize}
-            openableFiles={openableFiles}
-            ref={applicationFocusRef}
-            windowId={id}
-          />
-        </MenubarContext.Provider>
+        <div
+          className={clsx(styles.nondraggable, styles.content, {
+            [styles.inert]: isDialogOpen,
+            [styles.scrollbar]: !fixedSize,
+          })}>
+          <MenubarContext.Provider value={setMenuitems}>
+            <Component
+              application={application}
+              file={file}
+              onAbout={onAbout}
+              onClose={onClose}
+              onNew={onNew}
+              onOpen={onOpen}
+              onQuit={onQuit}
+              onResize={onResize}
+              openableFiles={openableFiles}
+              ref={applicationFocusRef}
+              windowId={id}
+            />
+          </MenubarContext.Provider>
+        </div>
       </div>
       {!fixedSize && (
         <Resize

@@ -180,6 +180,48 @@
   outline: 0;
 }
 
+.dialog {
+  background-color: var(--window-background-color);
+  border-width: 0 var(--border-width) var(--border-width);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+  cursor: var(--cursor--default);
+  font-size: 0.875rem;
+  max-width: calc(100% - 3rem);
+  z-index: 1;
+}
+
+.dialog footer {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin: 1.5rem 0 0;
+}
+
+.dialog > :first-child {
+  margin-top: 0;
+}
+
+.dialog h1,
+.dialog h2,
+.dialog h3,
+.dialog h4,
+.dialog h5,
+.dialog h6 {
+  margin: 1rem 0 0.5rem;
+}
+
+.dialog dl,
+.dialog ol,
+.dialog p,
+.dialog ul {
+  margin: 0.5rem 0;
+}
+
+.inert {
+  pointer-events: none;
+  user-select: none;
+}
+
 .nav {
   background-image: linear-gradient(
     to bottom,
@@ -194,16 +236,23 @@
   display: inline-flex;
 }
 
-.content {
+.contentWrapper {
   background-color: rgb(255, 255, 255);
   border-width: var(--border-width);
-  box-sizing: content-box;
   cursor: var(--cursor--default);
+  box-sizing: content-box;
   flex-grow: 1;
-  overflow: scroll;
+  overflow: hidden;
 }
 
-.zoomed .content {
+.content {
+  height: 100%;
+  overflow: scroll;
+  position: relative;
+  width: 100%;
+}
+
+.zoomed .contentWrapper {
   box-sizing: border-box;
   height: 100% !important;
   width: 100% !important;
