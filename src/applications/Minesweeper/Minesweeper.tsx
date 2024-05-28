@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import {
+  CSSProperties,
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -16,6 +17,7 @@ import {
   ApplicationComponentProps,
   ApplicationComponentRef,
 } from "state/types";
+import { setStyles } from "utils";
 
 import styles from "./Minesweeper.module.css";
 
@@ -309,22 +311,12 @@ const Minesweeper = forwardRef<
   );
 
   useLayoutEffect(() => {
-    rootRef.current?.style.setProperty(
-      "--minesweeper-border-size",
-      `${BORDER_SIZE}px`
-    );
-    rootRef.current?.style.setProperty(
-      "--minesweeper-header-height",
-      `${HEADER_HEIGHT}px`
-    );
-    rootRef.current?.style.setProperty(
-      "--minesweeper-padding-size",
-      `${PADDING_SIZE}px`
-    );
-    rootRef.current?.style.setProperty(
-      "--minesweeper-square-size",
-      `${SQUARE_SIZE}px`
-    );
+    setStyles(rootRef.current, {
+      "--minesweeper-border-size": `${BORDER_SIZE}px`,
+      "--minesweeper-header-height": `${HEADER_HEIGHT}px`,
+      "--minesweeper-padding-size": `${PADDING_SIZE}px`,
+      "--minesweeper-square-size": `${SQUARE_SIZE}px`,
+    } as CSSProperties);
   }, []);
 
   return (

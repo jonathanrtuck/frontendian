@@ -209,6 +209,7 @@
   width: 100% !important;
 }
 
+/* note: custom scrollbar styles not supported in ios >14 😔 */
 .scrollbar::-webkit-scrollbar {
   appearance: none;
   background-color: rgb(239, 239, 239);

@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import {
+  CSSProperties,
   FunctionComponent,
   HTMLAttributes,
   useCallback,
@@ -21,6 +22,7 @@ import {
   Window as WindowType,
 } from "state";
 import { ID } from "types";
+import { getInteractionPosition, setStyles } from "utils";
 
 import styles from "./Window.module.css";
 
@@ -28,6 +30,7 @@ const DEFAULT_SCROLLBAR_SIZE = 16 * 1; // 1rem
 const MIN_WINDOW_HEIGHT = 16 * 7; // 7rem
 const MIN_WINDOW_WIDTH = 16 * 7; // 7rem
 
+// @todo attach event listeners to document in `onDragStart`/`onResizeStart` and remove in `onDragEnd`/`onResizeEnd` (use refs for keeping handles to attached callbacks)
 // @todo listen for root element's `font-size` changes
 export const Window: FunctionComponent<
   WindowType & {
@@ -61,14 +64,14 @@ export const Window: FunctionComponent<
 
   // values
   const draggingFromRef = useRef<
-    [screenX: number, screenY: number] | undefined
+    [clientX: number, clientY: number] | undefined
   >(undefined);
   const draggingHeaderFromRef = useRef<number | undefined>(undefined);
   const heightRef = useRef<number>(height);
   const headerLeftRef = useRef<number>(headerX);
   const leftRef = useRef<number>(x);
   const resizingFromRef = useRef<
-    [screenX: number, screenY: number] | undefined
+    [clientX: number, clientY: number] | undefined
   >(undefined);
   const topRef = useRef<number>(y);
   const touchRef = useRef<number>(0);
@@ -112,11 +115,11 @@ export const Window: FunctionComponent<
       const rootElement = rootRef.current;
 
       if (draggingFromRef.current !== undefined && rootElement) {
+        const [clientX, clientY] = getInteractionPosition(e);
         const [fromX, fromY] = draggingFromRef.current;
-        const { screenX, screenY } = e as MouseEvent;
 
-        leftRef.current = x + (screenX - fromX);
-        topRef.current = y + (screenY - fromY);
+        leftRef.current = x + (clientX - fromX);
+        topRef.current = y + (clientY - fromY);
 
         rootElement.style.left = `${leftRef.current}px`;
         rootElement.style.top = `${topRef.current}px`;
@@ -127,8 +130,8 @@ export const Window: FunctionComponent<
         rootElement &&
         headerElement
       ) {
-        const { screenX } = e as MouseEvent;
-        const offset = screenX - draggingHeaderFromRef.current;
+        const [clientX] = getInteractionPosition(e);
+        const offset = clientX - draggingHeaderFromRef.current;
         const maxX = rootElement.offsetWidth - headerElement.offsetWidth;
 
         if (headerElement.style.left === "auto") {
@@ -149,7 +152,7 @@ export const Window: FunctionComponent<
   const onDragEnd = useCallback(() => {
     if (draggingFromRef.current !== undefined) {
       draggingFromRef.current = undefined;
-      document.body.style.userSelect = "unset";
+      document.body.style.userSelect = "";
 
       dispatch({
         payload: {
@@ -164,7 +167,7 @@ export const Window: FunctionComponent<
 
     if (draggingHeaderFromRef.current !== undefined) {
       draggingHeaderFromRef.current = undefined;
-      document.body.style.userSelect = "unset";
+      document.body.style.userSelect = "";
 
       dispatch({
         payload: {
@@ -178,8 +181,7 @@ export const Window: FunctionComponent<
   }, [dispatch, id]);
   const onDragStart = useCallback(
     (e: MouseEvent | TouchEvent) => {
-      const { screenX, screenY } = e as MouseEvent;
-
+      const [clientX, clientY] = getInteractionPosition(e);
       const isDraggable = !(e.target as HTMLElement).closest(
         `.${styles.nondraggable}`
       );
@@ -198,14 +200,14 @@ export const Window: FunctionComponent<
         }
 
         document.body.style.userSelect = "none";
-        draggingHeaderFromRef.current = screenX;
+        draggingHeaderFromRef.current = clientX;
       } else {
         if (zoomed || draggingFromRef.current !== undefined) {
           return;
         }
 
         document.body.style.userSelect = "none";
-        draggingFromRef.current = [screenX, screenY];
+        draggingFromRef.current = [clientX, clientY];
       }
     },
     [zoomed]
@@ -224,8 +226,8 @@ export const Window: FunctionComponent<
         menubarElement &&
         rootElement
       ) {
+        const [clientX, clientY] = getInteractionPosition(e);
         const [fromX, fromY] = resizingFromRef.current;
-        const { screenX, screenY } = e as MouseEvent;
         const isHeaderOverflowing =
           headerX + headerElement.offsetWidth >
           widthRef.current +
@@ -234,10 +236,10 @@ export const Window: FunctionComponent<
 
         heightRef.current = Math.max(
           MIN_WINDOW_HEIGHT,
-          height + (screenY - fromY)
+          height + (clientY - fromY)
         );
         widthRef.current = Math.max(
-          Math.max(MIN_WINDOW_WIDTH, width + (screenX - fromX)),
+          Math.max(MIN_WINDOW_WIDTH, width + (clientX - fromX)),
           menubarElement.offsetWidth +
             rootElement.offsetWidth -
             contentElement.clientWidth -
@@ -256,7 +258,7 @@ export const Window: FunctionComponent<
   const onResizeEnd = useCallback(() => {
     if (resizingFromRef.current) {
       resizingFromRef.current = undefined;
-      document.body.style.userSelect = "unset";
+      document.body.style.userSelect = "";
 
       dispatch({
         payload: {
@@ -271,14 +273,14 @@ export const Window: FunctionComponent<
   const onResizeStart = useCallback(
     (e: MouseEvent | TouchEvent) => {
       if (!resizingFromRef.current && !zoomed) {
-        const { screenX, screenY } = e as MouseEvent;
+        const [clientX, clientY] = getInteractionPosition(e);
 
         if (e.type === "touchstart") {
           e.preventDefault();
         }
 
         document.body.style.userSelect = "none";
-        resizingFromRef.current = [screenX, screenY];
+        resizingFromRef.current = [clientX, clientY];
       }
     },
     [zoomed]
@@ -371,9 +373,11 @@ export const Window: FunctionComponent<
 
   useEffect(() => {
     document.addEventListener("mousemove", onDragMove);
+    document.addEventListener("touchmove", onDragMove);
 
     return () => {
       document.removeEventListener("mousemove", onDragMove);
+      document.removeEventListener("touchmove", onDragMove);
     };
   }, [onDragMove]);
 
@@ -414,9 +418,11 @@ export const Window: FunctionComponent<
 
   useEffect(() => {
     document.addEventListener("mousemove", onResizeMove);
+    document.addEventListener("touchmove", onResizeMove);
 
     return () => {
       document.removeEventListener("mousemove", onResizeMove);
+      document.removeEventListener("touchmove", onResizeMove);
     };
   }, [onResizeMove]);
 
@@ -440,10 +446,9 @@ export const Window: FunctionComponent<
   }, [onResizeEnd]);
 
   useLayoutEffect(() => {
-    document.documentElement.style.setProperty(
-      "--window_scrollbar-size",
-      `${DEFAULT_SCROLLBAR_SIZE}px`
-    );
+    setStyles(document.body, {
+      "--window_scrollbar-size": `${DEFAULT_SCROLLBAR_SIZE}px`,
+    } as CSSProperties);
   }, []);
 
   useLayoutEffect(() => {

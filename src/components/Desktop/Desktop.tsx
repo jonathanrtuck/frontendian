@@ -4,102 +4,104 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
-  useState,
+  useLayoutEffect,
+  useRef,
 } from "react";
 
 import { File } from "icons";
 import { StateContext } from "state";
+import { getInteractionPosition, removeStyles, setStyles } from "utils";
 
 import styles from "./Desktop.module.css";
-
-type SelectionCoordinates = [
-  [fromX: number | undefined, fromY: number | undefined],
-  [toX: number | undefined, toY: number | undefined]
-];
-
-const EMPTY_SELECTION_COORDINATES: SelectionCoordinates = [
-  [undefined, undefined],
-  [undefined, undefined],
-];
-const EMPTY_STYLE = {
-  "--desktop-selection-display": "none",
-} as CSSProperties;
 
 // @todo handle draggable icons
 export const Desktop: FunctionComponent<{}> = () => {
   const [state, dispatch] = useContext(StateContext);
 
-  const [selectionCoordinates, setSelectionCoordinates] =
-    useState<SelectionCoordinates>(EMPTY_SELECTION_COORDINATES);
+  const rootRef = useRef<HTMLElement>(null);
 
-  const style = useMemo<CSSProperties>(() => {
-    const [[fromX, fromY], [toX, toY]] = selectionCoordinates;
+  const selectingFromRef = useRef<
+    [clientX: number, clientY: number] | undefined
+  >(undefined);
 
-    if (
-      fromX === undefined ||
-      fromY === undefined ||
-      toX === undefined ||
-      toY === undefined
-    ) {
-      return EMPTY_STYLE;
+  const onMouseDown = useCallback((e: MouseEvent) => {
+    // only handle clicks on the background (not on icons)
+    if (e.target !== e.currentTarget) {
+      return;
     }
 
-    return {
-      "--desktop-selection-display": "block",
-      "--desktop-selection-height": `${Math.abs(toY - fromY)}px`,
-      "--desktop-selection-left": `${Math.min(toX, fromX)}px`,
-      "--desktop-selection-top": `${Math.min(toY, fromY)}px`,
-      "--desktop-selection-width": `${Math.abs(toX - fromX)}px`,
-    } as CSSProperties;
-  }, [selectionCoordinates]);
+    const [clientX, clientY] = getInteractionPosition(e);
 
-  const onPointerMove = useCallback(({ clientX, clientY }: any) => {
-    setSelectionCoordinates(([[fromX, fromY]]) =>
-      fromX === undefined || fromY === undefined
-        ? EMPTY_SELECTION_COORDINATES
-        : [
-            [fromX, fromY],
-            [clientX, clientY],
-          ]
-    );
+    selectingFromRef.current = [clientX, clientY];
+    // clear any highlighted text
+    window.getSelection()?.removeAllRanges();
+    // prevent highlighting text dragged across
+    document.body.style.userSelect = "none";
   }, []);
-  const onPointerUp = useCallback(() => {
-    setSelectionCoordinates(EMPTY_SELECTION_COORDINATES);
+  const onMouseMove = useCallback((e: MouseEvent) => {
+    if (!selectingFromRef.current) {
+      return;
+    }
 
-    document.removeEventListener("pointermove", onPointerMove);
-    document.removeEventListener("pointerup", onPointerUp);
-    document.body.style.userSelect = "auto";
-  }, [onPointerMove]);
+    const [clientX, clientY] = getInteractionPosition(e);
+    const [fromX, fromY] = selectingFromRef.current;
 
-  useEffect(
-    () => () => {
-      document.removeEventListener("pointermove", onPointerMove);
-      document.removeEventListener("pointerup", onPointerUp);
-    },
-    [onPointerMove, onPointerUp]
-  );
+    setStyles(rootRef.current, {
+      "--desktop-selection-display": "block",
+      "--desktop-selection-height": `${Math.abs(clientY - fromY)}px`,
+      "--desktop-selection-left": `${Math.min(clientX, fromX)}px`,
+      "--desktop-selection-top": `${Math.min(clientY, fromY)}px`,
+      "--desktop-selection-width": `${Math.abs(clientX - fromX)}px`,
+    } as CSSProperties);
+  }, []);
+  const onMouseUp = useCallback(() => {
+    if (!selectingFromRef.current) {
+      return;
+    }
+
+    selectingFromRef.current = undefined;
+    removeStyles(rootRef.current, [
+      "--desktop-selection-height",
+      "--desktop-selection-left",
+      "--desktop-selection-top",
+      "--desktop-selection-width",
+    ]);
+    setStyles(rootRef.current, {
+      "--desktop-selection-display": "none",
+    } as CSSProperties);
+    document.body.style.userSelect = "";
+  }, []);
+
+  useEffect(() => {
+    const rootElement = rootRef.current;
+
+    if (rootElement) {
+      rootElement.addEventListener("mousedown", onMouseDown);
+
+      return () => {
+        rootElement.removeEventListener("mousedown", onMouseDown);
+      };
+    }
+  }, [onMouseDown]);
+
+  useEffect(() => {
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+  }, [onMouseMove, onMouseUp]);
+
+  useLayoutEffect(() => {
+    setStyles(rootRef.current, {
+      "--desktop-selection-display": "none",
+    } as CSSProperties);
+  }, []);
 
   return (
-    <nav
-      className={styles.root}
-      onPointerDown={({ clientX, clientY, currentTarget, target }) => {
-        // only handle clicks on the background (not on icons)
-        if (target === currentTarget) {
-          setSelectionCoordinates([
-            [clientX, clientY],
-            [clientX, clientY],
-          ]);
-
-          document.addEventListener("pointermove", onPointerMove);
-          document.addEventListener("pointerup", onPointerUp);
-          // prevent highlighting text dragged across
-          document.body.style.userSelect = "none";
-          // clear any highlighted text
-          window.getSelection()?.removeAllRanges();
-        }
-      }}
-      style={style}>
+    <nav className={styles.root} ref={rootRef}>
       {state.desktop.map((id) => {
         const obj = [...state.applications, ...state.files].find(
           (o) => o.id === id
