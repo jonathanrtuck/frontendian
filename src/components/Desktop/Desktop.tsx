@@ -25,8 +25,8 @@ export const Desktop: FunctionComponent<{}> = () => {
   >(undefined);
 
   const onMouseDown = useCallback((e: MouseEvent) => {
-    // only handle clicks on the background (not on icons)
-    if (e.target !== e.currentTarget) {
+    // only handle left clicks on the background (not on icons)
+    if (e.button !== 0 || e.buttons !== 1 || e.target !== e.currentTarget) {
       return;
     }
 
