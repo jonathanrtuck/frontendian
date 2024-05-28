@@ -10,7 +10,13 @@ import {
 
 import { File } from "icons";
 import { StateContext } from "state";
-import { getInteractionPosition, removeStyles, setStyles } from "utils";
+import {
+  allowSelection,
+  getInteractionPosition,
+  preventSelection,
+  removeStyles,
+  setStyles,
+} from "utils";
 
 import styles from "./Desktop.module.css";
 
@@ -36,7 +42,7 @@ export const Desktop: FunctionComponent<{}> = () => {
     // clear any highlighted text
     window.getSelection()?.removeAllRanges();
     // prevent highlighting text dragged across
-    document.body.style.userSelect = "none";
+    preventSelection();
   }, []);
   const onMouseMove = useCallback((e: MouseEvent) => {
     if (!selectingFromRef.current) {
@@ -69,7 +75,7 @@ export const Desktop: FunctionComponent<{}> = () => {
     setStyles(rootRef.current, {
       "--desktop-selection-display": "none",
     } as CSSProperties);
-    document.body.style.userSelect = "";
+    allowSelection();
   }, []);
 
   useEffect(() => {

@@ -23,7 +23,12 @@ import {
   Window as WindowType,
 } from "state";
 import { ID } from "types";
-import { getInteractionPosition, setStyles } from "utils";
+import {
+  allowSelection,
+  getInteractionPosition,
+  preventSelection,
+  setStyles,
+} from "utils";
 
 import styles from "./Window.module.css";
 
@@ -155,7 +160,7 @@ export const Window: FunctionComponent<
   const onDragEnd = useCallback(() => {
     if (draggingFromRef.current !== undefined) {
       draggingFromRef.current = undefined;
-      document.body.style.userSelect = "";
+      allowSelection();
 
       dispatch({
         payload: {
@@ -170,7 +175,7 @@ export const Window: FunctionComponent<
 
     if (draggingHeaderFromRef.current !== undefined) {
       draggingHeaderFromRef.current = undefined;
-      document.body.style.userSelect = "";
+      allowSelection();
 
       dispatch({
         payload: {
@@ -202,14 +207,14 @@ export const Window: FunctionComponent<
           return;
         }
 
-        document.body.style.userSelect = "none";
+        preventSelection();
         draggingHeaderFromRef.current = clientX;
       } else {
         if (zoomed || draggingFromRef.current !== undefined) {
           return;
         }
 
-        document.body.style.userSelect = "none";
+        preventSelection();
         draggingFromRef.current = [clientX, clientY];
       }
     },
@@ -261,7 +266,7 @@ export const Window: FunctionComponent<
   const onResizeEnd = useCallback(() => {
     if (resizingFromRef.current) {
       resizingFromRef.current = undefined;
-      document.body.style.userSelect = "";
+      allowSelection();
 
       dispatch({
         payload: {
@@ -282,7 +287,9 @@ export const Window: FunctionComponent<
           e.preventDefault();
         }
 
-        document.body.style.userSelect = "none";
+        preventSelection();
+        document.body.style.setProperty("-webkit-user-select", "none");
+
         resizingFromRef.current = [clientX, clientY];
       }
     },
