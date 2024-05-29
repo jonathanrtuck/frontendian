@@ -476,9 +476,10 @@ const Minesweeper = forwardRef<
                   }
                   tabIndex={0}
                   type="button">
-                  {isRevealedMine && "💣"}
-                  {hasFlag && (isLost && !hasMine ? "💣" : "🚩")}
-                  {isWon && hasMine && "🚩"}
+                  {(isRevealedMine || (hasFlag && isLost && !hasMine)) && "💣"}
+                  {((!isGameOver && hasFlag) ||
+                    ((isWon || hasFlag) && hasMine)) &&
+                    "🚩"}
                   {isRevealed &&
                     !isRevealedMine &&
                     numAdjacentMines !== 0 &&
