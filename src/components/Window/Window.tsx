@@ -13,6 +13,7 @@ import {
 } from "react";
 
 import { Button } from "components/Button";
+import { ErrorBoundary } from "components/ErrorBoundary";
 import { Menubar, MenubarContext, Menubaritem } from "components/Menubar";
 import { Resize } from "icons";
 import {
@@ -84,7 +85,8 @@ export const Window: FunctionComponent<
   const touchRef = useRef<number>(0);
   const widthRef = useRef<number>(width);
 
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isAboutDialogOpen, setIsAboutDialogOpen] = useState<boolean>(false);
+  const [isErrorDialogOpen, setIsErrorDialogOpen] = useState<boolean>(false);
   const [menuitems, setMenuitems] = useState<Menubaritem[]>([]);
 
   const application = useMemo<Application>(
@@ -298,7 +300,7 @@ export const Window: FunctionComponent<
 
   // these are passed down to the application component
   const onAbout = useCallback(() => {
-    setIsDialogOpen(true);
+    setIsAboutDialogOpen(true);
   }, []);
   const onClose = useCallback(() => {
     dispatch({
@@ -627,14 +629,14 @@ export const Window: FunctionComponent<
       {application.about && (
         <dialog
           className={clsx(styles.nondraggable, styles.dialog)}
-          open={isDialogOpen}
+          open={isAboutDialogOpen}
           ref={dialogRef}>
           {application.about}
           <footer>
             <Button
               formMethod="dialog"
               onClick={() => {
-                setIsDialogOpen(false);
+                setIsAboutDialogOpen(false);
               }}
               type="reset">
               OK
@@ -642,11 +644,22 @@ export const Window: FunctionComponent<
           </footer>
         </dialog>
       )}
+      <dialog
+        className={clsx(styles.nondraggable, styles.dialog)}
+        open={isErrorDialogOpen}
+        ref={dialogRef}>
+        <p>{application.title} has encountered an unknown error.</p>
+        <footer>
+          <Button formMethod="dialog" onClick={onClose} type="reset">
+            Close window
+          </Button>
+        </footer>
+      </dialog>
       {menuitems.length !== 0 && (
         <nav className={clsx(styles.nondraggable, styles.nav)}>
           <Menubar
             className={clsx(styles.menubar, {
-              [styles.inert]: isDialogOpen,
+              [styles.inert]: isAboutDialogOpen || isErrorDialogOpen,
             })}
             items={menuitems}
             ref={menubarRef}
@@ -658,24 +671,30 @@ export const Window: FunctionComponent<
         ref={contentRef}>
         <div
           className={clsx(styles.nondraggable, styles.content, {
-            [styles.inert]: isDialogOpen,
+            [styles.inert]: isAboutDialogOpen || isErrorDialogOpen,
             [styles.scrollbar]: !fixedSize,
           })}>
-          <MenubarContext.Provider value={setMenuitems}>
-            <Component
-              application={application}
-              file={file}
-              onAbout={onAbout}
-              onClose={onClose}
-              onNew={onNew}
-              onOpen={onOpen}
-              onQuit={onQuit}
-              onResize={onResize}
-              openableFiles={openableFiles}
-              ref={applicationFocusRef}
-              windowId={id}
-            />
-          </MenubarContext.Provider>
+          <ErrorBoundary
+            fallback={<div className={styles.error} />}
+            onError={() => {
+              setIsErrorDialogOpen(true);
+            }}>
+            <MenubarContext.Provider value={setMenuitems}>
+              <Component
+                application={application}
+                file={file}
+                onAbout={onAbout}
+                onClose={onClose}
+                onNew={onNew}
+                onOpen={onOpen}
+                onQuit={onQuit}
+                onResize={onResize}
+                openableFiles={openableFiles}
+                ref={applicationFocusRef}
+                windowId={id}
+              />
+            </MenubarContext.Provider>
+          </ErrorBoundary>
         </div>
       </div>
       {!fixedSize && (

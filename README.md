@@ -6,6 +6,8 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 
 ## Tips
 
+- Applications can be opened from the *frontendian* menu in the *Deskbar*
+- Double-click *Desktop* icons to open certain files/applications
 - Grab the yellow window titlebar to move windows
   - Grab while holding `Shift` to move the titlebar
     - This is useful for creating tabs when multiple windows are zoomed (maximized)

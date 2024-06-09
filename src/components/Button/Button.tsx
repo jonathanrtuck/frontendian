@@ -5,12 +5,8 @@ import styles from "./Button.module.css";
 
 export const Button: FunctionComponent<
   ButtonHTMLAttributes<HTMLButtonElement>
-> = ({ children, className, type = "button", ...props }) => {
-  //
-
-  return (
-    <button className={clsx(className, styles.root)} type={type} {...props}>
-      {children}
-    </button>
-  );
-};
+> = ({ children, className, type = "button", ...props }) => (
+  <button className={clsx(className, styles.root)} type={type} {...props}>
+    {children}
+  </button>
+);

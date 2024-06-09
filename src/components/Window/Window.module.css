@@ -245,6 +245,12 @@
   overflow: hidden;
 }
 
+.zoomed .contentWrapper {
+  box-sizing: border-box;
+  height: 100% !important;
+  width: 100% !important;
+}
+
 .content {
   height: 100%;
   overflow: scroll;
@@ -252,10 +258,10 @@
   width: 100%;
 }
 
-.zoomed .contentWrapper {
-  box-sizing: border-box;
-  height: 100% !important;
-  width: 100% !important;
+.error {
+  background-color: var(--window-background-color);
+  height: 100%;
+  width: 100%;
 }
 
 /* note: custom scrollbar styles not supported in ios >14 😔 */
