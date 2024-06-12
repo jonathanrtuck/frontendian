@@ -1,4 +1,11 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Menubaritem, useMenubar } from "components/Menubar";
 import { Graphics as Icon } from "icons";
@@ -21,6 +28,8 @@ const PdfViewer = forwardRef<
   ApplicationComponentProps
 >(({ file, onAbout, onClose, onNew, onOpen, onQuit, openableFiles }, ref) => {
   const rootRef = useRef<HTMLIFrameElement>(null);
+
+  const [numPages, setNumPages] = useState<number>(1);
 
   const menubaritems = useMemo<Menubaritem[]>(
     () => [
@@ -75,6 +84,33 @@ const PdfViewer = forwardRef<
 
   useMenubar(menubaritems);
 
+  // parse pdf to get number of pages
+  useEffect(() => {
+    if (file?.url) {
+      const controller = new AbortController();
+
+      fetch(file.url, {
+        signal: controller.signal,
+      })
+        .then((response) => response.text())
+        .then((text) => text.match(/\/Pages (\d+)/)?.[1])
+        .then((numPagesStr) => {
+          if (numPagesStr) {
+            const numPages = Number(numPagesStr);
+
+            if (!isNaN(numPages)) {
+              setNumPages(numPages);
+            }
+          }
+        })
+        .catch(() => {});
+
+      return () => {
+        controller.abort("unmount");
+      };
+    }
+  }, [file?.url]);
+
   if (file?.type !== MimeType.ApplicationPdf) {
     return null;
   }
@@ -82,7 +118,7 @@ const PdfViewer = forwardRef<
   return (
     <iframe
       className={styles.root}
-      height={file.height}
+      height={file.height * numPages}
       ref={rootRef}
       src={`${file.url}#toolbar=0&navpanes=0`} // hide chrome's chrome
       title={file.title}
