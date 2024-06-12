@@ -119,6 +119,7 @@ export type ActionZoom = {
 export type Application = {
   about?: ReactElement;
   Component: ForwardRefExoticComponent<ApplicationComponentProps>;
+  fonts?: Font[];
   getWindow?(file?: File): Partial<Window>;
   icon: ReactElement;
   id: ID;
@@ -157,6 +158,12 @@ export type File = {
       type: MimeType.TextMarkdown;
     }
 );
+
+export type Font = {
+  format: "opentype"; // add other formats as needed
+  publicUrl: string;
+  title: string;
+};
 
 export type State = {
   applications: Application[]; // the order is used as the display order in the Deskbar logo Menu

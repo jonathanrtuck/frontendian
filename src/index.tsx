@@ -6,7 +6,7 @@ import reportWebVitals from "reportWebVitals";
 
 import "./index.css";
 
-const IS_DEBUG_MODE = false; // process.env.NODE_ENV === "development";
+const IS_DEBUG_MODE = process.env.NODE_ENV === "development";
 
 // eslint-disable-next-line no-console
 reportWebVitals(IS_DEBUG_MODE ? console.debug : undefined);

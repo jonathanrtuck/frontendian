@@ -512,6 +512,18 @@ export const APPLICATION_MINESWEEPER: Application = {
     </>
   ),
   Component: Minesweeper,
+  fonts: [
+    {
+      format: "opentype",
+      publicUrl: "/fonts/DigitalDismay.otf",
+      title: "DigitalDismay",
+    },
+    {
+      format: "opentype",
+      publicUrl: "/fonts/MineSweeper.otf",
+      title: "MineSweeper",
+    },
+  ],
   getWindow: () => ({
     fixedSize: true,
     height: DEFAULT_STATE[DEFAULT_LEVEL].height,
