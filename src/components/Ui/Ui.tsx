@@ -20,9 +20,9 @@ import {
   stateReducer,
 } from "state";
 
-import styles from "./App.module.css";
+import styles from "./Ui.module.css";
 
-export const App: FunctionComponent<{
+export const Ui: FunctionComponent<{
   isDebugMode: boolean;
 }> = ({ isDebugMode }) => {
   const [state, _dispatch] = useReducer(stateReducer, INITIAL_STATE);
