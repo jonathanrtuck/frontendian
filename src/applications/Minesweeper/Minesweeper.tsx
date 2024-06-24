@@ -23,7 +23,7 @@ import styles from "./Minesweeper.module.css";
 
 type Coordinates = [rowIndex: number, columnIndex: number];
 
-enum Level {
+const enum Level {
   Beginner = "beginner",
   Expert = "expert",
   Intermediate = "intermediate",

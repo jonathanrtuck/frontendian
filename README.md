@@ -6,15 +6,14 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 
 ## Tips
 
-- Applications can be opened from the *frontendian* menu in the *Deskbar*
+- Applications can be launched from the *frontendian* menu in the *Deskbar* (top right)
 - Double-click *Desktop* icons to open certain files/applications
-- Grab the yellow window titlebar to move windows
-  - Grab while holding `Shift` to move the titlebar
-    - This is useful for creating tabs when multiple windows are zoomed (maximized)
-- Grab the bottom right corner of a window to resize
+- Grab and drag the yellow window titlebar to move windows
+  - Drag while holding `Shift` to move the titlebar along the window
+    - This is useful for positioning "tabs" when multiple windows are zoomed (maximized)
+- Grab and drag the bottom right corner of a window to resize
 - Double-click a windowʼs titlebar to hide the window
-  - Hidden windows can be shown again using the *Deskbar* menu
-- Applications can be launched from the main menu in the *Deskbar*
+  - Hidden windows can be shown again using the appliationʼs menu in the *Deskbar*
 - Click the *Deskbar*ʼs clock to open a calendar
 
 ## Todo

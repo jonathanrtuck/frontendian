@@ -1,6 +1,6 @@
 export type ID = string;
 
-export enum MimeType {
+export const enum MimeType {
   ApplicationPdf = "application/pdf",
   TextMarkdown = "text/markdown",
 }

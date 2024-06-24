@@ -150,9 +150,9 @@ export type File = {
   url: URL;
 } & (
   | {
-      height: number;
+      height: number; // page height
       type: MimeType.ApplicationPdf;
-      width: number;
+      width: number; // page width
     }
   | {
       type: MimeType.TextMarkdown;
