@@ -371,6 +371,12 @@ export const Window: FunctionComponent<
   }, [focused]);
 
   useEffect(() => {
+    if (!isAboutDialogOpen) {
+      rootRef.current?.focus();
+    }
+  }, [isAboutDialogOpen]);
+
+  useEffect(() => {
     const rootElement = rootRef.current;
 
     if (rootElement) {
