@@ -239,10 +239,7 @@ export const Window: FunctionComponent<
         const [clientX, clientY] = getInteractionPosition(e);
         const [fromX, fromY] = resizingFromRef.current;
         const isHeaderOverflowing =
-          headerX + headerElement.offsetWidth >
-          widthRef.current +
-            rootElement.offsetWidth -
-            contentElement.clientWidth;
+          headerX + headerElement.offsetWidth > rootElement.offsetWidth;
 
         heightRef.current = Math.max(
           MIN_WINDOW_HEIGHT,
