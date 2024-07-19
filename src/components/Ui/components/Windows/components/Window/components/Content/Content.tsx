@@ -1,13 +1,17 @@
-import { FunctionComponent } from "react";
+import clsx from "clsx";
+import { FunctionComponent, HTMLAttributes } from "react";
 
 import styles from "./Content.module.css";
 
-export const Content: FunctionComponent<{
-  height?: number;
-  width?: number;
-}> = ({ height, width }) => (
+export const Content: FunctionComponent<
+  HTMLAttributes<HTMLDivElement> & {
+    height?: number;
+    width?: number;
+  }
+> = ({ className, height, width, ...props }) => (
   <div
-    className={styles.root}
+    {...props}
+    className={clsx(className, styles.root)}
     style={{
       height,
       width,

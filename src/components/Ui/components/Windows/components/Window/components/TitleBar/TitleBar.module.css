@@ -33,7 +33,7 @@
   height: calc(var(--titlebar-height) + var(--border-width));
   display: flex;
   left: 0;
-  margin: 0 calc(var(--border-width) * -1);
+  margin: 0 calc((var(--border-width) + var(--window-padding)) * -1);
   padding: var(--window-padding);
   position: absolute;
   z-index: 1;

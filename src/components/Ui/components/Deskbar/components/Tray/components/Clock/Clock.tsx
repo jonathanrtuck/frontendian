@@ -1,22 +1,37 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
+
+import { Calendar } from "./components/Calendar";
 
 import styles from "./Clock.module.css";
 
 export const Clock: FunctionComponent<{
   date: Date;
-}> = ({ date }) => (
-  <button
-    className={styles.root}
-    onClick={() => {
-      console.debug("calendar");
-    }}
-    type="button">
-    <time
-      dateTime={date.toISOString()}
-      title={date.toLocaleDateString(navigator.language, {
-        dateStyle: "full",
-      })}>
-      {date.toLocaleTimeString(navigator.language)}
-    </time>
-  </button>
-);
+}> = ({ date }) => {
+  const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
+
+  return (
+    <>
+      <button
+        className={styles.root}
+        onClick={() => {
+          setIsCalendarOpen(true);
+        }}
+        type="button">
+        <time
+          dateTime={date.toISOString()}
+          title={date.toLocaleDateString(navigator.language, {
+            dateStyle: "full",
+          })}>
+          {date.toLocaleTimeString(navigator.language)}
+        </time>
+      </button>
+      {isCalendarOpen && (
+        <Calendar
+          onClose={() => {
+            setIsCalendarOpen(false);
+          }}
+        />
+      )}
+    </>
+  );
+};

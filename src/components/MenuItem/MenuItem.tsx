@@ -1,6 +1,8 @@
+import clsx from "clsx";
 import {
   ForwardRefExoticComponent,
   FunctionComponent,
+  HTMLAttributes,
   PropsWithChildren,
   RefAttributes,
   SVGAttributes,
@@ -9,27 +11,30 @@ import {
 import styles from "./MenuItem.module.css";
 
 export const MenuItem: FunctionComponent<
-  PropsWithChildren<{
-    Icon?: ForwardRefExoticComponent<
-      SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
-    >;
-    disabled?: boolean;
-    expanded?: boolean;
-    title: string;
-  }>
-> = ({ children, disabled, expanded, Icon, title }) => (
+  PropsWithChildren<
+    HTMLAttributes<HTMLLIElement> & {
+      Icon?: ForwardRefExoticComponent<
+        SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
+      >;
+      disabled?: boolean;
+      expanded?: boolean;
+      title: string;
+    }
+  >
+> = ({ children, className, disabled, expanded, Icon, title, ...props }) => (
   <li
+    {...props}
     aria-disabled={disabled}
     aria-expanded={expanded}
     aria-haspopup={children ? "menu" : undefined}
     aria-label={title}
-    className={styles.root}
+    className={clsx(className, styles.root)}
     role="menuitem"
     tabIndex={0}>
     {Icon && (
       <Icon aria-hidden="false" className={styles.icon} role="presentation" />
     )}
     <span className={styles.title}>{title}</span>
-    {children}
+    {expanded && children}
   </li>
 );

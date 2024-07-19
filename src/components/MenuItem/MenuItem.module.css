@@ -3,6 +3,7 @@
   display: inline-flex;
   gap: 0.5rem;
   padding: 0 0.5rem;
+  user-select: none;
 }
 
 [aria-orientation="vertical"] > .root {

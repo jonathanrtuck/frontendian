@@ -1,7 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 
 import { Clock } from "./components/Clock";
-import { TrayIcon } from "./components/TrayIcon";
 import { Network } from "icons/Network";
 
 import styles from "./Tray.module.css";
@@ -11,7 +10,6 @@ export const Tray: FunctionComponent<{}> = () => {
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
-
     // first use timeout in order to get second tick interval to align with system clock
     const timeout = setTimeout(() => {
       interval = setInterval(() => {
@@ -30,7 +28,9 @@ export const Tray: FunctionComponent<{}> = () => {
   return (
     <nav className={styles.root}>
       <ul className={styles.icons}>
-        <TrayIcon Icon={Network} />
+        <li className={styles.icon}>
+          <Network />
+        </li>
       </ul>
       <Clock date={date} />
     </nav>

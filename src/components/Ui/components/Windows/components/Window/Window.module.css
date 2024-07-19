@@ -14,9 +14,21 @@
   position: fixed;
 }
 
+.root[hidden] {
+  display: none;
+}
+
 .zoomed {
-  bottom: 0;
-  left: 0 !important;
-  right: var(--deskbar-width);
-  top: 0 !important;
+  height: calc(100vh - var(--titlebar-height));
+  transform: translate(0, 0) !important;
+  width: calc(100vw - var(--deskbar-width));
+}
+
+.button {
+}
+
+.menubar {
+}
+
+.content {
 }
