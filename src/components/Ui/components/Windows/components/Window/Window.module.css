@@ -7,6 +7,7 @@
   background-color: var(--window-background-color);
   border-width: var(--border-width);
   color: rgb(0, 0, 0);
+  cursor: var(--cursor--grab);
   display: flex;
   flex-direction: column;
   margin: var(--titlebar-height) 0 0;
@@ -19,16 +20,20 @@
 }
 
 .zoomed {
+  cursor: unset;
   height: calc(100vh - var(--titlebar-height));
   transform: translate(0, 0) !important;
   width: calc(100vw - var(--deskbar-width));
 }
 
 .button {
+  cursor: var(--cursor--default);
 }
 
 .menubar {
+  cursor: var(--cursor--default);
 }
 
 .content {
+  cursor: var(--cursor--default);
 }
