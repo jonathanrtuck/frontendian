@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useState } from "react";
 
 import { Clock } from "./components/Clock";
-import { Network } from "icons/Network";
+import { Network } from "icons";
 
 import styles from "./Tray.module.css";
 

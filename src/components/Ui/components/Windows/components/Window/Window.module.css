@@ -10,7 +10,10 @@
   cursor: var(--cursor--grab);
   display: flex;
   flex-direction: column;
-  margin: var(--titlebar-height) 0 0;
+  margin: calc(
+      var(--window-padding) + var(--titlebar-height) + var(--window-padding)
+    )
+    0 0;
   padding: var(--window-padding);
   position: fixed;
 }
@@ -21,7 +24,10 @@
 
 .zoomed {
   cursor: unset;
-  height: calc(100vh - var(--titlebar-height));
+  height: calc(
+    100vh - var(--window-padding) - var(--titlebar-height) -
+      var(--window-padding)
+  );
   transform: translate(0, 0) !important;
   width: calc(100vw - var(--deskbar-width));
 }
@@ -36,4 +42,9 @@
 
 .content {
   cursor: var(--cursor--default);
+}
+
+.zoomed .content {
+  height: auto !important;
+  width: auto !important;
 }

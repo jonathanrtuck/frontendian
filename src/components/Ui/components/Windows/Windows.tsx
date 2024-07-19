@@ -1,27 +1,16 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext } from "react";
 
 import { Window } from "./components/Window";
-import { Window as WindowType } from "types";
+import { StateContext } from "contexts";
 
-const WINDOWS: WindowType[] = [
-  {
-    focused: true,
-    height: 300,
-    hidden: false,
-    id: "window-id-1",
-    left: 96,
-    title: "Window…",
-    titleBarLeft: 0,
-    top: 96,
-    width: 480,
-    zoomed: false,
-  },
-];
+export const Windows: FunctionComponent<{}> = () => {
+  const [state] = useContext(StateContext);
 
-export const Windows: FunctionComponent<{}> = () => (
-  <>
-    {WINDOWS.map((window) => (
-      <Window key={window.id} {...window} />
-    ))}
-  </>
-);
+  return (
+    <>
+      {state.windows.map((window) => (
+        <Window key={window.id} {...window} />
+      ))}
+    </>
+  );
+};

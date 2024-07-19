@@ -2,6 +2,8 @@ import clsx from "clsx";
 import Draggable from "react-draggable";
 import { FunctionComponent, useMemo, useRef } from "react";
 
+import { getComputedCustomProperty } from "utils";
+
 import styles from "./TitleBar.module.css";
 
 export const TitleBar: FunctionComponent<{
@@ -12,23 +14,16 @@ export const TitleBar: FunctionComponent<{
   };
   left: number;
   onClose(): void;
+  onMove(left: number): void;
   onZoom?(): void;
   title: string;
-}> = ({ classes, left, onClose, onZoom, title }) => {
+}> = ({ classes, left, onClose, onMove, onZoom, title }) => {
   const rootRef = useRef<HTMLElement>(null);
 
-  // @todo handle other css units for window padding as needed
-  const offset = useMemo<number>(() => {
-    const style = getComputedStyle(document.body);
-    const windowPadding = style.getPropertyValue("--window-padding");
-    const fontSize = parseInt(style.fontSize, 10);
-
-    if (windowPadding.endsWith("rem")) {
-      return parseFloat(windowPadding) * fontSize;
-    }
-
-    return 0;
-  }, []);
+  const offset = useMemo<number>(
+    () => getComputedCustomProperty("--window-padding"),
+    []
+  );
 
   return (
     <Draggable
@@ -46,7 +41,7 @@ export const TitleBar: FunctionComponent<{
         }
       }}
       onStop={(_, { x }) => {
-        console.debug("move titlebar", x - offset);
+        onMove(x - offset);
       }}>
       <header className={clsx(classes?.root, styles.root)} ref={rootRef}>
         <h1 className={clsx(classes?.title, styles.title)} title={title}>

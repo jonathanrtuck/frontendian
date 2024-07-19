@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useRef } from "react";
-import { Resizable } from "react-resizable";
+import { FunctionComponent, useContext, useRef } from "react";
 
 import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
 import { MenuBar } from "components/MenuBar";
 import { MenuItem } from "components/MenuItem";
+import { StateContext } from "contexts";
 import { Window as WindowType } from "types";
 
 import styles from "./Window.module.css";
@@ -23,6 +23,8 @@ export const Window: FunctionComponent<WindowType> = ({
   width,
   zoomed,
 }) => {
+  const [, dispatch] = useContext(StateContext);
+
   const rootRef = useRef<HTMLElement>(null);
 
   return (
@@ -40,7 +42,15 @@ export const Window: FunctionComponent<WindowType> = ({
         }
       }}
       onStop={(_, { x, y }) => {
-        console.debug("move window", x, y);
+        dispatch({
+          payload: {
+            ids: [id],
+            left: x,
+            top: y,
+            type: "window",
+          },
+          type: "MOVE",
+        });
       }}>
       <section
         aria-current={focused}
@@ -58,10 +68,31 @@ export const Window: FunctionComponent<WindowType> = ({
           }}
           left={titleBarLeft}
           onClose={() => {
-            console.debug("close");
+            dispatch({
+              payload: {
+                ids: [id],
+                type: "window",
+              },
+              type: "CLOSE",
+            });
+          }}
+          onMove={(left) => {
+            dispatch({
+              payload: {
+                ids: [id],
+                left,
+                type: "titleBar",
+              },
+              type: "MOVE",
+            });
           }}
           onZoom={() => {
-            console.debug("zoom");
+            dispatch({
+              payload: {
+                ids: [id],
+              },
+              type: "ZOOM",
+            });
           }}
           title={title}
         />
@@ -72,8 +103,17 @@ export const Window: FunctionComponent<WindowType> = ({
         </MenuBar>
         <Content
           className={styles.content}
-          height={zoomed ? undefined : height}
-          width={zoomed ? undefined : width}
+          height={height}
+          onResize={(size) => {
+            dispatch({
+              payload: {
+                ids: [id],
+                ...size,
+              },
+              type: "RESIZE",
+            });
+          }}
+          width={width}
         />
       </section>
     </Draggable>
