@@ -1,0 +1,6 @@
+.root {
+  background-color: rgb(255, 255, 255);
+  border-width: var(--border-width);
+  flex: 1 1 auto;
+  overflow: hidden;
+}

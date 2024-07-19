@@ -1,0 +1,42 @@
+:root {
+  --deskbar-width: 11rem;
+}
+
+.root {
+  background-color: rgb(222, 222, 222);
+  border-width: var(--border-width);
+  color: rgb(0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: var(--deskbar-width);
+}
+
+.button {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(227, 227, 227),
+    rgb(209, 209, 209)
+  );
+  border: 0;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  height: 1.875rem;
+  letter-spacing: 0.0625rem;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 0.25rem rgb(255, 255, 255);
+}
+
+.button:focus,
+.button[aria-expanded="true"] {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(206, 206, 206),
+    rgb(219, 219, 219)
+  );
+}

@@ -1,0 +1,46 @@
+.root {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0 0.5rem;
+}
+
+[aria-orientation="vertical"] > .root {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(227, 227, 227),
+    rgb(209, 209, 209)
+  );
+  line-height: 1.4;
+  padding: 0.25rem 0.5rem;
+}
+
+[aria-orientation="vertical"] > .root + .root {
+  border-width: var(--border-width) 0 0;
+}
+
+.root[aria-disabled="true"] {
+  color: var(--text-color--disabled);
+}
+
+.root[aria-expanded="true"] {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(146, 146, 146),
+    rgb(163, 163, 163)
+  );
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon {
+  flex: 0 0 1rem;
+  height: 1rem;
+  width: 1rem;
+}

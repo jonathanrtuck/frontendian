@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import { Ui } from "components/Ui";
+import { IsDebugModeContext } from "contexts";
 import reportWebVitals from "reportWebVitals";
 
 import "./index.css";
@@ -13,6 +14,8 @@ reportWebVitals(IS_DEBUG_MODE ? console.debug : undefined);
 
 createRoot(document.body).render(
   <StrictMode>
-    <Ui isDebugMode={IS_DEBUG_MODE} />
+    <IsDebugModeContext.Provider value={IS_DEBUG_MODE}>
+      <Ui />
+    </IsDebugModeContext.Provider>
   </StrictMode>
 );

@@ -6,3 +6,13 @@ export const enum MimeType {
 }
 
 export type URL = string;
+
+export type Window = {
+  height: number;
+  id: ID;
+  left: number;
+  title: string;
+  top: number;
+  width: number;
+  zoomed: boolean;
+};
