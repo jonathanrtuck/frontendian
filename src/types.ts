@@ -1,79 +1,13 @@
-export type Action =
-  | ActionBlur
-  | ActionClose
-  | ActionFocus
-  | ActionHide
-  | ActionMove
-  | ActionResize
-  | ActionShow
-  | ActionZoom;
-
-export type ActionBlur = {
-  payload: {
-    ids: ID[];
-  };
-  type: "BLUR";
-};
-
-export type ActionClose = {
-  payload: {
-    ids: ID[];
-    type: "application" | "window";
-  };
-  type: "CLOSE";
-};
-
-export type ActionFocus = {
-  payload: {
-    ids: ID[];
-  };
-  type: "FOCUS";
-};
-
-export type ActionHide = {
-  payload: {
-    ids: ID[];
-  };
-  type: "HIDE";
-};
-
-export type ActionMove = {
-  payload:
-    | {
-        ids: ID[];
-        left: number;
-        type: "titleBar";
-      }
-    | {
-        ids: ID[];
-        left: number;
-        top: number;
-        type: "window";
-      };
-  type: "MOVE";
-};
-
-export type ActionResize = {
-  payload: {
-    height: number;
-    ids: ID[];
-    width: number;
-  };
-  type: "RESIZE";
-};
-
-export type ActionShow = {
-  payload: {
-    ids: ID[];
-  };
-  type: "SHOW";
-};
-
-export type ActionZoom = {
-  payload: {
-    ids: ID[];
-  };
-  type: "ZOOM";
+export type Actions = {
+  blurWindows(windowIds: ID[]): void;
+  closeWindows(windowIds: ID[]): void;
+  focusWindow(windowIds: ID[]): void;
+  hideWindows(windowIds: ID[]): void;
+  moveWindows(windowIds: ID[], left: number, top: number): void;
+  moveWindowTitleBar(windowIds: ID[], titleBarLeft: number): void;
+  resizeWindows(windowIds: ID[], height: number, width: number): void;
+  showWindows(windowIds: ID[]): void;
+  zoomWindows(windowIds: ID[]): void;
 };
 
 export type ID = string;

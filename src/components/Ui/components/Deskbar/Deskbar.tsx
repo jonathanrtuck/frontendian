@@ -11,7 +11,7 @@ import styles from "./Deskbar.module.css";
 export const Deskbar: FunctionComponent<{}> = () => (
   <header className={styles.root}>
     <MenuBar orientation="vertical">
-      <MenuItem title="frontendian">
+      <MenuItem className={styles.menuButton} title="frontendian">
         <Menu>
           <MenuItem title="About frontendian" />
         </Menu>

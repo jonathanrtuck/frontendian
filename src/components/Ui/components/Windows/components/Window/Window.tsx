@@ -1,15 +1,24 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useContext, useRef, useState } from "react";
+import { FunctionComponent, useRef, useState } from "react";
 
 import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
 import { MenuBar } from "components/MenuBar";
 import { MenuItem } from "components/MenuItem";
-import { StateContext } from "contexts";
+import { useStore } from "store";
 import { Window as WindowType } from "types";
 
 import styles from "./Window.module.css";
+
+const getMenuBarWidth = (node: HTMLElement | null): number | undefined =>
+  node?.childNodes.length
+    ? Array.prototype.reduce.call<NodeList, any[], number>(
+        node.childNodes,
+        (acc: number, menuItem: HTMLElement) => acc + menuItem.offsetWidth,
+        0
+      )
+    : undefined;
 
 export const Window: FunctionComponent<WindowType> = ({
   focused,
@@ -23,7 +32,13 @@ export const Window: FunctionComponent<WindowType> = ({
   width,
   zoomed,
 }) => {
-  const [, dispatch] = useContext(StateContext);
+  const closeWindows = useStore(({ closeWindows }) => closeWindows);
+  const moveWindowTitleBar = useStore(
+    ({ moveWindowTitleBar }) => moveWindowTitleBar
+  );
+  const moveWindows = useStore(({ moveWindows }) => moveWindows);
+  const resizeWindows = useStore(({ resizeWindows }) => resizeWindows);
+  const zoomWindows = useStore(({ zoomWindows }) => zoomWindows);
 
   const rootRef = useRef<HTMLElement>(null);
 
@@ -46,15 +61,7 @@ export const Window: FunctionComponent<WindowType> = ({
         }
       }}
       onStop={(_, { x, y }) => {
-        dispatch({
-          payload: {
-            ids: [id],
-            left: x,
-            top: y,
-            type: "window",
-          },
-          type: "MOVE",
-        });
+        moveWindows([id], x, y);
       }}>
       <section
         aria-current={focused}
@@ -72,31 +79,13 @@ export const Window: FunctionComponent<WindowType> = ({
           }}
           left={titleBarLeft}
           onClose={() => {
-            dispatch({
-              payload: {
-                ids: [id],
-                type: "window",
-              },
-              type: "CLOSE",
-            });
+            closeWindows([id]);
           }}
           onMove={(left) => {
-            dispatch({
-              payload: {
-                ids: [id],
-                left,
-                type: "titleBar",
-              },
-              type: "MOVE",
-            });
+            moveWindowTitleBar([id], left);
           }}
           onZoom={() => {
-            dispatch({
-              payload: {
-                ids: [id],
-              },
-              type: "ZOOM",
-            });
+            zoomWindows([id]);
           }}
           title={title}
         />
@@ -104,16 +93,7 @@ export const Window: FunctionComponent<WindowType> = ({
           className={styles.menubar}
           orientation="horizontal"
           ref={(node) => {
-            setMenuBarWidth(
-              node?.childNodes.length
-                ? Array.prototype.reduce.call<NodeList, any[], number>(
-                    node.childNodes,
-                    (acc: number, menuItem: HTMLElement) =>
-                      acc + menuItem.offsetWidth,
-                    0
-                  )
-                : undefined
-            );
+            setMenuBarWidth(getMenuBarWidth(node));
           }}>
           <MenuItem title="File" />
           <MenuItem title="View" />
@@ -123,14 +103,8 @@ export const Window: FunctionComponent<WindowType> = ({
           className={styles.content}
           height={height}
           minWidth={menuBarWidth}
-          onResize={(size) => {
-            dispatch({
-              payload: {
-                ids: [id],
-                ...size,
-              },
-              type: "RESIZE",
-            });
+          onResize={({ height, width }) => {
+            resizeWindows([id], height, width);
           }}
           width={width}
           zoomed={zoomed}

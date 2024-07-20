@@ -1,14 +1,14 @@
-import { FunctionComponent, useContext } from "react";
+import { FunctionComponent } from "react";
 
 import { Window } from "./components/Window";
-import { StateContext } from "contexts";
+import { useStore } from "store";
 
 export const Windows: FunctionComponent<{}> = () => {
-  const [state] = useContext(StateContext);
+  const windows = useStore(({ windows }) => windows);
 
   return (
     <>
-      {state.windows.map((window) => (
+      {windows.map((window) => (
         <Window key={window.id} {...window} />
       ))}
     </>

@@ -15,7 +15,7 @@
   width: var(--deskbar-width);
 }
 
-.button {
+.menuButton {
   background-image: linear-gradient(
     to bottom,
     rgb(227, 227, 227),
@@ -26,14 +26,15 @@
   font-size: 1rem;
   font-weight: 500;
   height: 1.875rem;
+  justify-content: center;
   letter-spacing: 0.0625rem;
   margin: 0;
   padding: 0;
   text-shadow: 0 0 0.25rem rgb(255, 255, 255);
 }
 
-.button:focus,
-.button[aria-expanded="true"] {
+.menuButton:focus,
+.menuButton[aria-expanded="true"] {
   background-image: linear-gradient(
     to bottom,
     rgb(206, 206, 206),

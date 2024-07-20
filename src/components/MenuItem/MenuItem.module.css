@@ -1,8 +1,15 @@
 .root {
   align-items: center;
   display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 500;
   gap: 0.5rem;
+  line-height: 1.4;
   user-select: none;
+}
+
+[aria-orientation="horizontal"] > .root {
+  padding: 0 0.5rem;
 }
 
 [aria-orientation="vertical"] > .root {
@@ -31,11 +38,7 @@
 }
 
 .title {
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.4;
   overflow: hidden;
-  padding: 0 0.5rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
