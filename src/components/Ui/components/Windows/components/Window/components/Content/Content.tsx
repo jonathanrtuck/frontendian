@@ -32,8 +32,6 @@ export const Content: FunctionComponent<
     []
   );
 
-  console.debug(minWidth);
-
   return (
     <Resizable
       axis={zoomed ? "none" : "both"}
