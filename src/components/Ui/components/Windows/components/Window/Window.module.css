@@ -43,8 +43,3 @@
 .content {
   cursor: var(--cursor--default);
 }
-
-.zoomed .content {
-  height: auto !important;
-  width: auto !important;
-}

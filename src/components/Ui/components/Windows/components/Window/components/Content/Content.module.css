@@ -113,3 +113,8 @@
   width: calc(var(--content-scrollbar-size) + var(--border-width));
   z-index: 3;
 }
+
+.resize.zoomed {
+  color: transparent;
+  pointer-events: none;
+}

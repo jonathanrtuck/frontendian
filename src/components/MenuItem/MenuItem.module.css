@@ -2,7 +2,6 @@
   align-items: center;
   display: inline-flex;
   gap: 0.5rem;
-  padding: 0 0.5rem;
   user-select: none;
 }
 
@@ -12,7 +11,6 @@
     rgb(227, 227, 227),
     rgb(209, 209, 209)
   );
-  line-height: 1.4;
   padding: 0.25rem 0.5rem;
 }
 
@@ -35,7 +33,9 @@
 .title {
   font-size: 0.875rem;
   font-weight: 500;
+  line-height: 1.4;
   overflow: hidden;
+  padding: 0 0.5rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

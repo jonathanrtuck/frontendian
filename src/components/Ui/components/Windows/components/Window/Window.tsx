@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useContext, useRef } from "react";
+import { FunctionComponent, useContext, useRef, useState } from "react";
 
 import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
@@ -26,6 +26,10 @@ export const Window: FunctionComponent<WindowType> = ({
   const [, dispatch] = useContext(StateContext);
 
   const rootRef = useRef<HTMLElement>(null);
+
+  const [menuBarWidth, setMenuBarWidth] = useState<number | undefined>(
+    undefined
+  );
 
   return (
     <Draggable
@@ -96,7 +100,21 @@ export const Window: FunctionComponent<WindowType> = ({
           }}
           title={title}
         />
-        <MenuBar className={styles.menubar} orientation="horizontal">
+        <MenuBar
+          className={styles.menubar}
+          orientation="horizontal"
+          ref={(node) => {
+            setMenuBarWidth(
+              node?.childNodes.length
+                ? Array.prototype.reduce.call<NodeList, any[], number>(
+                    node.childNodes,
+                    (acc: number, menuItem: HTMLElement) =>
+                      acc + menuItem.offsetWidth,
+                    0
+                  )
+                : undefined
+            );
+          }}>
           <MenuItem title="File" />
           <MenuItem title="View" />
           <MenuItem title="Help" />
@@ -104,6 +122,7 @@ export const Window: FunctionComponent<WindowType> = ({
         <Content
           className={styles.content}
           height={height}
+          minWidth={menuBarWidth}
           onResize={(size) => {
             dispatch({
               payload: {
@@ -114,6 +133,7 @@ export const Window: FunctionComponent<WindowType> = ({
             });
           }}
           width={width}
+          zoomed={zoomed}
         />
       </section>
     </Draggable>

@@ -13,22 +13,41 @@ const MIN_WIDTH = 16 * 7; // 7rem
 export const Content: FunctionComponent<
   Omit<HTMLAttributes<HTMLDivElement>, "onResize"> & {
     height: number;
+    minWidth?: number;
     onResize(size: { height: number; width: number }): void;
     width: number;
+    zoomed: boolean;
   }
-> = ({ className, height, onResize, width, ...props }) => {
+> = ({
+  className,
+  height,
+  minWidth = MIN_WIDTH,
+  onResize,
+  width,
+  zoomed,
+  ...props
+}) => {
   const scrollbarSize = useMemo<number>(
     () => getComputedCustomProperty("--content-scrollbar-size"),
     []
   );
 
+  console.debug(minWidth);
+
   return (
     <Resizable
+      axis={zoomed ? "none" : "both"}
       handle={
-        <Resize aria-hidden className={styles.resize} role="presentation" />
+        <Resize
+          aria-hidden
+          className={clsx(styles.resize, {
+            [styles.zoomed]: zoomed,
+          })}
+          role="presentation"
+        />
       }
       height={height}
-      minConstraints={[MIN_WIDTH, MIN_HEIGHT]}
+      minConstraints={[minWidth - scrollbarSize, MIN_HEIGHT]}
       onResize={(_, { size }) => {
         onResize(size);
       }}
@@ -36,10 +55,14 @@ export const Content: FunctionComponent<
       <div
         {...props}
         className={clsx(className, styles.root)}
-        style={{
-          height: height + scrollbarSize,
-          width: width + scrollbarSize,
-        }}>
+        style={
+          zoomed
+            ? undefined
+            : {
+                height: height + scrollbarSize,
+                width: width + scrollbarSize,
+              }
+        }>
         content…
       </div>
     </Resizable>
