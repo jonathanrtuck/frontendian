@@ -2,8 +2,6 @@ import { create } from "zustand";
 
 import { Actions, ID, State } from "types";
 
-type Store = State & Actions;
-
 const INITIAL_STATE: State = {
   windows: [
     {
@@ -21,7 +19,7 @@ const INITIAL_STATE: State = {
   ],
 };
 
-export const useStore = create<Store>()((set) => ({
+export const useStore = create<State & Actions>()((set) => ({
   ...INITIAL_STATE,
   blurWindows: (windowIds: ID[]) =>
     set((state) => ({

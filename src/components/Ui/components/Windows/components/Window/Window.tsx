@@ -20,6 +20,7 @@ const getMenuBarWidth = (node: HTMLElement | null): number | undefined =>
       )
     : undefined;
 
+// @todo handle potential TitleBar overflow after Window resize
 export const Window: FunctionComponent<WindowType> = ({
   focused,
   height,
