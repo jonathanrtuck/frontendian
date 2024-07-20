@@ -4,7 +4,7 @@ import { Window } from "./components/Window";
 import { useStore } from "store";
 
 export const Windows: FunctionComponent<{}> = () => {
-  const windows = useStore(({ windows }) => windows);
+  const windows = useStore((state) => state.windows);
 
   return (
     <>

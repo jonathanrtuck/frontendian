@@ -3,9 +3,12 @@ export type Actions = {
   closeWindows(windowIds: ID[]): void;
   focusWindow(windowIds: ID[]): void;
   hideWindows(windowIds: ID[]): void;
-  moveWindows(windowIds: ID[], left: number, top: number): void;
-  moveWindowTitleBar(windowIds: ID[], titleBarLeft: number): void;
-  resizeWindows(windowIds: ID[], height: number, width: number): void;
+  moveWindows(windowIds: ID[], payload: { left: number; top: number }): void;
+  moveWindowTitleBar(windowIds: ID[], payload: { titleBarLeft: number }): void;
+  resizeWindows(
+    windowIds: ID[],
+    payload: { height: number; width: number }
+  ): void;
   showWindows(windowIds: ID[]): void;
   zoomWindows(windowIds: ID[]): void;
 };

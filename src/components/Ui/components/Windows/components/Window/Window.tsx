@@ -33,13 +33,11 @@ export const Window: FunctionComponent<WindowType> = ({
   width,
   zoomed,
 }) => {
-  const closeWindows = useStore(({ closeWindows }) => closeWindows);
-  const moveWindowTitleBar = useStore(
-    ({ moveWindowTitleBar }) => moveWindowTitleBar
-  );
-  const moveWindows = useStore(({ moveWindows }) => moveWindows);
-  const resizeWindows = useStore(({ resizeWindows }) => resizeWindows);
-  const zoomWindows = useStore(({ zoomWindows }) => zoomWindows);
+  const closeWindows = useStore((actions) => actions.closeWindows);
+  const moveWindowTitleBar = useStore((actions) => actions.moveWindowTitleBar);
+  const moveWindows = useStore((actions) => actions.moveWindows);
+  const resizeWindows = useStore((actions) => actions.resizeWindows);
+  const zoomWindows = useStore((actions) => actions.zoomWindows);
 
   const rootRef = useRef<HTMLElement>(null);
 
@@ -62,7 +60,7 @@ export const Window: FunctionComponent<WindowType> = ({
         }
       }}
       onStop={(_, { x, y }) => {
-        moveWindows([id], x, y);
+        moveWindows([id], { left: x, top: y });
       }}>
       <section
         aria-current={focused}
@@ -82,8 +80,8 @@ export const Window: FunctionComponent<WindowType> = ({
           onClose={() => {
             closeWindows([id]);
           }}
-          onMove={(left) => {
-            moveWindowTitleBar([id], left);
+          onMove={(titleBarLeft) => {
+            moveWindowTitleBar([id], { titleBarLeft });
           }}
           onZoom={() => {
             zoomWindows([id]);
@@ -104,8 +102,8 @@ export const Window: FunctionComponent<WindowType> = ({
           className={styles.content}
           height={height}
           minWidth={menuBarWidth}
-          onResize={({ height, width }) => {
-            resizeWindows([id], height, width);
+          onResize={(size) => {
+            resizeWindows([id], size);
           }}
           width={width}
           zoomed={zoomed}

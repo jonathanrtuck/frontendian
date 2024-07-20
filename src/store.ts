@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
 import { Actions, ID, State } from "types";
@@ -8,7 +9,7 @@ const INITIAL_STATE: State = {
       focused: true,
       height: 300,
       hidden: false,
-      id: "window-id-1",
+      id: uuid(),
       left: 96,
       title: "Window…",
       titleBarLeft: 0,
@@ -58,40 +59,41 @@ export const useStore = create<State & Actions>()((set) => ({
           : window
       ),
     })),
-  moveWindows: (windowIds: ID[], left: number, top: number) =>
+  moveWindows: (windowIds: ID[], payload: { left: number; top: number }) =>
     set((state) => ({
       ...state,
       windows: state.windows.map((window) =>
         windowIds.includes(window.id)
           ? {
               ...window,
-              left,
-              top,
+              ...payload,
             }
           : window
       ),
     })),
-  moveWindowTitleBar: (windowIds: ID[], titleBarLeft: number) =>
+  moveWindowTitleBar: (windowIds: ID[], payload: { titleBarLeft: number }) =>
     set((state) => ({
       ...state,
       windows: state.windows.map((window) =>
         windowIds.includes(window.id)
           ? {
               ...window,
-              titleBarLeft,
+              ...payload,
             }
           : window
       ),
     })),
-  resizeWindows: (windowIds: ID[], height: number, width: number) =>
+  resizeWindows: (
+    windowIds: ID[],
+    payload: { height: number; width: number }
+  ) =>
     set((state) => ({
       ...state,
       windows: state.windows.map((window) =>
         windowIds.includes(window.id)
           ? {
               ...window,
-              height,
-              width,
+              ...payload,
             }
           : window
       ),
