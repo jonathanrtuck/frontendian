@@ -82,6 +82,7 @@ export const Window: FunctionComponent<WindowType> = ({
           classes={{
             button: styles.button,
           }}
+          id={id}
           left={titleBarLeft}
           maxWidth={rootWidth}
           onClose={() => {

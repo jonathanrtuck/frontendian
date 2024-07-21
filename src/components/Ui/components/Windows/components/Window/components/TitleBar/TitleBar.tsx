@@ -8,6 +8,8 @@ import {
   useState,
 } from "react";
 
+import { useStore } from "store";
+import { ID } from "types";
 import { getComputedCustomProperty } from "utils";
 
 import styles from "./TitleBar.module.css";
@@ -18,14 +20,18 @@ export const TitleBar: FunctionComponent<{
     root?: string;
     title?: string;
   };
+  id: ID;
   left: number;
   maxWidth: number;
   onClose(): void;
   onMove(left: number): void;
   onZoom?(): void;
   title: string;
-}> = ({ classes, left, maxWidth, onClose, onMove, onZoom, title }) => {
+}> = ({ classes, id, left, maxWidth, onClose, onMove, onZoom, title }) => {
+  const hide = useStore((actions) => actions.hide);
+
   const rootRef = useRef<HTMLElement>(null);
+  const touchRef = useRef<number>(0);
 
   const [rootWidth, setRootWidth] = useState<number>(0);
 
@@ -58,7 +64,34 @@ export const TitleBar: FunctionComponent<{
         x: Math.min(left + offset, maxWidth - rootWidth + offset),
         y: 0,
       }}>
-      <header className={clsx(classes?.root, styles.root)} ref={rootRef}>
+      <header
+        className={clsx(classes?.root, styles.root)}
+        onDoubleClick={(e) => {
+          const isButton = (e.target as HTMLElement)?.classList.contains(
+            styles.button
+          );
+
+          if (!isButton) {
+            hide({ id });
+          }
+        }}
+        onPointerUp={(e) => {
+          const now = Date.now();
+          const isButton = (e.target as HTMLElement)?.classList.contains(
+            styles.button
+          );
+
+          if (!isButton) {
+            const isDoubleClick = now - touchRef.current < 500;
+
+            if (isDoubleClick) {
+              hide({ id });
+            }
+
+            touchRef.current = now;
+          }
+        }}
+        ref={rootRef}>
         <h1 className={clsx(classes?.title, styles.title)} title={title}>
           {title}
         </h1>

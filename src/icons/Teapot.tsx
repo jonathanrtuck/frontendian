@@ -178,3 +178,5 @@ export const Teapot = forwardRef<SVGSVGElement, SVGAttributes<SVGSVGElement>>(
     );
   }
 );
+
+Teapot.displayName = "Teapot";

@@ -219,3 +219,5 @@ export const Tracker = forwardRef<SVGSVGElement, SVGAttributes<SVGSVGElement>>(
     );
   }
 );
+
+Tracker.displayName = "Tracker";

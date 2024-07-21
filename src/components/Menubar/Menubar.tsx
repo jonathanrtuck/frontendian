@@ -19,3 +19,5 @@ export const MenuBar = forwardRef<
     {children}
   </menu>
 ));
+
+MenuBar.displayName = "MenuBar";

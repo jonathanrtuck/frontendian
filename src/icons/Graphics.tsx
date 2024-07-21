@@ -137,3 +137,5 @@ export const Graphics = forwardRef<SVGSVGElement, SVGAttributes<SVGSVGElement>>(
     );
   }
 );
+
+Graphics.displayName = "Graphics";

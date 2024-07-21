@@ -21,3 +21,5 @@ export const Resize = forwardRef<SVGSVGElement, SVGAttributes<SVGSVGElement>>(
     </svg>
   )
 );
+
+Resize.displayName = "Resize";

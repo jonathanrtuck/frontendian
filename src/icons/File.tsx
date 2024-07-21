@@ -63,3 +63,5 @@ export const File = forwardRef<SVGSVGElement, SVGAttributes<SVGSVGElement>>(
     );
   }
 );
+
+File.displayName = "File";

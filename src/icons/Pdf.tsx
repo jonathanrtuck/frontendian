@@ -146,3 +146,5 @@ export const Pdf = forwardRef<SVGSVGElement, SVGAttributes<SVGSVGElement>>(
     );
   }
 );
+
+Pdf.displayName = "Pdf";

@@ -89,3 +89,5 @@ export const Network = forwardRef<SVGSVGElement, SVGAttributes<SVGSVGElement>>(
     );
   }
 );
+
+Network.displayName = "Network";

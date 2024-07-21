@@ -38,3 +38,5 @@ export const WindowVisible = forwardRef<
     </svg>
   );
 });
+
+WindowVisible.displayName = "WindowVisible";

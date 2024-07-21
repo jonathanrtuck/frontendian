@@ -17,3 +17,5 @@ export const WindowHidden = forwardRef<
     <path d="M32 4V8H36V4H32z" fill="#000000" />
   </svg>
 ));
+
+WindowHidden.displayName = "WindowHidden";

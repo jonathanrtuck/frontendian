@@ -213,3 +213,5 @@ export const StyledEdit = forwardRef<
     </svg>
   );
 });
+
+StyledEdit.displayName = "StyledEdit";

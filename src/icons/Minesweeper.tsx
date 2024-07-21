@@ -154,3 +154,5 @@ export const Minesweeper = forwardRef<
     </svg>
   );
 });
+
+Minesweeper.displayName = "Minesweeper";

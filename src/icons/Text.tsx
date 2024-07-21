@@ -95,3 +95,5 @@ export const Text = forwardRef<SVGSVGElement, SVGAttributes<SVGSVGElement>>(
     );
   }
 );
+
+Text.displayName = "Text";
