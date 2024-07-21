@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useRef, useState } from "react";
+import { FunctionComponent, useLayoutEffect, useState, useRef } from "react";
 
 import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
@@ -10,15 +10,6 @@ import { useStore } from "store";
 import { Window as WindowType } from "types";
 
 import styles from "./Window.module.css";
-
-const getMenuBarWidth = (node: HTMLElement | null): number | undefined =>
-  node?.childNodes.length
-    ? Array.prototype.reduce.call<NodeList, any[], number>(
-        node.childNodes,
-        (acc: number, menuItem: HTMLElement) => acc + menuItem.offsetWidth,
-        0
-      )
-    : undefined;
 
 // @todo handle potential TitleBar overflow after Window resize
 export const Window: FunctionComponent<WindowType> = ({
@@ -33,17 +24,32 @@ export const Window: FunctionComponent<WindowType> = ({
   width,
   zoomed,
 }) => {
-  const closeWindows = useStore((actions) => actions.closeWindows);
-  const moveWindowTitleBar = useStore((actions) => actions.moveWindowTitleBar);
-  const moveWindows = useStore((actions) => actions.moveWindows);
-  const resizeWindows = useStore((actions) => actions.resizeWindows);
-  const zoomWindows = useStore((actions) => actions.zoomWindows);
+  const close = useStore((actions) => actions.close);
+  const move = useStore((actions) => actions.move);
+  const resize = useStore((actions) => actions.resize);
+  const zoom = useStore((actions) => actions.zoom);
 
+  const menuBarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
 
-  const [menuBarWidth, setMenuBarWidth] = useState<number | undefined>(
-    undefined
-  );
+  const [menuBarWidth, setMenuBarWidth] = useState<number>(0);
+  const [rootWidth, setRootWidth] = useState<number>(0);
+
+  useLayoutEffect(() => {
+    if (rootRef.current) {
+      setRootWidth(rootRef.current.offsetWidth);
+    }
+  }, [width, zoomed]);
+
+  useLayoutEffect(() => {
+    if (menuBarRef.current) {
+      setMenuBarWidth(
+        Array.from(menuBarRef.current.children)
+          .map((element) => (element as HTMLElement).offsetWidth)
+          .reduce((acc, width) => acc + width, 0)
+      );
+    }
+  }, []); // @todo menuBarItems
 
   return (
     <Draggable
@@ -59,8 +65,8 @@ export const Window: FunctionComponent<WindowType> = ({
           return false;
         }
       }}
-      onStop={(_, { x, y }) => {
-        moveWindows([id], { left: x, top: y });
+      onStop={(_, { x: left, y: top }) => {
+        move({ id, left, top, type: "window" });
       }}>
       <section
         aria-current={focused}
@@ -77,23 +83,22 @@ export const Window: FunctionComponent<WindowType> = ({
             button: styles.button,
           }}
           left={titleBarLeft}
+          maxWidth={rootWidth}
           onClose={() => {
-            closeWindows([id]);
+            close({ id });
           }}
-          onMove={(titleBarLeft) => {
-            moveWindowTitleBar([id], { titleBarLeft });
+          onMove={(left) => {
+            move({ id, left, type: "titlebar" });
           }}
           onZoom={() => {
-            zoomWindows([id]);
+            zoom({ id });
           }}
           title={title}
         />
         <MenuBar
           className={styles.menubar}
           orientation="horizontal"
-          ref={(node) => {
-            setMenuBarWidth(getMenuBarWidth(node));
-          }}>
+          ref={menuBarRef}>
           <MenuItem title="File" />
           <MenuItem title="View" />
           <MenuItem title="Help" />
@@ -103,7 +108,7 @@ export const Window: FunctionComponent<WindowType> = ({
           height={height}
           minWidth={menuBarWidth}
           onResize={(size) => {
-            resizeWindows([id], size);
+            resize({ id, ...size });
           }}
           width={width}
           zoomed={zoomed}

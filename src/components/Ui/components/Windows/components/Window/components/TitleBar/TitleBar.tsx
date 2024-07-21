@@ -1,6 +1,12 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useMemo, useRef } from "react";
+import {
+  FunctionComponent,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { getComputedCustomProperty } from "utils";
 
@@ -13,27 +19,32 @@ export const TitleBar: FunctionComponent<{
     title?: string;
   };
   left: number;
+  maxWidth: number;
   onClose(): void;
   onMove(left: number): void;
   onZoom?(): void;
   title: string;
-}> = ({ classes, left, onClose, onMove, onZoom, title }) => {
+}> = ({ classes, left, maxWidth, onClose, onMove, onZoom, title }) => {
   const rootRef = useRef<HTMLElement>(null);
+
+  const [rootWidth, setRootWidth] = useState<number>(0);
 
   const offset = useMemo<number>(
     () => getComputedCustomProperty("--window-padding"),
     []
   );
 
+  useLayoutEffect(() => {
+    if (rootRef.current) {
+      setRootWidth(rootRef.current.offsetWidth);
+    }
+  }, [maxWidth, onZoom, title]);
+
   return (
     <Draggable
       axis="x"
       bounds="parent"
       cancel={`.${styles.button}`}
-      defaultPosition={{
-        x: left + offset,
-        y: 0,
-      }}
       nodeRef={rootRef}
       onStart={(e) => {
         if (!e.shiftKey) {
@@ -42,6 +53,10 @@ export const TitleBar: FunctionComponent<{
       }}
       onStop={(_, { x }) => {
         onMove(x - offset);
+      }}
+      position={{
+        x: Math.min(left + offset, maxWidth - rootWidth + offset),
+        y: 0,
       }}>
       <header className={clsx(classes?.root, styles.root)} ref={rootRef}>
         <h1 className={clsx(classes?.title, styles.title)} title={title}>

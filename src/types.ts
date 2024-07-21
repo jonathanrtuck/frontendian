@@ -1,16 +1,20 @@
 export type Actions = {
-  blurWindows(windowIds: ID[]): void;
-  closeWindows(windowIds: ID[]): void;
-  focusWindow(windowIds: ID[]): void;
-  hideWindows(windowIds: ID[]): void;
-  moveWindows(windowIds: ID[], payload: { left: number; top: number }): void;
-  moveWindowTitleBar(windowIds: ID[], payload: { titleBarLeft: number }): void;
-  resizeWindows(
-    windowIds: ID[],
-    payload: { height: number; width: number }
+  blur(payload: { id: ID } | { ids: ID[] }): void;
+  close(payload: { id: ID } | { ids: ID[] }): void;
+  focus(payload: { id: ID } | { ids: ID[] }): void;
+  hide(payload: { id: ID } | { ids: ID[] }): void;
+  move(
+    payload: ({ id: ID } | { ids: ID[] }) &
+      (
+        | { left: number; top: number; type: "window" }
+        | { left: number; type: "titlebar" }
+      )
   ): void;
-  showWindows(windowIds: ID[]): void;
-  zoomWindows(windowIds: ID[]): void;
+  resize(
+    payload: ({ id: ID } | { ids: ID[] }) & { height: number; width: number }
+  ): void;
+  show(payload: { id: ID } | { ids: ID[] }): void;
+  zoom(payload: { id: ID } | { ids: ID[] }): void;
 };
 
 export type ID = string;

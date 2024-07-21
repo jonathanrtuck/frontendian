@@ -13,20 +13,12 @@ const MIN_WIDTH = 16 * 7; // 7rem
 export const Content: FunctionComponent<
   Omit<HTMLAttributes<HTMLDivElement>, "onResize"> & {
     height: number;
-    minWidth?: number;
+    minWidth: number;
     onResize(size: { height: number; width: number }): void;
     width: number;
     zoomed: boolean;
   }
-> = ({
-  className,
-  height,
-  minWidth = MIN_WIDTH,
-  onResize,
-  width,
-  zoomed,
-  ...props
-}) => {
+> = ({ className, height, minWidth, onResize, width, zoomed, ...props }) => {
   const scrollbarSize = useMemo<number>(
     () => getComputedCustomProperty("--content-scrollbar-size"),
     []
@@ -45,7 +37,10 @@ export const Content: FunctionComponent<
         />
       }
       height={height}
-      minConstraints={[minWidth - scrollbarSize, MIN_HEIGHT]}
+      minConstraints={[
+        Math.max(minWidth, MIN_WIDTH) - scrollbarSize,
+        MIN_HEIGHT,
+      ]}
       onResize={(_, { size }) => {
         onResize(size);
       }}

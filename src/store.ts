@@ -20,13 +20,17 @@ const INITIAL_STATE: State = {
   ],
 };
 
+const isPayloadId = (payload: { id: ID } | { ids: ID[] }, id: ID): boolean =>
+  ("id" in payload && id === payload.id) ||
+  ("ids" in payload && payload.ids.includes(id));
+
 export const useStore = create<State & Actions>()((set) => ({
   ...INITIAL_STATE,
-  blurWindows: (windowIds: ID[]) =>
+  blur: (payload) =>
     set((state) => ({
       ...state,
       windows: state.windows.map((window) =>
-        windowIds.includes(window.id)
+        isPayloadId(payload, window.id)
           ? {
               ...window,
               focus: false,
@@ -34,24 +38,26 @@ export const useStore = create<State & Actions>()((set) => ({
           : window
       ),
     })),
-  closeWindows: (windowIds: ID[]) =>
+  close: (payload) =>
     set((state) => ({
       ...state,
-      windows: state.windows.filter((window) => !windowIds.includes(window.id)),
+      windows: state.windows.filter(
+        (window) => !isPayloadId(payload, window.id)
+      ),
     })),
-  focusWindow: (windowIds: ID[]) =>
+  focus: (payload) =>
     set((state) => ({
       ...state,
       windows: state.windows.map((window) => ({
         ...window,
-        focused: windowIds.includes(window.id),
+        focused: isPayloadId(payload, window.id),
       })),
     })),
-  hideWindows: (windowIds: ID[]) =>
+  hide: (payload) =>
     set((state) => ({
       ...state,
       windows: state.windows.map((window) =>
-        windowIds.includes(window.id)
+        isPayloadId(payload, window.id)
           ? {
               ...window,
               hidden: true,
@@ -59,50 +65,55 @@ export const useStore = create<State & Actions>()((set) => ({
           : window
       ),
     })),
-  moveWindows: (windowIds: ID[], payload: { left: number; top: number }) =>
+  move: (payload) => {
+    switch (payload.type) {
+      case "titlebar":
+        set((state) => ({
+          ...state,
+          windows: state.windows.map((window) =>
+            isPayloadId(payload, window.id)
+              ? {
+                  ...window,
+                  titleBarLeft: payload.left,
+                }
+              : window
+          ),
+        }));
+        break;
+      case "window":
+        set((state) => ({
+          ...state,
+          windows: state.windows.map((window) =>
+            isPayloadId(payload, window.id)
+              ? {
+                  ...window,
+                  left: payload.left,
+                  top: payload.top,
+                }
+              : window
+          ),
+        }));
+        break;
+    }
+  },
+  resize: (payload) =>
     set((state) => ({
       ...state,
       windows: state.windows.map((window) =>
-        windowIds.includes(window.id)
+        isPayloadId(payload, window.id)
           ? {
               ...window,
-              ...payload,
+              height: payload.height,
+              width: payload.width,
             }
           : window
       ),
     })),
-  moveWindowTitleBar: (windowIds: ID[], payload: { titleBarLeft: number }) =>
+  show: (payload) =>
     set((state) => ({
       ...state,
       windows: state.windows.map((window) =>
-        windowIds.includes(window.id)
-          ? {
-              ...window,
-              ...payload,
-            }
-          : window
-      ),
-    })),
-  resizeWindows: (
-    windowIds: ID[],
-    payload: { height: number; width: number }
-  ) =>
-    set((state) => ({
-      ...state,
-      windows: state.windows.map((window) =>
-        windowIds.includes(window.id)
-          ? {
-              ...window,
-              ...payload,
-            }
-          : window
-      ),
-    })),
-  showWindows: (windowIds: ID[]) =>
-    set((state) => ({
-      ...state,
-      windows: state.windows.map((window) =>
-        windowIds.includes(window.id)
+        isPayloadId(payload, window.id)
           ? {
               ...window,
               hidden: false,
@@ -110,11 +121,11 @@ export const useStore = create<State & Actions>()((set) => ({
           : window
       ),
     })),
-  zoomWindows: (windowIds: ID[]) =>
+  zoom: (payload) =>
     set((state) => ({
       ...state,
       windows: state.windows.map((window) =>
-        windowIds.includes(window.id)
+        isPayloadId(payload, window.id)
           ? {
               ...window,
               zoomed: !window.zoomed,
