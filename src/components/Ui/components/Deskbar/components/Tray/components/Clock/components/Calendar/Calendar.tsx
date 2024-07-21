@@ -1,5 +1,7 @@
-import { FocusEvent, FunctionComponent, useEffect, useRef } from "react";
+import { FunctionComponent, useRef } from "react";
 import ReactCalendar from "react-calendar";
+
+import { useFocus } from "hooks";
 
 import "react-calendar/dist/Calendar.css";
 
@@ -11,20 +13,17 @@ export const Calendar: FunctionComponent<{
 }> = ({ onClose }) => {
   const rootRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    // set focus (to today) on mount
-    (
-      rootRef.current?.querySelector(
-        ".react-calendar__tile--now"
-      ) as HTMLElement
-    )?.focus();
-  }, []);
+  useFocus({
+    deps: [],
+    ref: rootRef,
+    selector: ".react-calendar__tile--now",
+  });
 
   return (
     <section
       className={styles.root}
-      onBlur={(e: FocusEvent) => {
-        if (!rootRef.current?.contains(e.relatedTarget)) {
+      onBlur={({ relatedTarget }) => {
+        if (!rootRef.current?.contains(relatedTarget)) {
           onClose();
         }
       }}
@@ -32,7 +31,7 @@ export const Calendar: FunctionComponent<{
       tabIndex={-1}>
       <ReactCalendar
         className={styles.calendar}
-        formatShortWeekday={(locale: string | undefined, date: Date) =>
+        formatShortWeekday={(locale, date) =>
           new Intl.DateTimeFormat(locale, {
             weekday: "narrow",
           }).format(date)

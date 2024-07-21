@@ -37,7 +37,10 @@ export const Window: FunctionComponent<WindowType> = ({
   const menuBarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
 
-  useFocus(rootRef, [focused]);
+  useFocus({
+    deps: [focused],
+    ref: rootRef,
+  });
 
   const { width: rootWidth } = useElementDimensions(rootRef, [width, zoomed]);
 
