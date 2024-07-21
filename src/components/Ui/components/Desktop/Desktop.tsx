@@ -3,26 +3,17 @@ import {
   FunctionComponent,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
+
+import { userSelect } from "utils";
 
 import styles from "./Desktop.module.css";
 
 type Coordinates = {
   x: number;
   y: number;
-};
-
-const allowSelection = (): void => {
-  document.body.style.userSelect = "";
-  document.body.style.removeProperty("-webkit-user-select"); // for safari
-};
-
-const preventSelection = (): void => {
-  document.body.style.userSelect = "none";
-  document.body.style.setProperty("-webkit-user-select", "none"); // for safari
 };
 
 export const Desktop: FunctionComponent<{}> = () => {
@@ -32,22 +23,6 @@ export const Desktop: FunctionComponent<{}> = () => {
     from?: Coordinates;
     to?: Coordinates;
   }>({});
-
-  const selectionStyles = useMemo<CSSProperties>(() => {
-    const { from, to } = selection;
-
-    return from && to
-      ? {
-          display: "block",
-          height: Math.abs(from.y - to.y),
-          left: Math.min(from.x, to.x),
-          top: Math.min(from.y, to.y),
-          width: Math.abs(from.x - to.x),
-        }
-      : {
-          display: "none",
-        };
-  }, [selection]);
 
   const onMouseMove = useCallback(({ clientX, clientY }: MouseEvent) => {
     setSelection((prevState) => ({
@@ -61,7 +36,7 @@ export const Desktop: FunctionComponent<{}> = () => {
   const onMouseUp = useCallback(() => {
     document.removeEventListener("mousemove", onMouseMove);
     document.removeEventListener("mouseup", onMouseUp);
-    allowSelection();
+    userSelect(true);
     setSelection({});
   }, [onMouseMove]);
 
@@ -69,7 +44,7 @@ export const Desktop: FunctionComponent<{}> = () => {
     () => () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", onMouseUp);
-      allowSelection();
+      userSelect(true);
     },
     [onMouseMove, onMouseUp]
   );
@@ -81,7 +56,7 @@ export const Desktop: FunctionComponent<{}> = () => {
         if ((button === 0 || buttons === 1) && target === rootRef.current) {
           document.addEventListener("mousemove", onMouseMove);
           document.addEventListener("mouseup", onMouseUp);
-          preventSelection();
+          userSelect(false);
           setSelection({
             from: {
               x: clientX,
@@ -90,9 +65,31 @@ export const Desktop: FunctionComponent<{}> = () => {
           });
         }
       }}
-      ref={rootRef}>
+      ref={rootRef}
+      style={
+        selection.from && selection.to
+          ? ({
+              "--desktop-selection-display": "block",
+              "--desktop-selection-height": `${Math.abs(
+                selection.from.y - selection.to.y
+              )}px`,
+              "--desktop-selection-left": `${Math.min(
+                selection.from.x,
+                selection.to.x
+              )}px`,
+              "--desktop-selection-top": `${Math.min(
+                selection.from.y,
+                selection.to.y
+              )}px`,
+              "--desktop-selection-width": `${Math.abs(
+                selection.from.x - selection.to.x
+              )}px`,
+            } as CSSProperties)
+          : ({
+              "--desktop-selection-display": "none",
+            } as CSSProperties)
+      }>
       <i>desktop…</i>
-      <span className={styles.selection} style={selectionStyles} />
     </nav>
   );
 };

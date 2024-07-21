@@ -62,15 +62,21 @@ export const useStore = create<State & Actions>()((set) => ({
       windows: state.windows.map((window) => ({
         ...window,
         focused: isPayloadId(payload, window.id),
+        hidden: isPayloadId(payload, window.id) ? false : window.hidden,
       })),
     })),
   hide: (payload) =>
     set((state) => ({
       ...state,
+      stackingOrder: [
+        ...("id" in payload ? [payload.id] : payload.ids),
+        ...state.stackingOrder.filter((id) => !isPayloadId(payload, id)),
+      ],
       windows: state.windows.map((window) =>
         isPayloadId(payload, window.id)
           ? {
               ...window,
+              focused: false,
               hidden: true,
             }
           : window
@@ -123,10 +129,15 @@ export const useStore = create<State & Actions>()((set) => ({
   show: (payload) =>
     set((state) => ({
       ...state,
+      stackingOrder: [
+        ...state.stackingOrder.filter((id) => !isPayloadId(payload, id)),
+        ...("id" in payload ? [payload.id] : payload.ids),
+      ],
       windows: state.windows.map((window) =>
         isPayloadId(payload, window.id)
           ? {
               ...window,
+              focused: true,
               hidden: false,
             }
           : window

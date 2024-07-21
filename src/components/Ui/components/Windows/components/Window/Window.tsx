@@ -1,16 +1,11 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import {
-  FunctionComponent,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { FunctionComponent, useRef } from "react";
 
 import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
 import { MenuBar } from "components/MenuBar";
+import { useElementDimensions, useFocus } from "hooks";
 import { useStore } from "store";
 import { Window as WindowType } from "types";
 
@@ -42,23 +37,9 @@ export const Window: FunctionComponent<WindowType> = ({
   const menuBarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
 
-  const [rootWidth, setRootWidth] = useState<number>(0);
+  useFocus(rootRef, [focused]);
 
-  useLayoutEffect(() => {
-    if (rootRef.current) {
-      setRootWidth(rootRef.current.offsetWidth);
-    }
-  }, [width, zoomed]);
-
-  useEffect(() => {
-    if (
-      focused &&
-      rootRef.current &&
-      !rootRef.current.contains(document.activeElement)
-    ) {
-      rootRef.current.focus();
-    }
-  }, [focused]);
+  const { width: rootWidth } = useElementDimensions(rootRef, [width, zoomed]);
 
   return (
     <Draggable

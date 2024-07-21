@@ -6,9 +6,15 @@
   top: 0;
 }
 
-.selection {
+.root::after {
   background: rgba(128, 187, 255, 0.2);
   border-color: rgba(0, 0, 204, 0.5);
   border-width: var(--border-width);
+  content: "";
+  display: var(--desktop-selection-display);
+  height: var(--desktop-selection-height);
+  left: var(--desktop-selection-left);
   position: absolute;
+  top: var(--desktop-selection-top);
+  width: var(--desktop-selection-width);
 }

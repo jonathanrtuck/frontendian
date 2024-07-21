@@ -1,13 +1,8 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import {
-  FunctionComponent,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { FunctionComponent, useMemo, useRef } from "react";
 
+import { useElementDimensions } from "hooks";
 import { getComputedCustomProperty } from "utils";
 
 import styles from "./TitleBar.module.css";
@@ -29,18 +24,16 @@ export const TitleBar: FunctionComponent<{
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<number>(0);
 
-  const [rootWidth, setRootWidth] = useState<number>(0);
+  const { width: rootWidth } = useElementDimensions(rootRef, [
+    maxWidth,
+    onZoom,
+    title,
+  ]);
 
   const offset = useMemo<number>(
     () => getComputedCustomProperty("--window-padding"),
     []
   );
-
-  useLayoutEffect(() => {
-    if (rootRef.current) {
-      setRootWidth(rootRef.current.offsetWidth);
-    }
-  }, [maxWidth, onZoom, title]);
 
   return (
     <Draggable
