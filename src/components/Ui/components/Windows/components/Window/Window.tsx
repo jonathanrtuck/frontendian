@@ -1,11 +1,10 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useLayoutEffect, useState, useRef } from "react";
+import { FunctionComponent, useLayoutEffect, useRef, useState } from "react";
 
 import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
 import { MenuBar } from "components/MenuBar";
-import { MenuItem } from "components/MenuItem";
 import { useStore } from "store";
 import { Window as WindowType } from "types";
 
@@ -32,7 +31,6 @@ export const Window: FunctionComponent<WindowType> = ({
   const menuBarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
 
-  const [menuBarWidth, setMenuBarWidth] = useState<number>(0);
   const [rootWidth, setRootWidth] = useState<number>(0);
 
   useLayoutEffect(() => {
@@ -40,16 +38,6 @@ export const Window: FunctionComponent<WindowType> = ({
       setRootWidth(rootRef.current.offsetWidth);
     }
   }, [width, zoomed]);
-
-  useLayoutEffect(() => {
-    if (menuBarRef.current) {
-      setMenuBarWidth(
-        Array.from(menuBarRef.current.children)
-          .map((element) => (element as HTMLElement).offsetWidth)
-          .reduce((acc, width) => acc + width, 0)
-      );
-    }
-  }, []); // @todo menuBarItems
 
   return (
     <Draggable
@@ -101,15 +89,12 @@ export const Window: FunctionComponent<WindowType> = ({
         <MenuBar
           className={styles.menubar}
           orientation="horizontal"
-          ref={menuBarRef}>
-          <MenuItem title="File" />
-          <MenuItem title="View" />
-          <MenuItem title="Help" />
-        </MenuBar>
+          ref={menuBarRef}
+        />
         <Content
           className={styles.content}
           height={height}
-          minWidth={menuBarWidth}
+          menuBarRef={menuBarRef}
           onResize={(size) => {
             resize({ id, ...size });
           }}

@@ -5,3 +5,10 @@
   right: 0;
   top: 0;
 }
+
+.selection {
+  background: rgba(128, 187, 255, 0.2);
+  border-color: rgba(0, 0, 204, 0.5);
+  border-width: var(--border-width);
+  position: absolute;
+}
