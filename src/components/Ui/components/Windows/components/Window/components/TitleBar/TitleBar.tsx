@@ -8,8 +8,6 @@ import {
   useState,
 } from "react";
 
-import { useStore } from "store";
-import { ID } from "types";
 import { getComputedCustomProperty } from "utils";
 
 import styles from "./TitleBar.module.css";
@@ -20,16 +18,14 @@ export const TitleBar: FunctionComponent<{
     root?: string;
     title?: string;
   };
-  id: ID;
   left: number;
   maxWidth: number;
   onClose(): void;
+  onHide(): void;
   onMove(left: number): void;
   onZoom?(): void;
   title: string;
-}> = ({ classes, id, left, maxWidth, onClose, onMove, onZoom, title }) => {
-  const hide = useStore((actions) => actions.hide);
-
+}> = ({ classes, left, maxWidth, onClose, onHide, onMove, onZoom, title }) => {
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<number>(0);
 
@@ -72,7 +68,7 @@ export const TitleBar: FunctionComponent<{
           );
 
           if (!isButton) {
-            hide({ id });
+            onHide();
           }
         }}
         onPointerUp={(e) => {
@@ -85,7 +81,7 @@ export const TitleBar: FunctionComponent<{
             const isDoubleClick = now - touchRef.current < 500;
 
             if (isDoubleClick) {
-              hide({ id });
+              onHide();
             }
 
             touchRef.current = now;

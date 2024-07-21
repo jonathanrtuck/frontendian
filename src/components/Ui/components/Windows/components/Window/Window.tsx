@@ -11,7 +11,6 @@ import { Window as WindowType } from "types";
 
 import styles from "./Window.module.css";
 
-// @todo handle potential TitleBar overflow after Window resize
 export const Window: FunctionComponent<WindowType> = ({
   focused,
   height,
@@ -25,6 +24,7 @@ export const Window: FunctionComponent<WindowType> = ({
   zoomed,
 }) => {
   const close = useStore((actions) => actions.close);
+  const hide = useStore((actions) => actions.hide);
   const move = useStore((actions) => actions.move);
   const resize = useStore((actions) => actions.resize);
   const zoom = useStore((actions) => actions.zoom);
@@ -82,11 +82,13 @@ export const Window: FunctionComponent<WindowType> = ({
           classes={{
             button: styles.button,
           }}
-          id={id}
           left={titleBarLeft}
           maxWidth={rootWidth}
           onClose={() => {
             close({ id });
+          }}
+          onHide={() => {
+            hide({ id });
           }}
           onMove={(left) => {
             move({ id, left, type: "titlebar" });
