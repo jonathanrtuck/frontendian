@@ -1,6 +1,12 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useLayoutEffect, useRef, useState } from "react";
+import {
+  FunctionComponent,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
@@ -22,7 +28,12 @@ export const Window: FunctionComponent<WindowType> = ({
   width,
   zoomed,
 }) => {
+  // state
+  const stackingOrder = useStore((state) => state.stackingOrder);
+  // actions
+  const blur = useStore((actions) => actions.blur);
   const close = useStore((actions) => actions.close);
+  const focus = useStore((actions) => actions.focus);
   const hide = useStore((actions) => actions.hide);
   const move = useStore((actions) => actions.move);
   const resize = useStore((actions) => actions.resize);
@@ -38,6 +49,16 @@ export const Window: FunctionComponent<WindowType> = ({
       setRootWidth(rootRef.current.offsetWidth);
     }
   }, [width, zoomed]);
+
+  useEffect(() => {
+    if (
+      focused &&
+      rootRef.current &&
+      !rootRef.current.contains(document.activeElement)
+    ) {
+      rootRef.current.focus();
+    }
+  }, [focused]);
 
   return (
     <Draggable
@@ -64,8 +85,22 @@ export const Window: FunctionComponent<WindowType> = ({
         })}
         hidden={hidden}
         id={id}
+        onBlur={({ relatedTarget }) => {
+          if (!rootRef.current?.contains(relatedTarget)) {
+            blur({ id });
+          }
+        }}
+        onFocus={({ relatedTarget }) => {
+          if (!relatedTarget || !rootRef.current?.contains(relatedTarget)) {
+            focus({ id });
+          }
+        }}
         ref={rootRef}
-        role="dialog">
+        role="dialog"
+        style={{
+          zIndex: stackingOrder.indexOf(id),
+        }}
+        tabIndex={0}>
         <TitleBar
           classes={{
             button: styles.button,

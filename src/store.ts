@@ -1,23 +1,30 @@
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
-import { Actions, ID, State } from "types";
+import {
+  DEFAULT_WINDOW_POSITION_INCREMENT,
+  DEFAULT_WINDOW_POSITION_OFFSET,
+  INITIAL_STATE,
+} from "consts";
+import { Actions, ID, State, Window } from "types";
 
-const INITIAL_STATE: State = {
-  windows: [
-    {
-      focused: true,
-      height: 300,
-      hidden: false,
-      id: uuid(),
-      left: 96,
-      title: "Window…",
-      titleBarLeft: 0,
-      top: 96,
-      width: 480,
-      zoomed: false,
-    },
-  ],
+const getFirstOpenWindowPosition = (windows: Window[]): number => {
+  for (let i = 0; i !== windows.length; i++) {
+    const position =
+      DEFAULT_WINDOW_POSITION_OFFSET + i * DEFAULT_WINDOW_POSITION_INCREMENT;
+    const isPositionOpen = windows.every(
+      ({ left, top }) => left !== position || top !== position
+    );
+
+    if (isPositionOpen) {
+      return position;
+    }
+  }
+
+  return (
+    DEFAULT_WINDOW_POSITION_OFFSET +
+    windows.length * DEFAULT_WINDOW_POSITION_INCREMENT
+  );
 };
 
 const isPayloadId = (payload: { id: ID } | { ids: ID[] }, id: ID): boolean =>
@@ -33,7 +40,7 @@ export const useStore = create<State & Actions>()((set) => ({
         isPayloadId(payload, window.id)
           ? {
               ...window,
-              focus: false,
+              focused: false,
             }
           : window
       ),
@@ -48,6 +55,10 @@ export const useStore = create<State & Actions>()((set) => ({
   focus: (payload) =>
     set((state) => ({
       ...state,
+      stackingOrder: [
+        ...state.stackingOrder.filter((id) => !isPayloadId(payload, id)),
+        ...("id" in payload ? [payload.id] : payload.ids),
+      ],
       windows: state.windows.map((window) => ({
         ...window,
         focused: isPayloadId(payload, window.id),

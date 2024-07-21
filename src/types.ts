@@ -25,6 +25,7 @@ export const enum MimeType {
 }
 
 export type State = {
+  stackingOrder: ID[];
   windows: Window[];
 };
 

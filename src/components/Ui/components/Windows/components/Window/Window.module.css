@@ -1,5 +1,6 @@
 :root {
   --window-background-color: rgb(232, 232, 232);
+  --window--active-background-color: rgb(224, 224, 224);
   --window-padding: 0.125rem;
 }
 
@@ -16,6 +17,11 @@
     0 0;
   padding: var(--window-padding);
   position: fixed;
+}
+
+.root:focus-within {
+  background-color: var(--window--active-background-color);
+  outline: 0;
 }
 
 .root[hidden] {

@@ -74,7 +74,8 @@
   background-image: var(--titlebar--active_button-background);
 }
 
-.close:active {
+.close:active,
+.close:focus-visible {
   background-image: var(--titlebar_button-background--active);
 }
 
@@ -116,6 +117,8 @@
 }
 
 .zoom:active::before,
-.zoom:active::after {
+.zoom:active::after,
+.zoom:focus-visible::before,
+.zoom:focus-visible::after {
   background-image: var(--titlebar_button-background--active);
 }

@@ -118,3 +118,9 @@
   color: transparent;
   pointer-events: none;
 }
+
+[aria-current="true"] .resize {
+  background-color: var(--window--active-background-color);
+  border-color: var(--border-color) var(--window--active-background-color)
+    var(--window--active-background-color) var(--border-color);
+}
