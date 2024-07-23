@@ -8,8 +8,8 @@ import {
 } from "react";
 import { Resizable } from "react-resizable";
 
+import { ResizeHandle } from "./components/ResizeHandle";
 import { ErrorBoundary } from "components/ErrorBoundary";
-import { Resize } from "icons";
 import { getComputedCustomProperty } from "utils";
 
 import styles from "./Content.module.css";
@@ -50,7 +50,7 @@ export const Content: FunctionComponent<ContentProps> = ({
     <Resizable
       axis={zoomed ? "none" : "both"}
       handle={
-        <Resize
+        <ResizeHandle
           aria-hidden
           className={clsx(styles.resize, {
             [styles.zoomed]: zoomed,
