@@ -1,5 +1,6 @@
 import {
   ComponentType,
+  DependencyList,
   ForwardRefExoticComponent,
   ReactElement,
   RefAttributes,
@@ -41,7 +42,10 @@ export type Application = {
 };
 
 export type ApplicationComponentProps = {
-  setMenuItems(menuItems: ReactElement<MenuItemProps>[]): void;
+  useMenuItems(
+    menuItems: ReactElement<MenuItemProps>[],
+    deps: DependencyList
+  ): void;
 };
 
 export type File = {

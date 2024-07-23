@@ -8,7 +8,8 @@ import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
 import { Menu } from "components/Menu";
 import { MenuItemProps } from "components/MenuItem";
-import { useElementDimensions, useFocus } from "hooks";
+import { MenuItemsContext } from "contexts";
+import { useElementDimensions, useFocus, useMenuItems } from "hooks";
 import { useStore } from "store";
 import { Window as WindowType } from "types";
 
@@ -126,7 +127,9 @@ export const Window: FunctionComponent<WindowProps> = ({
           }}
           width={width}
           zoomed={zoomed}>
-          <Component setMenuItems={setMenuItems} />
+          <MenuItemsContext.Provider value={setMenuItems}>
+            <Component useMenuItems={useMenuItems} />
+          </MenuItemsContext.Provider>
         </Content>
       </section>
     </Draggable>
