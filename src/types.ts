@@ -1,3 +1,13 @@
+import {
+  ComponentType,
+  ForwardRefExoticComponent,
+  ReactElement,
+  RefAttributes,
+  SVGAttributes,
+} from "react";
+
+import { MenuItemProps } from "components/MenuItem";
+
 export type Actions = {
   blur(payload: { id: ID } | { ids: ID[] }): void;
   close(payload: { id: ID } | { ids: ID[] }): void;
@@ -10,12 +20,44 @@ export type Actions = {
         | { left: number; type: "titlebar" }
       )
   ): void;
+  open(
+    payload: ({ id: ID } | { ids: ID[] }) & { type: "application" | "file" }
+  ): void;
   resize(
     payload: ({ id: ID } | { ids: ID[] }) & { height: number; width: number }
   ): void;
   show(payload: { id: ID } | { ids: ID[] }): void;
   zoom(payload: { id: ID } | { ids: ID[] }): void;
 };
+
+export type Application = {
+  Component: ComponentType<ApplicationComponentProps>;
+  Icon?: ForwardRefExoticComponent<
+    SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
+  >;
+  id: ID;
+  title: string;
+  windowIds: ID[];
+};
+
+export type ApplicationComponentProps = {
+  setMenuItems(menuItems: ReactElement<MenuItemProps>[]): void;
+};
+
+export type File = {
+  id: ID;
+  title: string;
+  url: URL;
+} & (
+  | {
+      height: number; // page height
+      type: MimeType.ApplicationPdf;
+      width: number; // page width
+    }
+  | {
+      type: MimeType.TextMarkdown;
+    }
+);
 
 export type ID = string;
 
@@ -25,7 +67,20 @@ export const enum MimeType {
 }
 
 export type State = {
+  applications: Application[]; // the order is used as the display order in the Deskbar logo Menu
+  desktop: ID[]; // the order is used as the display order on the Desktop
+  files: File[];
+  openApplicationIds: ID[]; // the order is used as the display order in the Deskbar Applications
   stackingOrder: ID[];
+  types: Partial<
+    Record<
+      MimeType,
+      {
+        application?: ID;
+        icon: ReactElement;
+      }
+    >
+  >;
   windows: Window[];
 };
 

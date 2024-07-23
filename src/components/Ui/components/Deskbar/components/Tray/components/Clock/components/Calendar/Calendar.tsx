@@ -7,10 +7,12 @@ import "react-calendar/dist/Calendar.css";
 
 import styles from "./Calendar.module.css";
 
-// @see https://github.com/wojtekmaj/react-calendar
-export const Calendar: FunctionComponent<{
+export type CalendarProps = {
   onClose(): void;
-}> = ({ onClose }) => {
+};
+
+// @see https://github.com/wojtekmaj/react-calendar
+export const Calendar: FunctionComponent<CalendarProps> = ({ onClose }) => {
   const rootRef = useRef<HTMLElement>(null);
 
   useFocus({

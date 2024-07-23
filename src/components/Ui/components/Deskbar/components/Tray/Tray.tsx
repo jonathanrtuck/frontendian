@@ -6,7 +6,7 @@ import { Network } from "icons";
 
 import styles from "./Tray.module.css";
 
-export const Tray: FunctionComponent<{}> = () => {
+export const Tray: FunctionComponent = () => {
   const date = useClock();
 
   return (

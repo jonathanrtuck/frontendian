@@ -1,17 +1,22 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useRef } from "react";
+import { FunctionComponent, ReactElement, useRef, useState } from "react";
+
+import { APPLICATION_TRACKER } from "applications";
 
 import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
-import { MenuBar } from "components/MenuBar";
+import { Menu } from "components/Menu";
+import { MenuItemProps } from "components/MenuItem";
 import { useElementDimensions, useFocus } from "hooks";
 import { useStore } from "store";
 import { Window as WindowType } from "types";
 
 import styles from "./Window.module.css";
 
-export const Window: FunctionComponent<WindowType> = ({
+export type WindowProps = WindowType;
+
+export const Window: FunctionComponent<WindowProps> = ({
   focused,
   height,
   hidden,
@@ -34,8 +39,10 @@ export const Window: FunctionComponent<WindowType> = ({
   const resize = useStore((actions) => actions.resize);
   const zoom = useStore((actions) => actions.zoom);
 
-  const menuBarRef = useRef<HTMLElement>(null);
+  const menubarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
+
+  const [menuItems, setMenuItems] = useState<ReactElement<MenuItemProps>[]>([]);
 
   useFocus({
     deps: [focused],
@@ -43,6 +50,8 @@ export const Window: FunctionComponent<WindowType> = ({
   });
 
   const { width: rootWidth } = useElementDimensions(rootRef, [width, zoomed]);
+
+  const Component = APPLICATION_TRACKER.Component; // @todo
 
   return (
     <Draggable
@@ -105,21 +114,20 @@ export const Window: FunctionComponent<WindowType> = ({
           }}
           title={title}
         />
-        <MenuBar
-          className={styles.menubar}
-          orientation="horizontal"
-          ref={menuBarRef}
-        />
+        <Menu bar className={styles.menubar} horizontal ref={menubarRef}>
+          {menuItems}
+        </Menu>
         <Content
           className={styles.content}
           height={height}
-          menuBarRef={menuBarRef}
+          menubarRef={menubarRef}
           onResize={(size) => {
             resize({ id, ...size });
           }}
           width={width}
-          zoomed={zoomed}
-        />
+          zoomed={zoomed}>
+          <Component setMenuItems={setMenuItems} />
+        </Content>
       </section>
     </Draggable>
   );

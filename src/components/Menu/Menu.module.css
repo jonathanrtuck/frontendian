@@ -1,5 +1,47 @@
 .root {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.root:is(.bar) {
+  flex-direction: row;
+}
+
+.root:not(.bar) {
+  background-color: rgb(224, 224, 224);
+  border-width: var(--border-width);
+  color: rgb(0, 0, 0);
+  flex-direction: column;
+  max-width: 20rem;
+  min-width: 5rem;
   position: absolute;
+  z-index: 100;
+}
+
+.root:is(.horizontal) {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(227, 227, 227),
+    rgb(209, 209, 209)
+  );
+  border-width: var(--border-width) var(--border-width) 0;
+  height: 1.5rem;
+}
+
+.root:is(.vertical) {
+  flex-direction: column;
+}
+
+/*
+[role="menubar"][aria-orientation="horizontal"] > [role="menuitem"] > .root {
+  left: 0;
+  top: 100%;
+}
+
+[role="menubar"][aria-orientation="vertical"] > [role="menuitem"] > .root {
   right: 100%;
   top: 0;
 }
+*/

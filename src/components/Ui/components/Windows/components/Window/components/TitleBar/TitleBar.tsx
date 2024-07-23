@@ -7,7 +7,7 @@ import { getComputedCustomProperty } from "utils";
 
 import styles from "./TitleBar.module.css";
 
-export const TitleBar: FunctionComponent<{
+export type TitleBarProps = {
   classes?: {
     button?: string;
     root?: string;
@@ -20,7 +20,18 @@ export const TitleBar: FunctionComponent<{
   onMove(left: number): void;
   onZoom?(): void;
   title: string;
-}> = ({ classes, left, maxWidth, onClose, onHide, onMove, onZoom, title }) => {
+};
+
+export const TitleBar: FunctionComponent<TitleBarProps> = ({
+  classes,
+  left,
+  maxWidth,
+  onClose,
+  onHide,
+  onMove,
+  onZoom,
+  title,
+}) => {
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<number>(0);
 

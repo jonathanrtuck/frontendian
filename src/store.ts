@@ -113,6 +113,17 @@ export const useStore = create<State & Actions>()((set) => ({
         break;
     }
   },
+  // @todo
+  open: (payload) => {
+    switch (payload.type) {
+      case "application":
+        set((state) => state);
+        break;
+      case "file":
+        set((state) => state);
+        break;
+    }
+  },
   resize: (payload) =>
     set((state) => ({
       ...state,

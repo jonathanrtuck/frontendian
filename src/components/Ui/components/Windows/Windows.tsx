@@ -3,7 +3,7 @@ import { FunctionComponent } from "react";
 import { Window } from "./components/Window";
 import { useStore } from "store";
 
-export const Windows: FunctionComponent<{}> = () => {
+export const Windows: FunctionComponent = () => {
   // state
   const windows = useStore((state) => state.windows);
 

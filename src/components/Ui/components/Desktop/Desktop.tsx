@@ -16,7 +16,7 @@ type Coordinates = {
   y: number;
 };
 
-export const Desktop: FunctionComponent<{}> = () => {
+export const Desktop: FunctionComponent = () => {
   const rootRef = useRef<HTMLElement>(null);
 
   const [selection, setSelection] = useState<{

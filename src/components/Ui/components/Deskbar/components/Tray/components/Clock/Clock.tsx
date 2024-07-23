@@ -4,9 +4,11 @@ import { Calendar } from "./components/Calendar";
 
 import styles from "./Clock.module.css";
 
-export const Clock: FunctionComponent<{
+export type ClockProps = {
   date: Date;
-}> = ({ date }) => {
+};
+
+export const Clock: FunctionComponent<ClockProps> = ({ date }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
 
   return (
