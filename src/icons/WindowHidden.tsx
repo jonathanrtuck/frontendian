@@ -1,15 +1,14 @@
-import { forwardRef, SVGAttributes } from "react";
+import { forwardRef } from "react";
 
-export const WindowHidden = forwardRef<
-  SVGSVGElement,
-  SVGAttributes<SVGSVGElement>
->((props, ref) => (
+import { IconComponent } from "types";
+
+export const WindowHidden: IconComponent = forwardRef((props, ref) => (
   <svg
+    {...props}
     ref={ref}
     version="1.1"
     viewBox="-4 -4 64 64"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}>
+    xmlns="http://www.w3.org/2000/svg">
     <path d="M0 0V12H32V0H0z" fill="#989898" />
     <path d="M0 12V56H52V12H0z" fill="#c8c8c8" />
     <path d="M4 52V4H32V12H52V8H36V0H0V52H4z" fill="#787878" />

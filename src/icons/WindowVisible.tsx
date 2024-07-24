@@ -1,18 +1,17 @@
-import { forwardRef, SVGAttributes, useId } from "react";
+import { forwardRef, useId } from "react";
 
-export const WindowVisible = forwardRef<
-  SVGSVGElement,
-  SVGAttributes<SVGSVGElement>
->((props, ref) => {
+import { IconComponent } from "types";
+
+export const WindowVisible: IconComponent = forwardRef((props, ref) => {
   const id = useId();
 
   return (
     <svg
+      {...props}
       ref={ref}
       version="1.1"
       viewBox="-4 -4 64 64"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}>
+      xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient
           gradientUnits="userSpaceOnUse"

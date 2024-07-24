@@ -17,6 +17,7 @@ import styles from "./Window.module.css";
 
 export type WindowProps = WindowType;
 
+// @todo dialogs
 export const Window: FunctionComponent<WindowProps> = ({
   focused,
   height,

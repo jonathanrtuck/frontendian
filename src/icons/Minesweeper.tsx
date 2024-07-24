@@ -1,18 +1,17 @@
-import { forwardRef, SVGAttributes, useId } from "react";
+import { forwardRef, useId } from "react";
 
-export const Minesweeper = forwardRef<
-  SVGSVGElement,
-  SVGAttributes<SVGSVGElement>
->((props, ref) => {
+import { IconComponent } from "types";
+
+export const Minesweeper: IconComponent = forwardRef((props, ref) => {
   const id = useId();
 
   return (
     <svg
+      {...props}
       ref={ref}
       version="1.1"
       viewBox="0 0 64 64"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}>
+      xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient
           cx="0"

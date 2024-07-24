@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { Ui } from "components/Ui";
+import { UI } from "components/UI";
 import reportWebVitals from "reportWebVitals";
 
 import "./index.css";
@@ -13,6 +13,6 @@ reportWebVitals(
 
 createRoot(document.body).render(
   <StrictMode>
-    <Ui />
+    <UI />
   </StrictMode>
 );

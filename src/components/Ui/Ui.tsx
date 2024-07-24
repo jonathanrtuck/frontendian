@@ -8,7 +8,7 @@ import { Dialog } from "components/Dialog";
 import { ErrorBoundary } from "components/ErrorBoundary";
 import { useStore } from "store";
 
-export const Ui: FunctionComponent = () => {
+export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);
   const fonts = useStore((state) => state.fonts);
 
