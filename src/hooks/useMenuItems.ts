@@ -1,4 +1,9 @@
-import { DependencyList, ReactElement, useContext, useEffect } from "react";
+import {
+  DependencyList,
+  ReactElement,
+  useContext,
+  useLayoutEffect,
+} from "react";
 
 import { MenuItemProps } from "components/MenuItem";
 import { MenuItemsContext } from "contexts";
@@ -9,7 +14,7 @@ export const useMenuItems = (
 ) => {
   const setMenuItems = useContext(MenuItemsContext);
 
-  useEffect(
+  useLayoutEffect(
     () => {
       setMenuItems(menuItems);
     },

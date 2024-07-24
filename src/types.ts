@@ -61,6 +61,13 @@ export type File = {
     }
 );
 
+export type Font = {
+  format: "opentype"; // add other formats as needed
+  id: ID;
+  title: string;
+  url: URL;
+};
+
 export type IconComponent = ForwardRefExoticComponent<
   SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
 >;
@@ -76,6 +83,7 @@ export type State = {
   applications: Application[]; // the order is used as the display order in the Deskbar logo Menu
   desktop: ID[]; // the order is used as the display order on the Desktop
   files: File[];
+  fonts: Font[];
   openApplicationIds: ID[]; // the order is used as the display order in the Deskbar Applications
   stackingOrder: ID[];
   types: Partial<

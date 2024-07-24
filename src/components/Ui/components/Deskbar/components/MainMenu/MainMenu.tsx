@@ -25,7 +25,7 @@ export const MainMenu: FunctionComponent = () => {
             onClick={() => {
               open({ id: FILE_README_MD.id, type: "file" });
             }}
-            title="About frontendian"
+            title={FILE_README_MD.title}
           />
           <MenuItem separator />
           {applications

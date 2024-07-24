@@ -1,5 +1,6 @@
 import * as applications from "applications";
 import * as files from "files";
+import * as fonts from "fonts";
 import { Pdf, Text } from "icons";
 import { ID, MimeType, State } from "types";
 
@@ -17,6 +18,7 @@ export const INITIAL_STATE: State = {
   applications: Object.values(applications),
   desktop: [files.FILE_RESUME_PDF.id],
   files: Object.values(files),
+  fonts: Object.values(fonts),
   openApplicationIds: [applications.APPLICATION_TRACKER.id],
   stackingOrder: [DESKBAR_ID, "window-id-0"],
   types: {
