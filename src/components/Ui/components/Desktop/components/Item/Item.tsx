@@ -3,7 +3,7 @@ import { FunctionComponent } from "react";
 import { File } from "icons";
 import { IconComponent } from "types";
 
-import styles from "./Icon.module.css";
+import styles from "./Item.module.css";
 
 export type IconProps = {
   Icon?: IconComponent;
@@ -11,7 +11,7 @@ export type IconProps = {
   title: string;
 };
 
-export const Icon: FunctionComponent<IconProps> = ({
+export const Item: FunctionComponent<IconProps> = ({
   Icon = File,
   onClick,
   title,

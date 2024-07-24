@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { Icon } from "./components/Icon";
+import { Item } from "./components/Item";
 import { useStore } from "store";
 import { userSelect } from "utils";
 
@@ -104,7 +104,7 @@ export const Desktop: FunctionComponent = () => {
       }>
       {icons.map((obj) =>
         obj ? (
-          <Icon
+          <Item
             Icon={"windowIds" in obj ? obj.Icon : types[obj.type]?.Icon}
             key={obj.id}
             onClick={() => {
