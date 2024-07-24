@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 
-import { StyledEdit as Icon } from "icons";
-import { ApplicationComponent, ApplicationComponentProps } from "types";
+import { StyledEdit as Icon } from "@/icons";
+import { ApplicationComponent, ApplicationComponentProps } from "@/types";
 
 const Component: FunctionComponent<ApplicationComponentProps> = () => null;
 

@@ -7,7 +7,7 @@ import {
   SVGAttributes,
 } from "react";
 
-import { MenuItemProps } from "components/MenuItem";
+import { MenuItemProps } from "@/components/MenuItem";
 
 export type Actions = {
   blur(payload: { id: ID } | { ids: ID[] }): void;

@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 
-import { File } from "icons";
-import { IconComponent } from "types";
+import { File } from "@/icons";
+import { IconComponent } from "@/types";
 
 import styles from "./Item.module.css";
 

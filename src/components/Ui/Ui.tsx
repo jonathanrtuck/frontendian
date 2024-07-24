@@ -1,12 +1,13 @@
 import { FunctionComponent } from "react";
 import { Helmet } from "react-helmet";
 
+import { Dialog } from "@/components/Dialog";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { useStore } from "@/store";
+
 import { Deskbar } from "./components/Deskbar";
 import { Desktop } from "./components/Desktop";
 import { Windows } from "./components/Windows";
-import { Dialog } from "components/Dialog";
-import { ErrorBoundary } from "components/ErrorBoundary";
-import { useStore } from "store";
 
 export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);

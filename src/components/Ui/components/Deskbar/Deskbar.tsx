@@ -1,10 +1,11 @@
 import { FunctionComponent, useRef } from "react";
 
+import { DESKBAR_ID } from "@/constants";
+import { useStore } from "@/store";
+
 import { Applications } from "./components/Applications";
 import { MainMenu } from "./components/MainMenu";
 import { Tray } from "./components/Tray";
-import { DESKBAR_ID } from "consts";
-import { useStore } from "store";
 
 import styles from "./Deskbar.module.css";
 

@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-import { IconComponent } from "types";
+import { IconComponent } from "@/types";
 
 export const Resize: IconComponent = forwardRef((props, ref) => (
   <svg

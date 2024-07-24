@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 
-import { Minesweeper as Icon } from "icons";
-import { ApplicationComponent, ApplicationComponentProps } from "types";
+import { Minesweeper as Icon } from "@/icons";
+import { ApplicationComponent, ApplicationComponentProps } from "@/types";
 
 const Component: FunctionComponent<ApplicationComponentProps> = () => null;
 

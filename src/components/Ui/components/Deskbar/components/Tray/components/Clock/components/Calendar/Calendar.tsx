@@ -1,7 +1,7 @@
 import { FunctionComponent, useRef } from "react";
 import ReactCalendar from "react-calendar";
 
-import { useFocus } from "hooks";
+import { useFocus } from "@/hooks";
 
 import "react-calendar/dist/Calendar.css";
 

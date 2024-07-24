@@ -1,8 +1,8 @@
-import * as applicationComponents from "applications";
-import * as files from "files";
-import * as fonts from "fonts";
-import { Pdf, Text } from "icons";
-import { ID, MimeType, State } from "types";
+import * as applicationComponents from "@/applications";
+import * as files from "@/files";
+import * as fonts from "@/fonts";
+import { Pdf, Text } from "@/icons";
+import { ID, MimeType, State } from "@/types";
 
 const { APPLICATION_PDF_VIEWER, APPLICATION_STYLED_EDIT, APPLICATION_TRACKER } =
   applicationComponents;

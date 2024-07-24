@@ -7,9 +7,10 @@ import {
   useState,
 } from "react";
 
+import { useStore } from "@/store";
+import { userSelect } from "@/utils";
+
 import { Item } from "./components/Item";
-import { useStore } from "store";
-import { userSelect } from "utils";
 
 import styles from "./Desktop.module.css";
 

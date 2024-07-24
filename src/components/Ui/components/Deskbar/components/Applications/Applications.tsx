@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
 
-import { Menu } from "components/Menu";
-import { MenuItem } from "components/MenuItem";
-import { useStore } from "store";
+import { Menu } from "@/components/Menu";
+import { MenuItem } from "@/components/MenuItem";
+import { useStore } from "@/store";
 
 export const Applications: FunctionComponent = () => {
   const close = useStore((actions) => actions.close);

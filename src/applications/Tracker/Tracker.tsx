@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
 
-import { MenuItem } from "components/MenuItem";
-import { Tracker as Icon } from "icons";
-import { ApplicationComponent, ApplicationComponentProps } from "types";
+import { MenuItem } from "@/components/MenuItem";
+import { Tracker as Icon } from "@/icons";
+import { ApplicationComponent, ApplicationComponentProps } from "@/types";
 
 // @todo
 const Component: FunctionComponent<ApplicationComponentProps> = ({

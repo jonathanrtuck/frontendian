@@ -1,10 +1,10 @@
 import { FunctionComponent } from "react";
 
-import { APPLICATION_TRACKER } from "applications";
-import { Menu } from "components/Menu";
-import { MenuItem } from "components/MenuItem";
-import { FILE_README_MD } from "files";
-import { useStore } from "store";
+import { APPLICATION_TRACKER } from "@/applications";
+import { Menu } from "@/components/Menu";
+import { MenuItem } from "@/components/MenuItem";
+import { FILE_README_MD } from "@/files";
+import { useStore } from "@/store";
 
 import styles from "./MainMenu.module.css";
 

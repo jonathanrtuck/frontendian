@@ -7,9 +7,10 @@ import {
 } from "react";
 import { Resizable } from "react-resizable";
 
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { useComputedCustomProperty } from "@/hooks";
+
 import { ResizeHandle } from "./components/ResizeHandle";
-import { ErrorBoundary } from "components/ErrorBoundary";
-import { useComputedCustomProperty } from "hooks";
 
 import styles from "./Content.module.css";
 

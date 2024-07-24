@@ -9,7 +9,7 @@ import {
   useContext,
 } from "react";
 
-import { MenuContext } from "contexts";
+import { MenuContext } from "@/contexts";
 
 import styles from "./MenuItem.module.css";
 

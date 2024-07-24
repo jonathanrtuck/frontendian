@@ -1,6 +1,6 @@
 import { forwardRef, useId } from "react";
 
-import { IconComponent } from "types";
+import { IconComponent } from "@/types";
 
 export const WindowVisible: IconComponent = forwardRef((props, ref) => {
   const id = useId();

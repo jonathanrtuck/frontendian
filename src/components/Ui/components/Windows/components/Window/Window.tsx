@@ -1,17 +1,17 @@
 import clsx from "clsx";
-import Draggable from "react-draggable";
 import { FunctionComponent, ReactElement, useRef, useState } from "react";
+import Draggable from "react-draggable";
 
-import { APPLICATION_TRACKER } from "applications";
+import { APPLICATION_TRACKER } from "@/applications";
+import { Menu } from "@/components/Menu";
+import { MenuItemProps } from "@/components/MenuItem";
+import { MenuItemsContext } from "@/contexts";
+import { useElementDimensions, useFocus, useMenuItems } from "@/hooks";
+import { useStore } from "@/store";
+import { Window as WindowType } from "@/types";
 
 import { Content } from "./components/Content";
 import { TitleBar } from "./components/TitleBar";
-import { Menu } from "components/Menu";
-import { MenuItemProps } from "components/MenuItem";
-import { MenuItemsContext } from "contexts";
-import { useElementDimensions, useFocus, useMenuItems } from "hooks";
-import { useStore } from "store";
-import { Window as WindowType } from "types";
 
 import styles from "./Window.module.css";
 

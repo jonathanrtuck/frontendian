@@ -5,8 +5,8 @@ import {
   DEFAULT_WINDOW_POSITION_INCREMENT,
   DEFAULT_WINDOW_POSITION_OFFSET,
   INITIAL_STATE,
-} from "consts";
-import { Actions, ID, State, Window } from "types";
+} from "@/constants";
+import { Actions, ID, State, Window } from "@/types";
 
 const getFirstOpenWindowPosition = (windows: Window[]): number => {
   for (let i = 0; i !== windows.length; i++) {

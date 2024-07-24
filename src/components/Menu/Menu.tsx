@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { forwardRef, HTMLAttributes, PropsWithChildren, useState } from "react";
 
-import { MenuContext } from "contexts";
+import { MenuContext } from "@/contexts";
 
 import styles from "./Menu.module.css";
 

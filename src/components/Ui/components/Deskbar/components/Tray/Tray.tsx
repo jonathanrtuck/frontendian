@@ -1,8 +1,9 @@
 import { FunctionComponent } from "react";
 
+import { useClock } from "@/hooks";
+import { Network } from "@/icons";
+
 import { Clock } from "./components/Clock";
-import { useClock } from "hooks";
-import { Network } from "icons";
 
 import styles from "./Tray.module.css";
 

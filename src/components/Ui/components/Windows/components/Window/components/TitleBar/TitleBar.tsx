@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useMemo, useRef } from "react";
+import { FunctionComponent, useRef } from "react";
 
-import { useComputedCustomProperty, useElementDimensions } from "hooks";
+import { useComputedCustomProperty, useElementDimensions } from "@/hooks";
 
 import styles from "./TitleBar.module.css";
 

@@ -1,4 +1,4 @@
-import { File, MimeType } from "types";
+import { File, MimeType } from "@/types";
 
 export const FILE_README_MD: File = {
   id: "file-README.md",

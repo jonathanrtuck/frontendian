@@ -1,8 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { UI } from "components/UI";
-import reportWebVitals from "reportWebVitals";
+import { UI } from "@/components/UI";
+import reportWebVitals from "@/reportWebVitals";
 
 import "./index.css";
 

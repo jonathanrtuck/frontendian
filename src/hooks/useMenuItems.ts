@@ -5,8 +5,8 @@ import {
   useLayoutEffect,
 } from "react";
 
-import { MenuItemProps } from "components/MenuItem";
-import { MenuItemsContext } from "contexts";
+import { MenuItemProps } from "@/components/MenuItem";
+import { MenuItemsContext } from "@/contexts";
 
 export const useMenuItems = (
   menuItems: ReactElement<MenuItemProps>[],
