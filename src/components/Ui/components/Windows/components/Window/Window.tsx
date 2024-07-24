@@ -29,9 +29,6 @@ export const Window: FunctionComponent<WindowProps> = ({
   width,
   zoomed,
 }) => {
-  // state
-  const stackingOrder = useStore((state) => state.stackingOrder);
-  // actions
   const blur = useStore((actions) => actions.blur);
   const close = useStore((actions) => actions.close);
   const focus = useStore((actions) => actions.focus);
@@ -39,6 +36,7 @@ export const Window: FunctionComponent<WindowProps> = ({
   const move = useStore((actions) => actions.move);
   const resize = useStore((actions) => actions.resize);
   const zoom = useStore((actions) => actions.zoom);
+  const stackingOrder = useStore((state) => state.stackingOrder);
 
   const menubarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);

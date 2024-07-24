@@ -1,6 +1,12 @@
 .root {
+  align-items: start;
   bottom: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, 6rem);
+  justify-items: center;
   left: 0;
+  padding: 1rem var(--deskbar-width) 1rem 1rem;
   position: fixed;
   right: 0;
   top: 0;

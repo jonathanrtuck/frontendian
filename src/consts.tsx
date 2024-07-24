@@ -15,18 +15,18 @@ export const DESKBAR_ID: ID = "deskbar";
 
 export const INITIAL_STATE: State = {
   applications: Object.values(applications),
-  desktop: [],
+  desktop: [files.FILE_RESUME_PDF.id],
   files: Object.values(files),
   openApplicationIds: [applications.APPLICATION_TRACKER.id],
   stackingOrder: [DESKBAR_ID, "window-id-0"],
   types: {
     [MimeType.ApplicationPdf]: {
       application: applications.APPLICATION_PDF_VIEWER.id,
-      icon: <Pdf />,
+      Icon: Pdf,
     },
     [MimeType.TextMarkdown]: {
       application: applications.APPLICATION_STYLED_EDIT.id,
-      icon: <Text />,
+      Icon: Text,
     },
   },
   windows: [

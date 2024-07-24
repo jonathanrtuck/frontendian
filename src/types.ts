@@ -33,9 +33,7 @@ export type Actions = {
 
 export type Application = {
   Component: ComponentType<ApplicationComponentProps>;
-  Icon?: ForwardRefExoticComponent<
-    SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
-  >;
+  Icon?: IconComponent;
   id: ID;
   title: string;
   windowIds: ID[];
@@ -63,6 +61,10 @@ export type File = {
     }
 );
 
+export type IconComponent = ForwardRefExoticComponent<
+  SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
+>;
+
 export type ID = string;
 
 export const enum MimeType {
@@ -81,7 +83,7 @@ export type State = {
       MimeType,
       {
         application?: ID;
-        icon: ReactElement;
+        Icon: IconComponent;
       }
     >
   >;

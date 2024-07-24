@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { forwardRef, HTMLAttributes, PropsWithChildren } from "react";
+import { forwardRef, HTMLAttributes, PropsWithChildren, useState } from "react";
 
 import { MenuContext } from "contexts";
 
@@ -31,6 +31,8 @@ export const Menu = forwardRef<HTMLElement, MenuProps>(
       vertical: undefined,
     });
 
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
     return (
       <menu
         {...props}
@@ -42,13 +44,14 @@ export const Menu = forwardRef<HTMLElement, MenuProps>(
           [styles.horizontal]: isHorizontal,
           [styles.vertical]: isVertical,
         })}
+        hidden={!isBar && !isOpen}
         ref={ref}
         role={isBar ? "menubar" : "menu"}>
         <MenuContext.Provider
           value={{
             isBar,
             isHorizontal,
-            isOpen: false,
+            isOpen,
             isVertical,
           }}>
           {children}

@@ -5,6 +5,10 @@
   padding: 0;
 }
 
+.root[hidden] {
+  display: none;
+}
+
 .root:is(.bar) {
   flex-direction: row;
 }
@@ -34,14 +38,12 @@
   flex-direction: column;
 }
 
-/*
-[role="menubar"][aria-orientation="horizontal"] > [role="menuitem"] > .root {
+.horizontal .root {
   left: 0;
   top: 100%;
 }
 
-[role="menubar"][aria-orientation="vertical"] > [role="menuitem"] > .root {
+.vertical .root {
   right: 100%;
   top: 0;
 }
-*/

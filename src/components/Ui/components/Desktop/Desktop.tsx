@@ -7,6 +7,8 @@ import {
   useState,
 } from "react";
 
+import { Icon } from "./components/Icon";
+import { useStore } from "store";
 import { userSelect } from "utils";
 
 import styles from "./Desktop.module.css";
@@ -17,12 +19,23 @@ type Coordinates = {
 };
 
 export const Desktop: FunctionComponent = () => {
+  const open = useStore((actions) => actions.open);
+  const applications = useStore((state) => state.applications);
+  const desktop = useStore((state) => state.desktop);
+  const files = useStore((state) => state.files);
+  const types = useStore((state) => state.types);
+
   const rootRef = useRef<HTMLElement>(null);
 
   const [selection, setSelection] = useState<{
     from?: Coordinates;
     to?: Coordinates;
   }>({});
+
+  const applicationsAndFiles = [...applications, ...files];
+  const icons = desktop.map((id) =>
+    applicationsAndFiles.find((obj) => obj.id === id)
+  );
 
   const onMouseMove = useCallback(({ clientX, clientY }: MouseEvent) => {
     setSelection((prevState) => ({
@@ -89,7 +102,21 @@ export const Desktop: FunctionComponent = () => {
               "--desktop-selection-display": "none",
             } as CSSProperties)
       }>
-      <i>desktop…</i>
+      {icons.map((obj) =>
+        obj ? (
+          <Icon
+            Icon={"windowIds" in obj ? obj.Icon : types[obj.type]?.Icon}
+            key={obj.id}
+            onClick={() => {
+              open({
+                id: obj.id,
+                type: "windowIds" in obj ? "application" : "file",
+              });
+            }}
+            title={obj.title}
+          />
+        ) : null
+      )}
     </nav>
   );
 };

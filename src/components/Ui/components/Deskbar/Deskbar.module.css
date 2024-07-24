@@ -14,30 +14,3 @@
   top: 0;
   width: var(--deskbar-width);
 }
-
-.menuButton {
-  background-image: linear-gradient(
-    to bottom,
-    rgb(227, 227, 227),
-    rgb(209, 209, 209)
-  );
-  border: 0;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 500;
-  height: 1.875rem;
-  justify-content: center;
-  letter-spacing: 0.0625rem;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 0.25rem rgb(255, 255, 255);
-}
-
-.menuButton[aria-expanded="true"],
-[role="menubar"]:focus-within > .menuButton:not([aria-disabled="true"]):hover {
-  background-image: linear-gradient(
-    to bottom,
-    rgb(206, 206, 206),
-    rgb(219, 219, 219)
-  );
-}

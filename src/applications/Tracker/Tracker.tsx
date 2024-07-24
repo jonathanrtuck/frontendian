@@ -4,6 +4,7 @@ import { MenuItem } from "components/MenuItem";
 import { Tracker as Icon } from "icons";
 import { Application, ApplicationComponentProps } from "types";
 
+// @todo
 const Component: FunctionComponent<ApplicationComponentProps> = ({
   useMenuItems,
 }) => {

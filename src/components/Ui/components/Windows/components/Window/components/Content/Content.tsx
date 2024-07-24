@@ -4,13 +4,12 @@ import {
   HTMLAttributes,
   PropsWithChildren,
   RefObject,
-  useMemo,
 } from "react";
 import { Resizable } from "react-resizable";
 
 import { ResizeHandle } from "./components/ResizeHandle";
 import { ErrorBoundary } from "components/ErrorBoundary";
-import { getComputedCustomProperty } from "utils";
+import { useComputedCustomProperty } from "hooks";
 
 import styles from "./Content.module.css";
 
@@ -41,10 +40,7 @@ export const Content: FunctionComponent<ContentProps> = ({
         .map((element) => (element as HTMLElement).offsetWidth)
         .reduce((acc, width) => acc + width, 0)
     : 0;
-  const scrollbarSize = useMemo<number>(
-    () => getComputedCustomProperty("--content-scrollbar-size"),
-    []
-  );
+  const scrollbarSize = useComputedCustomProperty("--content-scrollbar-size");
 
   return (
     <Resizable
@@ -80,7 +76,7 @@ export const Content: FunctionComponent<ContentProps> = ({
         }>
         <ErrorBoundary
           onError={() => {
-            console.debug("error…"); // @todo
+            console.debug("error…"); // @todo show error dialog
           }}>
           {children}
         </ErrorBoundary>

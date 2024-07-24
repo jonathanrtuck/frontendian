@@ -22,8 +22,13 @@ export type MenuItemProps = Omit<
   | "onClick"
   | "role"
   | "tabIndex"
-> &
-  (
+> & {
+  classes?: {
+    icon?: string;
+    root?: string;
+    title?: string;
+  };
+} & (
     | {
         Icon?: ForwardRefExoticComponent<
           SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
@@ -42,6 +47,7 @@ export type MenuItemProps = Omit<
 export const MenuItem: FunctionComponent<MenuItemProps> = ({
   children,
   className,
+  classes,
   title,
   ...restProps
 }) => {
@@ -53,7 +59,7 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
     return (
       <li
         {...props}
-        className={clsx(className, styles.separator, {
+        className={clsx(className, classes?.root, styles.separator, {
           [styles.bar]: isBar,
           [styles.horizontal]: isHorizontal,
           [styles.vertical]: isVertical,
@@ -72,19 +78,32 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
       aria-expanded={expanded}
       aria-haspopup={children ? "menu" : undefined}
       aria-label={title}
-      className={clsx(className, styles.root, {
+      className={clsx(className, classes?.root, styles.root, {
         [styles.bar]: isBar,
         [styles.horizontal]: isHorizontal,
         [styles.vertical]: isVertical,
       })}
-      onClick={onClick}
+      onClick={() => {
+        if (!disabled) {
+          if (children) {
+            //
+            console.debug("open…");
+          }
+
+          onClick?.();
+        }
+      }}
       role="menuitem"
       tabIndex={0}>
       {Icon && (
-        <Icon aria-hidden="false" className={styles.icon} role="presentation" />
+        <Icon
+          aria-hidden="false"
+          className={clsx(classes?.icon, styles.icon)}
+          role="presentation"
+        />
       )}
-      <span className={styles.title}>{title}</span>
-      {expanded && children}
+      <span className={clsx(classes?.title, styles.title)}>{title}</span>
+      {children}
     </li>
   );
 };
