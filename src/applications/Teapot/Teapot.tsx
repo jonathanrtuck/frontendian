@@ -1,9 +1,28 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useRef } from "react";
 
 import { Teapot as Icon } from "@/icons";
 import { ApplicationComponent, ApplicationComponentProps } from "@/types";
 
-const Component: FunctionComponent<ApplicationComponentProps> = () => null;
+import { main } from "./webgl";
+
+import styles from "./Teapot.module.css";
+
+// @see https://en.wikipedia.org/wiki/Utah_teapot
+const Component: FunctionComponent<ApplicationComponentProps> = ({
+  useMenuItems,
+}) => {
+  const rootRef = useRef<HTMLCanvasElement>(null);
+
+  useMenuItems([], []); // @todo
+
+  useEffect(() => {
+    if (rootRef.current) {
+      main(rootRef.current);
+    }
+  }, []);
+
+  return <canvas className={styles.root} ref={rootRef} />;
+};
 
 Component.displayName = "Teapot";
 

@@ -43,6 +43,7 @@ export type ApplicationComponent = {
 };
 
 export type ApplicationComponentProps = {
+  file?: File;
   useMenuItems(
     menuItems: ReactElement<MenuItemProps>[],
     deps: DependencyList
