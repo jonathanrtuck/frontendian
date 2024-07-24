@@ -31,12 +31,15 @@ export type Actions = {
   zoom(payload: { id: ID } | { ids: ID[] }): void;
 };
 
-export type Application = {
+export type Application = ApplicationComponent & {
+  windowIds: ID[];
+};
+
+export type ApplicationComponent = {
   Component: ComponentType<ApplicationComponentProps>;
   Icon?: IconComponent;
   id: ID;
   title: string;
-  windowIds: ID[];
 };
 
 export type ApplicationComponentProps = {

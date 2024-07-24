@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 
 import { MenuItem } from "components/MenuItem";
 import { Tracker as Icon } from "icons";
-import { Application, ApplicationComponentProps } from "types";
+import { ApplicationComponent, ApplicationComponentProps } from "types";
 
 // @todo
 const Component: FunctionComponent<ApplicationComponentProps> = ({
@@ -22,10 +22,9 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
 
 Component.displayName = "Tracker";
 
-export const APPLICATION_TRACKER: Application = {
+export const APPLICATION_TRACKER: ApplicationComponent = {
   Component,
   Icon,
   id: "application-tracker",
   title: "Tracker",
-  windowIds: [],
 };

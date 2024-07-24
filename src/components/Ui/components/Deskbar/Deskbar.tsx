@@ -25,7 +25,8 @@ export const Deskbar: FunctionComponent = () => {
       ref={rootRef}
       style={{
         zIndex: stackingOrder.indexOf(DESKBAR_ID),
-      }}>
+      }}
+      tabIndex={0}>
       <MainMenu />
       <Tray />
       <Applications />
