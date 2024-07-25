@@ -22,7 +22,7 @@ export const Item: FunctionComponent<IconProps> = ({
     onDoubleClick={onClick}
     title={title}
     type="button">
-    <Icon aria-hidden className={styles.icon} role="presentation" />
+    <Icon aria-hidden className={styles.icon} />
     <span className={styles.title}>{title}</span>
   </button>
 );

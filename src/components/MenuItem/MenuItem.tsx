@@ -99,11 +99,7 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
       role="menuitem"
       tabIndex={0}>
       {Icon && (
-        <Icon
-          aria-hidden="false"
-          className={clsx(classes?.icon, styles.icon)}
-          role="presentation"
-        />
+        <Icon aria-hidden className={clsx(classes?.icon, styles.icon)} />
       )}
       <span className={clsx(classes?.title, styles.title)} id={`${id}-title`}>
         {title}

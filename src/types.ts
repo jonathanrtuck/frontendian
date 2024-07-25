@@ -9,6 +9,7 @@ import {
 
 import { MenuItemProps } from "@/components/MenuItem";
 
+// all id(s) are window ids unless otherwise defined by the `type` property
 export type Actions = {
   blur(payload: { id: ID } | { ids: ID[] }): void;
   close(payload: { id: ID } | { ids: ID[] }): void;

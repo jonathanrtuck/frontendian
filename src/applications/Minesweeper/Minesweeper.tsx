@@ -198,7 +198,7 @@ const LEVELS: [lvl: Level, title: string][] = [
 const Component: FunctionComponent<ApplicationComponentProps> = ({
   useMenuItems,
 }) => {
-  const intervalRef = useRef<number>(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [flagsRemaining, setFlagsRemaining] = useState<number>(10);
@@ -218,25 +218,27 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
 
   useEffect(() => {
     if (elapsedTime === 1) {
-      intervalRef.current = window.setInterval(() => {
+      intervalRef.current = setInterval(() => {
         setElapsedTime((prevState) => prevState + 1);
       }, 1000);
     }
 
-    if (elapsedTime === 0 || elapsedTime === 999) {
-      window.clearInterval(intervalRef.current);
+    if (intervalRef.current && (elapsedTime === 0 || elapsedTime === 999)) {
+      clearInterval(intervalRef.current);
     }
   }, [elapsedTime]);
 
   useEffect(() => {
-    if (isLost || isWon) {
-      window.clearInterval(intervalRef.current);
+    if (intervalRef.current && (isLost || isWon)) {
+      clearInterval(intervalRef.current);
     }
   }, [isLost, isWon]);
 
   useEffect(
     () => () => {
-      window.clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     },
     []
   );

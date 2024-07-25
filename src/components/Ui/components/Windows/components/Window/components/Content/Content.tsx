@@ -52,7 +52,6 @@ export const Content: FunctionComponent<ContentProps> = ({
           className={clsx(styles.resize, {
             [styles.zoomed]: zoomed,
           })}
-          role="presentation"
         />
       }
       height={height}
