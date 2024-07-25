@@ -104,7 +104,6 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
           setInput((e.target as HTMLTextAreaElement).value);
         }}
         rows={numInputRows}
-        tabIndex={0}
         value={input}
       />
     );

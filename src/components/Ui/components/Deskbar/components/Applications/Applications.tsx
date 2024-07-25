@@ -31,6 +31,7 @@ export const Applications: FunctionComponent = () => {
                   <>
                     {applicationWindows.map(({ id, title }) => (
                       <MenuItem
+                        key={id}
                         onClick={() => {
                           focus({ id });
                         }}
@@ -43,7 +44,7 @@ export const Applications: FunctionComponent = () => {
                         ({ hidden }) => hidden
                       )}
                       onClick={() => {
-                        hide({ ids: applicationWindows.map(({ id }) => id) });
+                        hide({ ids: windowIds });
                       }}
                       title="Hide all"
                     />
@@ -52,13 +53,13 @@ export const Applications: FunctionComponent = () => {
                         ({ hidden }) => !hidden
                       )}
                       onClick={() => {
-                        show({ ids: applicationWindows.map(({ id }) => id) });
+                        show({ ids: windowIds });
                       }}
                       title="Show all"
                     />
                     <MenuItem
                       onClick={() => {
-                        close({ ids: applicationWindows.map(({ id }) => id) });
+                        close({ ids: windowIds });
                       }}
                       title="Close all"
                     />

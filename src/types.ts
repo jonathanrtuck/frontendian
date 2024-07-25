@@ -22,7 +22,12 @@ export type Actions = {
       )
   ): void;
   open(
-    payload: ({ id: ID } | { ids: ID[] }) & { type: "application" | "file" }
+    payload: ({ id: ID } | { ids: ID[] }) &
+      (
+        | { type: "application" }
+        | { type: "file"; windowId?: ID }
+        | { type: "window" }
+      )
   ): void;
   resize(
     payload: ({ id: ID } | { ids: ID[] }) & { height: number; width: number }
@@ -105,6 +110,7 @@ export type State = {
 export type URL = string;
 
 export type Window = {
+  fileId?: ID;
   focused: boolean;
   height: number;
   hidden: boolean;

@@ -72,7 +72,7 @@ export const Window: FunctionComponent<WindowProps> = ({
       }}>
       <section
         aria-current={focused}
-        aria-label={title}
+        aria-labelledby={`${id}-title`}
         className={clsx(styles.root, {
           [styles.zoomed]: zoomed,
         })}
@@ -98,6 +98,7 @@ export const Window: FunctionComponent<WindowProps> = ({
           classes={{
             button: styles.button,
           }}
+          id={id}
           left={titleBarLeft}
           maxWidth={rootWidth}
           onClose={() => {

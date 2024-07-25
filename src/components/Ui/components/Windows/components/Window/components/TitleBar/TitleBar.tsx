@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import { FunctionComponent, useRef } from "react";
 
 import { useComputedCustomProperty, useElementDimensions } from "@/hooks";
+import { ID } from "@/types";
 
 import styles from "./TitleBar.module.css";
 
@@ -12,6 +13,7 @@ export type TitleBarProps = {
     root?: string;
     title?: string;
   };
+  id: ID;
   left: number;
   maxWidth: number;
   onClose(): void;
@@ -23,6 +25,7 @@ export type TitleBarProps = {
 
 export const TitleBar: FunctionComponent<TitleBarProps> = ({
   classes,
+  id,
   left,
   maxWidth,
   onClose,
@@ -87,7 +90,10 @@ export const TitleBar: FunctionComponent<TitleBarProps> = ({
           }
         }}
         ref={rootRef}>
-        <h1 className={clsx(classes?.title, styles.title)} title={title}>
+        <h1
+          className={clsx(classes?.title, styles.title)}
+          id={`${id}-title`}
+          title={title}>
           {title}
         </h1>
         <button

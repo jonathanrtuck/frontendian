@@ -26,7 +26,7 @@ export const Desktop: FunctionComponent = () => {
   const files = useStore((state) => state.files);
   const types = useStore((state) => state.types);
 
-  const rootRef = useRef<HTMLElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const [selection, setSelection] = useState<{
     from?: Coordinates;
@@ -64,7 +64,8 @@ export const Desktop: FunctionComponent = () => {
   );
 
   return (
-    <nav
+    <div
+      aria-label="Desktop"
       className={styles.root}
       onMouseDown={({ button, buttons, clientX, clientY, target }) => {
         if ((button === 0 || buttons === 1) && target === rootRef.current) {
@@ -109,15 +110,16 @@ export const Desktop: FunctionComponent = () => {
             Icon={"windowIds" in obj ? obj.Icon : types[obj.type]?.Icon}
             key={obj.id}
             onClick={() => {
-              open({
-                id: obj.id,
-                type: "windowIds" in obj ? "application" : "file",
-              });
+              open(
+                "windowIds" in obj
+                  ? { id: obj.id, type: "application" }
+                  : { id: obj.id, type: "file" }
+              );
             }}
             title={obj.title}
           />
         ) : null
       )}
-    </nav>
+    </div>
   );
 };

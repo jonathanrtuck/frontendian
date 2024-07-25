@@ -7,6 +7,7 @@ import {
   RefAttributes,
   SVGAttributes,
   useContext,
+  useId,
 } from "react";
 
 import { MenuContext } from "@/contexts";
@@ -53,6 +54,8 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
 }) => {
   const { isBar, isHorizontal, isOpen, isVertical } = useContext(MenuContext);
 
+  const id = useId();
+
   if ("separator" in restProps) {
     const { separator, ...props } = restProps;
 
@@ -77,7 +80,7 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
       aria-disabled={disabled}
       aria-expanded={expanded}
       aria-haspopup={children ? "menu" : undefined}
-      aria-label={title}
+      aria-labelledby={`${id}-title`}
       className={clsx(className, classes?.root, styles.root, {
         [styles.bar]: isBar,
         [styles.horizontal]: isHorizontal,
@@ -102,7 +105,9 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
           role="presentation"
         />
       )}
-      <span className={clsx(classes?.title, styles.title)}>{title}</span>
+      <span className={clsx(classes?.title, styles.title)} id={`${id}-title`}>
+        {title}
+      </span>
       {children}
     </li>
   );

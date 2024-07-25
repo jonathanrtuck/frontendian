@@ -394,7 +394,6 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
                           }
                         }
                   }
-                  tabIndex={0}
                   type="button">
                   {(isRevealedMine || (hasFlag && isLost && !hasMine)) && "💣"}
                   {((!isGameOver && hasFlag) ||
