@@ -8,7 +8,6 @@ import {
 } from "react";
 
 import { useStore } from "@/store";
-import { userSelect } from "@/utils";
 
 import { Item } from "./components/Item";
 
@@ -17,6 +16,16 @@ import styles from "./Desktop.module.css";
 type Coordinates = {
   x: number;
   y: number;
+};
+
+const setUserCanSelectText = (userCanSelectText: boolean): void => {
+  if (userCanSelectText) {
+    document.body.style.userSelect = "";
+    document.body.style.removeProperty("-webkit-user-select"); // for safari
+  } else {
+    document.body.style.userSelect = "none";
+    document.body.style.setProperty("-webkit-user-select", "none"); // for safari
+  }
 };
 
 export const Desktop: FunctionComponent = () => {
@@ -50,7 +59,7 @@ export const Desktop: FunctionComponent = () => {
   const onMouseUp = useCallback(() => {
     document.removeEventListener("mousemove", onMouseMove);
     document.removeEventListener("mouseup", onMouseUp);
-    userSelect(true);
+    setUserCanSelectText(true);
     setSelection({});
   }, [onMouseMove]);
 
@@ -58,7 +67,7 @@ export const Desktop: FunctionComponent = () => {
     () => () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", onMouseUp);
-      userSelect(true);
+      setUserCanSelectText(true);
     },
     [onMouseMove, onMouseUp]
   );
@@ -71,7 +80,7 @@ export const Desktop: FunctionComponent = () => {
         if ((button === 0 || buttons === 1) && target === rootRef.current) {
           document.addEventListener("mousemove", onMouseMove);
           document.addEventListener("mouseup", onMouseUp);
-          userSelect(false);
+          setUserCanSelectText(false);
           setSelection({
             from: {
               x: clientX,
