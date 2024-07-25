@@ -18,26 +18,26 @@ export const useClock = (): Date => {
   const [date, setDate] = useState<Date>(new Date());
 
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    // first use timeout in order to get second tick interval to align with system clock
-    const timeout = setTimeout(() => {
-      interval = setInterval(() => {
-        setDate(new Date());
-      }, 1000);
+    let animationFrameRequest: ReturnType<typeof requestAnimationFrame>;
 
+    // @recursive
+    const tick = () => {
       setDate(new Date());
-    }, 1000 - new Date().getMilliseconds());
+
+      animationFrameRequest = requestAnimationFrame(tick);
+    };
+
+    animationFrameRequest = requestAnimationFrame(tick);
 
     return () => {
-      clearTimeout(timeout);
-      clearInterval(interval);
+      cancelAnimationFrame(animationFrameRequest);
     };
   }, []);
 
   return date;
 };
 
-// @todo handle other css units as needed
+// get the current value of a css variable in px
 export const useComputedCustomProperty = (property: string): number =>
   useMemo<number>(() => {
     const fontSize = parseInt(
@@ -48,11 +48,13 @@ export const useComputedCustomProperty = (property: string): number =>
       property
     );
 
+    // @todo handle other css units as needed (e.g. `%`, `em`, `vw`, etc…)
     if (value.endsWith("rem")) {
       return parseFloat(value) * fontSize;
     }
 
-    return 0;
+    // px values
+    return parseFloat(value);
   }, [property]);
 
 export const useElementDimensions = (
@@ -74,7 +76,7 @@ export const useElementDimensions = (
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [...deps]
+    deps
   );
 
   return dimensions;
@@ -85,7 +87,7 @@ export const useFocus = ({
   ref,
   selector,
 }: {
-  deps: DependencyList;
+  deps: boolean[];
   ref: RefObject<HTMLElement>;
   selector?: Parameters<ParentNode["querySelector"]>[0];
 }): void => {
@@ -102,7 +104,7 @@ export const useFocus = ({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [...deps]
+    deps
   );
 };
 

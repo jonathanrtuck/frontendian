@@ -19,6 +19,7 @@ export const Deskbar: FunctionComponent = () => {
     <header
       aria-label="Deskbar"
       className={styles.root}
+      id={DESKBAR_ID}
       onFocus={({ relatedTarget }) => {
         if (!relatedTarget || !rootRef.current?.contains(relatedTarget)) {
           focus({ id: DESKBAR_ID });

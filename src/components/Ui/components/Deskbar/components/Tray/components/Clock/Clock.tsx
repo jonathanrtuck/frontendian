@@ -1,15 +1,15 @@
 import { FunctionComponent, useState } from "react";
 
+import { useClock } from "@/hooks";
+
 import { Calendar } from "./components/Calendar";
 
 import styles from "./Clock.module.css";
 
-export type ClockProps = {
-  date: Date;
-};
-
-export const Clock: FunctionComponent<ClockProps> = ({ date }) => {
+export const Clock: FunctionComponent = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
+
+  const date = useClock();
 
   return (
     <>
@@ -20,7 +20,8 @@ export const Clock: FunctionComponent<ClockProps> = ({ date }) => {
         }}
         type="button">
         <time
-          dateTime={date.toISOString()}
+          // remove milliseconds to prevent (more) frequent dom updates
+          dateTime={date.toISOString().replace(/\.\d+/, "")}
           title={date.toLocaleDateString(navigator.language, {
             dateStyle: "full",
           })}>

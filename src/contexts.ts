@@ -1,6 +1,7 @@
 import { createContext, Dispatch, ReactElement, SetStateAction } from "react";
 
 import { MenuItemProps } from "@/components/MenuItem";
+
 export const MenuContext = createContext<{
   isBar: boolean;
   isHorizontal: boolean;
