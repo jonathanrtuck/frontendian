@@ -9,7 +9,6 @@ import {
 
 import { MenuitemProps } from "@/components/Menuitem";
 
-// all id(s) are window ids unless otherwise defined by the `type` property
 export type Actions = {
   blurWindow(payload: ActionIds): void;
   closeApplication(payload: ActionIds): void;
@@ -34,6 +33,7 @@ export type Application = ApplicationComponent & {
 
 export type ApplicationComponent = {
   Component: ComponentType<ApplicationComponentProps>;
+  getWindow?(file?: File): Partial<Window>;
   Icon?: IconComponent;
   id: ID;
   title: string;
@@ -81,11 +81,11 @@ export const enum MimeType {
 }
 
 export type State = {
-  applications: Application[]; // the order is used as the display order in the Deskbar logo Menu
+  applications: Application[]; // the order is used as the display order in the Deskbar MainMenu
   desktop: ID[]; // the order is used as the display order on the Desktop
   files: File[];
   fonts: Font[];
-  openApplicationIds: ID[]; // the order is used as the display order in the Deskbar Applications
+  openApplicationIds: ID[]; // the order is used as the display order in the Deskbar Applications Menu
   stackingOrder: ID[];
   types: Partial<
     Record<

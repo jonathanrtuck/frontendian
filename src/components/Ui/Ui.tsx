@@ -7,11 +7,12 @@ import { useStore } from "@/store";
 
 import { Deskbar } from "./components/Deskbar";
 import { Desktop } from "./components/Desktop";
-import { Windows } from "./components/Windows";
+import { Window } from "./components/Window";
 
 export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);
   const fonts = useStore((state) => state.fonts);
+  const windows = useStore((state) => state.windows);
 
   return (
     <>
@@ -32,7 +33,9 @@ export const UI: FunctionComponent = () => {
         }>
         <Desktop />
         <Deskbar />
-        <Windows />
+        {windows.map((window) => (
+          <Window key={window.id} {...window} />
+        ))}
       </ErrorBoundary>
     </>
   );

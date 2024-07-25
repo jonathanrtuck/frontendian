@@ -64,6 +64,11 @@ Component.displayName = "PdfViewer";
 
 export const APPLICATION_PDF_VIEWER: ApplicationComponent = {
   Component,
+  getWindow: (file) => ({
+    height: 600,
+    title: file?.title || "PDF Viewer",
+    width: file && "width" in file ? file.width : undefined,
+  }),
   Icon,
   id: "application-pdf-viewer",
   title: "PDF Viewer",

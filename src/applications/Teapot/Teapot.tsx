@@ -28,6 +28,11 @@ Component.displayName = "Teapot";
 
 export const APPLICATION_TEAPOT: ApplicationComponent = {
   Component,
+  getWindow: () => ({
+    height: 300,
+    title: "Teapot",
+    width: 300,
+  }),
   Icon,
   id: "application-teapot",
   title: "Teapot",

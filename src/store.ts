@@ -3,9 +3,11 @@ import { create } from "zustand";
 
 import { APPLICATION_TRACKER } from "@/applications";
 import {
+  DEFAULT_WINDOW,
   DEFAULT_WINDOW_POSITION_INCREMENT,
   DEFAULT_WINDOW_POSITION_OFFSET,
   INITIAL_STATE,
+  UNTITLED_WINDOW_TITLE,
 } from "@/constants";
 import { ActionIds, Actions, ID, State, Window } from "@/types";
 
@@ -33,8 +35,9 @@ const isPayloadId = (payload: ActionIds, id: ID): boolean =>
   ("ids" in payload && payload.ids.includes(id));
 
 export const useStore = create<State & Actions>()((set) => ({
+  // state
   ...INITIAL_STATE,
-
+  // actions
   blurWindow: (payload) => {
     set((prevState) => ({
       ...prevState,
@@ -175,7 +178,7 @@ export const useStore = create<State & Actions>()((set) => ({
     set((prevState) =>
       prevState.applications
         .filter(({ id }) => isPayloadId(payload, id))
-        .reduce((state, { id, windowIds }) => {
+        .reduce((state, { id, getWindow, title, windowIds }) => {
           const isApplicationOpen = state.openApplicationIds.includes(id);
 
           // if the application is already open, raise and focus its first visible window
@@ -205,6 +208,14 @@ export const useStore = create<State & Actions>()((set) => ({
 
           const windowId = uuid();
           const windowPosition = getFirstOpenWindowPosition(state.windows);
+          const window: Window = {
+            ...DEFAULT_WINDOW,
+            title: title ?? UNTITLED_WINDOW_TITLE,
+            ...(getWindow?.() ?? {}),
+            id: windowId,
+            left: windowPosition,
+            top: windowPosition,
+          };
 
           // open application and its initial window
           return {
@@ -227,18 +238,7 @@ export const useStore = create<State & Actions>()((set) => ({
                 ...window,
                 focused: false,
               })),
-              {
-                focused: true,
-                height: 300, // @todo
-                hidden: false,
-                id: windowId,
-                left: windowPosition,
-                title: "Window…", // @todo
-                titlebarLeft: 0,
-                top: windowPosition,
-                width: 480, // @todo
-                zoomed: false,
-              },
+              window,
             ],
           };
         }, prevState)
@@ -248,8 +248,10 @@ export const useStore = create<State & Actions>()((set) => ({
     set((prevState) =>
       prevState.files
         .filter(({ id }) => isPayloadId(payload, id))
-        .reduce((state, { id, type }) => {
-          const fileWindow = state.windows.find(({ fileId }) => fileId === id);
+        .reduce((state, file) => {
+          const fileWindow = state.windows.find(
+            ({ fileId }) => fileId === file.id
+          );
 
           // if the file is already open, unhide and/or focus its window
           if (fileWindow) {
@@ -277,7 +279,7 @@ export const useStore = create<State & Actions>()((set) => ({
             };
           }
 
-          const applicationId = state.types[type]?.application;
+          const applicationId = state.types[file.type]?.application;
 
           if (!applicationId) {
             return state;
@@ -295,7 +297,7 @@ export const useStore = create<State & Actions>()((set) => ({
                 window.id === existingWindow.id
                   ? {
                       ...window,
-                      fileId: id,
+                      fileId: file.id,
                       focused: true,
                       // @todo
                       /*
@@ -312,16 +314,28 @@ export const useStore = create<State & Actions>()((set) => ({
             };
           }
 
+          const application = state.applications.find(
+            ({ id }) => id === applicationId
+          );
           const isApplicationOpen =
             state.openApplicationIds.includes(applicationId);
           const windowId = uuid();
           const windowPosition = getFirstOpenWindowPosition(state.windows);
+          const window: Window = {
+            ...DEFAULT_WINDOW,
+            title: application?.title ?? UNTITLED_WINDOW_TITLE,
+            ...(application?.getWindow?.(file) ?? {}),
+            fileId: file.id,
+            id: windowId,
+            left: windowPosition,
+            top: windowPosition,
+          };
 
           // open application and file window
           return {
             ...state,
             applications: state.applications.map((application) =>
-              application.id === id
+              application.id === applicationId
                 ? {
                     ...application,
                     windowIds: [...application.windowIds, windowId],
@@ -338,19 +352,7 @@ export const useStore = create<State & Actions>()((set) => ({
                 ...window,
                 focused: false,
               })),
-              {
-                fileId: id,
-                focused: true,
-                height: 300, // @todo
-                hidden: false,
-                id: windowId,
-                left: windowPosition,
-                title: "Window…", // @todo
-                titlebarLeft: 0,
-                top: windowPosition,
-                width: 480, // @todo
-                zoomed: false,
-              },
+              window,
             ],
           };
         }, prevState)
@@ -360,10 +362,18 @@ export const useStore = create<State & Actions>()((set) => ({
     set((prevState) =>
       prevState.applications
         .filter(({ id }) => isPayloadId(payload, id))
-        .reduce((state, { id }) => {
+        .reduce((state, { getWindow, id, title }) => {
           const isApplicationOpen = state.openApplicationIds.includes(id);
           const windowId = uuid();
           const windowPosition = getFirstOpenWindowPosition(state.windows);
+          const window: Window = {
+            ...DEFAULT_WINDOW,
+            title: title ?? UNTITLED_WINDOW_TITLE,
+            ...(getWindow?.() ?? {}),
+            id: windowId,
+            left: windowPosition,
+            top: windowPosition,
+          };
 
           return {
             ...state,
@@ -383,18 +393,7 @@ export const useStore = create<State & Actions>()((set) => ({
                 ...window,
                 focused: false,
               })),
-              {
-                focused: true,
-                height: 300, // @todo
-                hidden: false,
-                id: windowId,
-                left: windowPosition,
-                title: "Window…", // @todo
-                titlebarLeft: 0,
-                top: windowPosition,
-                width: 480, // @todo
-                zoomed: false,
-              },
+              window,
             ],
           };
         }, prevState)

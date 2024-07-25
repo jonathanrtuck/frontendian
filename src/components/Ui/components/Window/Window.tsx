@@ -19,6 +19,7 @@ export type WindowProps = WindowType;
 
 // @todo dialogs
 export const Window: FunctionComponent<WindowProps> = ({
+  fileId,
   focused,
   height,
   hidden,
@@ -38,6 +39,8 @@ export const Window: FunctionComponent<WindowProps> = ({
   const moveWindowTitlebar = useStore((actions) => actions.moveWindowTitlebar);
   const resizeWindow = useStore((actions) => actions.resizeWindow);
   const zoomWindow = useStore((actions) => actions.zoomWindow);
+  const applications = useStore((state) => state.applications);
+  const files = useStore((state) => state.files);
   const stackingOrder = useStore((state) => state.stackingOrder);
 
   const menubarRef = useRef<HTMLElement>(null);
@@ -52,7 +55,14 @@ export const Window: FunctionComponent<WindowProps> = ({
 
   const { width: rootWidth } = useElementDimensions(rootRef, [width, zoomed]);
 
-  const Component = APPLICATION_TRACKER.Component; // @todo
+  const application = applications.find(({ windowIds }) =>
+    windowIds.includes(id)
+  );
+  const file = fileId ? files.find(({ id }) => id === fileId) : undefined;
+
+  if (!application?.Component) {
+    return null;
+  }
 
   return (
     <Draggable
@@ -129,7 +139,7 @@ export const Window: FunctionComponent<WindowProps> = ({
           width={width}
           zoomed={zoomed}>
           <MenuitemsContext.Provider value={setMenuitems}>
-            <Component useMenuitems={useMenuitems} />
+            <application.Component file={file} useMenuitems={useMenuitems} />
           </MenuitemsContext.Provider>
         </Content>
       </section>

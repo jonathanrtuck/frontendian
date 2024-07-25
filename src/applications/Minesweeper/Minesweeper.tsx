@@ -254,6 +254,11 @@ Component.displayName = "Minesweeper";
 
 export const APPLICATION_MINESWEEPER: ApplicationComponent = {
   Component,
+  getWindow: () => ({
+    height: DEFAULT_STATE[DEFAULT_LEVEL].height,
+    title: "Minesweeper",
+    width: DEFAULT_STATE[DEFAULT_LEVEL].width,
+  }),
   Icon,
   id: "application-minesweeper",
   title: "Minesweeper",
