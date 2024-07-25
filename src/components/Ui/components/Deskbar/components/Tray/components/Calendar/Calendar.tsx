@@ -33,6 +33,7 @@ export const Calendar: FunctionComponent<CalendarProps> = ({ onClose }) => {
       tabIndex={-1}>
       <ReactCalendar
         className={styles.calendar}
+        defaultValue={new Date()}
         formatShortWeekday={(locale, date) =>
           new Intl.DateTimeFormat(locale, {
             weekday: "narrow",

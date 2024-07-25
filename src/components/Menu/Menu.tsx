@@ -60,3 +60,5 @@ export const Menu = forwardRef<HTMLElement, MenuProps>(
     );
   }
 );
+
+Menu.displayName = "Menu";

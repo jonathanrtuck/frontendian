@@ -23,7 +23,7 @@ export const INITIAL_STATE: State = {
   files: Object.values(files),
   fonts: Object.values(fonts),
   openApplicationIds: [APPLICATION_TRACKER.id],
-  stackingOrder: [DESKBAR_ID, "window-id-0"], // @todo
+  stackingOrder: [DESKBAR_ID],
   types: {
     [MimeType.ApplicationPdf]: {
       application: APPLICATION_PDF_VIEWER.id,
@@ -34,19 +34,5 @@ export const INITIAL_STATE: State = {
       Icon: Text,
     },
   },
-  windows: [
-    // @todo
-    {
-      focused: true,
-      height: 300,
-      hidden: false,
-      id: "window-id-0",
-      left: 96,
-      title: "Window…",
-      titleBarLeft: 0,
-      top: 96,
-      width: 480,
-      zoomed: false,
-    },
-  ],
+  windows: [],
 };
