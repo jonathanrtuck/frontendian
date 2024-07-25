@@ -12,9 +12,9 @@ import {
 
 import { MenuContext } from "@/contexts";
 
-import styles from "./MenuItem.module.css";
+import styles from "./Menuitem.module.css";
 
-export type MenuItemProps = Omit<
+export type MenuitemProps = Omit<
   HTMLAttributes<HTMLLIElement>,
   | "aria-disabled"
   | "aria-expanded"
@@ -45,7 +45,7 @@ export type MenuItemProps = Omit<
       }
   );
 
-export const MenuItem: FunctionComponent<MenuItemProps> = ({
+export const Menuitem: FunctionComponent<MenuitemProps> = ({
   children,
   className,
   classes,
@@ -90,7 +90,6 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
         if (!disabled) {
           if (children) {
             //
-            console.debug("open…");
           }
 
           onClick?.();

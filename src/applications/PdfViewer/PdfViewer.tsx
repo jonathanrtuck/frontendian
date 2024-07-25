@@ -12,11 +12,11 @@ import styles from "./PdfViewer.module.css";
  */
 const Component: FunctionComponent<ApplicationComponentProps> = ({
   file,
-  useMenuItems,
+  useMenuitems,
 }) => {
   const [numPages, setNumPages] = useState<number>(1);
 
-  useMenuItems([], []); // @todo
+  useMenuitems([], []); // @todo
 
   // parse pdf to get number of pages
   useEffect(() => {

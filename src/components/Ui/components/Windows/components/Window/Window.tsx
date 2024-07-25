@@ -4,14 +4,14 @@ import Draggable from "react-draggable";
 
 import { APPLICATION_TRACKER } from "@/applications";
 import { Menu } from "@/components/Menu";
-import { MenuItemProps } from "@/components/MenuItem";
-import { MenuItemsContext } from "@/contexts";
-import { useElementDimensions, useFocus, useMenuItems } from "@/hooks";
+import { MenuitemProps } from "@/components/Menuitem";
+import { MenuitemsContext } from "@/contexts";
+import { useElementDimensions, useFocus, useMenuitems } from "@/hooks";
 import { useStore } from "@/store";
 import { Window as WindowType } from "@/types";
 
 import { Content } from "./components/Content";
-import { TitleBar } from "./components/TitleBar";
+import { Titlebar } from "./components/Titlebar";
 
 import styles from "./Window.module.css";
 
@@ -25,24 +25,25 @@ export const Window: FunctionComponent<WindowProps> = ({
   id,
   left,
   title,
-  titleBarLeft,
+  titlebarLeft,
   top,
   width,
   zoomed,
 }) => {
-  const blur = useStore((actions) => actions.blur);
-  const close = useStore((actions) => actions.close);
-  const focus = useStore((actions) => actions.focus);
-  const hide = useStore((actions) => actions.hide);
-  const move = useStore((actions) => actions.move);
-  const resize = useStore((actions) => actions.resize);
-  const zoom = useStore((actions) => actions.zoom);
+  const blurWindow = useStore((actions) => actions.blurWindow);
+  const closeWindow = useStore((actions) => actions.closeWindow);
+  const focusWindow = useStore((actions) => actions.focusWindow);
+  const hideWindow = useStore((actions) => actions.hideWindow);
+  const moveWindow = useStore((actions) => actions.moveWindow);
+  const moveWindowTitlebar = useStore((actions) => actions.moveWindowTitlebar);
+  const resizeWindow = useStore((actions) => actions.resizeWindow);
+  const zoomWindow = useStore((actions) => actions.zoomWindow);
   const stackingOrder = useStore((state) => state.stackingOrder);
 
   const menubarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
 
-  const [menuItems, setMenuItems] = useState<ReactElement<MenuItemProps>[]>([]);
+  const [menuitems, setMenuitems] = useState<ReactElement<MenuitemProps>[]>([]);
 
   useFocus({
     deps: [focused],
@@ -68,7 +69,7 @@ export const Window: FunctionComponent<WindowProps> = ({
         }
       }}
       onStop={(_, { x: left, y: top }) => {
-        move({ id, left, top, type: "window" });
+        moveWindow({ id, left, top });
       }}>
       <section
         aria-current={focused}
@@ -80,12 +81,12 @@ export const Window: FunctionComponent<WindowProps> = ({
         id={id}
         onBlur={({ relatedTarget }) => {
           if (!rootRef.current?.contains(relatedTarget)) {
-            blur({ id });
+            blurWindow({ id });
           }
         }}
         onFocus={({ relatedTarget }) => {
           if (!relatedTarget || !rootRef.current?.contains(relatedTarget)) {
-            focus({ id });
+            focusWindow({ id });
           }
         }}
         ref={rootRef}
@@ -94,42 +95,42 @@ export const Window: FunctionComponent<WindowProps> = ({
           zIndex: stackingOrder.indexOf(id),
         }}
         tabIndex={0}>
-        <TitleBar
+        <Titlebar
           classes={{
             button: styles.button,
           }}
           id={id}
-          left={titleBarLeft}
+          left={titlebarLeft}
           maxWidth={rootWidth}
           onClose={() => {
-            close({ id });
+            closeWindow({ id });
           }}
           onHide={() => {
-            hide({ id });
+            hideWindow({ id });
           }}
           onMove={(left) => {
-            move({ id, left, type: "titlebar" });
+            moveWindowTitlebar({ id, left });
           }}
           onZoom={() => {
-            zoom({ id });
+            zoomWindow({ id });
           }}
           title={title}
         />
         <Menu bar className={styles.menubar} horizontal ref={menubarRef}>
-          {menuItems}
+          {menuitems}
         </Menu>
         <Content
           className={styles.content}
           height={height}
           menubarRef={menubarRef}
           onResize={(size) => {
-            resize({ id, ...size });
+            resizeWindow({ id, ...size });
           }}
           width={width}
           zoomed={zoomed}>
-          <MenuItemsContext.Provider value={setMenuItems}>
-            <Component useMenuItems={useMenuItems} />
-          </MenuItemsContext.Provider>
+          <MenuitemsContext.Provider value={setMenuitems}>
+            <Component useMenuitems={useMenuitems} />
+          </MenuitemsContext.Provider>
         </Content>
       </section>
     </Draggable>

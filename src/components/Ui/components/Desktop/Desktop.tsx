@@ -29,7 +29,8 @@ const setUserCanSelectText = (userCanSelectText: boolean): void => {
 };
 
 export const Desktop: FunctionComponent = () => {
-  const open = useStore((actions) => actions.open);
+  const openApplication = useStore((actions) => actions.openApplication);
+  const openFile = useStore((actions) => actions.openFile);
   const applications = useStore((state) => state.applications);
   const desktop = useStore((state) => state.desktop);
   const files = useStore((state) => state.files);
@@ -119,11 +120,9 @@ export const Desktop: FunctionComponent = () => {
             Icon={"windowIds" in obj ? obj.Icon : types[obj.type]?.Icon}
             key={obj.id}
             onClick={() => {
-              open(
-                "windowIds" in obj
-                  ? { id: obj.id, type: "application" }
-                  : { id: obj.id, type: "file" }
-              );
+              "windowIds" in obj
+                ? openApplication({ id: obj.id })
+                : openFile({ id: obj.id });
             }}
             title={obj.title}
           />

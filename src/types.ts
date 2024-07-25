@@ -7,35 +7,26 @@ import {
   SVGAttributes,
 } from "react";
 
-import { MenuItemProps } from "@/components/MenuItem";
+import { MenuitemProps } from "@/components/Menuitem";
 
 // all id(s) are window ids unless otherwise defined by the `type` property
 export type Actions = {
-  blur(payload: { id: ID } | { ids: ID[] }): void;
-  close(payload: { id: ID } | { ids: ID[] }): void;
-  focus(payload: { id: ID } | { ids: ID[] }): void;
-  hide(payload: { id: ID } | { ids: ID[] }): void;
-  move(
-    payload: ({ id: ID } | { ids: ID[] }) &
-      (
-        | { left: number; top: number; type: "window" }
-        | { left: number; type: "titlebar" }
-      )
-  ): void;
-  open(
-    payload: ({ id: ID } | { ids: ID[] }) &
-      (
-        | { type: "application" }
-        | { type: "file"; windowId?: ID }
-        | { type: "window" }
-      )
-  ): void;
-  resize(
-    payload: ({ id: ID } | { ids: ID[] }) & { height: number; width: number }
-  ): void;
-  show(payload: { id: ID } | { ids: ID[] }): void;
-  zoom(payload: { id: ID } | { ids: ID[] }): void;
+  blurWindow(payload: ActionIds): void;
+  closeApplication(payload: ActionIds): void;
+  closeWindow(payload: ActionIds): void;
+  focusWindow(payload: ActionIds): void;
+  hideWindow(payload: ActionIds): void;
+  moveWindow(payload: ActionIds & { left: number; top: number }): void;
+  moveWindowTitlebar(payload: ActionIds & { left: number }): void;
+  openApplication(payload: ActionIds): void;
+  openFile(payload: ActionIds & { windowId?: ID }): void;
+  openWindow(payload: ActionIds): void;
+  resizeWindow(payload: ActionIds & { height: number; width: number }): void;
+  showWindow(payload: ActionIds): void;
+  zoomWindow(payload: ActionIds): void;
 };
+
+export type ActionIds = { id: ID } | { ids: ID[] };
 
 export type Application = ApplicationComponent & {
   windowIds: ID[];
@@ -50,8 +41,8 @@ export type ApplicationComponent = {
 
 export type ApplicationComponentProps = {
   file?: File;
-  useMenuItems(
-    menuItems: ReactElement<MenuItemProps>[],
+  useMenuitems(
+    menuitems: ReactElement<MenuitemProps>[],
     deps: DependencyList
   ): void;
 };
@@ -118,7 +109,7 @@ export type Window = {
   id: ID;
   left: number;
   title: string;
-  titleBarLeft: number;
+  titlebarLeft: number;
   top: number;
   width: number;
   zoomed: boolean;

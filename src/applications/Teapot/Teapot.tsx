@@ -9,11 +9,11 @@ import styles from "./Teapot.module.css";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
 const Component: FunctionComponent<ApplicationComponentProps> = ({
-  useMenuItems,
+  useMenuitems,
 }) => {
   const rootRef = useRef<HTMLCanvasElement>(null);
 
-  useMenuItems([], []); // @todo
+  useMenuitems([], []); // @todo
 
   useEffect(() => {
     if (rootRef.current) {

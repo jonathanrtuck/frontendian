@@ -10,7 +10,7 @@ import { Tray } from "./components/Tray";
 import styles from "./Deskbar.module.css";
 
 export const Deskbar: FunctionComponent = () => {
-  const focus = useStore((actions) => actions.focus);
+  const focusWindow = useStore((actions) => actions.focusWindow);
   const stackingOrder = useStore((state) => state.stackingOrder);
 
   const rootRef = useRef<HTMLElement>(null);
@@ -22,7 +22,7 @@ export const Deskbar: FunctionComponent = () => {
       id={DESKBAR_ID}
       onFocus={({ relatedTarget }) => {
         if (!relatedTarget || !rootRef.current?.contains(relatedTarget)) {
-          focus({ id: DESKBAR_ID });
+          focusWindow({ id: DESKBAR_ID });
         }
       }}
       ref={rootRef}

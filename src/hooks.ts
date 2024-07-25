@@ -9,8 +9,8 @@ import {
   useState,
 } from "react";
 
-import { MenuItemProps } from "@/components/MenuItem";
-import { MenuItemsContext } from "@/contexts";
+import { MenuitemProps } from "@/components/Menuitem";
+import { MenuitemsContext } from "@/contexts";
 
 type Dimensions = { height: number; width: number };
 
@@ -22,7 +22,12 @@ export const useClock = (): Date => {
 
     // @recursive
     const tick = () => {
-      setDate(new Date());
+      // only update state every second
+      setDate((prevState) => {
+        const now = new Date();
+
+        return now.getSeconds() !== prevState.getSeconds() ? now : prevState;
+      });
 
       animationFrameRequest = requestAnimationFrame(tick);
     };
@@ -108,15 +113,15 @@ export const useFocus = ({
   );
 };
 
-export const useMenuItems = (
-  menuItems: ReactElement<MenuItemProps>[],
+export const useMenuitems = (
+  menuitems: ReactElement<MenuitemProps>[],
   deps: DependencyList
 ) => {
-  const setMenuItems = useContext(MenuItemsContext);
+  const setMenuitems = useContext(MenuitemsContext);
 
   useLayoutEffect(
     () => {
-      setMenuItems(menuItems);
+      setMenuitems(menuitems);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     deps

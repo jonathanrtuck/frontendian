@@ -7,7 +7,7 @@ import {
 } from "react";
 import Markdown from "react-markdown";
 
-import { MenuItem } from "@/components/MenuItem";
+import { Menuitem } from "@/components/Menuitem";
 import { StyledEdit as Icon } from "@/icons";
 import { ApplicationComponent, ApplicationComponentProps } from "@/types";
 
@@ -15,7 +15,7 @@ import styles from "./StyledEdit.module.css";
 
 const Component: FunctionComponent<ApplicationComponentProps> = ({
   file,
-  useMenuItems,
+  useMenuitems,
 }) => {
   const [fileContent, setFileContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -34,11 +34,11 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
   const numInputRows = inputLines.length;
 
   // @todo
-  useMenuItems(
+  useMenuitems(
     [
-      <MenuItem key="file" title="File" />,
-      <MenuItem key="view" title="View" />,
-      <MenuItem key="help" title="Help" />,
+      <Menuitem key="file" title="File" />,
+      <Menuitem key="view" title="View" />,
+      <Menuitem key="help" title="Help" />,
     ],
     []
   );

@@ -5,9 +5,9 @@ import { FunctionComponent, useRef } from "react";
 import { useComputedCustomProperty, useElementDimensions } from "@/hooks";
 import { ID } from "@/types";
 
-import styles from "./TitleBar.module.css";
+import styles from "./Titlebar.module.css";
 
-export type TitleBarProps = {
+export type TitlebarProps = {
   classes?: {
     button?: string;
     root?: string;
@@ -23,7 +23,7 @@ export type TitleBarProps = {
   title: string;
 };
 
-export const TitleBar: FunctionComponent<TitleBarProps> = ({
+export const Titlebar: FunctionComponent<TitlebarProps> = ({
   classes,
   id,
   left,

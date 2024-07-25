@@ -1,6 +1,6 @@
 import { createContext, Dispatch, ReactElement, SetStateAction } from "react";
 
-import { MenuItemProps } from "@/components/MenuItem";
+import { MenuitemProps } from "@/components/Menuitem";
 
 export const MenuContext = createContext<{
   isBar: boolean;
@@ -14,6 +14,6 @@ export const MenuContext = createContext<{
   isVertical: false,
 });
 
-export const MenuItemsContext = createContext<
-  Dispatch<SetStateAction<ReactElement<MenuItemProps>[]>>
+export const MenuitemsContext = createContext<
+  Dispatch<SetStateAction<ReactElement<MenuitemProps>[]>>
 >(() => {});

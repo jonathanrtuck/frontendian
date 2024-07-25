@@ -2,46 +2,47 @@ import { FunctionComponent } from "react";
 
 import { APPLICATION_TRACKER } from "@/applications";
 import { Menu } from "@/components/Menu";
-import { MenuItem } from "@/components/MenuItem";
+import { Menuitem } from "@/components/Menuitem";
 import { FILE_README_MD } from "@/files";
 import { useStore } from "@/store";
 
 import styles from "./MainMenu.module.css";
 
 export const MainMenu: FunctionComponent = () => {
-  const open = useStore((actions) => actions.open);
+  const openApplication = useStore((actions) => actions.openApplication);
+  const openFile = useStore((actions) => actions.openFile);
   const applications = useStore((state) => state.applications);
 
   return (
     <Menu bar vertical>
-      <MenuItem
-        className={styles.menuItem}
+      <Menuitem
+        className={styles.menuitem}
         classes={{
-          title: styles.menuItemTitle,
+          title: styles.menuitemTitle,
         }}
         title="frontendian">
         <Menu>
-          <MenuItem
+          <Menuitem
             onClick={() => {
-              open({ id: FILE_README_MD.id, type: "file" });
+              openFile({ id: FILE_README_MD.id });
             }}
             title={FILE_README_MD.title}
           />
-          <MenuItem separator />
+          <Menuitem separator />
           {applications
             .filter(({ id }) => id !== APPLICATION_TRACKER.id)
             .map(({ Icon, id, title }) => (
-              <MenuItem
+              <Menuitem
                 Icon={Icon}
                 key={id}
                 onClick={() => {
-                  open({ id, type: "application" });
+                  openApplication({ id });
                 }}
                 title={title}
               />
             ))}
         </Menu>
-      </MenuItem>
+      </Menuitem>
     </Menu>
   );
 };

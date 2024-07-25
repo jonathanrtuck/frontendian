@@ -10,193 +10,28 @@ import {
 import { Minesweeper as Icon } from "@/icons";
 import { ApplicationComponent, ApplicationComponentProps } from "@/types";
 
+import {
+  BORDER_SIZE,
+  DEFAULT_LEVEL,
+  DEFAULT_STATE,
+  HEADER_HEIGHT,
+  LEVELS,
+  PADDING_SIZE,
+  SQUARE_SIZE,
+} from "./constants";
+import { Coordinates, Level, Square } from "./types";
+import {
+  getAdjacentSquareCoordinates,
+  getMineCoordinates,
+  isEqualCoordinates,
+  revealSquare,
+} from "./utils";
+
 import styles from "./Minesweeper.module.css";
-
-type Coordinates = [rowIndex: number, columnIndex: number];
-
-const enum Level {
-  Beginner = "beginner",
-  Expert = "expert",
-  Intermediate = "intermediate",
-}
-
-interface Square {
-  hasFlag: boolean;
-  hasMine: boolean;
-  isRevealed: boolean;
-  numAdjacentMines: number | undefined;
-}
-
-const getAdjacentSquareCoordinates = (
-  numRows: number,
-  numColumns: number,
-  coordinates: Coordinates
-): Coordinates[] =>
-  [
-    [-1, -1],
-    [-1, 0],
-    [-1, 1],
-    [0, -1],
-    [0, 1],
-    [1, -1],
-    [1, 0],
-    [1, 1],
-  ]
-    // adjecent squares' coordinates
-    .map(
-      ([rowOffset, columnOffset]): Coordinates => [
-        coordinates[0] + rowOffset,
-        coordinates[1] + columnOffset,
-      ]
-    )
-    // remove coordinates outside of the board
-    .filter(
-      ([rowIndex, columnIndex]) =>
-        rowIndex !== -1 &&
-        rowIndex !== numRows &&
-        columnIndex !== -1 &&
-        columnIndex !== numColumns
-    );
-
-const getInitialSquares = (numRows: number, numColumns: number): Square[][] =>
-  new Array(numRows).fill(
-    new Array(numColumns).fill({
-      hasFlag: false,
-      hasMine: false,
-      isRevealed: false,
-      numAdjacentMines: undefined,
-    })
-  );
-
-const isEqualCoordinates =
-  ([rowA, columnA]: Coordinates) =>
-  ([rowB, columnB]: Coordinates) =>
-    rowA === rowB && columnA === columnB;
-
-const getMineCoordinates = (
-  numRows: number,
-  numColumns: number,
-  numMines: number,
-  avoidCoordinates: Coordinates
-): Coordinates[] => {
-  const arr: Coordinates[] = [];
-
-  while (arr.length < numMines) {
-    const coordinates: Coordinates = [
-      Math.floor(Math.random() * numRows),
-      Math.floor(Math.random() * numColumns),
-    ];
-    const isEqualWith = isEqualCoordinates(coordinates);
-
-    // square to avoid or already has mine
-    if (isEqualWith(avoidCoordinates) || arr.some(isEqualWith)) {
-      continue;
-    }
-
-    arr.push(coordinates);
-  }
-
-  return arr;
-};
-
-// @recursive
-const revealSquare = (
-  numRows: number,
-  numColumns: number,
-  squares: Square[][],
-  coordinates: Coordinates
-): Square[][] => {
-  const [rowIndex, columnIndex] = coordinates;
-  const square = squares[rowIndex][columnIndex];
-  const { hasMine, isRevealed, numAdjacentMines } = square;
-
-  if (isRevealed) {
-    return squares;
-  }
-
-  const isEqualCoordinatesTo = isEqualCoordinates(coordinates);
-  const nextSquares = squares.map((row, rowIndex) =>
-    row.map((square, columnIndex) => ({
-      ...square,
-      isRevealed:
-        isEqualCoordinatesTo([rowIndex, columnIndex]) || square.isRevealed,
-    }))
-  );
-
-  if (!hasMine && numAdjacentMines === 0) {
-    return getAdjacentSquareCoordinates(
-      numRows,
-      numColumns,
-      coordinates
-    ).reduce(
-      (acc, coordinates) => revealSquare(numRows, numColumns, acc, coordinates),
-      nextSquares
-    );
-  }
-
-  return nextSquares;
-};
-
-const BORDER_SIZE = 16 * 0.1875; // 0.1875rem
-const HEADER_HEIGHT = 16 * 3.75; // 3.75rem
-const PADDING_SIZE = 16 * 0.5; // 0.5rem
-const SQUARE_SIZE = 16 * 1.5; // 1.5rem
-
-const DEFAULT_LEVEL = Level.Beginner;
-
-const DEFAULT_STATE: Record<
-  Level,
-  {
-    flagsRemaining: number;
-    height: number;
-    numColumns: number;
-    numMines: number;
-    numRows: number;
-    squares: Square[][];
-    width: number;
-  }
-> = {
-  [Level.Beginner]: {
-    flagsRemaining: 10,
-    height:
-      SQUARE_SIZE * 9 + (BORDER_SIZE * 4 + PADDING_SIZE * 3 + HEADER_HEIGHT),
-    numColumns: 9,
-    numMines: 10,
-    numRows: 9,
-    squares: getInitialSquares(9, 9),
-    width: SQUARE_SIZE * 9 + (BORDER_SIZE * 4 + PADDING_SIZE * 2),
-  },
-  [Level.Intermediate]: {
-    flagsRemaining: 40,
-    height:
-      SQUARE_SIZE * 16 + (BORDER_SIZE * 4 + PADDING_SIZE * 3 + HEADER_HEIGHT),
-    numColumns: 16,
-    numMines: 40,
-    numRows: 16,
-    squares: getInitialSquares(16, 16),
-    width: SQUARE_SIZE * 16 + (BORDER_SIZE * 4 + PADDING_SIZE * 2),
-  },
-  [Level.Expert]: {
-    flagsRemaining: 99,
-    height:
-      SQUARE_SIZE * 16 + (BORDER_SIZE * 4 + PADDING_SIZE * 3 + HEADER_HEIGHT),
-    numColumns: 30,
-    numMines: 99,
-    numRows: 16,
-    squares: getInitialSquares(16, 30),
-    width: SQUARE_SIZE * 30 + (BORDER_SIZE * 4 + PADDING_SIZE * 2),
-  },
-};
-
-const LEVELS: [lvl: Level, title: string][] = [
-  [Level.Beginner, "Beginner"],
-  [Level.Intermediate, "Intermediate"],
-  [Level.Expert, "Expert"],
-];
 
 // @see https://github.com/jonathanrtuck/minesweeper
 const Component: FunctionComponent<ApplicationComponentProps> = ({
-  useMenuItems,
+  useMenuitems,
 }) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -214,7 +49,7 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
     .flat()
     .every(({ hasMine, isRevealed }) => isRevealed !== hasMine);
 
-  useMenuItems([], []); // @todo
+  useMenuitems([], []); // @todo
 
   useEffect(() => {
     if (elapsedTime === 1) {

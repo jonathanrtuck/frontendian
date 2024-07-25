@@ -1,14 +1,14 @@
 import { FunctionComponent } from "react";
 
 import { Menu } from "@/components/Menu";
-import { MenuItem } from "@/components/MenuItem";
+import { Menuitem } from "@/components/Menuitem";
 import { useStore } from "@/store";
 
 export const Applications: FunctionComponent = () => {
-  const close = useStore((actions) => actions.close);
-  const focus = useStore((actions) => actions.focus);
-  const hide = useStore((actions) => actions.hide);
-  const show = useStore((actions) => actions.show);
+  const closeApplication = useStore((actions) => actions.closeApplication);
+  const focusWindow = useStore((actions) => actions.focusWindow);
+  const hideWindow = useStore((actions) => actions.hideWindow);
+  const showWindow = useStore((actions) => actions.showWindow);
   const applications = useStore((state) => state.applications);
   const openApplicationIds = useStore((state) => state.openApplicationIds);
   const windows = useStore((state) => state.windows);
@@ -23,50 +23,50 @@ export const Applications: FunctionComponent = () => {
           );
 
           return (
-            <MenuItem Icon={Icon} key={id} title={title}>
+            <Menuitem Icon={Icon} key={id} title={title}>
               <Menu>
                 {applicationWindows.length === 0 ? (
-                  <MenuItem disabled title="No windows" />
+                  <Menuitem disabled title="No windows" />
                 ) : (
                   <>
                     {applicationWindows.map(({ id, title }) => (
-                      <MenuItem
+                      <Menuitem
                         key={id}
                         onClick={() => {
-                          focus({ id });
+                          focusWindow({ id });
                         }}
                         title={title}
                       />
                     ))}
-                    <MenuItem separator />
-                    <MenuItem
+                    <Menuitem separator />
+                    <Menuitem
                       disabled={applicationWindows.every(
                         ({ hidden }) => hidden
                       )}
                       onClick={() => {
-                        hide({ ids: windowIds });
+                        hideWindow({ ids: windowIds });
                       }}
                       title="Hide all"
                     />
-                    <MenuItem
+                    <Menuitem
                       disabled={applicationWindows.every(
                         ({ hidden }) => !hidden
                       )}
                       onClick={() => {
-                        show({ ids: windowIds });
+                        showWindow({ ids: windowIds });
                       }}
                       title="Show all"
                     />
-                    <MenuItem
+                    <Menuitem
                       onClick={() => {
-                        close({ ids: windowIds });
+                        closeApplication({ id });
                       }}
                       title="Close all"
                     />
                   </>
                 )}
               </Menu>
-            </MenuItem>
+            </Menuitem>
           );
         })}
     </Menu>
