@@ -285,6 +285,9 @@ export const useStore = create<State & Actions>()((set) => ({
             return state;
           }
 
+          const application = state.applications.find(
+            ({ id }) => id === applicationId
+          );
           const existingWindow = state.windows.find(
             ({ id }) => id === payload.windowId
           );
@@ -297,14 +300,10 @@ export const useStore = create<State & Actions>()((set) => ({
                 window.id === existingWindow.id
                   ? {
                       ...window,
+                      title: application?.title ?? UNTITLED_WINDOW_TITLE,
+                      ...(application?.getWindow?.(file) ?? {}),
                       fileId: file.id,
                       focused: true,
-                      // @todo
-                      /*
-                      height: newWindow?.height ?? window.height,
-                      title: newWindow?.title ?? window.title,
-                      width: newWindow?.width ?? window.width,
-                      */
                     }
                   : {
                       ...window,
@@ -314,9 +313,6 @@ export const useStore = create<State & Actions>()((set) => ({
             };
           }
 
-          const application = state.applications.find(
-            ({ id }) => id === applicationId
-          );
           const isApplicationOpen =
             state.openApplicationIds.includes(applicationId);
           const windowId = uuid();

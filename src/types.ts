@@ -41,6 +41,7 @@ export type ApplicationComponent = {
 
 export type ApplicationComponentProps = {
   file?: File;
+  openableFiles: File[];
   useMenuitems(
     menuitems: ReactElement<MenuitemProps>[],
     deps: DependencyList
@@ -53,7 +54,6 @@ export type File = {
   url: URL;
 } & (
   | {
-      height: number; // page height
       type: MimeType.ApplicationPdf;
       width: number; // page width
     }

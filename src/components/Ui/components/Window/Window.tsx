@@ -2,13 +2,12 @@ import clsx from "clsx";
 import { FunctionComponent, ReactElement, useRef, useState } from "react";
 import Draggable from "react-draggable";
 
-import { APPLICATION_TRACKER } from "@/applications";
 import { Menu } from "@/components/Menu";
 import { MenuitemProps } from "@/components/Menuitem";
 import { MenuitemsContext } from "@/contexts";
 import { useElementDimensions, useFocus, useMenuitems } from "@/hooks";
 import { useStore } from "@/store";
-import { Window as WindowType } from "@/types";
+import { File, Window as WindowType } from "@/types";
 
 import { Content } from "./components/Content";
 import { Titlebar } from "./components/Titlebar";
@@ -42,6 +41,7 @@ export const Window: FunctionComponent<WindowProps> = ({
   const applications = useStore((state) => state.applications);
   const files = useStore((state) => state.files);
   const stackingOrder = useStore((state) => state.stackingOrder);
+  const types = useStore((state) => state.types);
 
   const menubarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
@@ -58,11 +58,21 @@ export const Window: FunctionComponent<WindowProps> = ({
   const application = applications.find(({ windowIds }) =>
     windowIds.includes(id)
   );
-  const file = fileId ? files.find(({ id }) => id === fileId) : undefined;
 
   if (!application?.Component) {
     return null;
   }
+
+  const file = fileId ? files.find(({ id }) => id === fileId) : undefined;
+  const openableFiles = Object.entries(types)
+    .filter(
+      ([, { application: applicationId }]) => applicationId === application.id
+    )
+    .reduce(
+      (acc: File[], [type]) =>
+        acc.concat(files.filter((file) => file.type === type)),
+      []
+    );
 
   return (
     <Draggable
@@ -139,7 +149,11 @@ export const Window: FunctionComponent<WindowProps> = ({
           width={width}
           zoomed={zoomed}>
           <MenuitemsContext.Provider value={setMenuitems}>
-            <application.Component file={file} useMenuitems={useMenuitems} />
+            <application.Component
+              file={file}
+              openableFiles={openableFiles}
+              useMenuitems={useMenuitems}
+            />
           </MenuitemsContext.Provider>
         </Content>
       </section>

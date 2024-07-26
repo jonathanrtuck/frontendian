@@ -2,3 +2,7 @@
   display: block;
   min-width: 100%;
 }
+
+.page + .page {
+  border-width: var(--border-width) 0 0;
+}

@@ -8,10 +8,9 @@ export const FILE_README_MD: File = {
 };
 
 export const FILE_RESUME_PDF: File = {
-  height: 990,
   id: "file-resume.pdf",
   title: "Résumé",
   type: MimeType.ApplicationPdf,
   url: `${process.env.PUBLIC_URL}/files/resume.pdf`,
-  width: 765, // 11/8.5 ratio
+  width: 918,
 };
