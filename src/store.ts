@@ -210,7 +210,7 @@ export const useStore = create<State & Actions>()((set) => ({
           const windowPosition = getFirstOpenWindowPosition(state.windows);
           const window: Window = {
             ...DEFAULT_WINDOW,
-            title: title ?? UNTITLED_WINDOW_TITLE,
+            title,
             ...(getWindow?.() ?? {}),
             id: windowId,
             left: windowPosition,
@@ -364,7 +364,7 @@ export const useStore = create<State & Actions>()((set) => ({
           const windowPosition = getFirstOpenWindowPosition(state.windows);
           const window: Window = {
             ...DEFAULT_WINDOW,
-            title: title ?? UNTITLED_WINDOW_TITLE,
+            title,
             ...(getWindow?.() ?? {}),
             id: windowId,
             left: windowPosition,

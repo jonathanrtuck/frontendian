@@ -12,5 +12,5 @@ export const FILE_RESUME_PDF: File = {
   title: "Résumé",
   type: MimeType.ApplicationPdf,
   url: `${process.env.PUBLIC_URL}/files/resume.pdf`,
-  width: 918,
+  width: 765,
 };

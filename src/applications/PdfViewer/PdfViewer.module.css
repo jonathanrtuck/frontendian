@@ -1,8 +1,13 @@
 .root {
-  display: block;
-  min-width: 100%;
+}
+
+.page {
 }
 
 .page + .page {
   border-width: var(--border-width) 0 0;
+}
+
+.page :global(.textLayer :is(span, br)) {
+  cursor: var(--cursor--text);
 }

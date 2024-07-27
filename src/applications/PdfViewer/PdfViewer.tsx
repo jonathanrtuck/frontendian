@@ -101,7 +101,7 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
         setNumPages(numPages);
       }}>
       {Array.from(new Array(numPages)).map((_, i) => (
-        <Page className={styles.page} key={i} pageIndex={i} scale={1.5} />
+        <Page className={styles.page} key={i} pageIndex={i} scale={1.25} />
       ))}
     </Document>
   );
@@ -112,7 +112,7 @@ Component.displayName = "PdfViewer";
 export const APPLICATION_PDF_VIEWER: ApplicationComponent = {
   Component,
   getWindow: (file) => ({
-    height: 480,
+    height: 540,
     title: file?.title || "PDF Viewer",
     width: file && "width" in file ? file.width : undefined,
   }),
