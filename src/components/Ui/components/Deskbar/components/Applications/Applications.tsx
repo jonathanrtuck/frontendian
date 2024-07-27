@@ -15,60 +15,65 @@ export const Applications: FunctionComponent = () => {
 
   return (
     <Menu bar vertical>
-      {applications
-        .filter(({ id }) => openApplicationIds.includes(id))
-        .map(({ Icon, id, title, windowIds }) => {
-          const applicationWindows = windows.filter(({ id }) =>
-            windowIds.includes(id)
-          );
+      {openApplicationIds.map((applicationId) => {
+        const application = applications.find(
+          (application) => application.id === applicationId
+        );
 
-          return (
-            <Menuitem Icon={Icon} key={id} title={title}>
-              <Menu>
-                {applicationWindows.length === 0 ? (
-                  <Menuitem disabled title="No windows" />
-                ) : (
-                  <>
-                    {applicationWindows.map(({ id, title }) => (
-                      <Menuitem
-                        key={id}
-                        onClick={() => {
-                          focusWindow({ id });
-                        }}
-                        title={title}
-                      />
-                    ))}
-                    <Menuitem separator />
+        if (!application) {
+          return null;
+        }
+
+        const applicationWindows = windows.filter((window) =>
+          application.windowIds.includes(window.id)
+        );
+
+        return (
+          <Menuitem
+            Icon={application.Icon}
+            key={applicationId}
+            title={application.title}>
+            <Menu>
+              {applicationWindows.length === 0 ? (
+                <Menuitem disabled title="No windows" />
+              ) : (
+                <>
+                  {applicationWindows.map((window) => (
                     <Menuitem
-                      disabled={applicationWindows.every(
-                        ({ hidden }) => hidden
-                      )}
+                      key={window.id}
                       onClick={() => {
-                        hideWindow({ ids: windowIds });
+                        focusWindow({ id: window.id });
                       }}
-                      title="Hide all"
+                      title={window.title}
                     />
-                    <Menuitem
-                      disabled={applicationWindows.every(
-                        ({ hidden }) => !hidden
-                      )}
-                      onClick={() => {
-                        showWindow({ ids: windowIds });
-                      }}
-                      title="Show all"
-                    />
-                    <Menuitem
-                      onClick={() => {
-                        closeApplication({ id });
-                      }}
-                      title="Close all"
-                    />
-                  </>
-                )}
-              </Menu>
-            </Menuitem>
-          );
-        })}
+                  ))}
+                  <Menuitem separator />
+                  <Menuitem
+                    disabled={applicationWindows.every(({ hidden }) => hidden)}
+                    onClick={() => {
+                      hideWindow({ ids: application.windowIds });
+                    }}
+                    title="Hide all"
+                  />
+                  <Menuitem
+                    disabled={applicationWindows.every(({ hidden }) => !hidden)}
+                    onClick={() => {
+                      showWindow({ ids: application.windowIds });
+                    }}
+                    title="Show all"
+                  />
+                  <Menuitem
+                    onClick={() => {
+                      closeApplication({ id: applicationId });
+                    }}
+                    title="Close all"
+                  />
+                </>
+              )}
+            </Menu>
+          </Menuitem>
+        );
+      })}
     </Menu>
   );
 };

@@ -230,9 +230,7 @@ export const useStore = create<State & Actions>()((set) => ({
             ),
             openApplicationIds: isApplicationOpen
               ? state.openApplicationIds
-              : state.openApplicationIds.concat(
-                  "id" in payload ? [payload.id] : payload.ids
-                ),
+              : [...state.openApplicationIds, id],
             windows: [
               ...state.windows.map((window) => ({
                 ...window,
@@ -340,9 +338,7 @@ export const useStore = create<State & Actions>()((set) => ({
             ),
             openApplicationIds: isApplicationOpen
               ? state.openApplicationIds
-              : state.openApplicationIds.concat(
-                  "id" in payload ? [payload.id] : payload.ids
-                ),
+              : [...state.openApplicationIds, applicationId],
             windows: [
               ...state.windows.map((window) => ({
                 ...window,
