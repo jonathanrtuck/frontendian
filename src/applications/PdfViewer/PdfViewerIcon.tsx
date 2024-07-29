@@ -2,7 +2,7 @@ import { forwardRef, useId } from "react";
 
 import { IconComponent } from "@/types";
 
-export const Graphics: IconComponent = forwardRef((props, ref) => {
+export const PdfViewerIcon: IconComponent = forwardRef((props, ref) => {
   const id = useId();
 
   return (
@@ -138,4 +138,4 @@ export const Graphics: IconComponent = forwardRef((props, ref) => {
   );
 });
 
-Graphics.displayName = "Graphics";
+PdfViewerIcon.displayName = "PdfViewerIcon";

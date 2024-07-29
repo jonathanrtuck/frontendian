@@ -2,13 +2,15 @@ import { FunctionComponent } from "react";
 
 import { Menu } from "@/components/Menu";
 import { Menuitem } from "@/components/Menuitem";
-import { useStore } from "@/store";
+import {
+  closeApplication,
+  focusWindow,
+  hideWindow,
+  showWindow,
+  useStore,
+} from "@/store";
 
 export const Applications: FunctionComponent = () => {
-  const closeApplication = useStore((actions) => actions.closeApplication);
-  const focusWindow = useStore((actions) => actions.focusWindow);
-  const hideWindow = useStore((actions) => actions.hideWindow);
-  const showWindow = useStore((actions) => actions.showWindow);
   const applications = useStore((state) => state.applications);
   const openApplicationIds = useStore((state) => state.openApplicationIds);
   const windows = useStore((state) => state.windows);

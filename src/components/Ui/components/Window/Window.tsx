@@ -6,7 +6,7 @@ import { Menu } from "@/components/Menu";
 import { Menuitem } from "@/components/Menuitem";
 import { WindowContext } from "@/contexts";
 import { useElementDimensions, useFocus } from "@/hooks";
-import { useStore } from "@/store";
+import { blurWindow, focusWindow, moveWindow, useStore } from "@/store";
 import { File, Window as WindowType } from "@/types";
 
 import { Content } from "./components/Content";
@@ -21,9 +21,6 @@ export type WindowProps = WindowType;
 export const Window: FunctionComponent<WindowProps> = (props) => {
   const { fileId, focused, hidden, id, left, top, width, zoomed } = props;
 
-  const blurWindow = useStore((actions) => actions.blurWindow);
-  const focusWindow = useStore((actions) => actions.focusWindow);
-  const moveWindow = useStore((actions) => actions.moveWindow);
   const applications = useStore((state) => state.applications);
   const files = useStore((state) => state.files);
   const stackingOrder = useStore((state) => state.stackingOrder);

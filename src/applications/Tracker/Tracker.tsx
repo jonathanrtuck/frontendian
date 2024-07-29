@@ -1,16 +1,3 @@
-import { FunctionComponent } from "react";
+import { ApplicationComponent } from "@/types";
 
-import { Tracker as Icon } from "@/icons";
-import { ApplicationComponent, ApplicationComponentProps } from "@/types";
-
-// @todo
-const Component: FunctionComponent<ApplicationComponentProps> = () => null;
-
-Component.displayName = "Tracker";
-
-export const APPLICATION_TRACKER: ApplicationComponent = {
-  Component,
-  Icon,
-  id: "application-tracker",
-  title: "Tracker",
-};
+export const Tracker: ApplicationComponent = () => null;

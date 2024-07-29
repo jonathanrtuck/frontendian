@@ -1,8 +1,7 @@
-import { FunctionComponent, useState } from "react";
+import { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
-import { Graphics as Icon } from "@/icons";
-import { ApplicationComponent, ApplicationComponentProps } from "@/types";
+import { ApplicationComponent } from "@/types";
 
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
@@ -16,7 +15,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 // @see https://github.com/wojtekmaj/react-pdf
-const Component: FunctionComponent<ApplicationComponentProps> = ({
+export const PdfViewer: ApplicationComponent = ({
   Content,
   Menu,
   Menubar,
@@ -82,7 +81,7 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
               onClick={() => {
                 console.debug("about…");
               }}
-              title={`About ${APPLICATION_PDF_VIEWER.title}…`}
+              title="About PDF Viewer"
             />
           </Menu>
         </Menuitem>
@@ -102,18 +101,4 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
       </Content>
     </>
   );
-};
-
-Component.displayName = "PdfViewer";
-
-export const APPLICATION_PDF_VIEWER: ApplicationComponent = {
-  Component,
-  getWindow: (file) => ({
-    height: 540,
-    title: file?.title || "PDF Viewer",
-    width: file && "width" in file ? file.width : undefined,
-  }),
-  Icon,
-  id: "application-pdf-viewer",
-  title: "PDF Viewer",
 };

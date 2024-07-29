@@ -1,7 +1,7 @@
 import { FunctionComponent, useRef } from "react";
 
 import { DESKBAR_ID } from "@/constants";
-import { useStore } from "@/store";
+import { focusWindow, useStore } from "@/store";
 
 import { Applications } from "./components/Applications";
 import { MainMenu } from "./components/MainMenu";
@@ -10,7 +10,6 @@ import { Tray } from "./components/Tray";
 import styles from "./Deskbar.module.css";
 
 export const Deskbar: FunctionComponent = () => {
-  const focusWindow = useStore((actions) => actions.focusWindow);
   const stackingOrder = useStore((state) => state.stackingOrder);
 
   const rootRef = useRef<HTMLElement>(null);

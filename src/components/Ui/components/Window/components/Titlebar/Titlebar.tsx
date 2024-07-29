@@ -4,7 +4,12 @@ import { FunctionComponent, useContext, useRef } from "react";
 
 import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty, useElementDimensions } from "@/hooks";
-import { useStore } from "@/store";
+import {
+  closeWindow,
+  hideWindow,
+  moveWindowTitlebar,
+  zoomWindow,
+} from "@/store";
 
 import styles from "./Titlebar.module.css";
 
@@ -13,11 +18,6 @@ export type TitlebarProps = {
 };
 
 export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
-  const closeWindow = useStore((actions) => actions.closeWindow);
-  const hideWindow = useStore((actions) => actions.hideWindow);
-  const moveWindowTitlebar = useStore((actions) => actions.moveWindowTitlebar);
-  const zoomWindow = useStore((actions) => actions.zoomWindow);
-
   const { id, title, titlebarLeft } = useContext(WindowContext);
 
   const rootRef = useRef<HTMLElement>(null);

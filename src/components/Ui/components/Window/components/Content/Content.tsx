@@ -5,7 +5,7 @@ import { Resizable } from "react-resizable";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty } from "@/hooks";
-import { useStore } from "@/store";
+import { resizeWindow } from "@/store";
 
 import { ResizeHandle } from "./components/ResizeHandle";
 
@@ -17,8 +17,6 @@ const MIN_WIDTH = 16 * 7; // 7rem
 export type ContentProps = PropsWithChildren;
 
 export const Content: FunctionComponent<ContentProps> = ({ children }) => {
-  const resizeWindow = useStore((actions) => actions.resizeWindow);
-
   const { height, id, menubarRef, width, zoomed } = useContext(WindowContext);
 
   const minWidth = menubarRef.current

@@ -4,13 +4,11 @@ import { APPLICATION_TRACKER } from "@/applications";
 import { Menu } from "@/components/Menu";
 import { Menuitem } from "@/components/Menuitem";
 import { FILE_README_MD } from "@/files";
-import { useStore } from "@/store";
+import { openApplication, openFile, useStore } from "@/store";
 
 import styles from "./MainMenu.module.css";
 
 export const MainMenu: FunctionComponent = () => {
-  const openApplication = useStore((actions) => actions.openApplication);
-  const openFile = useStore((actions) => actions.openFile);
   const applications = useStore((state) => state.applications);
 
   return (

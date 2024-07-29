@@ -2,7 +2,7 @@ import { forwardRef, useId } from "react";
 
 import { IconComponent } from "@/types";
 
-export const Minesweeper: IconComponent = forwardRef((props, ref) => {
+export const MinesweeperIcon: IconComponent = forwardRef((props, ref) => {
   const id = useId();
 
   return (
@@ -154,4 +154,4 @@ export const Minesweeper: IconComponent = forwardRef((props, ref) => {
   );
 });
 
-Minesweeper.displayName = "Minesweeper";
+MinesweeperIcon.displayName = "MinesweeperIcon";

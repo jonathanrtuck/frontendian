@@ -9,43 +9,27 @@ import {
 import { MenuProps } from "@/components/Menu";
 import { MenuitemProps } from "@/components/Menuitem";
 
-export type Actions = {
-  blurWindow(payload: ActionIds): void;
-  closeApplication(payload: ActionIds): void;
-  closeWindow(payload: ActionIds): void;
-  focusWindow(payload: ActionIds): void;
-  hideWindow(payload: ActionIds): void;
-  moveWindow(payload: ActionIds & { left: number; top: number }): void;
-  moveWindowTitlebar(payload: ActionIds & { left: number }): void;
-  openApplication(payload: ActionIds): void;
-  openFile(payload: ActionIds & { windowId?: ID }): void;
-  openWindow(payload: ActionIds): void;
-  resizeWindow(payload: ActionIds & { height: number; width: number }): void;
-  showWindow(payload: ActionIds): void;
-  zoomWindow(payload: ActionIds): void;
-};
-
-export type ActionIds = { id: ID } | { ids: ID[] };
-
-export type Application = ApplicationComponent & {
+export type Application = ApplicationConfiguration & {
   windowIds: ID[];
 };
 
-export type ApplicationComponent = {
-  Component: ComponentType<ApplicationComponentProps>;
+export type ApplicationComponent = ComponentType<ApplicationComponentProps>;
+
+export type ApplicationComponentProps = {
+  Content: ComponentType<PropsWithChildren>;
+  Menu: ComponentType<MenuProps>;
+  Menubar: ComponentType<PropsWithChildren>;
+  Menuitem: ComponentType<MenuitemProps>;
+  file?: File;
+  openableFiles: File[];
+};
+
+export type ApplicationConfiguration = {
+  Component: ApplicationComponent;
   getWindow?(file?: File): Partial<Window>;
   Icon?: IconComponent;
   id: ID;
   title: string;
-};
-
-export type ApplicationComponentProps = {
-  Content: ComponentType<PropsWithChildren>;
-  file?: File;
-  Menu: ComponentType<MenuProps>;
-  Menubar: ComponentType<PropsWithChildren>;
-  Menuitem: ComponentType<MenuitemProps>;
-  openableFiles: File[];
 };
 
 export type File = {
@@ -75,6 +59,7 @@ export type IconComponent = ForwardRefExoticComponent<
 
 export type ID = string;
 
+// add others as needed
 export const enum MimeType {
   ApplicationPdf = "application/pdf",
   TextMarkdown = "text/markdown",

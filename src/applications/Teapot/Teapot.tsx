@@ -1,14 +1,13 @@
-import { FunctionComponent, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-import { Teapot as Icon } from "@/icons";
-import { ApplicationComponent, ApplicationComponentProps } from "@/types";
+import { ApplicationComponent } from "@/types";
 
 import { main } from "./webgl";
 
 import styles from "./Teapot.module.css";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
-const Component: FunctionComponent<ApplicationComponentProps> = ({}) => {
+export const Teapot: ApplicationComponent = ({ Content }) => {
   const rootRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -17,19 +16,9 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({}) => {
     }
   }, []);
 
-  return <canvas className={styles.root} ref={rootRef} />;
-};
-
-Component.displayName = "Teapot";
-
-export const APPLICATION_TEAPOT: ApplicationComponent = {
-  Component,
-  getWindow: () => ({
-    height: 300,
-    title: "Teapot",
-    width: 300,
-  }),
-  Icon,
-  id: "application-teapot",
-  title: "Teapot",
+  return (
+    <Content>
+      <canvas className={styles.root} ref={rootRef} />
+    </Content>
+  );
 };

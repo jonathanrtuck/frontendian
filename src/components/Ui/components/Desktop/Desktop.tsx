@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { useStore } from "@/store";
+import { openApplication, openFile, useStore } from "@/store";
 
 import { Item } from "./components/Item";
 
@@ -29,8 +29,6 @@ const setUserCanSelectText = (userCanSelectText: boolean): void => {
 };
 
 export const Desktop: FunctionComponent = () => {
-  const openApplication = useStore((actions) => actions.openApplication);
-  const openFile = useStore((actions) => actions.openFile);
   const applications = useStore((state) => state.applications);
   const desktop = useStore((state) => state.desktop);
   const files = useStore((state) => state.files);

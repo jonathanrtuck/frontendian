@@ -2,7 +2,7 @@ import { forwardRef, useId } from "react";
 
 import { IconComponent } from "@/types";
 
-export const StyledEdit: IconComponent = forwardRef((props, ref) => {
+export const StyledEditIcon: IconComponent = forwardRef((props, ref) => {
   const id = useId();
 
   return (
@@ -213,4 +213,4 @@ export const StyledEdit: IconComponent = forwardRef((props, ref) => {
   );
 });
 
-StyledEdit.displayName = "StyledEdit";
+StyledEditIcon.displayName = "StyledEditIcon";

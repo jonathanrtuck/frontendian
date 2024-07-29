@@ -1,18 +1,12 @@
 import clsx from "clsx";
-import {
-  FunctionComponent,
-  useDeferredValue,
-  useEffect,
-  useState,
-} from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 
-import { StyledEdit as Icon } from "@/icons";
-import { ApplicationComponent, ApplicationComponentProps } from "@/types";
+import { ApplicationComponent } from "@/types";
 
 import styles from "./StyledEdit.module.css";
 
-const Component: FunctionComponent<ApplicationComponentProps> = ({ file }) => {
+export const StyledEdit: ApplicationComponent = ({ Content, file }) => {
   const [fileContent, setFileContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
@@ -73,40 +67,35 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({ file }) => {
   }, [file]);
 
   if (isLoading) {
-    return <span>loading…</span>;
+    return <Content>loading…</Content>;
   }
 
   if (error) {
-    return <span>error…</span>;
+    return <Content>error…</Content>;
   }
 
   if (view === "markdown") {
     return (
-      <textarea
-        autoFocus
-        className={clsx(styles.root, styles.input)}
-        cols={numInputCols}
-        onInput={(e) => {
-          setInput((e.target as HTMLTextAreaElement).value);
-        }}
-        rows={numInputRows}
-        value={input}
-      />
+      <Content>
+        <textarea
+          autoFocus
+          className={clsx(styles.root, styles.input)}
+          cols={numInputCols}
+          onInput={(e) => {
+            setInput((e.target as HTMLTextAreaElement).value);
+          }}
+          rows={numInputRows}
+          value={input}
+        />
+      </Content>
     );
   }
 
   return (
-    <samp className={clsx(styles.root, styles.markdown)}>
-      <Markdown>{deferredInput}</Markdown>
-    </samp>
+    <Content>
+      <samp className={clsx(styles.root, styles.markdown)}>
+        <Markdown>{deferredInput}</Markdown>
+      </samp>
+    </Content>
   );
-};
-
-Component.displayName = "StyledEdit";
-
-export const APPLICATION_STYLED_EDIT: ApplicationComponent = {
-  Component,
-  Icon,
-  id: "application-styled-edit",
-  title: "StyledEdit",
 };
