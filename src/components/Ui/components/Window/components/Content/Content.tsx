@@ -1,14 +1,11 @@
 import clsx from "clsx";
-import {
-  FunctionComponent,
-  HTMLAttributes,
-  PropsWithChildren,
-  RefObject,
-} from "react";
+import { FunctionComponent, PropsWithChildren, useContext } from "react";
 import { Resizable } from "react-resizable";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty } from "@/hooks";
+import { useStore } from "@/store";
 
 import { ResizeHandle } from "./components/ResizeHandle";
 
@@ -17,25 +14,13 @@ import styles from "./Content.module.css";
 const MIN_HEIGHT = 16 * 7; // 7rem
 const MIN_WIDTH = 16 * 7; // 7rem
 
-export type ContentProps = Omit<HTMLAttributes<HTMLDivElement>, "onResize"> &
-  PropsWithChildren<{
-    height: number;
-    menubarRef: RefObject<HTMLElement>;
-    onResize(size: { height: number; width: number }): void;
-    width: number;
-    zoomed: boolean;
-  }>;
+export type ContentProps = PropsWithChildren;
 
-export const Content: FunctionComponent<ContentProps> = ({
-  children,
-  className,
-  height,
-  menubarRef,
-  onResize,
-  width,
-  zoomed,
-  ...props
-}) => {
+export const Content: FunctionComponent<ContentProps> = ({ children }) => {
+  const resizeWindow = useStore((actions) => actions.resizeWindow);
+
+  const { height, id, menubarRef, width, zoomed } = useContext(WindowContext);
+
   const minWidth = menubarRef.current
     ? Array.from(menubarRef.current.children)
         .map((element) => (element as HTMLElement).offsetWidth)
@@ -60,12 +45,12 @@ export const Content: FunctionComponent<ContentProps> = ({
         MIN_HEIGHT,
       ]}
       onResize={(_, { size }) => {
-        onResize(size);
+        resizeWindow({ id, ...size });
       }}
       width={width}>
       <div
-        {...props}
-        className={clsx(className, styles.root)}
+        className={styles.root}
+        draggable={false}
         style={
           zoomed
             ? undefined

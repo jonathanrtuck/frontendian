@@ -30,9 +30,7 @@ import {
 import styles from "./Minesweeper.module.css";
 
 // @see https://github.com/jonathanrtuck/minesweeper
-const Component: FunctionComponent<ApplicationComponentProps> = ({
-  useMenuitems,
-}) => {
+const Component: FunctionComponent<ApplicationComponentProps> = ({}) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [elapsedTime, setElapsedTime] = useState<number>(0);
@@ -48,8 +46,6 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
   const isWon = squares
     .flat()
     .every(({ hasMine, isRevealed }) => isRevealed !== hasMine);
-
-  useMenuitems([], []); // @todo
 
   useEffect(() => {
     if (elapsedTime === 1) {

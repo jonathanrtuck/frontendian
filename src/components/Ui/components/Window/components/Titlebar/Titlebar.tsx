@@ -1,48 +1,30 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useRef } from "react";
+import { FunctionComponent, useContext, useRef } from "react";
 
+import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty, useElementDimensions } from "@/hooks";
-import { ID } from "@/types";
+import { useStore } from "@/store";
 
 import styles from "./Titlebar.module.css";
 
 export type TitlebarProps = {
-  classes?: {
-    button?: string;
-    root?: string;
-    title?: string;
-  };
-  id: ID;
-  left: number;
   maxWidth: number;
-  onClose(): void;
-  onHide(): void;
-  onMove(left: number): void;
-  onZoom?(): void;
-  title: string;
 };
 
-export const Titlebar: FunctionComponent<TitlebarProps> = ({
-  classes,
-  id,
-  left,
-  maxWidth,
-  onClose,
-  onHide,
-  onMove,
-  onZoom,
-  title,
-}) => {
+export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
+  const closeWindow = useStore((actions) => actions.closeWindow);
+  const hideWindow = useStore((actions) => actions.hideWindow);
+  const moveWindowTitlebar = useStore((actions) => actions.moveWindowTitlebar);
+  const zoomWindow = useStore((actions) => actions.zoomWindow);
+
+  const { id, title, titlebarLeft } = useContext(WindowContext);
+
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<number>(0);
 
   const offset = useComputedCustomProperty("--window-padding");
-  const { width: rootWidth } = useElementDimensions(rootRef, [
-    maxWidth,
-    onZoom,
-    title,
-  ]);
+  const { width: rootWidth } = useElementDimensions(rootRef, [maxWidth, title]);
 
   return (
     <Draggable
@@ -56,21 +38,21 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({
         }
       }}
       onStop={(_, { x }) => {
-        onMove(x - offset);
+        moveWindowTitlebar({ id, left: x - offset });
       }}
       position={{
-        x: Math.min(left + offset, maxWidth - rootWidth + offset),
+        x: Math.min(titlebarLeft + offset, maxWidth - rootWidth + offset),
         y: 0,
       }}>
       <header
-        className={clsx(classes?.root, styles.root)}
+        className={styles.root}
         onDoubleClick={(e) => {
           const isButton = (e.target as HTMLElement)?.classList.contains(
             styles.button
           );
 
           if (!isButton) {
-            onHide();
+            hideWindow({ id });
           }
         }}
         onPointerUp={(e) => {
@@ -83,35 +65,36 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({
             const isDoubleClick = now - touchRef.current < 500;
 
             if (isDoubleClick) {
-              onHide();
+              hideWindow({ id });
             }
 
             touchRef.current = now;
           }
         }}
         ref={rootRef}>
-        <h1
-          className={clsx(classes?.title, styles.title)}
-          id={`${id}-title`}
-          title={title}>
+        <h1 className={styles.title} id={`${id}-title`} title={title}>
           {title}
         </h1>
         <button
           aria-label="Close"
-          className={clsx(classes?.button, styles.button, styles.close)}
-          onClick={onClose}
+          className={clsx(styles.button, styles.close)}
+          draggable={false}
+          onClick={() => {
+            closeWindow({ id });
+          }}
           title="Close"
           type="button"
         />
-        {onZoom && (
-          <button
-            aria-label="Zoom"
-            className={clsx(classes?.button, styles.button, styles.zoom)}
-            onClick={onZoom}
-            title="Zoom"
-            type="button"
-          />
-        )}
+        <button
+          aria-label="Zoom"
+          className={clsx(styles.button, styles.zoom)}
+          draggable={false}
+          onClick={() => {
+            zoomWindow({ id });
+          }}
+          title="Zoom"
+          type="button"
+        />
       </header>
     </Draggable>
   );

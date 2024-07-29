@@ -1,12 +1,12 @@
 import {
   ComponentType,
-  DependencyList,
   ForwardRefExoticComponent,
-  ReactElement,
+  PropsWithChildren,
   RefAttributes,
   SVGAttributes,
 } from "react";
 
+import { MenuProps } from "@/components/Menu";
 import { MenuitemProps } from "@/components/Menuitem";
 
 export type Actions = {
@@ -40,12 +40,12 @@ export type ApplicationComponent = {
 };
 
 export type ApplicationComponentProps = {
+  Content: ComponentType<PropsWithChildren>;
   file?: File;
+  Menu: ComponentType<MenuProps>;
+  Menubar: ComponentType<PropsWithChildren>;
+  Menuitem: ComponentType<MenuitemProps>;
   openableFiles: File[];
-  useMenuitems(
-    menuitems: ReactElement<MenuitemProps>[],
-    deps: DependencyList
-  ): void;
 };
 
 export type File = {

@@ -8,12 +8,8 @@ import { main } from "./webgl";
 import styles from "./Teapot.module.css";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
-const Component: FunctionComponent<ApplicationComponentProps> = ({
-  useMenuitems,
-}) => {
+const Component: FunctionComponent<ApplicationComponentProps> = ({}) => {
   const rootRef = useRef<HTMLCanvasElement>(null);
-
-  useMenuitems([], []); // @todo
 
   useEffect(() => {
     if (rootRef.current) {

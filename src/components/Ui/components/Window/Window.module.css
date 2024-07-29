@@ -41,15 +41,3 @@
 .button {
   cursor: var(--cursor--default);
 }
-
-.menubar {
-  cursor: var(--cursor--default);
-}
-
-.menubar:empty {
-  display: none;
-}
-
-.content {
-  cursor: var(--cursor--default);
-}

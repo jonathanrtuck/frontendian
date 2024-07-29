@@ -7,16 +7,12 @@ import {
 } from "react";
 import Markdown from "react-markdown";
 
-import { Menuitem } from "@/components/Menuitem";
 import { StyledEdit as Icon } from "@/icons";
 import { ApplicationComponent, ApplicationComponentProps } from "@/types";
 
 import styles from "./StyledEdit.module.css";
 
-const Component: FunctionComponent<ApplicationComponentProps> = ({
-  file,
-  useMenuitems,
-}) => {
+const Component: FunctionComponent<ApplicationComponentProps> = ({ file }) => {
   const [fileContent, setFileContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
@@ -32,16 +28,6 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
   const inputLines = input.split("\n");
   const numInputCols = Math.max(...inputLines.map((line) => line.length));
   const numInputRows = inputLines.length;
-
-  // @todo
-  useMenuitems(
-    [
-      <Menuitem key="file" title="File" />,
-      <Menuitem key="view" title="View" />,
-      <Menuitem key="help" title="Help" />,
-    ],
-    []
-  );
 
   useEffect(() => {
     if (file?.type === "text/markdown" && Boolean(file?.url)) {

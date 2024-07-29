@@ -1,16 +1,11 @@
 import {
   DependencyList,
-  ReactElement,
   RefObject,
-  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
   useState,
 } from "react";
-
-import { MenuitemProps } from "@/components/Menuitem";
-import { MenuitemsContext } from "@/contexts";
 
 type Dimensions = { height: number; width: number };
 
@@ -107,21 +102,6 @@ export const useFocus = ({
           element.focus();
         }
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    deps
-  );
-};
-
-export const useMenuitems = (
-  menuitems: ReactElement<MenuitemProps>[],
-  deps: DependencyList
-) => {
-  const setMenuitems = useContext(MenuitemsContext);
-
-  useLayoutEffect(
-    () => {
-      setMenuitems(menuitems);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     deps

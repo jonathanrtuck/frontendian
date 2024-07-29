@@ -1,15 +1,16 @@
 import clsx from "clsx";
-import { FunctionComponent, ReactElement, useRef, useState } from "react";
+import { FunctionComponent, useRef } from "react";
 import Draggable from "react-draggable";
 
 import { Menu } from "@/components/Menu";
-import { MenuitemProps } from "@/components/Menuitem";
-import { MenuitemsContext } from "@/contexts";
-import { useElementDimensions, useFocus, useMenuitems } from "@/hooks";
+import { Menuitem } from "@/components/Menuitem";
+import { WindowContext } from "@/contexts";
+import { useElementDimensions, useFocus } from "@/hooks";
 import { useStore } from "@/store";
 import { File, Window as WindowType } from "@/types";
 
 import { Content } from "./components/Content";
+import { Menubar } from "./components/Menubar";
 import { Titlebar } from "./components/Titlebar";
 
 import styles from "./Window.module.css";
@@ -17,27 +18,12 @@ import styles from "./Window.module.css";
 export type WindowProps = WindowType;
 
 // @todo dialogs
-export const Window: FunctionComponent<WindowProps> = ({
-  fileId,
-  focused,
-  height,
-  hidden,
-  id,
-  left,
-  title,
-  titlebarLeft,
-  top,
-  width,
-  zoomed,
-}) => {
+export const Window: FunctionComponent<WindowProps> = (props) => {
+  const { fileId, focused, hidden, id, left, top, width, zoomed } = props;
+
   const blurWindow = useStore((actions) => actions.blurWindow);
-  const closeWindow = useStore((actions) => actions.closeWindow);
   const focusWindow = useStore((actions) => actions.focusWindow);
-  const hideWindow = useStore((actions) => actions.hideWindow);
   const moveWindow = useStore((actions) => actions.moveWindow);
-  const moveWindowTitlebar = useStore((actions) => actions.moveWindowTitlebar);
-  const resizeWindow = useStore((actions) => actions.resizeWindow);
-  const zoomWindow = useStore((actions) => actions.zoomWindow);
   const applications = useStore((state) => state.applications);
   const files = useStore((state) => state.files);
   const stackingOrder = useStore((state) => state.stackingOrder);
@@ -45,8 +31,6 @@ export const Window: FunctionComponent<WindowProps> = ({
 
   const menubarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
-
-  const [menuitems, setMenuitems] = useState<ReactElement<MenuitemProps>[]>([]);
 
   useFocus({
     deps: [focused],
@@ -76,7 +60,7 @@ export const Window: FunctionComponent<WindowProps> = ({
 
   return (
     <Draggable
-      cancel={`.${styles.button}, .${styles.menubar}, .${styles.content}`}
+      cancel={'[draggable="false"]'}
       defaultPosition={{
         x: left,
         y: top,
@@ -115,47 +99,21 @@ export const Window: FunctionComponent<WindowProps> = ({
           zIndex: stackingOrder.indexOf(id),
         }}
         tabIndex={0}>
-        <Titlebar
-          classes={{
-            button: styles.button,
-          }}
-          id={id}
-          left={titlebarLeft}
-          maxWidth={rootWidth}
-          onClose={() => {
-            closeWindow({ id });
-          }}
-          onHide={() => {
-            hideWindow({ id });
-          }}
-          onMove={(left) => {
-            moveWindowTitlebar({ id, left });
-          }}
-          onZoom={() => {
-            zoomWindow({ id });
-          }}
-          title={title}
-        />
-        <Menu bar className={styles.menubar} horizontal ref={menubarRef}>
-          {menuitems}
-        </Menu>
-        <Content
-          className={styles.content}
-          height={height}
-          menubarRef={menubarRef}
-          onResize={(size) => {
-            resizeWindow({ id, ...size });
-          }}
-          width={width}
-          zoomed={zoomed}>
-          <MenuitemsContext.Provider value={setMenuitems}>
-            <application.Component
-              file={file}
-              openableFiles={openableFiles}
-              useMenuitems={useMenuitems}
-            />
-          </MenuitemsContext.Provider>
-        </Content>
+        <WindowContext.Provider
+          value={{
+            ...props,
+            menubarRef,
+          }}>
+          <Titlebar maxWidth={rootWidth} />
+          <application.Component
+            Content={Content}
+            Menu={Menu}
+            Menubar={Menubar}
+            Menuitem={Menuitem}
+            file={file}
+            openableFiles={openableFiles}
+          />
+        </WindowContext.Provider>
       </section>
     </Draggable>
   );

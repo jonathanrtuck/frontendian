@@ -1,8 +1,6 @@
 import { FunctionComponent, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
-import { Menu } from "@/components/Menu";
-import { Menuitem } from "@/components/Menuitem";
 import { Graphics as Icon } from "@/icons";
 import { ApplicationComponent, ApplicationComponentProps } from "@/types";
 
@@ -17,20 +15,24 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-/**
- * @see https://github.com/wojtekmaj/react-pdf
- * @todo handle loading/error
- */
+// @see https://github.com/wojtekmaj/react-pdf
 const Component: FunctionComponent<ApplicationComponentProps> = ({
+  Content,
+  Menu,
+  Menubar,
+  Menuitem,
   file,
   openableFiles,
-  useMenuitems,
 }) => {
   const [numPages, setNumPages] = useState<number>(0);
 
-  useMenuitems(
-    [
-      <>
+  if (file?.type !== "application/pdf") {
+    return null;
+  }
+
+  return (
+    <>
+      <Menubar>
         <Menuitem key="File" title="File">
           <Menu>
             <Menuitem
@@ -84,26 +86,21 @@ const Component: FunctionComponent<ApplicationComponentProps> = ({
             />
           </Menu>
         </Menuitem>
-      </>,
-    ],
-    []
-  ); // @todo
-
-  if (file?.type !== "application/pdf") {
-    return null;
-  }
-
-  return (
-    <Document
-      className={styles.root}
-      file={file.url}
-      onLoadSuccess={({ numPages }) => {
-        setNumPages(numPages);
-      }}>
-      {Array.from(new Array(numPages)).map((_, i) => (
-        <Page className={styles.page} key={i} pageIndex={i} scale={1.25} />
-      ))}
-    </Document>
+      </Menubar>
+      <Content>
+        <Document
+          className={styles.root}
+          file={file.url}
+          loading={null}
+          onLoadSuccess={({ numPages }) => {
+            setNumPages(numPages);
+          }}>
+          {Array.from(new Array(numPages)).map((_, i) => (
+            <Page className={styles.page} key={i} pageIndex={i} scale={1.25} />
+          ))}
+        </Document>
+      </Content>
+    </>
   );
 };
 
