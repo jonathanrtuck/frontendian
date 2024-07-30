@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FunctionComponent, useRef } from "react";
+import { FunctionComponent, useRef, useState } from "react";
 import Draggable from "react-draggable";
 
 import { Menu } from "@/components/Menu";
@@ -28,6 +28,8 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
 
   const menubarRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
+
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   useFocus({
     deps: [focused],
@@ -68,14 +70,19 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
         if (e.shiftKey) {
           return false;
         }
+
+        setIsDragging(true);
       }}
       onStop={(_, { x: left, y: top }) => {
+        setIsDragging(false);
+
         moveWindow({ id, left, top });
       }}>
       <section
         aria-current={focused}
         aria-labelledby={`${id}-title`}
         className={clsx(styles.root, {
+          [styles.dragging]: isDragging,
           [styles.zoomed]: zoomed,
         })}
         hidden={hidden}

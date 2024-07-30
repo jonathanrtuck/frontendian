@@ -11,6 +11,11 @@
   overflow: scroll;
 }
 
+.root:where(.resizing) {
+  cursor: var(--cursor--grabbing); /* @todo this isn't working? */
+  pointer-events: none;
+}
+
 /* note: custom scrollbar styles not supported in ios >14 😔 */
 .root::-webkit-scrollbar {
   appearance: none;
@@ -108,6 +113,7 @@
   border-width: var(--border-width);
   bottom: var(--window-padding);
   color: rgba(0, 0, 0, 0.2);
+  cursor: var(--cursor--grab);
   height: calc(var(--content-scrollbar-size) + var(--border-width));
   position: absolute;
   right: var(--window-padding);
@@ -115,7 +121,7 @@
   z-index: 3;
 }
 
-.resize.zoomed {
+.resize:where(.zoomed) {
   color: transparent;
   pointer-events: none;
 }

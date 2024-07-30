@@ -1,5 +1,10 @@
 import clsx from "clsx";
-import { FunctionComponent, PropsWithChildren, useContext } from "react";
+import {
+  FunctionComponent,
+  PropsWithChildren,
+  useContext,
+  useState,
+} from "react";
 import { Resizable } from "react-resizable";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -19,6 +24,8 @@ export type ContentProps = PropsWithChildren;
 export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   const { height, id, menubarRef, width, zoomed } = useContext(WindowContext);
 
+  const [isResizing, setIsResizing] = useState<boolean>(false);
+
   const minWidth = menubarRef.current
     ? Array.from(menubarRef.current.children)
         .map((element) => (element as HTMLElement).offsetWidth)
@@ -33,6 +40,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         <ResizeHandle
           aria-hidden
           className={clsx(styles.resize, {
+            [styles.resizing]: isResizing,
             [styles.zoomed]: zoomed,
           })}
         />
@@ -45,9 +53,17 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
       onResize={(_, { size }) => {
         resizeWindow({ id, ...size });
       }}
+      onResizeStart={() => {
+        setIsResizing(true);
+      }}
+      onResizeStop={() => {
+        setIsResizing(false);
+      }}
       width={width}>
       <div
-        className={styles.root}
+        className={clsx(styles.root, {
+          [styles.resizing]: isResizing,
+        })}
         draggable={false}
         style={
           zoomed

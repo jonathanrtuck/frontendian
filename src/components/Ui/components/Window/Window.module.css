@@ -28,7 +28,11 @@
   display: none;
 }
 
-.zoomed {
+.root:where(.dragging) {
+  cursor: var(--cursor--grabbing);
+}
+
+.root:where(.zoomed) {
   cursor: unset;
   height: calc(
     100vh - var(--window-padding) - var(--titlebar-height) -

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useContext, useRef } from "react";
+import { FunctionComponent, useContext, useRef, useState } from "react";
 
 import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty, useElementDimensions } from "@/hooks";
@@ -23,6 +23,8 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<number>(0);
 
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
   const offset = useComputedCustomProperty("--window-padding");
   const { width: rootWidth } = useElementDimensions(rootRef, [maxWidth, title]);
 
@@ -36,8 +38,12 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
         if (!e.shiftKey) {
           return false;
         }
+
+        setIsDragging(true);
       }}
       onStop={(_, { x }) => {
+        setIsDragging(false);
+
         moveWindowTitlebar({ id, left: x - offset });
       }}
       position={{
@@ -45,7 +51,9 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
         y: 0,
       }}>
       <header
-        className={styles.root}
+        className={clsx(styles.root, {
+          [styles.dragging]: isDragging,
+        })}
         onDoubleClick={(e) => {
           const isButton = (e.target as HTMLElement)?.classList.contains(
             styles.button
