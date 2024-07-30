@@ -1,9 +1,10 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
 import { Dialog } from "@/components/Dialog";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { useStore } from "@/store";
+import { FILE_README_MD } from "@/files";
+import { openFile, useStore } from "@/store";
 
 import { Deskbar } from "./components/Deskbar";
 import { Desktop } from "./components/Desktop";
@@ -13,6 +14,10 @@ export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);
   const fonts = useStore((state) => state.fonts);
   const windows = useStore((state) => state.windows);
+
+  useEffect(() => {
+    openFile({ id: FILE_README_MD.id });
+  }, []);
 
   return (
     <>

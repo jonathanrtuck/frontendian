@@ -310,7 +310,7 @@ export const openFile = (payload: ActionIds & { windowId?: ID }) =>
               window.id === existingWindow.id
                 ? {
                     ...window,
-                    title: application?.title ?? UNTITLED_WINDOW_TITLE,
+                    title: file.title,
                     ...(application?.getWindow?.(file) ?? {}),
                     fileId: file.id,
                     focused: true,
@@ -329,7 +329,7 @@ export const openFile = (payload: ActionIds & { windowId?: ID }) =>
         const windowPosition = getFirstOpenWindowPosition(state.windows);
         const window: Window = {
           ...DEFAULT_WINDOW,
-          title: application?.title ?? UNTITLED_WINDOW_TITLE,
+          title: file.title,
           ...(application?.getWindow?.(file) ?? {}),
           fileId: file.id,
           id: windowId,
