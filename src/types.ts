@@ -3,6 +3,7 @@ import {
   ForwardRefExoticComponent,
   PropsWithChildren,
   RefAttributes,
+  RefObject,
   SVGAttributes,
 } from "react";
 
@@ -58,6 +59,13 @@ export type IconComponent = ForwardRefExoticComponent<
 >;
 
 export type ID = string;
+
+export type Menuitem = {
+  disabled: boolean;
+  expandable: boolean;
+  id: ID;
+  ref: RefObject<HTMLElement>;
+};
 
 // add others as needed
 export const enum MimeType {

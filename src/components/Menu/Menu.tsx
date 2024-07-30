@@ -1,7 +1,15 @@
 import clsx from "clsx";
-import { forwardRef, HTMLAttributes, PropsWithChildren, useState } from "react";
+import {
+  forwardRef,
+  HTMLAttributes,
+  PropsWithChildren,
+  useContext,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 
-import { MenuContext } from "@/contexts";
+import { MenuContext, MenuContextValue, MenuitemContext } from "@/contexts";
 
 import styles from "./Menu.module.css";
 
@@ -22,38 +30,46 @@ export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
 
 export const Menu = forwardRef<HTMLElement, MenuProps>(
   ({ children, className, ...restProps }, ref) => {
-    const isBar = "bar" in restProps;
-    const isHorizontal = "horizontal" in restProps;
-    const isVertical = "vertical" in restProps;
+    const { expanded } = useContext(MenuitemContext);
+
+    const rootRef = useRef<HTMLMenuElement>(null);
+
+    useImperativeHandle(ref, () => rootRef.current as HTMLElement);
+
+    const bar = "bar" in restProps;
+    const horizontal = "horizontal" in restProps;
+    const vertical = "vertical" in restProps;
     const props = Object.assign({}, restProps, {
       bar: undefined,
       horizontal: undefined,
       vertical: undefined,
     });
 
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const menuContextValue = useMemo<MenuContextValue>(
+      () => ({
+        bar,
+        horizontal,
+        ref: rootRef,
+        vertical,
+      }),
+      [bar, horizontal, vertical]
+    );
 
     return (
       <menu
         {...props}
         aria-orientation={
-          isBar ? (isHorizontal ? "horizontal" : "vertical") : undefined
+          bar ? (horizontal ? "horizontal" : "vertical") : undefined
         }
         className={clsx(className, styles.root, {
-          [styles.bar]: isBar,
-          [styles.horizontal]: isHorizontal,
-          [styles.vertical]: isVertical,
+          [styles.bar]: bar,
+          [styles.horizontal]: horizontal,
+          [styles.vertical]: vertical,
         })}
-        hidden={!isBar && !isOpen}
-        ref={ref}
-        role={isBar ? "menubar" : "menu"}>
-        <MenuContext.Provider
-          value={{
-            isBar,
-            isHorizontal,
-            isOpen,
-            isVertical,
-          }}>
+        hidden={!bar && !expanded}
+        ref={rootRef}
+        role={bar ? "menubar" : "menu"}>
+        <MenuContext.Provider value={menuContextValue}>
           {children}
         </MenuContext.Provider>
       </menu>

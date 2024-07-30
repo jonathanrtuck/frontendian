@@ -48,7 +48,8 @@
   color: var(--text-color--disabled);
 }
 
-.root[aria-expanded="true"] {
+.root[aria-expanded="true"],
+.root[aria-expanded="true"] .root:not([aria-disabled="true"]):hover {
   background-image: linear-gradient(
     to bottom,
     rgb(146, 146, 146),

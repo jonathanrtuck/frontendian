@@ -56,6 +56,7 @@
 
 .button {
   aspect-ratio: 1 / 1;
+  cursor: var(--cursor--default);
 }
 
 .button:focus {
