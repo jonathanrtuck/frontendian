@@ -6,13 +6,15 @@ import {
   ReactElement,
   RefAttributes,
   SVGAttributes,
+  useCallback,
   useContext,
   useId,
+  useMemo,
   useRef,
   useState,
 } from "react";
 
-import { MenuContext, MenuitemContext } from "@/contexts";
+import { MenuContext, MenuitemContext, MenuitemContextValue } from "@/contexts";
 
 import styles from "./Menuitem.module.css";
 
@@ -32,15 +34,22 @@ export type MenuitemProps = Omit<
     title?: string;
   };
 } & (
-    | {
-        Icon?: ForwardRefExoticComponent<
-          SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
-        >;
-        children?: ReactElement;
+    | ({
         disabled?: boolean;
         onClick?(): void;
         title: string;
-      }
+      } & (
+        | {
+            Icon?: ForwardRefExoticComponent<
+              SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
+            >;
+            children?: ReactElement;
+          }
+        | {
+            checked?: boolean;
+            type: "checkbox" | "radio";
+          }
+      ))
     | {
         separator: true;
       }
@@ -53,13 +62,28 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   title,
   ...restProps
 }) => {
-  const { bar, horizontal, ref, vertical } = useContext(MenuContext);
+  const { bar, close, horizontal, vertical } = useContext(MenuContext);
 
   const id = useId();
 
   const rootRef = useRef<HTMLLIElement>(null);
 
   const [expanded, setExpanded] = useState<boolean>(false);
+
+  const closeMenuitem = useCallback(() => {
+    // return focus to this parent
+    rootRef.current?.focus();
+
+    setExpanded(false);
+  }, []);
+
+  const menuitemContextValue = useMemo<MenuitemContextValue>(
+    () => ({
+      close: closeMenuitem,
+      expanded,
+    }),
+    [closeMenuitem, expanded]
+  );
 
   const expandable = Boolean(children);
 
@@ -81,11 +105,17 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
     );
   }
 
-  const { Icon, disabled, onClick, ...props } = restProps;
+  const { disabled, onClick, ...props } = restProps;
+  const Icon = "Icon" in restProps && restProps.Icon;
+  const checked = ("checked" in restProps && restProps.checked) ?? false;
+  const type = "type" in restProps ? restProps.type : undefined;
+
+  // @todo handle checkbox, checked, radio…
 
   return (
     <li
       {...props}
+      aria-checked={type ? checked : undefined}
       aria-disabled={disabled}
       aria-expanded={expanded}
       aria-haspopup={expandable ? "menu" : undefined}
@@ -96,25 +126,44 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         [styles.vertical]: vertical,
       })}
       onBlur={({ relatedTarget }) => {
-        if (!rootRef.current?.contains(relatedTarget)) {
+        if (expandable && !rootRef.current?.contains(relatedTarget)) {
           setExpanded(false);
         }
       }}
-      onClick={() => {
-        if (!disabled) {
-          onClick?.();
+      onFocus={() => {
+        if (expandable) {
+          setExpanded(true);
         }
       }}
-      onFocus={() => {
-        setExpanded(true);
-      }}
       onMouseEnter={() => {
-        if (ref.current?.contains(document.activeElement)) {
+        if (
+          rootRef.current
+            ?.closest('[role="menubar"]')
+            ?.contains(document.activeElement)
+        ) {
           rootRef.current?.focus();
         }
       }}
+      onPointerDown={() => {
+        if (!disabled && (!type || !checked) && expandable) {
+          setExpanded((prevState) => !prevState);
+        }
+      }}
+      onPointerUp={() => {
+        if (!disabled && (!type || !checked)) {
+          onClick?.();
+
+          if (!expandable) {
+            close();
+          }
+        }
+      }}
       ref={rootRef}
-      role="menuitem"
+      role={
+        (type === "checkbox" && "menuitemcheckbox") ||
+        (type === "radio" && "menuitemradio") ||
+        "menuitem"
+      }
       tabIndex={0}>
       {Icon && (
         <Icon aria-hidden className={clsx(classes?.icon, styles.icon)} />
@@ -122,7 +171,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
       <span className={clsx(classes?.title, styles.title)} id={`${id}-title`}>
         {title}
       </span>
-      <MenuitemContext.Provider value={{ expanded }}>
+      <MenuitemContext.Provider value={menuitemContextValue}>
         {children}
       </MenuitemContext.Provider>
     </li>

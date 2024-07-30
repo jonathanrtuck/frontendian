@@ -1,26 +1,28 @@
-import { createContext, createRef, RefObject } from "react";
+import { createContext, RefObject } from "react";
 
 import { Window } from "@/types";
 
 export const MenuContext = createContext<MenuContextValue>({
   bar: false,
+  close: () => {},
   horizontal: false,
-  ref: createRef(),
   vertical: false,
 });
 
 export type MenuContextValue = {
   bar: boolean;
+  close(): void;
   horizontal: boolean;
-  ref: RefObject<HTMLMenuElement>;
   vertical: boolean;
 };
 
 export const MenuitemContext = createContext<MenuitemContextValue>({
+  close: () => {},
   expanded: false,
 });
 
 export type MenuitemContextValue = {
+  close(): void;
   expanded: boolean;
 };
 

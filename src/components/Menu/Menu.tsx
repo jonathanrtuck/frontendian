@@ -4,9 +4,7 @@ import {
   HTMLAttributes,
   PropsWithChildren,
   useContext,
-  useImperativeHandle,
   useMemo,
-  useRef,
 } from "react";
 
 import { MenuContext, MenuContextValue, MenuitemContext } from "@/contexts";
@@ -30,11 +28,7 @@ export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
 
 export const Menu = forwardRef<HTMLElement, MenuProps>(
   ({ children, className, ...restProps }, ref) => {
-    const { expanded } = useContext(MenuitemContext);
-
-    const rootRef = useRef<HTMLMenuElement>(null);
-
-    useImperativeHandle(ref, () => rootRef.current as HTMLElement);
+    const { close, expanded } = useContext(MenuitemContext);
 
     const bar = "bar" in restProps;
     const horizontal = "horizontal" in restProps;
@@ -48,11 +42,11 @@ export const Menu = forwardRef<HTMLElement, MenuProps>(
     const menuContextValue = useMemo<MenuContextValue>(
       () => ({
         bar,
+        close,
         horizontal,
-        ref: rootRef,
         vertical,
       }),
-      [bar, horizontal, vertical]
+      [bar, close, horizontal, vertical]
     );
 
     return (
@@ -67,7 +61,7 @@ export const Menu = forwardRef<HTMLElement, MenuProps>(
           [styles.vertical]: vertical,
         })}
         hidden={!bar && !expanded}
-        ref={rootRef}
+        ref={ref}
         role={bar ? "menubar" : "menu"}>
         <MenuContext.Provider value={menuContextValue}>
           {children}

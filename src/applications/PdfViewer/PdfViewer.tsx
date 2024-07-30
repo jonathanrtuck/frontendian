@@ -25,14 +25,10 @@ export const PdfViewer: ApplicationComponent = ({
 }) => {
   const [numPages, setNumPages] = useState<number>(0);
 
-  if (file?.type !== "application/pdf") {
-    return null;
-  }
-
   return (
     <>
       <Menubar>
-        <Menuitem key="File" title="File">
+        <Menuitem title="File">
           <Menu>
             <Menuitem
               onClick={() => {
@@ -75,29 +71,36 @@ export const PdfViewer: ApplicationComponent = ({
             />
           </Menu>
         </Menuitem>
-        <Menuitem key="Help" title="Help">
+        <Menuitem title="Help">
           <Menu>
             <Menuitem
               onClick={() => {
                 console.debug("about…");
               }}
-              title="About PDF Viewer"
+              title="About PDF Viewer…"
             />
           </Menu>
         </Menuitem>
       </Menubar>
       <Content>
-        <Document
-          className={styles.root}
-          file={file.url}
-          loading={null}
-          onLoadSuccess={({ numPages }) => {
-            setNumPages(numPages);
-          }}>
-          {Array.from(new Array(numPages)).map((_, i) => (
-            <Page className={styles.page} key={i} pageIndex={i} scale={1.25} />
-          ))}
-        </Document>
+        {file?.url ? (
+          <Document
+            className={styles.root}
+            file={file.url}
+            loading={null}
+            onLoadSuccess={({ numPages }) => {
+              setNumPages(numPages);
+            }}>
+            {Array.from(new Array(numPages)).map((_, i) => (
+              <Page
+                className={styles.page}
+                key={i}
+                pageIndex={i}
+                scale={1.25}
+              />
+            ))}
+          </Document>
+        ) : null}
       </Content>
     </>
   );

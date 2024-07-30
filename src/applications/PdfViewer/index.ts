@@ -8,7 +8,11 @@ export const APPLICATION_PDF_VIEWER: ApplicationConfiguration = {
   getWindow: (file) => ({
     height: 540,
     title: file?.title || "PDF Viewer",
-    width: file && "width" in file ? file.width : undefined,
+    ...(file && "width" in file
+      ? {
+          width: file.width,
+        }
+      : {}),
   }),
   Icon: PdfViewerIcon,
   id: "application-pdf-viewer",
