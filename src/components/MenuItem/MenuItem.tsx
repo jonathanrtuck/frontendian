@@ -15,6 +15,21 @@ import { IconComponent } from "@/types";
 
 import styles from "./Menuitem.module.css";
 
+const getMenuitemToFocus = (
+  element: HTMLElement | null
+): HTMLElement | undefined => {
+  const menuitems = Array.from<HTMLElement>(
+    element?.querySelectorAll(':scope > [role="menu"] > [role^="menuitem"]') ??
+      []
+  );
+
+  return (
+    menuitems.find((menuitem) =>
+      menuitem.matches(':not([aria-checked="true"], [aria-disabled="true"])')
+    ) ?? menuitems[0]
+  );
+};
+
 export type MenuitemProps = Omit<
   HTMLAttributes<HTMLLIElement>,
   | "aria-disabled"
@@ -89,20 +104,6 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const onClick = "onClick" in restProps ? restProps.onClick : undefined;
   const type = "type" in restProps ? restProps.type : undefined;
 
-  const getMenuitemToFocus = (): HTMLElement | undefined => {
-    const menuitems = Array.from<HTMLElement>(
-      rootRef.current?.querySelectorAll(
-        ':scope > [role="menu"] > [role^="menuitem"]'
-      ) ?? []
-    );
-
-    return (
-      menuitems.find((menuitem) =>
-        menuitem.matches(':not([aria-checked="true"], [aria-disabled="true"])')
-      ) ?? menuitems[0]
-    );
-  };
-
   return (
     <li
       {...props}
@@ -129,7 +130,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
 
               if (children) {
                 if (!isExpanded) {
-                  getMenuitemToFocus()?.focus();
+                  getMenuitemToFocus(rootRef.current)?.focus();
                 }
 
                 setIsExpanded((prevState) => !prevState);
@@ -156,7 +157,9 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
               if (isFocusWithin) {
                 setIsExpanded(true);
 
-                (getMenuitemToFocus() ?? rootRef.current)?.focus();
+                (
+                  getMenuitemToFocus(rootRef.current) ?? rootRef.current
+                )?.focus();
               }
             }
       }

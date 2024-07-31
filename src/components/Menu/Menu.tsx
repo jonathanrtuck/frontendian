@@ -15,6 +15,20 @@ import { MenubarContext } from "@/contexts";
 
 import styles from "./Menu.module.css";
 
+const getMenuitemToFocus = (
+  element: HTMLElement | null
+): HTMLElement | undefined => {
+  const menuitems = Array.from<HTMLElement>(
+    element?.querySelectorAll(':scope > [role^="menuitem"]') ?? []
+  );
+
+  return (
+    menuitems.find((menuitem) =>
+      menuitem.matches(':not([aria-checked="true"], [aria-disabled="true"])')
+    ) ?? menuitems[0]
+  );
+};
+
 export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
   (
     | ({
@@ -52,22 +66,6 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
       vertical: undefined,
     };
 
-    const getMenuitems = (): HTMLElement[] =>
-      Array.from(
-        rootRef.current?.querySelectorAll(':scope > [role^="menuitem"]') ?? []
-      ) as HTMLElement[];
-    const getMenuitemToFocus = (): HTMLElement | undefined => {
-      const menuitems = getMenuitems();
-
-      return (
-        menuitems.find((menuitem) =>
-          menuitem.matches(
-            ':not([aria-checked="true"], [aria-disabled="true"])'
-          )
-        ) ?? menuitems[0]
-      );
-    };
-
     return (
       <menu
         {...props}
@@ -100,7 +98,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
                 const isExpanded = menuitem?.matches('[aria-expanded="true"]');
 
                 if (!hasPopup || isExpanded) {
-                  getMenuitemToFocus()?.focus();
+                  getMenuitemToFocus(rootRef.current)?.focus();
 
                   setIsFocusWithin(false);
                 }
