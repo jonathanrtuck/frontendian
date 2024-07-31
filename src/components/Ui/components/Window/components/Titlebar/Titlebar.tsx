@@ -18,7 +18,7 @@ export type TitlebarProps = {
 };
 
 export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
-  const { id, title, titlebarLeft } = useContext(WindowContext);
+  const { id, scrollable, title, titlebarLeft } = useContext(WindowContext);
 
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<number>(0);
@@ -93,16 +93,18 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
           title="Close"
           type="button"
         />
-        <button
-          aria-label="Zoom"
-          className={clsx(styles.button, styles.zoom)}
-          draggable={false}
-          onClick={() => {
-            zoomWindow({ id });
-          }}
-          title="Zoom"
-          type="button"
-        />
+        {scrollable && (
+          <button
+            aria-label="Zoom"
+            className={clsx(styles.button, styles.zoom)}
+            draggable={false}
+            onClick={() => {
+              zoomWindow({ id });
+            }}
+            title="Zoom"
+            type="button"
+          />
+        )}
       </header>
     </Draggable>
   );

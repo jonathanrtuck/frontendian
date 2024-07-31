@@ -22,7 +22,8 @@ const MIN_WIDTH = 16 * 7; // 7rem
 export type ContentProps = PropsWithChildren;
 
 export const Content: FunctionComponent<ContentProps> = ({ children }) => {
-  const { height, id, menubarRef, width, zoomed } = useContext(WindowContext);
+  const { height, id, menubarRef, scrollable, width, zoomed } =
+    useContext(WindowContext);
 
   const [isResizing, setIsResizing] = useState<boolean>(false);
 
@@ -31,19 +32,24 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         .map((element) => (element as HTMLElement).offsetWidth)
         .reduce((acc, width) => acc + width, 0)
     : 0;
-  const scrollbarSize = useComputedCustomProperty("--content-scrollbar-size");
+  const scrollbarSizeProperty = useComputedCustomProperty(
+    "--content-scrollbar-size"
+  );
+  const scrollbarSize = scrollable ? scrollbarSizeProperty : 0;
 
   return (
     <Resizable
       axis={zoomed ? "none" : "both"}
       handle={
-        <ResizeHandle
-          aria-hidden
-          className={clsx(styles.resize, {
-            [styles.resizing]: isResizing,
-            [styles.zoomed]: zoomed,
-          })}
-        />
+        scrollable ? (
+          <ResizeHandle
+            aria-hidden
+            className={clsx(styles.resize, {
+              [styles.resizing]: isResizing,
+              [styles.zoomed]: zoomed,
+            })}
+          />
+        ) : null
       }
       height={height}
       minConstraints={[
@@ -63,6 +69,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
       <div
         className={clsx(styles.root, {
           [styles.resizing]: isResizing,
+          [styles.scrollable]: scrollable,
         })}
         draggable={false}
         style={

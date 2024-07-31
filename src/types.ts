@@ -107,6 +107,7 @@ export type Window = {
   hidden: boolean;
   id: ID;
   left: number;
+  scrollable: boolean;
   title: string;
   titlebarLeft: number;
   top: number;

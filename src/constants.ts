@@ -17,6 +17,7 @@ export const DEFAULT_WINDOW: Window = {
   hidden: false,
   id: "",
   left: DEFAULT_WINDOW_POSITION_OFFSET,
+  scrollable: true,
   title: "",
   titlebarLeft: 0,
   top: DEFAULT_WINDOW_POSITION_OFFSET,
