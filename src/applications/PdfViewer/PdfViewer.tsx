@@ -21,6 +21,11 @@ export const PdfViewer: ApplicationComponent = ({
   Menubar,
   Menuitem,
   file,
+  onAbout,
+  onClose,
+  onNew,
+  onOpen,
+  onQuit,
   openableFiles,
 }) => {
   const [numPages, setNumPages] = useState<number>(0);
@@ -30,19 +35,14 @@ export const PdfViewer: ApplicationComponent = ({
       <Menubar>
         <Menuitem title="File">
           <Menu>
-            <Menuitem
-              onClick={() => {
-                console.debug("new…");
-              }}
-              title="New"
-            />
+            <Menuitem onClick={onNew} title="New" />
             <Menuitem title="Open">
               <Menu>
                 {openableFiles.map(({ id, title }) => (
                   <Menuitem
                     key={id}
                     onClick={() => {
-                      console.debug("open…", title);
+                      onOpen(id);
                     }}
                     title={title}
                   />
@@ -52,33 +52,18 @@ export const PdfViewer: ApplicationComponent = ({
             <Menuitem separator />
             <Menuitem
               onClick={() => {
-                console.debug("print…");
+                console.debug("print…"); // @todo
               }}
               title="Print"
             />
             <Menuitem separator />
-            <Menuitem
-              onClick={() => {
-                console.debug("close…");
-              }}
-              title="Close"
-            />
-            <Menuitem
-              onClick={() => {
-                console.debug("quit…");
-              }}
-              title="Quit"
-            />
+            <Menuitem onClick={onClose} title="Close" />
+            <Menuitem onClick={onQuit} title="Quit" />
           </Menu>
         </Menuitem>
         <Menuitem title="Help">
           <Menu>
-            <Menuitem
-              onClick={() => {
-                console.debug("about…");
-              }}
-              title="About PDF Viewer…"
-            />
+            <Menuitem onClick={onAbout} title="About PDF Viewer…" />
           </Menu>
         </Menuitem>
       </Menubar>

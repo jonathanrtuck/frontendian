@@ -12,6 +12,11 @@ export const StyledEdit: ApplicationComponent = ({
   Menubar,
   Menuitem,
   file,
+  onAbout,
+  onClose,
+  onNew,
+  onOpen,
+  onQuit,
   openableFiles,
 }) => {
   const rootRef = useRef<HTMLElement>(null);
@@ -86,19 +91,14 @@ export const StyledEdit: ApplicationComponent = ({
       <Menubar>
         <Menuitem title="File">
           <Menu>
-            <Menuitem
-              onClick={() => {
-                console.debug("new…");
-              }}
-              title="New"
-            />
+            <Menuitem onClick={onNew} title="New" />
             <Menuitem title="Open">
               <Menu>
                 {openableFiles.map(({ id, title }) => (
                   <Menuitem
                     key={id}
                     onClick={() => {
-                      console.debug("open…", title);
+                      onOpen(id);
                     }}
                     title={title}
                   />
@@ -106,18 +106,8 @@ export const StyledEdit: ApplicationComponent = ({
               </Menu>
             </Menuitem>
             <Menuitem separator />
-            <Menuitem
-              onClick={() => {
-                console.debug("close…");
-              }}
-              title="Close"
-            />
-            <Menuitem
-              onClick={() => {
-                console.debug("quit…");
-              }}
-              title="Quit"
-            />
+            <Menuitem onClick={onClose} title="Close" />
+            <Menuitem onClick={onQuit} title="Quit" />
           </Menu>
         </Menuitem>
         <Menuitem title="View">
@@ -142,12 +132,7 @@ export const StyledEdit: ApplicationComponent = ({
         </Menuitem>
         <Menuitem title="Help">
           <Menu>
-            <Menuitem
-              onClick={() => {
-                console.debug("about…");
-              }}
-              title="About StyledEdit…"
-            />
+            <Menuitem onClick={onAbout} title="About StyledEdit…" />
           </Menu>
         </Menuitem>
       </Menubar>

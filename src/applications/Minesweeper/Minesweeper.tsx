@@ -28,6 +28,9 @@ export const Minesweeper: ApplicationComponent = ({
   Menu,
   Menubar,
   Menuitem,
+  onAbout,
+  onQuit,
+  onResize,
 }) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -77,12 +80,7 @@ export const Minesweeper: ApplicationComponent = ({
       <Menubar>
         <Menuitem title="File">
           <Menu>
-            <Menuitem
-              onClick={() => {
-                console.debug("quit…");
-              }}
-              title="Quit"
-            />
+            <Menuitem onClick={onQuit} title="Quit" />
           </Menu>
         </Menuitem>
         <Menuitem title="Game">
@@ -94,7 +92,10 @@ export const Minesweeper: ApplicationComponent = ({
                 setSquares(DEFAULT_STATE[level].squares);
 
                 // reset window dimensions
-                // @todo `onResize(DEFAULT_STATE[level].height, DEFAULT_STATE[level].width);`
+                onResize(
+                  DEFAULT_STATE[level].height,
+                  DEFAULT_STATE[level].width
+                );
               }}
               title="New"
             />
@@ -113,7 +114,7 @@ export const Minesweeper: ApplicationComponent = ({
                   setSquares(squares);
 
                   // update window dimensions
-                  // @todo `onResize(height, width);`
+                  onResize(height, width);
                 }}
                 title={title}
                 type="radio"
@@ -123,12 +124,7 @@ export const Minesweeper: ApplicationComponent = ({
         </Menuitem>
         <Menuitem title="Help">
           <Menu>
-            <Menuitem
-              onClick={() => {
-                console.debug("about…");
-              }}
-              title="About Minesweeper…"
-            />
+            <Menuitem onClick={onAbout} title="About Minesweeper…" />
           </Menu>
         </Menuitem>
       </Menubar>

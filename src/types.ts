@@ -22,6 +22,12 @@ export type ApplicationComponentProps = {
   Menubar: ComponentType<PropsWithChildren>;
   Menuitem: ComponentType<MenuitemProps>;
   file?: File;
+  onAbout(): void;
+  onClose(): void;
+  onNew(): void;
+  onOpen(fileId: ID): void;
+  onQuit(): void;
+  onResize(height: number, width: number): void;
   openableFiles: File[];
 };
 

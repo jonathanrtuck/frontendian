@@ -12,6 +12,8 @@ export const Teapot: ApplicationComponent = ({
   Menu,
   Menubar,
   Menuitem,
+  onAbout,
+  onQuit,
 }) => {
   const rootRef = useRef<HTMLCanvasElement>(null);
 
@@ -26,22 +28,12 @@ export const Teapot: ApplicationComponent = ({
       <Menubar>
         <Menuitem title="File">
           <Menu>
-            <Menuitem
-              onClick={() => {
-                console.debug("quit…");
-              }}
-              title="Quit"
-            />
+            <Menuitem onClick={onQuit} title="Quit" />
           </Menu>
         </Menuitem>
         <Menuitem title="Help">
           <Menu>
-            <Menuitem
-              onClick={() => {
-                console.debug("about…");
-              }}
-              title="About Teapot…"
-            />
+            <Menuitem onClick={onAbout} title="About Teapot…" />
           </Menu>
         </Menuitem>
       </Menubar>
