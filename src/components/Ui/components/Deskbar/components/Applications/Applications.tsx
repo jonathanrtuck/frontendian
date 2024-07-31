@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 
 import { Menu } from "@/components/Menu";
 import { Menuitem } from "@/components/Menuitem";
+import { WindowHidden, WindowVisible } from "@/icons";
 import {
   closeApplication,
   focusWindow,
@@ -42,6 +43,7 @@ export const Applications: FunctionComponent = () => {
                 <>
                   {applicationWindows.map((window) => (
                     <Menuitem
+                      Icon={window.hidden ? WindowHidden : WindowVisible}
                       key={window.id}
                       onClick={() => {
                         focusWindow({ id: window.id });
