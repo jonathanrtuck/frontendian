@@ -1,13 +1,17 @@
 import clsx from "clsx";
 import {
+  FocusEvent,
   forwardRef,
   HTMLAttributes,
+  KeyboardEvent,
+  MouseEvent,
   PropsWithChildren,
-  useContext,
-  useMemo,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
 
-import { MenuContext, MenuContextValue, MenuitemContext } from "@/contexts";
+import { MenubarContext } from "@/contexts";
 
 import styles from "./Menu.module.css";
 
@@ -26,46 +30,108 @@ export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
     | {}
   );
 
-export const Menu = forwardRef<HTMLElement, MenuProps>(
-  ({ children, className, ...restProps }, ref) => {
-    const { close, expanded } = useContext(MenuitemContext);
+// @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
+export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
+  (
+    { children, className, onBlur, onClick, onFocus, onKeyDown, ...restProps },
+    ref
+  ) => {
+    const rootRef = useRef<HTMLMenuElement>(null);
+
+    useImperativeHandle(ref, () => rootRef.current as HTMLMenuElement);
+
+    const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
 
     const bar = "bar" in restProps;
     const horizontal = "horizontal" in restProps;
-    const vertical = "vertical" in restProps;
-    const props = Object.assign({}, restProps, {
+    const props = {
+      ...restProps,
       bar: undefined,
       horizontal: undefined,
+      open: undefined,
       vertical: undefined,
-    });
+    };
 
-    const menuContextValue = useMemo<MenuContextValue>(
-      () => ({
-        bar,
-        close,
-        horizontal,
-        vertical,
-      }),
-      [bar, close, horizontal, vertical]
-    );
+    const getMenuitems = (): HTMLElement[] =>
+      Array.from(
+        rootRef.current?.querySelectorAll(':scope > [role^="menuitem"]') ?? []
+      ) as HTMLElement[];
+    const getMenuitemToFocus = (): HTMLElement | undefined => {
+      const menuitems = getMenuitems();
+
+      return (
+        menuitems.find((menuitem) =>
+          menuitem.matches(
+            ':not([aria-checked="true"], [aria-disabled="true"])'
+          )
+        ) ?? menuitems[0]
+      );
+    };
 
     return (
       <menu
         {...props}
+        aria-hidden={bar ? undefined : !isFocusWithin}
         aria-orientation={
           bar ? (horizontal ? "horizontal" : "vertical") : undefined
         }
-        className={clsx(className, styles.root, {
-          [styles.bar]: bar,
-          [styles.horizontal]: horizontal,
-          [styles.vertical]: vertical,
-        })}
-        hidden={!bar && !expanded}
-        ref={ref}
+        className={clsx(className, styles.root)}
+        onBlur={(e: FocusEvent<HTMLMenuElement>) => {
+          onBlur?.(e);
+
+          if (
+            !rootRef.current?.contains(
+              e.relatedTarget ?? document.activeElement
+            )
+          ) {
+            setIsFocusWithin(false);
+          }
+        }}
+        onClick={
+          bar
+            ? (e: MouseEvent<HTMLMenuElement>) => {
+                onClick?.(e);
+
+                const menuitem = (e.target as HTMLElement).closest(
+                  '[role^="menuitem"]'
+                );
+                const hasPopup =
+                  menuitem?.matches('[aria-haspopup="menu"]') ?? false;
+                const isExpanded = menuitem?.matches('[aria-expanded="true"]');
+
+                if (!hasPopup || isExpanded) {
+                  getMenuitemToFocus()?.focus();
+
+                  setIsFocusWithin(false);
+                }
+              }
+            : onClick
+        }
+        onFocus={(e: FocusEvent<HTMLMenuElement>) => {
+          onFocus?.(e);
+
+          setIsFocusWithin(true);
+        }}
+        onKeyDown={
+          bar
+            ? (e: KeyboardEvent<HTMLMenuElement>) => {
+                onKeyDown?.(e);
+
+                if (e.key === "Enter" || e.key === " ") {
+                  // @todo
+                }
+              }
+            : onKeyDown
+        }
+        ref={rootRef}
         role={bar ? "menubar" : "menu"}>
-        <MenuContext.Provider value={menuContextValue}>
-          {children}
-        </MenuContext.Provider>
+        {bar ? (
+          <MenubarContext.Provider value={{ isFocusWithin }}>
+            {children}
+          </MenubarContext.Provider>
+        ) : (
+          children
+        )}
       </menu>
     );
   }

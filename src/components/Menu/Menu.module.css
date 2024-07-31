@@ -5,15 +5,21 @@
   padding: 0;
 }
 
-.root[hidden] {
-  display: none;
+.root[aria-hidden="true"] {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
-.root:is(.bar) {
+.root[role="menubar"] {
   flex-direction: row;
 }
 
-.root:not(.bar) {
+.root[role="menu"] {
   background-color: rgb(224, 224, 224);
   border-width: var(--border-width);
   color: rgb(0, 0, 0);
@@ -24,7 +30,7 @@
   z-index: 100;
 }
 
-.root:is(.horizontal) {
+.root[aria-orientation="horizontal"] {
   background-image: linear-gradient(
     to bottom,
     rgb(227, 227, 227),
@@ -34,16 +40,21 @@
   height: 1.5rem;
 }
 
-.root:is(.vertical) {
+.root[aria-orientation="vertical"] {
   flex-direction: column;
 }
 
-.horizontal .root {
+[aria-orientation="horizontal"] .root {
   left: 0;
   top: 100%;
 }
 
-.vertical .root {
+[aria-orientation="vertical"] .root {
   right: 100%;
+  top: 0;
+}
+
+[role="menu"] .root {
+  left: 100%;
   top: 0;
 }

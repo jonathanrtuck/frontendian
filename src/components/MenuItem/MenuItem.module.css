@@ -9,11 +9,11 @@
   user-select: none;
 }
 
-.root:where(.horizontal) {
+[aria-orientation="horizontal"] > .root {
   padding: 0 0.5rem;
 }
 
-.root:where(.vertical) {
+[aria-orientation="vertical"] > .root {
   background-image: linear-gradient(
     to bottom,
     rgb(227, 227, 227),
@@ -22,11 +22,11 @@
   padding: 0.25rem 0.5rem;
 }
 
-.root:where(.vertical) + .root {
+[aria-orientation="vertical"] > .root + .root {
   border-width: var(--border-width) 0 0;
 }
 
-.root:not(.bar) {
+[role="menu"] > .root {
   align-items: center;
   display: flex;
   gap: 0.5rem;
@@ -65,7 +65,7 @@
   content: "✔️";
 }
 
-.root[aria-haspopup="menu"]:not(.bar)::after {
+[role="menu"] > .root[aria-haspopup="menu"]::after {
   content: "▶";
   font-size: 0.5rem;
   margin-right: -0.5rem;

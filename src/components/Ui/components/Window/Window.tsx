@@ -26,7 +26,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
   const stackingOrder = useStore((state) => state.stackingOrder);
   const types = useStore((state) => state.types);
 
-  const menubarRef = useRef<HTMLElement>(null);
+  const menubarRef = useRef<HTMLMenuElement>(null);
   const rootRef = useRef<HTMLElement>(null);
 
   const [isDragging, setIsDragging] = useState<boolean>(false);

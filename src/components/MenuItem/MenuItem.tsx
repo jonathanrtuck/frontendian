@@ -1,20 +1,17 @@
 import clsx from "clsx";
 import {
-  ForwardRefExoticComponent,
+  FocusEvent,
   FunctionComponent,
   HTMLAttributes,
   ReactElement,
-  RefAttributes,
-  SVGAttributes,
-  useCallback,
   useContext,
   useId,
-  useMemo,
   useRef,
   useState,
 } from "react";
 
-import { MenuContext, MenuitemContext, MenuitemContextValue } from "@/contexts";
+import { MenubarContext } from "@/contexts";
+import { IconComponent } from "@/types";
 
 import styles from "./Menuitem.module.css";
 
@@ -35,20 +32,22 @@ export type MenuitemProps = Omit<
   };
 } & (
     | ({
-        disabled?: boolean;
-        onClick?(): void;
         title: string;
       } & (
         | {
-            Icon?: ForwardRefExoticComponent<
-              SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
-            >;
-            children?: ReactElement;
+            children: ReactElement;
           }
-        | {
-            checked?: boolean;
-            type: "checkbox" | "radio";
-          }
+        | ({
+            Icon?: IconComponent;
+            disabled?: boolean;
+            onClick?(): void;
+          } & (
+            | {
+                checked?: boolean;
+                type: "checkbox" | "radio";
+              }
+            | {}
+          ))
       ))
     | {
         separator: true;
@@ -62,30 +61,13 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   title,
   ...restProps
 }) => {
-  const { bar, close, horizontal, vertical } = useContext(MenuContext);
+  const { isFocusWithin } = useContext(MenubarContext);
 
   const id = useId();
 
   const rootRef = useRef<HTMLLIElement>(null);
 
-  const [expanded, setExpanded] = useState<boolean>(false);
-
-  const closeMenuitem = useCallback(() => {
-    // return focus to this parent
-    rootRef.current?.focus();
-
-    setExpanded(false);
-  }, []);
-
-  const menuitemContextValue = useMemo<MenuitemContextValue>(
-    () => ({
-      close: closeMenuitem,
-      expanded,
-    }),
-    [closeMenuitem, expanded]
-  );
-
-  const expandable = Boolean(children);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   if ("separator" in restProps) {
     const { separator, ...props } = restProps;
@@ -93,87 +75,105 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
     return (
       <li
         {...props}
-        className={clsx(className, classes?.root, styles.separator, {
-          [styles.bar]: bar,
-          [styles.horizontal]: horizontal,
-          [styles.vertical]: vertical,
-        })}
-        ref={rootRef}
+        className={clsx(className, classes?.root, styles.separator)}
         role="separator"
         tabIndex={-1}
       />
     );
   }
 
-  const { disabled, onClick, ...props } = restProps;
+  const { onKeyDown, onMouseEnter, ...props } = restProps;
   const Icon = "Icon" in restProps && restProps.Icon;
   const checked = ("checked" in restProps && restProps.checked) ?? false;
+  const disabled = ("disabled" in restProps && restProps.disabled) ?? false;
+  const onClick = "onClick" in restProps ? restProps.onClick : undefined;
   const type = "type" in restProps ? restProps.type : undefined;
 
-  // @todo handle checkbox, checked, radio…
+  const getMenuitemToFocus = (): HTMLElement | undefined => {
+    const menuitems = Array.from<HTMLElement>(
+      rootRef.current?.querySelectorAll(
+        ':scope > [role="menu"] > [role^="menuitem"]'
+      ) ?? []
+    );
+
+    return (
+      menuitems.find((menuitem) =>
+        menuitem.matches(':not([aria-checked="true"], [aria-disabled="true"])')
+      ) ?? menuitems[0]
+    );
+  };
 
   return (
     <li
       {...props}
       aria-checked={type ? checked : undefined}
       aria-disabled={disabled}
-      aria-expanded={expanded}
-      aria-haspopup={expandable ? "menu" : undefined}
+      aria-expanded={children ? isExpanded : undefined}
+      aria-haspopup={children ? "menu" : undefined}
       aria-labelledby={`${id}-title`}
-      className={clsx(className, classes?.root, styles.root, {
-        [styles.bar]: bar,
-        [styles.horizontal]: horizontal,
-        [styles.vertical]: vertical,
-      })}
-      onBlur={({ relatedTarget }) => {
-        if (expandable && !rootRef.current?.contains(relatedTarget)) {
-          setExpanded(false);
-        }
-      }}
-      onFocus={() => {
-        if (expandable) {
-          setExpanded(true);
-        }
-      }}
-      onMouseEnter={() => {
-        if (
-          rootRef.current
-            ?.closest('[role="menubar"]')
-            ?.contains(document.activeElement)
-        ) {
-          rootRef.current?.focus();
-        }
-      }}
-      onPointerDown={() => {
-        if (!disabled && (!type || !checked) && expandable) {
-          setExpanded((prevState) => !prevState);
-        }
-      }}
-      onPointerUp={() => {
-        if (!disabled && (!type || !checked)) {
-          onClick?.();
+      className={clsx(className, classes?.root, styles.root)}
+      onBlur={(e: FocusEvent<HTMLLIElement>) => {
+        props.onBlur?.(e);
 
-          if (!expandable) {
-            close();
-          }
+        if (
+          !rootRef.current?.contains(e.relatedTarget ?? document.activeElement)
+        ) {
+          setIsExpanded(false);
         }
       }}
+      onClick={
+        checked || disabled
+          ? onClick
+          : () => {
+              onClick?.();
+
+              if (children) {
+                if (!isExpanded) {
+                  getMenuitemToFocus()?.focus();
+                }
+
+                setIsExpanded((prevState) => !prevState);
+              }
+            }
+      }
+      onKeyDown={
+        checked || disabled
+          ? onKeyDown
+          : (e) => {
+              onKeyDown?.(e);
+
+              if (children && (e.key === "Enter" || e.key === " ")) {
+                // @todo
+              }
+            }
+      }
+      onMouseEnter={
+        checked || disabled
+          ? onMouseEnter
+          : (e) => {
+              onMouseEnter?.(e);
+
+              if (isFocusWithin) {
+                setIsExpanded(true);
+
+                (getMenuitemToFocus() ?? rootRef.current)?.focus();
+              }
+            }
+      }
       ref={rootRef}
       role={
         (type === "checkbox" && "menuitemcheckbox") ||
         (type === "radio" && "menuitemradio") ||
         "menuitem"
       }
-      tabIndex={0}>
+      tabIndex={-1}>
       {Icon && (
         <Icon aria-hidden className={clsx(classes?.icon, styles.icon)} />
       )}
       <span className={clsx(classes?.title, styles.title)} id={`${id}-title`}>
         {title}
       </span>
-      <MenuitemContext.Provider value={menuitemContextValue}>
-        {children}
-      </MenuitemContext.Provider>
+      {children}
     </li>
   );
 };

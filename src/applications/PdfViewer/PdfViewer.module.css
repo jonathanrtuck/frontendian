@@ -8,6 +8,6 @@
   border-width: var(--border-width) 0 0;
 }
 
-.page :global(.textLayer :is(span, br)) {
+.page :global(.textLayer :where(span, br)) {
   cursor: var(--cursor--text);
 }
