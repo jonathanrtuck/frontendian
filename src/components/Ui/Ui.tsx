@@ -34,7 +34,10 @@ export const UI: FunctionComponent = () => {
       </Helmet>
       <ErrorBoundary
         fallback={
-          <Dialog text="An unknown error has occured. Please reload the page." />
+          <Dialog>
+            <p>An unknown error has occured.</p>
+            <p>Please reload the page.</p>
+          </Dialog>
         }>
         <Desktop />
         <Deskbar />

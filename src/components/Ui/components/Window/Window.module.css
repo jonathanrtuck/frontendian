@@ -41,3 +41,15 @@
   transform: translate(0, 0) !important;
   width: calc(100vw - var(--deskbar-width));
 }
+
+.dialog {
+  background-color: var(--window-background-color);
+  border-width: 0 var(--border-width) var(--border-width);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+  font-size: 0.875rem;
+  max-height: calc(100% - 3rem);
+  max-width: calc(100% - 3rem);
+  top: var(--border-width);
+  transform: translate(-50%, 0);
+  z-index: 1;
+}

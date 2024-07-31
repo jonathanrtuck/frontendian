@@ -2,6 +2,8 @@ import clsx from "clsx";
 import { FunctionComponent, useCallback, useRef, useState } from "react";
 import Draggable from "react-draggable";
 
+import { Dialog } from "@/components/Dialog";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Menu, Menuitem } from "@/components/Menu";
 import { WindowContext } from "@/contexts";
 import { useElementDimensions, useFocus } from "@/hooks";
@@ -26,7 +28,6 @@ import styles from "./Window.module.css";
 
 export type WindowProps = WindowType;
 
-// @todo dialogs
 export const Window: FunctionComponent<WindowProps> = (props) => {
   const { fileId, focused, hidden, id, left, top, width, zoomed } = props;
 
@@ -51,7 +52,6 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     windowIds.includes(id)
   );
 
-  // these are passed down to the application component
   const onAbout = useCallback(() => {
     // setIsAboutDialogOpen(true);
   }, []);
@@ -151,20 +151,38 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
             menubarRef,
           }}>
           <Titlebar maxWidth={rootWidth} />
-          <application.Component
-            Content={Content}
-            Menu={Menu}
-            Menubar={Menubar}
-            Menuitem={Menuitem}
-            file={file}
-            onAbout={onAbout}
-            onClose={onClose}
-            onNew={onNew}
-            onOpen={onOpen}
-            onQuit={onQuit}
-            onResize={onResize}
-            openableFiles={openableFiles}
-          />
+          <ErrorBoundary
+            fallback={
+              <Content>
+                <Dialog className={styles.dialog}>
+                  <p>{application.title} has encountered an unknown error.</p>
+                  <footer>
+                    <button
+                      autoFocus
+                      formMethod="dialog"
+                      onClick={onClose}
+                      type="reset">
+                      Close window
+                    </button>
+                  </footer>
+                </Dialog>
+              </Content>
+            }>
+            <application.Component
+              Content={Content}
+              Menu={Menu}
+              Menubar={Menubar}
+              Menuitem={Menuitem}
+              file={file}
+              onAbout={onAbout}
+              onClose={onClose}
+              onNew={onNew}
+              onOpen={onOpen}
+              onQuit={onQuit}
+              onResize={onResize}
+              openableFiles={openableFiles}
+            />
+          </ErrorBoundary>
         </WindowContext.Provider>
       </section>
     </Draggable>

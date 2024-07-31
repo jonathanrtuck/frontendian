@@ -7,7 +7,6 @@ import {
 } from "react";
 import { Resizable } from "react-resizable";
 
-import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty } from "@/hooks";
 import { resizeWindow } from "@/store";
@@ -80,12 +79,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
                 width: width + scrollbarSize,
               }
         }>
-        <ErrorBoundary
-          onError={() => {
-            console.debug("error…"); // @todo show error dialog
-          }}>
-          {children}
-        </ErrorBoundary>
+        {children}
       </div>
     </Resizable>
   );

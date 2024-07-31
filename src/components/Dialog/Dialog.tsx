@@ -1,13 +1,16 @@
-import { FunctionComponent } from "react";
+import clsx from "clsx";
+import { FunctionComponent, HTMLAttributes, PropsWithChildren } from "react";
 
 import styles from "./Dialog.module.css";
 
-export type DialogProps = {
-  text: string;
-};
+export type DialogProps = PropsWithChildren<HTMLAttributes<HTMLDialogElement>>;
 
-export const Dialog: FunctionComponent<DialogProps> = ({ text }) => (
-  <dialog className={styles.root} open>
-    <p className={styles.text}>{text}</p>
+export const Dialog: FunctionComponent<DialogProps> = ({
+  children,
+  className,
+  ...props
+}) => (
+  <dialog {...props} className={clsx(className, styles.root)} open>
+    {children}
   </dialog>
 );
