@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
 import { ApplicationComponent } from "@/types";
@@ -28,6 +28,8 @@ export const PdfViewer: ApplicationComponent = ({
   onQuit,
   openableFiles,
 }) => {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
   const [numPages, setNumPages] = useState<number>(0);
 
   return (
@@ -51,9 +53,14 @@ export const PdfViewer: ApplicationComponent = ({
             </Menuitem>
             <Menuitem separator />
             <Menuitem
-              onClick={() => {
-                console.debug("print…"); // @todo
-              }}
+              disabled={!file?.url}
+              onClick={
+                file?.url
+                  ? () => {
+                      iframeRef.current?.contentWindow?.print();
+                    }
+                  : undefined
+              }
               title="Print"
             />
             <Menuitem separator />
@@ -69,22 +76,30 @@ export const PdfViewer: ApplicationComponent = ({
       </Menubar>
       <Content>
         {file?.url ? (
-          <Document
-            className={styles.root}
-            file={file.url}
-            loading={null}
-            onLoadSuccess={({ numPages }) => {
-              setNumPages(numPages);
-            }}>
-            {Array.from(new Array(numPages)).map((_, i) => (
-              <Page
-                className={styles.page}
-                key={i}
-                pageIndex={i}
-                scale={1.25}
-              />
-            ))}
-          </Document>
+          <>
+            <Document
+              className={styles.root}
+              file={file.url}
+              loading={null}
+              onLoadSuccess={({ numPages }) => {
+                setNumPages(numPages);
+              }}>
+              {Array.from(new Array(numPages)).map((_, i) => (
+                <Page
+                  className={styles.page}
+                  key={i}
+                  pageIndex={i}
+                  scale={1.25}
+                />
+              ))}
+            </Document>
+            <iframe
+              className={styles.iframe}
+              ref={iframeRef}
+              src={file.url}
+              title={file.title}
+            />
+          </>
         ) : null}
       </Content>
     </>
