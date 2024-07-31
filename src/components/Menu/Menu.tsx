@@ -16,6 +16,8 @@ import { getChildMenuitemToFocus, removeProps } from "@/utils";
 
 import styles from "./Menu.module.css";
 
+export * from "./components/Menuitem";
+
 export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
   (
     | ({

@@ -1,7 +1,6 @@
 import { FunctionComponent } from "react";
 
-import { Menu } from "@/components/Menu";
-import { Menuitem } from "@/components/Menuitem";
+import { Menu, Menuitem } from "@/components/Menu";
 import { WindowHidden, WindowVisible } from "@/icons";
 import {
   closeApplication,

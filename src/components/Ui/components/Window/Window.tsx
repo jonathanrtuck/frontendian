@@ -2,8 +2,7 @@ import clsx from "clsx";
 import { FunctionComponent, useCallback, useRef, useState } from "react";
 import Draggable from "react-draggable";
 
-import { Menu } from "@/components/Menu";
-import { Menuitem } from "@/components/Menuitem";
+import { Menu, Menuitem } from "@/components/Menu";
 import { WindowContext } from "@/contexts";
 import { useElementDimensions, useFocus } from "@/hooks";
 import {
