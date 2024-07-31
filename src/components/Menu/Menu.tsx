@@ -12,22 +12,9 @@ import {
 } from "react";
 
 import { MenubarContext } from "@/contexts";
+import { getChildMenuitemToFocus, removeProps } from "@/utils";
 
 import styles from "./Menu.module.css";
-
-const getMenuitemToFocus = (
-  element: HTMLElement | null
-): HTMLElement | undefined => {
-  const menuitems = Array.from<HTMLElement>(
-    element?.querySelectorAll(':scope > [role^="menuitem"]') ?? []
-  );
-
-  return (
-    menuitems.find((menuitem) =>
-      menuitem.matches(':not([aria-checked="true"], [aria-disabled="true"])')
-    ) ?? menuitems[0]
-  );
-};
 
 export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
   (
@@ -47,7 +34,7 @@ export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
   (
-    { children, className, onBlur, onClick, onFocus, onKeyDown, ...restProps },
+    { children, className, onBlur, onClick, onFocus, onKeyDown, ...props },
     ref
   ) => {
     const rootRef = useRef<HTMLMenuElement>(null);
@@ -56,19 +43,12 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
 
     const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
 
-    const bar = "bar" in restProps;
-    const horizontal = "horizontal" in restProps;
-    const props = {
-      ...restProps,
-      bar: undefined,
-      horizontal: undefined,
-      open: undefined,
-      vertical: undefined,
-    };
+    const bar = "bar" in props;
+    const horizontal = "horizontal" in props;
 
     return (
       <menu
-        {...props}
+        {...removeProps(props, ["bar", "horizontal", "vertical"])}
         aria-hidden={bar ? undefined : !isFocusWithin}
         aria-orientation={
           bar ? (horizontal ? "horizontal" : "vertical") : undefined
@@ -98,7 +78,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
                 const isExpanded = menuitem?.matches('[aria-expanded="true"]');
 
                 if (!hasPopup || isExpanded) {
-                  getMenuitemToFocus(rootRef.current)?.focus();
+                  getChildMenuitemToFocus(rootRef.current)?.focus();
 
                   setIsFocusWithin(false);
                 }

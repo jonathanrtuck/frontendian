@@ -12,33 +12,24 @@ import {
 
 import { MenubarContext } from "@/contexts";
 import { IconComponent } from "@/types";
+import { getChildMenuitemToFocus, removeProps } from "@/utils";
 
 import styles from "./Menuitem.module.css";
 
-const getMenuitemToFocus = (
-  element: HTMLElement | null
-): HTMLElement | undefined => {
-  const menuitems = Array.from<HTMLElement>(
-    element?.querySelectorAll(':scope > [role="menu"] > [role^="menuitem"]') ??
-      []
-  );
-
-  return (
-    menuitems.find((menuitem) =>
-      menuitem.matches(':not([aria-checked="true"], [aria-disabled="true"])')
-    ) ?? menuitems[0]
-  );
-};
-
 export type MenuitemProps = Omit<
   HTMLAttributes<HTMLLIElement>,
+  | "aria-checked"
   | "aria-disabled"
   | "aria-expanded"
   | "aria-haspopup"
-  | "aria-label"
+  | "aria-labelledby"
+  | "checked"
+  | "disabled"
   | "onClick"
   | "role"
   | "tabIndex"
+  | "title"
+  | "type"
 > & {
   classes?: {
     icon?: string;
@@ -73,8 +64,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   children,
   className,
   classes,
-  title,
-  ...restProps
+  ...props
 }) => {
   const { isFocusWithin } = useContext(MenubarContext);
 
@@ -84,15 +74,11 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  if ("separator" in restProps) {
-    const props = {
-      ...restProps,
-      separator: undefined,
-    };
-
+  if ("separator" in props) {
     return (
       <li
         {...props}
+        {...removeProps<HTMLAttributes<HTMLLIElement>>(props, ["separator"])}
         className={clsx(className, classes?.root, styles.root)}
         role="separator"
         tabIndex={-1}
@@ -100,26 +86,26 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
     );
   }
 
-  const { onKeyDown, onMouseEnter } = restProps;
-  const Icon = "Icon" in restProps && restProps.Icon;
-  const checked = ("checked" in restProps && restProps.checked) ?? false;
-  const disabled = ("disabled" in restProps && restProps.disabled) ?? false;
-  const onClick = "onClick" in restProps ? restProps.onClick : undefined;
-  const type = "type" in restProps ? restProps.type : undefined;
-  const props = {
-    ...restProps,
-    checked: undefined,
-    disabled: undefined,
-    Icon: undefined,
-    onClick: undefined,
-    onKeyDown: undefined,
-    onMouseEnter: undefined,
-    type: undefined,
-  };
+  const { onKeyDown, onMouseEnter } = props;
+  const Icon = "Icon" in props && props.Icon;
+  const checked = ("checked" in props && props.checked) ?? false;
+  const disabled = ("disabled" in props && props.disabled) ?? false;
+  const onClick = "onClick" in props ? props.onClick : undefined;
+  const title = "title" in props ? props.title : undefined;
+  const type = "type" in props ? props.type : undefined;
 
   return (
     <li
-      {...props}
+      {...removeProps<HTMLAttributes<HTMLLIElement>>(props, [
+        "checked",
+        "disabled",
+        "Icon",
+        "onClick",
+        "onKeyDown",
+        "onMouseEnter",
+        "title",
+        "type",
+      ])}
       aria-checked={type ? checked : undefined}
       aria-disabled={disabled}
       aria-expanded={children ? isExpanded : undefined}
@@ -137,13 +123,13 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
       }}
       onClick={
         checked || disabled
-          ? onClick
+          ? undefined
           : () => {
               onClick?.();
 
               if (children) {
                 if (!isExpanded) {
-                  getMenuitemToFocus(rootRef.current)?.focus();
+                  getChildMenuitemToFocus(rootRef.current)?.focus();
                 }
 
                 setIsExpanded((prevState) => !prevState);
@@ -171,7 +157,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
                 setIsExpanded(true);
 
                 (
-                  getMenuitemToFocus(rootRef.current) ?? rootRef.current
+                  getChildMenuitemToFocus(rootRef.current) ?? rootRef.current
                 )?.focus();
               }
             }
