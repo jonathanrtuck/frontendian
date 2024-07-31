@@ -108,7 +108,15 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
         onFocus={(e: FocusEvent<HTMLMenuElement>) => {
           onFocus?.(e);
 
-          setIsFocusWithin(true);
+          /**
+           * this conditional is needed to handle a case in which the menubar
+           * has focus within but `isFocusWithin` is `false`, and the browser
+           * window loses then regains focus, firing another focus event; where
+           * we want to keep the same `isFocusWithin` state
+           */
+          if (bar === (rootRef.current?.contains(e.relatedTarget) ?? false)) {
+            setIsFocusWithin(true);
+          }
         }}
         onKeyDown={
           bar

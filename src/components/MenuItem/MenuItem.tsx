@@ -97,12 +97,22 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
     );
   }
 
-  const { onKeyDown, onMouseEnter, ...props } = restProps;
+  const { onKeyDown, onMouseEnter } = restProps;
   const Icon = "Icon" in restProps && restProps.Icon;
   const checked = ("checked" in restProps && restProps.checked) ?? false;
   const disabled = ("disabled" in restProps && restProps.disabled) ?? false;
   const onClick = "onClick" in restProps ? restProps.onClick : undefined;
   const type = "type" in restProps ? restProps.type : undefined;
+  const props = {
+    ...restProps,
+    checked: undefined,
+    disabled: undefined,
+    Icon: undefined,
+    onClick: undefined,
+    onKeyDown: undefined,
+    onMouseEnter: undefined,
+    type: undefined,
+  };
 
   return (
     <li
