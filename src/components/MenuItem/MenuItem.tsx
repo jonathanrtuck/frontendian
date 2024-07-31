@@ -85,12 +85,15 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   if ("separator" in restProps) {
-    const { separator, ...props } = restProps;
+    const props = {
+      ...restProps,
+      separator: undefined,
+    };
 
     return (
       <li
         {...props}
-        className={clsx(className, classes?.root, styles.separator)}
+        className={clsx(className, classes?.root, styles.root)}
         role="separator"
         tabIndex={-1}
       />
