@@ -12,7 +12,7 @@ import {
 } from "react";
 
 import { MenubarContext } from "@/contexts";
-import { getChildMenuitemToFocus, removeProps } from "@/utils";
+import { getChildMenuitems, removeProps } from "@/utils";
 
 import styles from "./Menu.module.css";
 
@@ -80,7 +80,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
                 const isExpanded = menuitem?.matches('[aria-expanded="true"]');
 
                 if (!hasPopup || isExpanded) {
-                  getChildMenuitemToFocus(rootRef.current)?.focus();
+                  getChildMenuitems(rootRef.current)[0]?.focus();
 
                   setIsFocusWithin(false);
                 }
@@ -105,7 +105,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
             ? (e: KeyboardEvent<HTMLMenuElement>) => {
                 onKeyDown?.(e);
 
-                if (e.key === "Enter" || e.key === " ") {
+                if (e.key === "Enter") {
                   // @todo
                 }
               }

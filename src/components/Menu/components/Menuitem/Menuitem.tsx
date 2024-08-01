@@ -6,13 +6,14 @@ import {
   ReactElement,
   useContext,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 
 import { MenubarContext } from "@/contexts";
 import { IconComponent } from "@/types";
-import { getChildMenuitemToFocus, removeProps } from "@/utils";
+import { getChildMenuitems, getSiblingMenuitems, removeProps } from "@/utils";
 
 import styles from "./Menuitem.module.css";
 
@@ -73,6 +74,26 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const rootRef = useRef<HTMLLIElement>(null);
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
+
+  useLayoutEffect(() => {
+    if (rootRef.current) {
+      const isMenubaritem =
+        rootRef.current.matches('[role="menubar"] > :scope') ?? false;
+
+      if (isMenubaritem) {
+        const isFirstMenuitem = rootRef.current.matches(":first-of-type");
+
+        if (isFirstMenuitem) {
+          const siblingMenuitems = getSiblingMenuitems(rootRef.current);
+
+          setTabIndex(
+            siblingMenuitems.every(({ tabIndex }) => tabIndex === -1) ? 0 : -1
+          );
+        }
+      }
+    }
+  }, [isFocusWithin]);
 
   if ("separator" in props) {
     return (
@@ -80,7 +101,6 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         {...removeProps<HTMLAttributes<HTMLLIElement>>(props, ["separator"])}
         className={clsx(className, classes?.root, styles.root)}
         role="separator"
-        tabIndex={-1}
       />
     );
   }
@@ -118,6 +138,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
           !rootRef.current?.contains(e.relatedTarget ?? document.activeElement)
         ) {
           setIsExpanded(false);
+          setTabIndex(-1);
         }
       }}
       onClick={
@@ -128,10 +149,11 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
 
               if (children) {
                 if (!isExpanded) {
-                  getChildMenuitemToFocus(rootRef.current)?.focus();
+                  getChildMenuitems(rootRef.current)[0]?.focus();
                 }
 
                 setIsExpanded((prevState) => !prevState);
+                setTabIndex((prevState) => (prevState === 0 ? -1 : 0));
               }
             }
       }
@@ -141,7 +163,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
           : (e) => {
               onKeyDown?.(e);
 
-              if (children && (e.key === "Enter" || e.key === " ")) {
+              if (children && e.key === "Enter") {
                 // @todo
               }
             }
@@ -154,9 +176,10 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
 
               if (isFocusWithin) {
                 setIsExpanded(true);
+                setTabIndex(0);
 
                 (
-                  getChildMenuitemToFocus(rootRef.current) ?? rootRef.current
+                  getChildMenuitems(rootRef.current)[0] ?? rootRef.current
                 )?.focus();
               }
             }
@@ -167,7 +190,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         (type === "radio" && "menuitemradio") ||
         "menuitem"
       }
-      tabIndex={-1}>
+      tabIndex={tabIndex}>
       {Icon && (
         <Icon aria-hidden className={clsx(classes?.icon, styles.icon)} />
       )}

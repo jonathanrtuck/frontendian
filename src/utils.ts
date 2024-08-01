@@ -1,20 +1,20 @@
 import { ComponentPropsWithoutRef } from "react";
 
-export const getChildMenuitemToFocus = (
-  element: HTMLElement | null
-): HTMLElement | undefined => {
-  const menuitems = Array.from<HTMLElement>(
+export const getChildMenuitems = (element: HTMLElement | null): HTMLElement[] =>
+  Array.from<HTMLElement>(
     element?.querySelectorAll(
       ':scope > [role^="menuitem"], :scope > [role="menu"] > [role^="menuitem"]'
     ) ?? []
   );
 
-  return (
-    menuitems.find((menuitem) =>
-      menuitem.matches(':not([aria-checked="true"], [aria-disabled="true"])')
-    ) ?? menuitems[0]
-  );
-};
+export const getSiblingMenuitems = (
+  element: HTMLElement | null
+): HTMLElement[] =>
+  element
+    ? getChildMenuitems(
+        element.closest('[role="menubar"], [role="menu"]')
+      ).filter((menuitem) => menuitem !== element)
+    : [];
 
 export const removeProps = <T extends ComponentPropsWithoutRef<any>>(
   props: T,
