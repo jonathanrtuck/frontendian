@@ -1,20 +1,3 @@
-import { forwardRef } from "react";
+import { ApplicationComponent } from "@/types";
 
-import { Tracker as Icon } from "icons";
-import {
-  Application,
-  ApplicationComponentProps,
-  ApplicationComponentRef,
-} from "state/types";
-
-const Tracker = forwardRef<ApplicationComponentRef, ApplicationComponentProps>(
-  (props, ref) => null
-);
-
-export const APPLICATION_TRACKER: Application = {
-  Component: Tracker,
-  icon: <Icon />,
-  id: "application-tracker",
-  title: "Tracker",
-  windowIds: [],
-};
+export const Tracker: ApplicationComponent = () => null;

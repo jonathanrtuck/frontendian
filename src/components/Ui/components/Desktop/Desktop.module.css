@@ -1,0 +1,26 @@
+.root {
+  align-items: start;
+  bottom: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, 6rem);
+  justify-items: center;
+  left: 0;
+  padding: 1rem calc(var(--deskbar-width) + 1rem) 1rem 1rem;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.root::after {
+  background: rgba(128, 187, 255, 0.2);
+  border-color: rgba(0, 0, 204, 0.5);
+  border-width: var(--border-width);
+  content: "";
+  display: var(--desktop-selection-display);
+  height: var(--desktop-selection-height);
+  left: var(--desktop-selection-left);
+  position: absolute;
+  top: var(--desktop-selection-top);
+  width: var(--desktop-selection-width);
+}

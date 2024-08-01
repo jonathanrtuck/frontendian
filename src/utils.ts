@@ -1,47 +1,29 @@
-import { CSSProperties } from "react";
+import { ComponentPropsWithoutRef } from "react";
 
-export const allowSelection = (element = document.body): void => {
-  element.style.userSelect = "";
-  // and for safari
-  element.style.removeProperty("-webkit-user-select");
+export const getChildMenuitemToFocus = (
+  element: HTMLElement | null
+): HTMLElement | undefined => {
+  const menuitems = Array.from<HTMLElement>(
+    element?.querySelectorAll(
+      ':scope > [role^="menuitem"], :scope > [role="menu"] > [role^="menuitem"]'
+    ) ?? []
+  );
+
+  return (
+    menuitems.find((menuitem) =>
+      menuitem.matches(':not([aria-checked="true"], [aria-disabled="true"])')
+    ) ?? menuitems[0]
+  );
 };
 
-export const getInteractionPosition = (
-  e: MouseEvent | TouchEvent
-): [clientX: number, clientY: number] => {
-  const { clientX, clientY } = "touches" in e ? e.touches[0] : e;
+export const removeProps = <T extends ComponentPropsWithoutRef<any>>(
+  props: T,
+  propNames: string[]
+) =>
+  Object.entries(props).reduce<T>((acc, [key, value]) => {
+    if (!propNames.includes(key)) {
+      acc[key as keyof T] = value;
+    }
 
-  return [clientX, clientY];
-};
-
-export const preventSelection = (element = document.body): void => {
-  element.style.userSelect = "none";
-  // and for safari
-  element.style.setProperty("-webkit-user-select", "none");
-};
-
-export const removeStyles = (
-  element: HTMLElement | null,
-  keys: string[]
-): void => {
-  if (!element) {
-    return;
-  }
-
-  keys.forEach((key) => {
-    element.style.removeProperty(key);
-  });
-};
-
-export const setStyles = (
-  element: HTMLElement | null,
-  obj: CSSProperties
-): void => {
-  if (!element) {
-    return;
-  }
-
-  Object.entries(obj).forEach(([key, value]) => {
-    element.style.setProperty(key, value);
-  });
-};
+    return acc;
+  }, {} as ComponentPropsWithoutRef<any>);

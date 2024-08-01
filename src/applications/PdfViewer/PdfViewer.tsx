@@ -1,167 +1,122 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Fragment, useRef, useState } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
 
-import { Menubaritem, useMenubar } from "components/Menubar";
-import { Graphics as Icon } from "icons";
-import {
-  Application,
-  ApplicationComponentProps,
-  ApplicationComponentRef,
-} from "state/types";
-import { MimeType } from "types";
+import { ApplicationComponent } from "@/types";
+
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 
 import styles from "./PdfViewer.module.css";
 
-/**
- * it is impossible to detect focus within a different browsing context (e.g.
- * iframe), so `Window` component incorrectly fires a "BLUR" event when focus
- * moves into this iframe. 🤷‍♂️😣
- */
-const PdfViewer = forwardRef<
-  ApplicationComponentRef,
-  ApplicationComponentProps
->(({ file, onAbout, onClose, onNew, onOpen, onQuit, openableFiles }, ref) => {
-  const rootRef = useRef<HTMLIFrameElement>(null);
+// @see https://github.com/wojtekmaj/react-pdf/tree/main?tab=readme-ov-file#import-worker-recommended
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
-  const [numPages, setNumPages] = useState<number>(1);
+// @see https://github.com/wojtekmaj/react-pdf
+export const PdfViewer: ApplicationComponent = ({
+  Content,
+  Menu,
+  Menubar,
+  Menuitem,
+  file,
+  onAbout,
+  onClose,
+  onNew,
+  onOpen,
+  onQuit,
+  openableFiles,
+}) => {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const menubaritems = useMemo<Menubaritem[]>(
-    () => [
-      {
-        items: [
-          {
-            onClick: onNew,
-            title: "New",
-          },
-          {
-            items: openableFiles.map(({ id, title }) => ({
-              onClick: () => {
-                onOpen(id);
-              },
-              title,
-            })),
-            title: "Open",
-          },
-          null,
-          {
-            onClick: () => {
-              rootRef.current?.contentWindow?.print();
-            },
-            title: "Print…",
-          },
-          null,
-          {
-            onClick: onClose,
-            title: "Close",
-          },
-          {
-            onClick: onQuit,
-            title: "Quit",
-          },
-        ],
-        title: "File",
-      },
-      {
-        items: [
-          {
-            onClick: onAbout,
-            title: `About ${APPLICATION_PDF_VIEWER.title}…`,
-          },
-        ],
-        title: "Help",
-      },
-    ],
-    [onAbout, onClose, onNew, onOpen, onQuit, openableFiles]
-  );
-
-  useImperativeHandle(ref, () => ({}), []);
-
-  useMenubar(menubaritems);
-
-  // parse pdf to get number of pages
-  useEffect(() => {
-    if (file?.url) {
-      const controller = new AbortController();
-
-      fetch(file.url, {
-        signal: controller.signal,
-      })
-        .then((response) => response.text())
-        .then((text) => text.match(/\/Pages (\d+)/)?.[1])
-        .then((numPagesStr) => {
-          if (numPagesStr) {
-            const numPages = Number(numPagesStr);
-
-            if (!isNaN(numPages)) {
-              setNumPages(numPages);
-            }
-          }
-        })
-        .catch(() => {});
-
-      return () => {
-        controller.abort("unmount");
-      };
-    }
-  }, [file?.url]);
-
-  if (file?.type !== MimeType.ApplicationPdf) {
-    return null;
-  }
+  const [numPages, setNumPages] = useState<number>(0);
 
   return (
-    <iframe
-      className={styles.root}
-      height={file.height * numPages}
-      ref={rootRef}
-      src={`${file.url}#toolbar=0&navpanes=0`} // hide chrome's chrome
-      title={file.title}
-      width={file.width}
-    />
-  );
-});
-
-export const APPLICATION_PDF_VIEWER: Application = {
-  about: (
     <>
-      <p>
-        Renders <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a> in an{" "}
-        <a href="https://html.spec.whatwg.org/#the-iframe-element">iframe</a>.
-      </p>
-      <p>
-        Documents can be printed from the <b>File</b> menu.
-      </p>
-      <h4>Notes</h4>
-      <p>
-        For security reasons, the parent document does not have access to the
-        iframe's embedded browsing context. Thus, it is impossible for this{" "}
-        <code>Window</code> to determine if the embedded document has focus 😔.
-      </p>
+      <Menubar>
+        <Menuitem title="File">
+          <Menu>
+            <Menuitem onClick={onNew} title="New" />
+            <Menuitem title="Open">
+              <Menu>
+                {openableFiles.map(({ id, title }) => (
+                  <Menuitem
+                    key={id}
+                    onClick={() => {
+                      onOpen(id);
+                    }}
+                    title={title}
+                  />
+                ))}
+              </Menu>
+            </Menuitem>
+            <Menuitem separator />
+            <Menuitem
+              disabled={!file?.url}
+              onClick={
+                file?.url
+                  ? () => {
+                      iframeRef.current?.contentWindow?.print();
+                    }
+                  : undefined
+              }
+              title="Print"
+            />
+            <Menuitem separator />
+            <Menuitem onClick={onClose} title="Close" />
+            <Menuitem onClick={onQuit} title="Quit" />
+          </Menu>
+        </Menuitem>
+        <Menuitem title="Help">
+          <Menu>
+            <Menuitem
+              onClick={() => {
+                onAbout(
+                  <>
+                    <p>
+                      Renders{" "}
+                      <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a>.
+                    </p>
+                    <p>
+                      Documents can be printed from the <b>File</b> menu.
+                    </p>
+                  </>
+                );
+              }}
+              title="About PDF Viewer…"
+            />
+          </Menu>
+        </Menuitem>
+      </Menubar>
+      <Content>
+        {file?.url ? (
+          <>
+            <Document
+              className={styles.root}
+              file={file.url}
+              loading={<Fragment />}
+              onLoadSuccess={({ numPages }) => {
+                setNumPages(numPages);
+              }}>
+              {Array.from(new Array(numPages)).map((_, i) => (
+                <Page
+                  className={styles.page}
+                  key={i}
+                  pageIndex={i}
+                  scale={1.25}
+                />
+              ))}
+            </Document>
+            <iframe
+              className={styles.iframe}
+              ref={iframeRef}
+              src={file.url}
+              title={file.title}
+            />
+          </>
+        ) : null}
+      </Content>
     </>
-  ),
-  Component: PdfViewer,
-  getWindow: (file) => {
-    const window = {
-      height: 600,
-      title: file?.title || "PDF Viewer",
-    };
-    const width = file && "width" in file ? file.width : undefined;
-
-    return width
-      ? {
-          ...window,
-          width,
-        }
-      : window;
-  },
-  icon: <Icon />,
-  id: "application-pdf-viewer",
-  title: "PDF Viewer",
-  windowIds: [],
+  );
 };

@@ -20,5 +20,3 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 
 - Test in *Edge* and *iOS*
 - [Handle `Menubar` keyboard navigation](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
-- Fix *PDF Viewer* window focus when interacting with the PDF
-  - This may not be possible 😔

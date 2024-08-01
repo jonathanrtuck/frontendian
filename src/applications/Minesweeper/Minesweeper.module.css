@@ -1,8 +1,9 @@
 .root {
-  --minesweeper-background-color: silver;
+  --minesweeper-background-color: rgb(192, 192, 192);
+  --minesweeper-border-color: rgb(238, 238, 238);
 
   background-color: var(--minesweeper-background-color);
-  border: var(--minesweeper-border-size) outset;
+  border: var(--minesweeper-border-size) outset var(--minesweeper-border-color);
   display: flex;
   flex-direction: column;
   gap: var(--minesweeper-padding-size);
@@ -12,7 +13,7 @@
 
 .header {
   align-items: center;
-  border: var(--minesweeper-border-size) inset;
+  border: var(--minesweeper-border-size) inset var(--minesweeper-border-color);
   display: flex;
   gap: var(--minesweeper-padding-size);
   height: var(--minesweeper-header-height);
@@ -34,7 +35,7 @@
 
 .reset {
   background-color: var(--minesweeper-background-color);
-  border: var(--minesweeper-border-size) outset;
+  border: var(--minesweeper-border-size) outset var(--minesweeper-border-color);
   font-size: 1.75rem;
   line-height: 1;
   padding: 0;
@@ -63,7 +64,7 @@
 }
 
 .grid {
-  border: var(--minesweeper-border-size) inset;
+  border: var(--minesweeper-border-size) inset var(--minesweeper-border-color);
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -87,7 +88,7 @@
 
 .button {
   background-color: var(--minesweeper-background-color);
-  border-color: currentColor;
+  border-color: var(--minesweeper-border-color);
   border-style: outset;
 }
 

@@ -1,0 +1,98 @@
+.root[role^="menuitem"] {
+  align-items: center;
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.5rem;
+  line-height: 1.4;
+  position: relative;
+  user-select: none;
+}
+
+.root[role="separator"] {
+  background-clip: content-box;
+  background-color: var(--border-color);
+  box-sizing: content-box;
+  height: 0.0625rem;
+  padding: 0.25rem 0;
+}
+
+.root:focus {
+  outline: 0;
+}
+
+[aria-orientation="horizontal"] > .root[role^="menuitem"] {
+  padding: 0 0.5rem;
+}
+
+[aria-orientation="vertical"] > .root[role^="menuitem"] {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(227, 227, 227),
+    rgb(209, 209, 209)
+  );
+  padding: 0.25rem 0.5rem;
+}
+
+[aria-orientation="vertical"]
+  > .root[role^="menuitem"]
+  + .root[role^="menuitem"] {
+  border-width: var(--border-width) 0 0;
+}
+
+[role="menu"] > .root[role^="menuitem"] {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  height: 1.5rem;
+  padding: 0 1rem;
+  position: relative;
+  width: 100%;
+}
+
+.root[aria-disabled="true"] {
+  color: var(--text-color--disabled);
+}
+
+.root[role^="menuitem"][aria-expanded="true"],
+.root[role^="menuitem"][aria-expanded="true"]
+  .root[role^="menuitem"]:not(
+    [aria-checked="true"],
+    [aria-disabled="true"]
+  ):hover {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(146, 146, 146),
+    rgb(163, 163, 163)
+  );
+}
+
+.root[role="menuitemcheckbox"]::before,
+.root[role="menuitemradio"]::before {
+  content: "";
+  font-size: 0.625rem;
+  width: 0.75rem;
+}
+
+.root[aria-checked="true"]::before {
+  content: "✔️";
+}
+
+[role="menu"] > .root[aria-haspopup="menu"]::after {
+  content: "▶";
+  font-size: 0.5rem;
+  margin-right: -0.5rem;
+  padding-left: 0.5rem;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon {
+  flex: 0 0 1rem;
+  height: 1rem;
+  width: 1rem;
+}

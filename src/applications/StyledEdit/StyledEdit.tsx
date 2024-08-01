@@ -1,137 +1,44 @@
 import clsx from "clsx";
-import {
-  forwardRef,
-  useDeferredValue,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useDeferredValue, useEffect, useRef, useState } from "react";
 import Markdown from "react-markdown";
 
-import { Menubaritem, useMenubar } from "components/Menubar";
-import { StyledEdit as Icon } from "icons";
-import {
-  Application,
-  ApplicationComponentProps,
-  ApplicationComponentRef,
-} from "state/types";
-import { MimeType } from "types";
+import { ApplicationComponent } from "@/types";
 
 import styles from "./StyledEdit.module.css";
 
-// @todo handle loading styles
-// @todo handle error styles
-const StyledEdit = forwardRef<
-  ApplicationComponentRef,
-  ApplicationComponentProps
->(({ file, onAbout, onClose, onNew, onOpen, onQuit, openableFiles }, ref) => {
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      focus: inputRef.current
-        ? () => {
-            inputRef.current?.focus();
-          }
-        : undefined,
-    }),
-    []
-  );
+export const StyledEdit: ApplicationComponent = ({
+  Content,
+  Menu,
+  Menubar,
+  Menuitem,
+  file,
+  onAbout,
+  onClose,
+  onNew,
+  onOpen,
+  onQuit,
+  openableFiles,
+}) => {
+  const rootRef = useRef<HTMLElement>(null);
 
   const [fileContent, setFileContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [view, setView] = useState<"markdown" | "preview">(
-    file?.type === MimeType.TextMarkdown && Boolean(file?.url)
+    file?.type === "text/markdown" && Boolean(file?.url)
       ? "preview"
       : "markdown"
   );
 
   const deferredInput = useDeferredValue<string>(input);
 
-  const menubaritems = useMemo<Menubaritem[]>(
-    () => [
-      {
-        items: [
-          {
-            onClick: onNew,
-            title: "New",
-          },
-          {
-            items: openableFiles.map(({ id, title }) => ({
-              onClick: () => {
-                onOpen(id);
-              },
-              title,
-            })),
-            title: "Open",
-          },
-          null,
-          {
-            onClick: onClose,
-            title: "Close",
-          },
-          {
-            onClick: onQuit,
-            title: "Quit",
-          },
-        ],
-        title: "File",
-      },
-      {
-        items: [
-          {
-            checked: view === "markdown",
-            onClick:
-              view === "markdown"
-                ? undefined
-                : () => {
-                    setView("markdown");
-                  },
-            title: "Markdown",
-            type: "radio",
-          },
-          {
-            checked: view === "preview",
-            onClick:
-              view === "preview"
-                ? undefined
-                : () => {
-                    setView("preview");
-                  },
-            title: "Preview",
-            type: "radio",
-          },
-        ],
-        title: "View",
-      },
-      {
-        items: [
-          {
-            onClick: onAbout,
-            title: `About ${APPLICATION_STYLED_EDIT.title}…`,
-          },
-        ],
-        title: "Help",
-      },
-    ],
-    [onAbout, onClose, onNew, onOpen, onQuit, openableFiles, view]
-  );
-  const inputLines = useMemo<string[]>(() => input.split("\n"), [input]);
-  const numInputCols = useMemo<number>(
-    () => Math.max(...inputLines.map((line) => line.length)),
-    [inputLines]
-  );
-  const numInputRows = useMemo<number>(() => inputLines.length, [inputLines]);
-
-  useMenubar(menubaritems);
+  const inputLines = input.split("\n");
+  const numInputCols = Math.max(...inputLines.map((line) => line.length));
+  const numInputRows = inputLines.length;
 
   useEffect(() => {
-    if (file?.type === MimeType.TextMarkdown && Boolean(file?.url)) {
+    if (file?.type === "text/markdown" && Boolean(file?.url)) {
       const controller = new AbortController();
 
       setError(null);
@@ -167,64 +74,104 @@ const StyledEdit = forwardRef<
 
   useEffect(() => {
     setView(
-      file?.type === MimeType.TextMarkdown && Boolean(file?.url)
+      file?.type === "text/markdown" && Boolean(file?.url)
         ? "preview"
         : "markdown"
     );
   }, [file]);
 
-  useEffect(() => {
-    if (view === "markdown") {
-      inputRef.current?.focus();
-    }
-  }, [view]);
-
-  if (isLoading) {
-    return <span>loading…</span>;
-  }
-
-  if (error) {
-    return <span>error…</span>;
-  }
-
-  if (view === "markdown") {
-    return (
-      <textarea
-        className={clsx(styles.root, styles.input)}
-        cols={numInputCols}
-        onInput={(e) => {
-          setInput((e.target as HTMLTextAreaElement).value);
-        }}
-        ref={inputRef}
-        rows={numInputRows}
-        tabIndex={0}
-        value={input}
-      />
-    );
-  }
-
   return (
-    <samp className={clsx(styles.root, styles.markdown)}>
-      <Markdown>{deferredInput}</Markdown>
-    </samp>
-  );
-});
-
-export const APPLICATION_STYLED_EDIT: Application = {
-  about: (
     <>
-      <p>
-        Edit and preview{" "}
-        <a href="https://en.wikipedia.org/wiki/Markdown">markdown</a>.
-      </p>
-      <p>
-        <b>View</b> can be toggled in the menu.
-      </p>
+      <Menubar>
+        <Menuitem title="File">
+          <Menu>
+            <Menuitem onClick={onNew} title="New" />
+            <Menuitem title="Open">
+              <Menu>
+                {openableFiles.map(({ id, title }) => (
+                  <Menuitem
+                    key={id}
+                    onClick={() => {
+                      onOpen(id);
+                    }}
+                    title={title}
+                  />
+                ))}
+              </Menu>
+            </Menuitem>
+            <Menuitem separator />
+            <Menuitem onClick={onClose} title="Close" />
+            <Menuitem onClick={onQuit} title="Quit" />
+          </Menu>
+        </Menuitem>
+        <Menuitem title="View">
+          <Menu>
+            <Menuitem
+              checked={view === "markdown"}
+              onClick={() => {
+                setView("markdown");
+              }}
+              title="Markdown"
+              type="radio"
+            />
+            <Menuitem
+              checked={view === "preview"}
+              onClick={() => {
+                setView("preview");
+              }}
+              title="Preview"
+              type="radio"
+            />
+          </Menu>
+        </Menuitem>
+        <Menuitem title="Help">
+          <Menu>
+            <Menuitem
+              onClick={() => {
+                onAbout(
+                  <>
+                    <p>
+                      Edit and preview{" "}
+                      <a href="https://en.wikipedia.org/wiki/Markdown">
+                        markdown
+                      </a>
+                      .
+                    </p>
+                    <p>
+                      <b>View</b> can be toggled in the menu.
+                    </p>
+                  </>
+                );
+              }}
+              title="About StyledEdit…"
+            />
+          </Menu>
+        </Menuitem>
+      </Menubar>
+      <Content>
+        {isLoading && "loading…"}
+        {!isLoading && error && "error…"}
+        {!isLoading && !error && view === "markdown" && (
+          <textarea
+            autoFocus
+            className={clsx(styles.root, styles.markdown)}
+            cols={numInputCols}
+            onInput={(e) => {
+              setInput((e.target as HTMLTextAreaElement).value);
+            }}
+            rows={numInputRows}
+            value={input}
+          />
+        )}
+        {!isLoading && !error && view === "preview" && (
+          <samp
+            className={clsx(styles.root, styles.preview)}
+            ref={rootRef}
+            tabIndex={-1}>
+            <Markdown>{deferredInput}</Markdown>
+          </samp>
+        )}
+      </Content>
     </>
-  ),
-  Component: StyledEdit,
-  icon: <Icon />,
-  id: "application-styled-edit",
-  title: "StyledEdit",
-  windowIds: [],
+  );
 };

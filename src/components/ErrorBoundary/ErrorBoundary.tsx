@@ -1,11 +1,11 @@
 import { Component, ErrorInfo, PropsWithChildren, ReactElement } from "react";
 
-type ErrorBoundaryProps = PropsWithChildren<{
+export type ErrorBoundaryProps = PropsWithChildren<{
   fallback?: ReactElement;
   onError?(error: Error): void;
 }>;
 
-type ErrorBoundaryState = {
+export type ErrorBoundaryState = {
   hasError: boolean;
 };
 
