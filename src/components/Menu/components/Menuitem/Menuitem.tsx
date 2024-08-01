@@ -77,7 +77,6 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   if ("separator" in props) {
     return (
       <li
-        {...props}
         {...removeProps<HTMLAttributes<HTMLLIElement>>(props, ["separator"])}
         className={clsx(className, classes?.root, styles.root)}
         role="separator"

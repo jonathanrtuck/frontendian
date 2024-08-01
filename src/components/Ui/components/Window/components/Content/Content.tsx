@@ -21,7 +21,7 @@ const MIN_WIDTH = 16 * 7; // 7rem
 export type ContentProps = PropsWithChildren;
 
 export const Content: FunctionComponent<ContentProps> = ({ children }) => {
-  const { height, id, menubarRef, scrollable, width, zoomed } =
+  const { height, id, inert, menubarRef, scrollable, width, zoomed } =
     useContext(WindowContext);
 
   const [isResizing, setIsResizing] = useState<boolean>(false);
@@ -39,7 +39,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   return (
     <Resizable
       axis={zoomed ? "none" : "both"}
-      handle={
+      handle={(_, ref) =>
         scrollable ? (
           <ResizeHandle
             aria-hidden
@@ -47,6 +47,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
               [styles.resizing]: isResizing,
               [styles.zoomed]: zoomed,
             })}
+            ref={ref}
           />
         ) : null
       }
@@ -65,21 +66,25 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         setIsResizing(false);
       }}
       width={width}>
-      <div
-        className={clsx(styles.root, {
-          [styles.resizing]: isResizing,
-          [styles.scrollable]: scrollable,
-        })}
-        draggable={false}
-        style={
-          zoomed
-            ? undefined
-            : {
-                height: height + scrollbarSize,
-                width: width + scrollbarSize,
-              }
-        }>
-        {children}
+      <div className={styles.root}>
+        <div
+          className={clsx(styles.content, {
+            [styles.resizing]: isResizing,
+            [styles.scrollable]: scrollable,
+            [styles.zoomed]: zoomed,
+          })}
+          draggable={false}
+          inert={inert ? "" : undefined}
+          style={
+            zoomed
+              ? undefined
+              : {
+                  height: height + scrollbarSize,
+                  width: width + scrollbarSize,
+                }
+          }>
+          {children}
+        </div>
       </div>
     </Resizable>
   );

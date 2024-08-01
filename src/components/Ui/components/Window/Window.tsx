@@ -1,5 +1,11 @@
 import clsx from "clsx";
-import { FunctionComponent, useCallback, useRef, useState } from "react";
+import {
+  FunctionComponent,
+  ReactNode,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import Draggable from "react-draggable";
 
 import { Dialog } from "@/components/Dialog";
@@ -39,6 +45,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
   const menubarRef = useRef<HTMLMenuElement>(null);
   const rootRef = useRef<HTMLElement>(null);
 
+  const [aboutDialogContent, setAboutDialogContent] = useState<ReactNode>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   useFocus({
@@ -52,8 +59,8 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     windowIds.includes(id)
   );
 
-  const onAbout = useCallback(() => {
-    // setIsAboutDialogOpen(true);
+  const onAbout = useCallback((node: ReactNode) => {
+    setAboutDialogContent(node);
   }, []);
   const onClose = useCallback(() => {
     closeWindow({ id });
@@ -148,41 +155,60 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
         <WindowContext.Provider
           value={{
             ...props,
+            inert: Boolean(aboutDialogContent),
             menubarRef,
           }}>
           <Titlebar maxWidth={rootWidth} />
-          <ErrorBoundary
-            fallback={
-              <Content>
-                <Dialog className={styles.dialog}>
-                  <p>{application.title} has encountered an unknown error.</p>
-                  <footer>
-                    <button
-                      autoFocus
-                      formMethod="dialog"
-                      onClick={onClose}
-                      type="reset">
-                      Close window
-                    </button>
-                  </footer>
-                </Dialog>
-              </Content>
-            }>
-            <application.Component
-              Content={Content}
-              Menu={Menu}
-              Menubar={Menubar}
-              Menuitem={Menuitem}
-              file={file}
-              onAbout={onAbout}
-              onClose={onClose}
-              onNew={onNew}
-              onOpen={onOpen}
-              onQuit={onQuit}
-              onResize={onResize}
-              openableFiles={openableFiles}
-            />
-          </ErrorBoundary>
+          {aboutDialogContent && (
+            <Dialog className={styles.dialog} draggable={false}>
+              {aboutDialogContent}
+              <footer>
+                <button
+                  autoFocus
+                  formMethod="dialog"
+                  onClick={() => {
+                    setAboutDialogContent(null);
+                  }}
+                  type="reset">
+                  OK
+                </button>
+              </footer>
+            </Dialog>
+          )}
+          <div className={styles.content} draggable="false">
+            <ErrorBoundary
+              fallback={
+                <Content>
+                  <Dialog className={styles.dialog} draggable={false}>
+                    <p>{application.title} has encountered an unknown error.</p>
+                    <footer>
+                      <button
+                        autoFocus
+                        formMethod="dialog"
+                        onClick={onClose}
+                        type="reset">
+                        Close window
+                      </button>
+                    </footer>
+                  </Dialog>
+                </Content>
+              }>
+              <application.Component
+                Content={Content}
+                Menu={Menu}
+                Menubar={Menubar}
+                Menuitem={Menuitem}
+                file={file}
+                onAbout={onAbout}
+                onClose={onClose}
+                onNew={onNew}
+                onOpen={onOpen}
+                onQuit={onQuit}
+                onResize={onResize}
+                openableFiles={openableFiles}
+              />
+            </ErrorBoundary>
+          </div>
         </WindowContext.Provider>
       </section>
     </Draggable>

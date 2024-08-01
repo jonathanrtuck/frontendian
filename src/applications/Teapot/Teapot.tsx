@@ -33,7 +33,20 @@ export const Teapot: ApplicationComponent = ({
         </Menuitem>
         <Menuitem title="Help">
           <Menu>
-            <Menuitem onClick={onAbout} title="About Teapot…" />
+            <Menuitem
+              onClick={() => {
+                onAbout(
+                  <p>
+                    WebGL rendering of the{" "}
+                    <a href="https://en.wikipedia.org/wiki/Utah_teapot">
+                      Utah Teapot
+                    </a>
+                    .
+                  </p>
+                );
+              }}
+              title="About Teapot…"
+            />
           </Menu>
         </Menuitem>
       </Menubar>

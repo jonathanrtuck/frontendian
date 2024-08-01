@@ -132,7 +132,25 @@ export const StyledEdit: ApplicationComponent = ({
         </Menuitem>
         <Menuitem title="Help">
           <Menu>
-            <Menuitem onClick={onAbout} title="About StyledEdit…" />
+            <Menuitem
+              onClick={() => {
+                onAbout(
+                  <>
+                    <p>
+                      Edit and preview{" "}
+                      <a href="https://en.wikipedia.org/wiki/Markdown">
+                        markdown
+                      </a>
+                      .
+                    </p>
+                    <p>
+                      <b>View</b> can be toggled in the menu.
+                    </p>
+                  </>
+                );
+              }}
+              title="About StyledEdit…"
+            />
           </Menu>
         </Menuitem>
       </Menubar>

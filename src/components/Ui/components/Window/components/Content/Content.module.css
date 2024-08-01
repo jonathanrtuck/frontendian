@@ -3,6 +3,12 @@
 }
 
 .root {
+  flex: 1 1 auto;
+  height: 100%;
+  overflow: hidden;
+}
+
+.content {
   background-color: rgb(255, 255, 255);
   border-width: var(--border-width);
   box-sizing: content-box;
@@ -11,7 +17,7 @@
   overflow: hidden;
 }
 
-.root:where(.resizing) {
+.content:where(.resizing) {
   cursor: var(--cursor--grabbing); /* @todo this isn't working? */
   pointer-events: none;
 }
@@ -108,6 +114,11 @@
 
 .scrollable::-webkit-scrollbar-track:vertical {
   border-width: 0 0 0 var(--border-width);
+}
+
+.zoomed {
+  box-sizing: border-box;
+  height: 100%;
 }
 
 .resize {

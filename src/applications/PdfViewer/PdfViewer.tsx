@@ -70,7 +70,22 @@ export const PdfViewer: ApplicationComponent = ({
         </Menuitem>
         <Menuitem title="Help">
           <Menu>
-            <Menuitem onClick={onAbout} title="About PDF Viewer…" />
+            <Menuitem
+              onClick={() => {
+                onAbout(
+                  <>
+                    <p>
+                      Renders{" "}
+                      <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a>.
+                    </p>
+                    <p>
+                      Documents can be printed from the <b>File</b> menu.
+                    </p>
+                  </>
+                );
+              }}
+              title="About PDF Viewer…"
+            />
           </Menu>
         </Menuitem>
       </Menubar>

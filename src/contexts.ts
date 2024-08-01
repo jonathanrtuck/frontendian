@@ -10,6 +10,7 @@ export const MenubarContext = createContext<{
 
 export const WindowContext = createContext<
   Window & {
+    inert: boolean;
     menubarRef: RefObject<HTMLMenuElement>;
   }
 >(null as any);

@@ -2,6 +2,7 @@ import {
   ComponentType,
   ForwardRefExoticComponent,
   PropsWithChildren,
+  ReactNode,
   RefAttributes,
   RefObject,
   SVGAttributes,
@@ -21,7 +22,7 @@ export type ApplicationComponentProps = {
   Menubar: ComponentType<PropsWithChildren>;
   Menuitem: ComponentType<MenuitemProps>;
   file?: File;
-  onAbout(): void;
+  onAbout(node: ReactNode): void;
   onClose(): void;
   onNew(): void;
   onOpen(fileId: ID): void;

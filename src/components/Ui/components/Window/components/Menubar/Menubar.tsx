@@ -8,7 +8,7 @@ import styles from "./Menubar.module.css";
 export type MenubarProps = PropsWithChildren;
 
 export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
-  const { menubarRef } = useContext(WindowContext);
+  const { inert, menubarRef } = useContext(WindowContext);
 
   return (
     <Menu
@@ -16,6 +16,7 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
       className={styles.root}
       draggable={false}
       horizontal
+      inert={inert ? "" : undefined}
       ref={menubarRef}>
       {children}
     </Menu>
