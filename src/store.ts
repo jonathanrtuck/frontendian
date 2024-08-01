@@ -190,7 +190,7 @@ export const openApplication = (payload: ActionIds) =>
   useStore.setState((prevState) =>
     prevState.applications
       .filter(({ id }) => isPayloadId(payload, id))
-      .reduce((state, { id, getWindow, title, windowIds }) => {
+      .reduce((state, { id, getWindow, windowIds }) => {
         const isApplicationOpen = state.openApplicationIds.includes(id);
 
         // if the application is already open, raise and focus its first visible window
@@ -222,7 +222,7 @@ export const openApplication = (payload: ActionIds) =>
         const windowPosition = getFirstOpenWindowPosition(state.windows);
         const window: Window = {
           ...DEFAULT_WINDOW,
-          title,
+          title: UNTITLED_WINDOW_TITLE,
           ...(getWindow?.() ?? {}),
           id: windowId,
           left: windowPosition,
@@ -366,13 +366,13 @@ export const openWindow = (payload: ActionIds) =>
   useStore.setState((prevState) =>
     prevState.applications
       .filter(({ id }) => isPayloadId(payload, id))
-      .reduce((state, { getWindow, id, title }) => {
+      .reduce((state, { getWindow, id }) => {
         const isApplicationOpen = state.openApplicationIds.includes(id);
         const windowId = uuid();
         const windowPosition = getFirstOpenWindowPosition(state.windows);
         const window: Window = {
           ...DEFAULT_WINDOW,
-          title,
+          title: UNTITLED_WINDOW_TITLE,
           ...(getWindow?.() ?? {}),
           id: windowId,
           left: windowPosition,
