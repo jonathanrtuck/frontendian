@@ -26,6 +26,7 @@
 }
 
 .root {
+  align-items: center;
   background-color: var(--window-background-color);
   border-width: var(--border-width) var(--border-width) 0;
   bottom: 100%;
@@ -49,6 +50,7 @@
 }
 
 .title {
+  flex: 1 1 auto;
   font-size: 1rem;
   margin: 0 1rem;
   order: 2;
@@ -59,8 +61,10 @@
 }
 
 .button {
-  aspect-ratio: 1 / 1;
   cursor: var(--cursor--default);
+  flex: 0 0 var(--titlebar-height);
+  height: var(--titlebar-height);
+  width: var(--titlebar-height);
 }
 
 .button:focus {

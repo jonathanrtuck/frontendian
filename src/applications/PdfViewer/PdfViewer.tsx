@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
 import { ApplicationComponent } from "@/types";
@@ -95,7 +95,7 @@ export const PdfViewer: ApplicationComponent = ({
             <Document
               className={styles.root}
               file={file.url}
-              loading={null}
+              loading={<Fragment />}
               onLoadSuccess={({ numPages }) => {
                 setNumPages(numPages);
               }}>
