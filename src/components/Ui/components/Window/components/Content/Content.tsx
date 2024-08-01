@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import {
+  Fragment,
   FunctionComponent,
   PropsWithChildren,
   useContext,
@@ -49,7 +50,9 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
             })}
             ref={ref}
           />
-        ) : null
+        ) : (
+          <Fragment />
+        )
       }
       height={height}
       minConstraints={[

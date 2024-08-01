@@ -80,12 +80,6 @@ export const StyledEdit: ApplicationComponent = ({
     );
   }, [file]);
 
-  useEffect(() => {
-    if (view === "preview") {
-      rootRef.current?.focus();
-    }
-  }, [view]);
-
   return (
     <>
       <Menubar>
@@ -171,7 +165,7 @@ export const StyledEdit: ApplicationComponent = ({
         )}
         {!isLoading && !error && view === "preview" && (
           <samp
-            className={clsx(styles.root, styles.markdown)}
+            className={clsx(styles.root, styles.preview)}
             ref={rootRef}
             tabIndex={-1}>
             <Markdown>{deferredInput}</Markdown>
