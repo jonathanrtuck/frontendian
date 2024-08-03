@@ -3,7 +3,7 @@ import {
   FocusEvent,
   forwardRef,
   HTMLAttributes,
-  KeyboardEvent,
+  PointerEvent,
   PropsWithChildren,
   useContext,
   useImperativeHandle,
@@ -40,10 +40,10 @@ export type MenuProps = PropsWithChildren<
 
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
-  ({ children, className, onBlur, onFocus, onKeyDown, ...props }, ref) => {
+  ({ children, className, onBlur, onFocus, onPointerDown, ...props }, ref) => {
     const {
       isActive: isParentActive,
-      isKeyboardNavigation: isParentKeyboardNavigation,
+      isPointer: isParentPointer,
       setIsActive: setParentIsActive,
     } = useContext(MenuContext);
 
@@ -53,8 +53,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
 
     const [isActive, setIsActive] = useState<boolean>(false);
     const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
-    const [isKeyboardNavigation, setIsKeyboardNavigation] =
-      useState<boolean>(false);
+    const [isPointer, setIsPointer] = useState<boolean>(false);
 
     const bar = "bar" in props;
     const horizontal = "horizontal" in props;
@@ -80,6 +79,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
           ) {
             setIsActive(false);
             setIsFocusWithin(false);
+            setIsPointer(false);
           }
         }}
         onFocus={(e: FocusEvent<HTMLMenuElement>) => {
@@ -88,11 +88,11 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
           setIsActive(true);
           setIsFocusWithin(true);
         }}
-        onKeyDown={(e: KeyboardEvent<HTMLMenuElement>) => {
-          onKeyDown?.(e);
+        onPointerDown={(e: PointerEvent<HTMLMenuElement>) => {
+          onPointerDown?.(e);
 
           if (bar) {
-            setIsKeyboardNavigation(true);
+            setIsPointer(true);
           }
         }}
         ref={rootRef}
@@ -103,7 +103,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
               ? {
                   isActive,
                   isFocusWithin,
-                  isKeyboardNavigation,
+                  isPointer,
                   isTop: true,
                   orientation: horizontal ? "horizontal" : "vertical",
                   setIsActive,
@@ -111,7 +111,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
               : {
                   isActive: isParentActive,
                   isFocusWithin,
-                  isKeyboardNavigation: isParentKeyboardNavigation,
+                  isPointer: isParentPointer,
                   isTop: false,
                   orientation: "vertical",
                   setIsActive: setParentIsActive,

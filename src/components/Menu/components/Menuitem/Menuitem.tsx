@@ -63,8 +63,14 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   classes,
   ...props
 }) => {
-  const { isActive, isFocusWithin, isTop, orientation, setIsActive } =
-    useContext(MenuContext);
+  const {
+    isActive,
+    isFocusWithin,
+    isPointer,
+    isTop,
+    orientation,
+    setIsActive,
+  } = useContext(MenuContext);
   const { collapse: parentCollapse } = useContext(MenuitemContext);
 
   const id = useId();
@@ -77,11 +83,22 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
 
   useLayoutEffect(() => {
-    if (isTop && rootRef.current?.matches(":first-of-type")) {
-      setTabIndex(
-        isFocusWithin && !rootRef.current.matches(":focus-within") ? -1 : 0
-      );
-    }
+    setTabIndex((prevState) => {
+      if (
+        isFocusWithin &&
+        isTop &&
+        rootRef.current?.matches(":first-of-type") &&
+        !rootRef.current.matches(":focus-within")
+      ) {
+        return -1;
+      }
+
+      if (!isFocusWithin) {
+        return isTop && rootRef.current?.matches(":first-of-type") ? 0 : -1;
+      }
+
+      return prevState;
+    });
   }, [isFocusWithin, isTop]);
 
   if ("separator" in props) {
@@ -142,7 +159,9 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
 
         setTabIndex(0);
 
-        if (children) {
+        console.debug("isActive", isActive);
+
+        if (isActive && children) {
           setIsExpanded(true);
         }
       }}
@@ -154,7 +173,9 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         aria-expanded={children ? isExpanded : undefined}
         aria-haspopup={children ? "menu" : undefined}
         aria-labelledby={`${id}-title`}
-        className={clsx(classes?.button, styles.button)}
+        className={clsx(classes?.button, styles.button, {
+          [styles.pointer]: isPointer,
+        })}
         onClick={() => {
           onClick?.();
 

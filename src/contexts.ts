@@ -5,14 +5,14 @@ import { Window } from "@/types";
 export const MenuContext = createContext<{
   isActive: boolean;
   isFocusWithin: boolean;
-  isKeyboardNavigation: boolean;
+  isPointer: boolean;
   isTop: boolean;
   orientation: "horizontal" | "vertical";
   setIsActive: Dispatch<SetStateAction<boolean>>;
 }>({
   isActive: false,
   isFocusWithin: false,
-  isKeyboardNavigation: false,
+  isPointer: false,
   isTop: false,
   orientation: "horizontal",
   setIsActive: () => {},

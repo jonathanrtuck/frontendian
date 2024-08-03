@@ -67,6 +67,10 @@
   outline: 0;
 }
 
+.button:focus:not(.pointer) {
+  background-color: rgb(196, 196, 196);
+}
+
 .button[aria-disabled="true"] {
   color: var(--text-color--disabled);
 }
