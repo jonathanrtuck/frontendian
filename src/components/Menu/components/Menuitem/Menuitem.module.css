@@ -1,12 +1,18 @@
-.root[role^="menuitem"] {
-  align-items: center;
-  display: inline-flex;
-  font-size: 0.875rem;
-  font-weight: 500;
-  gap: 0.5rem;
-  line-height: 1.4;
+.root[role="none"] {
+  display: flex;
   position: relative;
-  user-select: none;
+}
+
+[role="menubar"][aria-orientation="vertical"]
+  .root[role="none"]
+  + .root[role="none"] {
+  border-width: var(--border-width) 0 0;
+}
+
+[role="menu"][aria-orientation="vertical"]
+  .root[role="none"]
+  + .root[role="none"] {
+  border-width: 0;
 }
 
 .root[role="separator"] {
@@ -17,31 +23,34 @@
   padding: 0.25rem 0;
 }
 
-.root:focus {
-  outline: 0;
+.button {
+  align-items: center;
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.5rem;
+  line-height: 1.4;
+  position: relative;
+  user-select: none;
 }
 
-[aria-orientation="horizontal"] > .root[role^="menuitem"] {
+[role="menubar"][aria-orientation="horizontal"] .button {
   padding: 0 0.5rem;
 }
 
-[aria-orientation="vertical"] > .root[role^="menuitem"] {
+[role="menubar"][aria-orientation="vertical"] .button {
   background-image: linear-gradient(
     to bottom,
     rgb(227, 227, 227),
     rgb(209, 209, 209)
   );
   padding: 0.25rem 0.5rem;
+  width: 100%;
 }
 
-[aria-orientation="vertical"]
-  > .root[role^="menuitem"]
-  + .root[role^="menuitem"] {
-  border-width: var(--border-width) 0 0;
-}
-
-[role="menu"] > .root[role^="menuitem"] {
+[role="menu"] .button {
   align-items: center;
+  background-image: unset;
   display: flex;
   gap: 0.5rem;
   height: 1.5rem;
@@ -50,16 +59,17 @@
   width: 100%;
 }
 
-.root[aria-disabled="true"] {
+.button:focus {
+  outline: 0;
+}
+
+.button[aria-disabled="true"] {
   color: var(--text-color--disabled);
 }
 
-.root[role^="menuitem"][aria-expanded="true"],
-.root[role^="menuitem"][aria-expanded="true"]
-  .root[role^="menuitem"]:not(
-    [aria-checked="true"],
-    [aria-disabled="true"]
-  ):hover {
+[role="menubar"] .button[aria-expanded="true"],
+[role="menu"] .button[aria-expanded="true"],
+[role="menu"] .button:not([aria-checked="true"], [aria-disabled="true"]):hover {
   background-image: linear-gradient(
     to bottom,
     rgb(146, 146, 146),
@@ -67,18 +77,18 @@
   );
 }
 
-.root[role="menuitemcheckbox"]::before,
-.root[role="menuitemradio"]::before {
+.button[role="menuitemcheckbox"]::before,
+.button[role="menuitemradio"]::before {
   content: "";
   font-size: 0.625rem;
   width: 0.75rem;
 }
 
-.root[aria-checked="true"]::before {
+.button[aria-checked="true"]::before {
   content: "✔️";
 }
 
-[role="menu"] > .root[aria-haspopup="menu"]::after {
+[role="menu"] > .root > .button[aria-haspopup="menu"]::after {
   content: "▶";
   font-size: 0.5rem;
   margin-right: -0.5rem;

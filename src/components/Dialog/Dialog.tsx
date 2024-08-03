@@ -3,7 +3,9 @@ import { FunctionComponent, HTMLAttributes, PropsWithChildren } from "react";
 
 import styles from "./Dialog.module.css";
 
-export type DialogProps = PropsWithChildren<HTMLAttributes<HTMLDialogElement>>;
+export type DialogProps = PropsWithChildren<
+  Omit<HTMLAttributes<HTMLDialogElement>, "open">
+>;
 
 export const Dialog: FunctionComponent<DialogProps> = ({
   children,

@@ -11,14 +11,19 @@ import {
   useState,
 } from "react";
 
-import { MenubarContext } from "@/contexts";
-import { getChildMenuitems, removeProps } from "@/utils";
+import { MenuContext } from "@/contexts";
+import { removeProps } from "@/utils";
 
 import styles from "./Menu.module.css";
 
 export * from "./components/Menuitem";
 
-export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
+export type MenuProps = PropsWithChildren<
+  Omit<
+    HTMLAttributes<HTMLMenuElement>,
+    "aria-hidden" | "aria-orientation" | "role"
+  >
+> &
   (
     | ({
         bar: true;
@@ -44,13 +49,19 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
     useImperativeHandle(ref, () => rootRef.current as HTMLMenuElement);
 
     const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
+    const [isKeyboardNavigation, setIsKeyboardNavigation] =
+      useState<boolean>(false);
 
     const bar = "bar" in props;
     const horizontal = "horizontal" in props;
 
     return (
       <menu
-        {...removeProps(props, ["bar", "horizontal", "vertical"])}
+        {...removeProps<HTMLAttributes<HTMLMenuElement>>(props, [
+          "bar",
+          "horizontal",
+          "vertical",
+        ])}
         aria-hidden={bar ? undefined : !isFocusWithin}
         aria-orientation={
           bar ? (horizontal ? "horizontal" : "vertical") : undefined
@@ -60,66 +71,39 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
           onBlur?.(e);
 
           if (
-            !rootRef.current?.contains(
-              e.relatedTarget ?? document.activeElement
-            )
+            document.hasFocus() &&
+            !e.currentTarget?.contains(e.relatedTarget)
           ) {
             setIsFocusWithin(false);
           }
         }}
-        onClick={
-          bar
-            ? (e: MouseEvent<HTMLMenuElement>) => {
-                onClick?.(e);
+        onClick={(e: MouseEvent<HTMLMenuElement>) => {
+          onClick?.(e);
 
-                const menuitem = (e.target as HTMLElement).closest(
-                  '[role^="menuitem"]'
-                );
-                const hasPopup =
-                  menuitem?.matches('[aria-haspopup="menu"]') ?? false;
-                const isExpanded = menuitem?.matches('[aria-expanded="true"]');
-
-                if (!hasPopup || isExpanded) {
-                  getChildMenuitems(rootRef.current)[0]?.focus();
-
-                  setIsFocusWithin(false);
-                }
-              }
-            : onClick
-        }
+          // close
+        }}
         onFocus={(e: FocusEvent<HTMLMenuElement>) => {
           onFocus?.(e);
 
-          /**
-           * this conditional is needed to handle a case in which the menubar
-           * has focus within but `isFocusWithin` is `false`, and the browser
-           * window loses then regains focus, firing another focus event; where
-           * we want to keep the same `isFocusWithin` state
-           */
-          if (bar === (rootRef.current?.contains(e.relatedTarget) ?? false)) {
-            setIsFocusWithin(true);
+          setIsFocusWithin(true);
+        }}
+        onKeyDown={(e: KeyboardEvent<HTMLMenuElement>) => {
+          onKeyDown?.(e);
+
+          if (bar) {
+            setIsKeyboardNavigation(true);
           }
         }}
-        onKeyDown={
-          bar
-            ? (e: KeyboardEvent<HTMLMenuElement>) => {
-                onKeyDown?.(e);
-
-                if (e.key === "Enter") {
-                  // @todo
-                }
-              }
-            : onKeyDown
-        }
         ref={rootRef}
         role={bar ? "menubar" : "menu"}>
-        {bar ? (
-          <MenubarContext.Provider value={{ isFocusWithin }}>
-            {children}
-          </MenubarContext.Provider>
-        ) : (
-          children
-        )}
+        <MenuContext.Provider
+          value={{
+            isFocusWithin,
+            isTop: bar,
+            orientation: horizontal ? "horizontal" : "vertical",
+          }}>
+          {children}
+        </MenuContext.Provider>
       </menu>
     );
   }

@@ -6,6 +6,6 @@ import { Resize } from "@/icons";
 export const ResizeHandle = forwardRef<
   SVGSVGElement,
   SVGAttributes<SVGSVGElement> & { handleAxis?: unknown } & unknown
->(({ handleAxis, ...restProps }, ref) => <Resize {...restProps} ref={ref} />);
+>(({ handleAxis, ...props }, ref) => <Resize {...props} ref={ref} />);
 
 ResizeHandle.displayName = "ResizeHandle";

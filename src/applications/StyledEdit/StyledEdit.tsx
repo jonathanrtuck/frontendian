@@ -164,10 +164,7 @@ export const StyledEdit: ApplicationComponent = ({
           />
         )}
         {!isLoading && !error && view === "preview" && (
-          <samp
-            className={clsx(styles.root, styles.preview)}
-            ref={rootRef}
-            tabIndex={-1}>
+          <samp className={clsx(styles.root, styles.preview)} ref={rootRef}>
             <Markdown>{deferredInput}</Markdown>
           </samp>
         )}

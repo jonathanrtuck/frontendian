@@ -5,19 +5,16 @@ import { useClock } from "@/hooks";
 
 import styles from "./Clock.module.css";
 
-export type ClockProps = HTMLAttributes<HTMLButtonElement>;
+export type ClockProps = Omit<HTMLAttributes<HTMLButtonElement>, "type">;
 
 export const Clock: FunctionComponent<ClockProps> = ({
   className,
-  ...restProps
+  ...props
 }) => {
   const date = useClock();
 
   return (
-    <button
-      {...restProps}
-      className={clsx(className, styles.root)}
-      type="button">
+    <button {...props} className={clsx(className, styles.root)} type="button">
       <time
         // remove milliseconds to prevent (more) frequent dom updates
         dateTime={date.toISOString().replace(/\.\d+/, "")}
