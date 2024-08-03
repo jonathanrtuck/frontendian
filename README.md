@@ -19,4 +19,3 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 ## Todo
 
 - Test in *Edge* and *iOS*
-- [Handle `Menubar` keyboard navigation](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
