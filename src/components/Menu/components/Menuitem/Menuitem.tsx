@@ -10,15 +10,15 @@ import {
   useState,
 } from "react";
 
-import { MenuContext } from "@/contexts";
+import { MenuContext, MenuitemContext } from "@/contexts";
 import { IconComponent } from "@/types";
 import { removeProps } from "@/utils";
 
 import styles from "./Menuitem.module.css";
 
-const getChildMenuitems = (menuitem: HTMLElement | null): HTMLElement[] =>
+const getChildMenuitems = (root: HTMLElement | null): HTMLElement[] =>
   Array.from(
-    menuitem?.querySelectorAll(
+    root?.querySelectorAll(
       `:scope > [role="menu"] > .${styles.root} > .${styles.button}`
     ) ?? []
   );
@@ -64,10 +64,12 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   ...props
 }) => {
   const { isFocusWithin, isTop, orientation } = useContext(MenuContext);
+  const { collapse } = useContext(MenuitemContext);
 
   const id = useId();
 
   const rootRef = useRef<HTMLLIElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
@@ -75,7 +77,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   useLayoutEffect(() => {
     if (isTop && rootRef.current?.matches(":first-of-type")) {
       setTabIndex(
-        !isFocusWithin || rootRef.current?.matches(":focus-within") ? 0 : -1
+        isFocusWithin && !rootRef.current.matches(":focus-within") ? -1 : 0
       );
     }
   }, [isFocusWithin, isTop]);
@@ -147,12 +149,11 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
             if (isExpanded) {
               // @todo reset focus to top-most menuitem button
             } else {
-              // getChildMenuitems()[0]?.focus();
+              // ???
             }
           } else {
+            collapse();
             onClick?.();
-
-            // @todo reset focus to top-most menuitem button
           }
         }}
         onKeyDown={(e) => {
@@ -215,6 +216,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
             e.preventDefault();
           }
         }}
+        ref={buttonRef}
         role={
           (type === "checkbox" && "menuitemcheckbox") ||
           (type === "radio" && "menuitemradio") ||
@@ -229,7 +231,20 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
           {title}
         </span>
       </button>
-      {children}
+      <MenuitemContext.Provider
+        value={{
+          collapse: isTop
+            ? () => {
+                buttonRef.current?.focus();
+
+                if (children) {
+                  setIsExpanded(false);
+                }
+              }
+            : collapse,
+        }}>
+        {children}
+      </MenuitemContext.Provider>
     </li>
   );
 };

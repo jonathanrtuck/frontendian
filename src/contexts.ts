@@ -12,6 +12,12 @@ export const MenuContext = createContext<{
   orientation: "horizontal",
 });
 
+export const MenuitemContext = createContext<{
+  collapse(): void;
+}>({
+  collapse: () => {},
+});
+
 export const WindowContext = createContext<
   Window & {
     inert: boolean;
