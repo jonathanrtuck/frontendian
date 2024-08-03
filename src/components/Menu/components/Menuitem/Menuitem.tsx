@@ -63,14 +63,16 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   classes,
   ...props
 }) => {
-  const { isFocusWithin, isTop, orientation } = useContext(MenuContext);
-  const { collapse } = useContext(MenuitemContext);
+  const { isActive, isFocusWithin, isTop, orientation, setIsActive } =
+    useContext(MenuContext);
+  const { collapse: parentCollapse } = useContext(MenuitemContext);
 
   const id = useId();
 
   const rootRef = useRef<HTMLLIElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
+  const [isExpandedClick, setIsExpandedClick] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
 
@@ -98,6 +100,17 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const onClick = "onClick" in props ? props.onClick : undefined;
   const title = "title" in props ? props.title : undefined;
   const type = "type" in props ? props.type : undefined;
+  const collapse = isTop
+    ? () => {
+        buttonRef.current?.focus();
+
+        if (children) {
+          setIsExpanded(false);
+        }
+
+        setIsActive(false);
+      }
+    : parentCollapse;
 
   return (
     <li
@@ -143,17 +156,12 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         aria-labelledby={`${id}-title`}
         className={clsx(classes?.button, styles.button)}
         onClick={() => {
-          if (children) {
-            getChildMenuitems(rootRef.current)[0]?.focus();
+          onClick?.();
 
-            if (isExpanded) {
-              // @todo reset focus to top-most menuitem button
-            } else {
-              // ???
-            }
+          if (isTop && children && !isExpandedClick) {
+            getChildMenuitems(rootRef.current)[0]?.focus();
           } else {
             collapse();
-            onClick?.();
           }
         }}
         onKeyDown={(e) => {
@@ -203,7 +211,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
           }
         }}
         onMouseEnter={(e) => {
-          if (isFocusWithin) {
+          if (isActive) {
             if (children) {
               getChildMenuitems(rootRef.current)[0]?.focus();
             } else {
@@ -214,6 +222,10 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         onPointerDown={(e) => {
           if (children && isExpanded) {
             e.preventDefault();
+          }
+
+          if (isTop && children) {
+            setIsExpandedClick(isExpanded);
           }
         }}
         ref={buttonRef}
@@ -233,15 +245,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
       </button>
       <MenuitemContext.Provider
         value={{
-          collapse: isTop
-            ? () => {
-                buttonRef.current?.focus();
-
-                if (children) {
-                  setIsExpanded(false);
-                }
-              }
-            : collapse,
+          collapse,
         }}>
         {children}
       </MenuitemContext.Provider>

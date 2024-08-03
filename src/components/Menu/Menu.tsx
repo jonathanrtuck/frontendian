@@ -4,8 +4,8 @@ import {
   forwardRef,
   HTMLAttributes,
   KeyboardEvent,
-  MouseEvent,
   PropsWithChildren,
+  useContext,
   useImperativeHandle,
   useRef,
   useState,
@@ -40,14 +40,18 @@ export type MenuProps = PropsWithChildren<
 
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
-  (
-    { children, className, onBlur, onClick, onFocus, onKeyDown, ...props },
-    ref
-  ) => {
+  ({ children, className, onBlur, onFocus, onKeyDown, ...props }, ref) => {
+    const {
+      isActive: isParentActive,
+      isKeyboardNavigation: isParentKeyboardNavigation,
+      setIsActive: setParentIsActive,
+    } = useContext(MenuContext);
+
     const rootRef = useRef<HTMLMenuElement>(null);
 
     useImperativeHandle(ref, () => rootRef.current as HTMLMenuElement);
 
+    const [isActive, setIsActive] = useState<boolean>(false);
     const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
     const [isKeyboardNavigation, setIsKeyboardNavigation] =
       useState<boolean>(false);
@@ -74,17 +78,14 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
             document.hasFocus() &&
             !e.currentTarget?.contains(e.relatedTarget)
           ) {
+            setIsActive(false);
             setIsFocusWithin(false);
           }
-        }}
-        onClick={(e: MouseEvent<HTMLMenuElement>) => {
-          onClick?.(e);
-
-          // close
         }}
         onFocus={(e: FocusEvent<HTMLMenuElement>) => {
           onFocus?.(e);
 
+          setIsActive(true);
           setIsFocusWithin(true);
         }}
         onKeyDown={(e: KeyboardEvent<HTMLMenuElement>) => {
@@ -97,11 +98,25 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
         ref={rootRef}
         role={bar ? "menubar" : "menu"}>
         <MenuContext.Provider
-          value={{
-            isFocusWithin,
-            isTop: bar,
-            orientation: horizontal ? "horizontal" : "vertical",
-          }}>
+          value={
+            bar
+              ? {
+                  isActive,
+                  isFocusWithin,
+                  isKeyboardNavigation,
+                  isTop: true,
+                  orientation: horizontal ? "horizontal" : "vertical",
+                  setIsActive,
+                }
+              : {
+                  isActive: isParentActive,
+                  isFocusWithin,
+                  isKeyboardNavigation: isParentKeyboardNavigation,
+                  isTop: false,
+                  orientation: "vertical",
+                  setIsActive: setParentIsActive,
+                }
+          }>
           {children}
         </MenuContext.Provider>
       </menu>
