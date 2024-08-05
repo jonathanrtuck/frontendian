@@ -153,7 +153,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
         style={{
           zIndex: stackingOrder.indexOf(id),
         }}
-        tabIndex={0}>
+        tabIndex={-1}>
         <WindowContext.Provider
           value={{
             ...props,
