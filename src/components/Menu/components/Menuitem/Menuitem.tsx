@@ -3,7 +3,7 @@ import {
   FunctionComponent,
   HTMLAttributes,
   ReactElement,
-  UIEvent,
+  useCallback,
   useContext,
   useId,
   useLayoutEffect,
@@ -60,7 +60,8 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
 }) => {
   const { inactivate, isActive, isFocusWithin, isPointer, isTop, orientation } =
     useContext(MenuContext);
-  const { topButtonRef: parentTopButtonRef } = useContext(MenuitemContext);
+  const { collapse: parentCollapse, topButtonRef: parentTopButtonRef } =
+    useContext(MenuitemContext);
 
   const id = useId();
 
@@ -69,6 +70,11 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
+
+  const collapse = useCallback(() => {
+    setIsExpanded(false);
+    rootRef.current?.focus();
+  }, []);
 
   const topButtonRef = isTop ? buttonRef : parentTopButtonRef;
 
@@ -135,17 +141,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         `:scope > [role="menu"] > .${styles.menuitem} > .${styles.button}`
       ) ?? []
     );
-  const getParentMenuitemButton = (): HTMLElement | undefined =>
-    rootRef.current?.parentElement
-      ?.closest(`.${styles.menuitem}`)
-      ?.querySelector(`.${styles.button}`) ?? undefined;
-  const getSiblingMenuitemButtons = (): HTMLElement[] =>
-    Array.from(
-      rootRef.current?.parentElement?.querySelectorAll(
-        `:scope > .${styles.menuitem} > .${styles.button}`
-      ) ?? []
-    );
-  const onActivate = (e: UIEvent): void => {
+  const onActivate = (): void => {
     if (!checked && !disabled) {
       onClick?.();
     }
@@ -153,11 +149,9 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
     if (haspopup && !isExpanded) {
       setTabIndex(0);
       setIsExpanded(true);
-
       getChildMenuitemButtons().at(0)?.focus();
     } else {
       topButtonRef.current?.focus();
-
       inactivate();
     }
   };
@@ -217,10 +211,19 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         })}
         onClick={onActivate}
         onKeyDown={(e) => {
-          const menuitem = e.target as HTMLElement;
+          const parentMenuitem =
+            rootRef.current?.parentElement?.closest<HTMLElement>(
+              `.${styles.menuitem}`
+            );
+          const parentMenuitemButton =
+            parentMenuitem?.querySelector<HTMLElement>(`.${styles.button}`);
           const childMenuitemButtons = getChildMenuitemButtons();
-          const siblingMenuitemButtons = getSiblingMenuitemButtons();
-          const index = siblingMenuitemButtons.indexOf(menuitem);
+          const siblingMenuitemButtons = Array.from<HTMLElement>(
+            rootRef.current?.parentElement?.querySelectorAll(
+              `:scope > .${styles.menuitem} > .${styles.button}`
+            ) ?? []
+          );
+          const index = siblingMenuitemButtons.indexOf(e.target as HTMLElement);
           const isFirstMenuitem = index === 0;
           const isLastMenuitem = index === siblingMenuitemButtons.length - 1;
 
@@ -238,13 +241,30 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
             case "ArrowLeft":
               if (isTop) {
                 if (orientation === "horizontal") {
-                  siblingMenuitemButtons
-                    .at(isFirstMenuitem ? -1 : index - 1)
-                    ?.focus();
+                  siblingMenuitemButtons.at(index - 1)?.focus();
                 }
               } else {
-                menuitem.blur();
-                getParentMenuitemButton()?.focus();
+                parentCollapse();
+
+                if (
+                  parentMenuitemButton &&
+                  parentMenuitem?.matches(`.${styles.horizontal}`)
+                ) {
+                  const parentMenuitemButtons = Array.from<HTMLElement>(
+                    parentMenuitem?.parentElement?.querySelectorAll(
+                      `:scope > .${styles.menuitem} > .${styles.button}`
+                    ) ?? []
+                  );
+                  const parentIndex =
+                    parentMenuitemButtons.indexOf(parentMenuitemButton);
+                  const prevMenuitemButton = parentMenuitemButtons.at(
+                    parentIndex - 1
+                  );
+
+                  prevMenuitemButton?.focus();
+                } else {
+                  parentMenuitemButton?.focus();
+                }
               }
               break;
             case "ArrowRight":
@@ -257,9 +277,38 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
                   setIsExpanded(true);
                   childMenuitemButtons.at(0)?.focus();
                 }
-              } else if (haspopup) {
-                setIsExpanded(true);
-                childMenuitemButtons.at(0)?.focus();
+              } else {
+                if (haspopup) {
+                  setIsExpanded(true);
+                  childMenuitemButtons.at(0)?.focus();
+                } else {
+                  const topMenuitemButton = topButtonRef.current;
+                  const topMenuitem = topMenuitemButton?.closest(
+                    `.${styles.menuitem}`
+                  );
+
+                  if (
+                    topMenuitemButton &&
+                    topMenuitem?.matches(`.${styles.horizontal}`)
+                  ) {
+                    const topMenuitemButtons = Array.from<HTMLElement>(
+                      topMenuitem?.parentElement?.querySelectorAll(
+                        `:scope > .${styles.menuitem} > .${styles.button}`
+                      ) ?? []
+                    );
+                    const topIndex =
+                      topMenuitemButtons.indexOf(topMenuitemButton);
+                    const nextMenuitemButton = topMenuitemButtons.at(
+                      topIndex === topMenuitemButtons.length - 1
+                        ? 0
+                        : topIndex + 1
+                    );
+
+                    nextMenuitemButton?.focus();
+                  } else {
+                    parentMenuitemButton?.focus();
+                  }
+                }
               }
               break;
             case "ArrowUp":
@@ -275,11 +324,11 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
             case "Enter":
             case " ":
               e.preventDefault();
-              onActivate(e);
+              onActivate();
               break;
             case "Escape":
-              menuitem.blur();
-              topButtonRef.current?.focus();
+              parentCollapse();
+              parentMenuitemButton?.focus();
               break;
           }
         }}
@@ -291,7 +340,6 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
 
             if (haspopup) {
               setIsExpanded(true);
-
               getChildMenuitemButtons().at(0)?.focus();
             } else {
               (e.target as HTMLElement).focus();
@@ -320,6 +368,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
       </button>
       <MenuitemContext.Provider
         value={{
+          collapse,
           isExpanded,
           topButtonRef,
         }}>

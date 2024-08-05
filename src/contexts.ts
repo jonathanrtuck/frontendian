@@ -19,9 +19,11 @@ export const MenuContext = createContext<{
 });
 
 export const MenuitemContext = createContext<{
+  collapse(): void;
   isExpanded: boolean;
   topButtonRef: RefObject<HTMLElement>;
 }>({
+  collapse: () => {},
   isExpanded: false,
   topButtonRef: createRef(),
 });

@@ -44,7 +44,7 @@
   width: 100%;
 }
 
-.menuitem:not(.top) > .button {
+.menuitem:where(:not(.top)) > .button {
   align-items: center;
   background-image: unset;
   display: flex;
