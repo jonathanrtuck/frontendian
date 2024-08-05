@@ -178,7 +178,10 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         className,
         classes?.menuitem,
         styles.menuitem,
-        styles[orientation]
+        styles[orientation],
+        {
+          [styles.top]: isTop,
+        }
       )}
       onBlur={(e) => {
         props.onBlur?.(e);
