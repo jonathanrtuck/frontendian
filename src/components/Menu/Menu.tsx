@@ -81,7 +81,12 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
         aria-orientation={
           bar ? (horizontal ? "horizontal" : "vertical") : undefined
         }
-        className={clsx(className, styles.root)}
+        className={clsx(className, styles.root, {
+          [styles.bar]: bar,
+          [styles.hidden]: !bar && !isExpanded,
+          [styles.horizontal]: horizontal,
+          [styles.vertical]: !horizontal,
+        })}
         onBlur={(e: FocusEvent<HTMLMenuElement>) => {
           onBlur?.(e);
 

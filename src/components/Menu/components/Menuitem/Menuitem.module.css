@@ -6,6 +6,10 @@
   padding: 0.25rem 0;
 }
 
+.separator:focus {
+  outline: 0;
+}
+
 .menuitem {
   display: flex;
   position: relative;

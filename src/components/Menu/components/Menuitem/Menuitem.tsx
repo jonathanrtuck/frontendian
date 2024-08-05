@@ -214,9 +214,10 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         })}
         onClick={onActivate}
         onKeyDown={(e) => {
+          const menuitem = e.target as HTMLElement;
           const childMenuitemButtons = getChildMenuitemButtons();
           const siblingMenuitemButtons = getSiblingMenuitemButtons();
-          const index = siblingMenuitemButtons.indexOf(e.target as HTMLElement);
+          const index = siblingMenuitemButtons.indexOf(menuitem);
           const isFirstMenuitem = index === 0;
           const isLastMenuitem = index === siblingMenuitemButtons.length - 1;
 
@@ -239,8 +240,8 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
                     ?.focus();
                 }
               } else {
+                menuitem.blur();
                 getParentMenuitemButton()?.focus();
-                // @todo collapse parent menuitem
               }
               break;
             case "ArrowRight":
@@ -249,17 +250,19 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
                   siblingMenuitemButtons
                     .at(isLastMenuitem ? 0 : index + 1)
                     ?.focus();
-                } else {
-                  //
+                } else if (haspopup) {
+                  setIsExpanded(true);
+                  childMenuitemButtons.at(0)?.focus();
                 }
               } else if (haspopup) {
-                // expand();
+                setIsExpanded(true);
+                childMenuitemButtons.at(0)?.focus();
               }
               break;
             case "ArrowUp":
               if (isTop && orientation === "horizontal") {
-                // childMenuitemButtons.at(-1)?.focus();
-                // setIsExpanded(true);
+                setIsExpanded(true);
+                childMenuitemButtons.at(-1)?.focus();
               } else {
                 siblingMenuitemButtons
                   .at(isFirstMenuitem ? -1 : index - 1)
@@ -272,7 +275,8 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
               onActivate(e);
               break;
             case "Escape":
-              // collapse();
+              menuitem.blur();
+              topButtonRef.current?.focus();
               break;
           }
         }}
