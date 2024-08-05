@@ -3,6 +3,7 @@ import {
   FunctionComponent,
   HTMLAttributes,
   ReactElement,
+  UIEvent,
   useContext,
   useId,
   useLayoutEffect,
@@ -16,13 +17,6 @@ import { removeProps } from "@/utils";
 
 import styles from "./Menuitem.module.css";
 
-const getChildMenuitems = (root: HTMLElement | null): HTMLElement[] =>
-  Array.from(
-    root?.querySelectorAll(
-      `:scope > [role="menu"] > .${styles.root} > .${styles.button}`
-    ) ?? []
-  );
-
 export type MenuitemProps = Omit<
   HTMLAttributes<HTMLLIElement>,
   "onClick" | "role"
@@ -30,7 +24,8 @@ export type MenuitemProps = Omit<
   classes?: {
     button?: string;
     icon?: string;
-    root?: string;
+    menuitem?: string;
+    separator?: string;
     title?: string;
   };
 } & (
@@ -63,50 +58,64 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   classes,
   ...props
 }) => {
-  const {
-    isActive,
-    isFocusWithin,
-    isPointer,
-    isTop,
-    orientation,
-    setIsActive,
-  } = useContext(MenuContext);
-  const { collapse: parentCollapse } = useContext(MenuitemContext);
+  const { inactivate, isActive, isFocusWithin, isPointer, isTop, orientation } =
+    useContext(MenuContext);
+  const { topButtonRef: parentTopButtonRef } = useContext(MenuitemContext);
 
   const id = useId();
 
   const rootRef = useRef<HTMLLIElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const [isExpandedClick, setIsExpandedClick] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
 
+  const topButtonRef = isTop ? buttonRef : parentTopButtonRef;
+
   useLayoutEffect(() => {
-    setTabIndex((prevState) => {
-      if (
-        isFocusWithin &&
-        isTop &&
-        rootRef.current?.matches(":first-of-type") &&
-        !rootRef.current.matches(":focus-within")
-      ) {
-        return -1;
-      }
+    if (!isActive) {
+      setIsExpanded(false);
+    }
+  }, [isActive]);
 
-      if (!isFocusWithin) {
-        return isTop && rootRef.current?.matches(":first-of-type") ? 0 : -1;
-      }
+  useLayoutEffect(() => {
+    if (isTop) {
+      setTabIndex((prevState) => {
+        const isFirstMenuitem = rootRef.current?.matches(":first-of-type");
+        const hasFocus = rootRef.current?.matches(":focus-within");
 
-      return prevState;
-    });
+        if (isFocusWithin && isFirstMenuitem && !hasFocus) {
+          return -1;
+        }
+
+        if (!isFocusWithin) {
+          return isFirstMenuitem ? 0 : -1;
+        }
+
+        return prevState;
+      });
+    }
   }, [isFocusWithin, isTop]);
 
   if ("separator" in props) {
     return (
       <li
         {...removeProps<HTMLAttributes<HTMLLIElement>>(props, ["separator"])}
-        className={clsx(className, classes?.root, styles.root)}
+        className={clsx(className, classes?.separator, styles.separator)}
+        onClick={() => {
+          topButtonRef.current?.focus();
+
+          inactivate();
+        }}
+        onMouseEnter={(e) => {
+          props.onMouseEnter?.(e);
+
+          if (isActive) {
+            (e.target as HTMLElement).focus();
+          }
+        }}
         role="separator"
+        tabIndex={-1}
       />
     );
   }
@@ -117,17 +126,41 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const onClick = "onClick" in props ? props.onClick : undefined;
   const title = "title" in props ? props.title : undefined;
   const type = "type" in props ? props.type : undefined;
-  const collapse = isTop
-    ? () => {
-        buttonRef.current?.focus();
 
-        if (children) {
-          setIsExpanded(false);
-        }
+  const haspopup = Boolean(children);
 
-        setIsActive(false);
-      }
-    : parentCollapse;
+  const getChildMenuitemButtons = (): HTMLElement[] =>
+    Array.from(
+      rootRef.current?.querySelectorAll(
+        `:scope > [role="menu"] > .${styles.menuitem} > .${styles.button}`
+      ) ?? []
+    );
+  const getParentMenuitemButton = (): HTMLElement | undefined =>
+    rootRef.current?.parentElement
+      ?.closest(`.${styles.menuitem}`)
+      ?.querySelector(`.${styles.button}`) ?? undefined;
+  const getSiblingMenuitemButtons = (): HTMLElement[] =>
+    Array.from(
+      rootRef.current?.parentElement?.querySelectorAll(
+        `:scope > .${styles.menuitem} > .${styles.button}`
+      ) ?? []
+    );
+  const onActivate = (e: UIEvent): void => {
+    if (!checked && !disabled) {
+      onClick?.();
+    }
+
+    if (haspopup && !isExpanded) {
+      setTabIndex(0);
+      setIsExpanded(true);
+
+      getChildMenuitemButtons().at(0)?.focus();
+    } else {
+      topButtonRef.current?.focus();
+
+      inactivate();
+    }
+  };
 
   return (
     <li
@@ -141,28 +174,25 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         "role",
         "title",
       ])}
-      className={clsx(className, classes?.root, styles.root)}
+      className={clsx(
+        className,
+        classes?.menuitem,
+        styles.menuitem,
+        styles[orientation]
+      )}
       onBlur={(e) => {
         props.onBlur?.(e);
 
         if (
-          children &&
+          haspopup &&
           document.hasFocus() &&
           !e.currentTarget?.contains(e.relatedTarget)
         ) {
           setIsExpanded(false);
-          setTabIndex(-1);
-        }
-      }}
-      onFocus={(e) => {
-        props.onFocus?.(e);
 
-        setTabIndex(0);
-
-        console.debug("isActive", isActive);
-
-        if (isActive && children) {
-          setIsExpanded(true);
+          if (isTop) {
+            setTabIndex(-1);
+          }
         }
       }}
       ref={rootRef}
@@ -170,83 +200,100 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
       <button
         aria-checked={type ? checked : undefined}
         aria-disabled={disabled}
-        aria-expanded={children ? isExpanded : undefined}
-        aria-haspopup={children ? "menu" : undefined}
+        aria-expanded={haspopup ? isExpanded : undefined}
+        aria-haspopup={haspopup ? "menu" : undefined}
         aria-labelledby={`${id}-title`}
         className={clsx(classes?.button, styles.button, {
+          [styles.checkbox]: type === "checkbox",
+          [styles.checked]: checked,
+          [styles.disabled]: disabled,
+          [styles.expanded]: isExpanded,
+          [styles.haspopup]: haspopup,
           [styles.pointer]: isPointer,
+          [styles.radio]: type === "radio",
         })}
-        onClick={() => {
-          onClick?.();
-
-          if (isTop && children && !isExpandedClick) {
-            getChildMenuitems(rootRef.current)[0]?.focus();
-          } else {
-            collapse();
-          }
-        }}
+        onClick={onActivate}
         onKeyDown={(e) => {
-          const isMenubaritem =
-            rootRef.current?.matches('[role="menubar"] > :scope') ?? false;
+          const childMenuitemButtons = getChildMenuitemButtons();
+          const siblingMenuitemButtons = getSiblingMenuitemButtons();
+          const index = siblingMenuitemButtons.indexOf(e.target as HTMLElement);
+          const isFirstMenuitem = index === 0;
+          const isLastMenuitem = index === siblingMenuitemButtons.length - 1;
 
           switch (e.key) {
             case "ArrowDown":
-              if (isMenubaritem) {
-                if (orientation === "horizontal") {
-                  // expand();
-                }
+              if (isTop && orientation === "horizontal") {
+                setIsExpanded(true);
+                childMenuitemButtons.at(0)?.focus();
               } else {
-                // @todo focus and expand next item
+                siblingMenuitemButtons
+                  .at(isLastMenuitem ? 0 : index + 1)
+                  ?.focus();
               }
               break;
             case "ArrowLeft":
-              if (isMenubaritem) {
-                // @todo focus and expand prev item
-              } else if (children) {
-                // collapse();
-                // @todo focus parent menuitem
+              if (isTop) {
+                if (orientation === "horizontal") {
+                  siblingMenuitemButtons
+                    .at(isFirstMenuitem ? -1 : index - 1)
+                    ?.focus();
+                }
+              } else {
+                getParentMenuitemButton()?.focus();
+                // @todo collapse parent menuitem
               }
               break;
             case "ArrowRight":
-              if (isMenubaritem) {
-                // @todo focus next item
-              } else if (children) {
+              if (isTop) {
+                if (orientation === "horizontal") {
+                  siblingMenuitemButtons
+                    .at(isLastMenuitem ? 0 : index + 1)
+                    ?.focus();
+                } else {
+                  //
+                }
+              } else if (haspopup) {
                 // expand();
               }
               break;
             case "ArrowUp":
-              if (!isMenubaritem) {
-                // @todo focus prev item
+              if (isTop && orientation === "horizontal") {
+                // childMenuitemButtons.at(-1)?.focus();
+                // setIsExpanded(true);
+              } else {
+                siblingMenuitemButtons
+                  .at(isFirstMenuitem ? -1 : index - 1)
+                  ?.focus();
               }
               break;
             case "Enter":
-              if (children) {
-                // @todo focus child menuitem
-              } else if (!checked && !disabled) {
-                // onClick?.();
-              }
+            case " ":
+              e.preventDefault();
+              onActivate(e);
               break;
             case "Escape":
-              // @todo focus and collapse parent
+              // collapse();
               break;
           }
         }}
         onMouseEnter={(e) => {
           if (isActive) {
-            if (children) {
-              getChildMenuitems(rootRef.current)[0]?.focus();
+            if (isTop) {
+              setTabIndex(0);
+            }
+
+            if (haspopup) {
+              setIsExpanded(true);
+
+              getChildMenuitemButtons().at(0)?.focus();
             } else {
               (e.target as HTMLElement).focus();
             }
           }
         }}
         onPointerDown={(e) => {
-          if (children && isExpanded) {
+          if (haspopup && isExpanded) {
             e.preventDefault();
-          }
-
-          if (isTop && children) {
-            setIsExpandedClick(isExpanded);
           }
         }}
         ref={buttonRef}
@@ -266,7 +313,8 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
       </button>
       <MenuitemContext.Provider
         value={{
-          collapse,
+          isExpanded,
+          topButtonRef,
         }}>
         {children}
       </MenuitemContext.Provider>

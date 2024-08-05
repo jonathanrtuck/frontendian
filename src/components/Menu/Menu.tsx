@@ -3,15 +3,15 @@ import {
   FocusEvent,
   forwardRef,
   HTMLAttributes,
+  KeyboardEvent,
   PointerEvent,
   PropsWithChildren,
+  useCallback,
   useContext,
-  useImperativeHandle,
-  useRef,
   useState,
 } from "react";
 
-import { MenuContext } from "@/contexts";
+import { MenuContext, MenuitemContext } from "@/contexts";
 import { removeProps } from "@/utils";
 
 import styles from "./Menu.module.css";
@@ -40,20 +40,32 @@ export type MenuProps = PropsWithChildren<
 
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
-  ({ children, className, onBlur, onFocus, onPointerDown, ...props }, ref) => {
+  (
+    {
+      children,
+      className,
+      onBlur,
+      onFocus,
+      onKeyDown,
+      onPointerDown,
+      ...props
+    },
+    ref
+  ) => {
     const {
+      inactivate: parentInactivate,
       isActive: isParentActive,
       isPointer: isParentPointer,
-      setIsActive: setParentIsActive,
     } = useContext(MenuContext);
-
-    const rootRef = useRef<HTMLMenuElement>(null);
-
-    useImperativeHandle(ref, () => rootRef.current as HTMLMenuElement);
+    const { isExpanded } = useContext(MenuitemContext);
 
     const [isActive, setIsActive] = useState<boolean>(false);
     const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
     const [isPointer, setIsPointer] = useState<boolean>(false);
+
+    const inactivate = useCallback(() => {
+      setIsActive(false);
+    }, []);
 
     const bar = "bar" in props;
     const horizontal = "horizontal" in props;
@@ -65,7 +77,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
           "horizontal",
           "vertical",
         ])}
-        aria-hidden={bar ? undefined : !isFocusWithin}
+        aria-hidden={bar ? undefined : !isExpanded}
         aria-orientation={
           bar ? (horizontal ? "horizontal" : "vertical") : undefined
         }
@@ -88,6 +100,13 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
           setIsActive(true);
           setIsFocusWithin(true);
         }}
+        onKeyDown={(e: KeyboardEvent<HTMLMenuElement>) => {
+          onKeyDown?.(e);
+
+          if (bar) {
+            setIsPointer(false);
+          }
+        }}
         onPointerDown={(e: PointerEvent<HTMLMenuElement>) => {
           onPointerDown?.(e);
 
@@ -95,28 +114,17 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
             setIsPointer(true);
           }
         }}
-        ref={rootRef}
+        ref={ref}
         role={bar ? "menubar" : "menu"}>
         <MenuContext.Provider
-          value={
-            bar
-              ? {
-                  isActive,
-                  isFocusWithin,
-                  isPointer,
-                  isTop: true,
-                  orientation: horizontal ? "horizontal" : "vertical",
-                  setIsActive,
-                }
-              : {
-                  isActive: isParentActive,
-                  isFocusWithin,
-                  isPointer: isParentPointer,
-                  isTop: false,
-                  orientation: "vertical",
-                  setIsActive: setParentIsActive,
-                }
-          }>
+          value={{
+            inactivate: bar ? inactivate : parentInactivate,
+            isActive: bar ? isActive : isParentActive,
+            isFocusWithin,
+            isPointer: bar ? isPointer : isParentPointer,
+            isTop: Boolean(bar),
+            orientation: bar && horizontal ? "horizontal" : "vertical",
+          }}>
           {children}
         </MenuContext.Provider>
       </menu>

@@ -1,26 +1,22 @@
-.root[role="none"] {
-  display: flex;
-  position: relative;
-}
-
-[role="menubar"][aria-orientation="vertical"]
-  .root[role="none"]
-  + .root[role="none"] {
-  border-width: var(--border-width) 0 0;
-}
-
-[role="menu"][aria-orientation="vertical"]
-  .root[role="none"]
-  + .root[role="none"] {
-  border-width: 0;
-}
-
-.root[role="separator"] {
+.separator {
   background-clip: content-box;
   background-color: var(--border-color);
   box-sizing: content-box;
   height: 0.0625rem;
   padding: 0.25rem 0;
+}
+
+.menuitem {
+  display: flex;
+  position: relative;
+}
+
+.vertical + .vertical {
+  border-width: var(--border-width) 0 0;
+}
+
+[role="menu"] .vertical + .vertical {
+  border-width: 0;
 }
 
 .button {
@@ -34,11 +30,11 @@
   user-select: none;
 }
 
-[role="menubar"][aria-orientation="horizontal"] .button {
+.horizontal .button {
   padding: 0 0.5rem;
 }
 
-[role="menubar"][aria-orientation="vertical"] .button {
+.vertical .button {
   background-image: linear-gradient(
     to bottom,
     rgb(227, 227, 227),
@@ -48,11 +44,7 @@
   width: 100%;
 }
 
-[role="menubar"] [role="menu"] .root[role="none"] + .root[role="none"] {
-  border-width: 0;
-}
-
-[role="menubar"] [role="menu"] .button {
+[role="menu"] .button {
   align-items: center;
   background-image: unset;
   display: flex;
@@ -71,13 +63,12 @@
   background-color: rgb(196, 196, 196);
 }
 
-.button[aria-disabled="true"] {
+.button:where(.disabled) {
   color: var(--text-color--disabled);
 }
 
-[role="menubar"] .button[aria-expanded="true"],
-[role="menu"] .button[aria-expanded="true"],
-[role="menu"] .button:not([aria-checked="true"], [aria-disabled="true"]):hover {
+.button:is(.expanded),
+[role="menu"] .button:not(.checked, .disabled):hover {
   background-image: linear-gradient(
     to bottom,
     rgb(146, 146, 146),
@@ -85,18 +76,18 @@
   );
 }
 
-.button[role="menuitemcheckbox"]::before,
-.button[role="menuitemradio"]::before {
+.checkbox::before,
+.radio::before {
   content: "";
   font-size: 0.625rem;
   width: 0.75rem;
 }
 
-.button[aria-checked="true"]::before {
+.checked::before {
   content: "✔️";
 }
 
-[role="menu"] > .root > .button[aria-haspopup="menu"]::after {
+[role="menu"] .haspopup::after {
   content: "▶";
   font-size: 0.5rem;
   margin-right: -0.5rem;
