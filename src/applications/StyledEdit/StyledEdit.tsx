@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useDeferredValue, useEffect, useRef, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 
 import { ApplicationComponent } from "@/types";
@@ -19,8 +19,6 @@ export const StyledEdit: ApplicationComponent = ({
   onQuit,
   openableFiles,
 }) => {
-  const rootRef = useRef<HTMLElement>(null);
-
   const [fileContent, setFileContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
@@ -164,10 +162,7 @@ export const StyledEdit: ApplicationComponent = ({
           />
         )}
         {!isLoading && !error && view === "preview" && (
-          <samp
-            className={clsx(styles.root, styles.preview)}
-            ref={rootRef}
-            tabIndex={-1}>
+          <samp className={clsx(styles.root, styles.preview)}>
             <Markdown>{deferredInput}</Markdown>
           </samp>
         )}

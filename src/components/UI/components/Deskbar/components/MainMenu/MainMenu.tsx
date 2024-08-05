@@ -15,7 +15,8 @@ export const MainMenu: FunctionComponent = () => {
       <Menuitem
         className={styles.menuitem}
         classes={{
-          title: styles.menuitemTitle,
+          button: styles.button,
+          title: styles.title,
         }}
         title="frontendian">
         <Menu>

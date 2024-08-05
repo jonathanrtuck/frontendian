@@ -44,7 +44,9 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
       onStop={(_, { x }) => {
         setIsDragging(false);
 
-        moveWindowTitlebar({ id, left: x - offset });
+        if (x - offset !== titlebarLeft) {
+          moveWindowTitlebar({ id, left: x - offset });
+        }
       }}
       position={{
         x: Math.min(titlebarLeft + offset, maxWidth - rootWidth + offset),

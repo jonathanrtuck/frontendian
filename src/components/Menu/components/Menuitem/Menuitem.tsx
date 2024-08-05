@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import {
-  FocusEvent,
   FunctionComponent,
   HTMLAttributes,
   ReactElement,
+  useCallback,
   useContext,
   useId,
   useLayoutEffect,
@@ -11,30 +11,21 @@ import {
   useState,
 } from "react";
 
-import { MenubarContext } from "@/contexts";
+import { MenuContext, MenuitemContext } from "@/contexts";
 import { IconComponent } from "@/types";
-import { getChildMenuitems, getSiblingMenuitems, removeProps } from "@/utils";
+import { removeProps } from "@/utils";
 
 import styles from "./Menuitem.module.css";
 
 export type MenuitemProps = Omit<
   HTMLAttributes<HTMLLIElement>,
-  | "aria-checked"
-  | "aria-disabled"
-  | "aria-expanded"
-  | "aria-haspopup"
-  | "aria-labelledby"
-  | "checked"
-  | "disabled"
-  | "onClick"
-  | "role"
-  | "tabIndex"
-  | "title"
-  | "type"
+  "onClick" | "role"
 > & {
   classes?: {
+    button?: string;
     icon?: string;
-    root?: string;
+    menuitem?: string;
+    separator?: string;
     title?: string;
   };
 } & (
@@ -67,45 +58,74 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   classes,
   ...props
 }) => {
-  const { isFocusWithin } = useContext(MenubarContext);
+  const { inactivate, isActive, isFocusWithin, isPointer, isTop, orientation } =
+    useContext(MenuContext);
+  const { collapse: parentCollapse, topButtonRef: parentTopButtonRef } =
+    useContext(MenuitemContext);
 
   const id = useId();
 
   const rootRef = useRef<HTMLLIElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
 
+  const collapse = useCallback(() => {
+    setIsExpanded(false);
+    rootRef.current?.focus();
+  }, []);
+
+  const topButtonRef = isTop ? buttonRef : parentTopButtonRef;
+
   useLayoutEffect(() => {
-    if (rootRef.current) {
-      const isMenubaritem =
-        rootRef.current.matches('[role="menubar"] > :scope') ?? false;
-
-      if (isMenubaritem) {
-        const isFirstMenuitem = rootRef.current.matches(":first-of-type");
-
-        if (isFirstMenuitem) {
-          const siblingMenuitems = getSiblingMenuitems(rootRef.current);
-
-          setTabIndex(
-            siblingMenuitems.every(({ tabIndex }) => tabIndex === -1) ? 0 : -1
-          );
-        }
-      }
+    if (!isActive) {
+      setIsExpanded(false);
     }
-  }, [isFocusWithin]);
+  }, [isActive]);
+
+  useLayoutEffect(() => {
+    if (isTop) {
+      setTabIndex((prevState) => {
+        const isFirstMenuitem = rootRef.current?.matches(":first-of-type");
+        const hasFocus = rootRef.current?.matches(":focus-within");
+
+        if (isFocusWithin && isFirstMenuitem && !hasFocus) {
+          return -1;
+        }
+
+        if (!isFocusWithin) {
+          return isFirstMenuitem ? 0 : -1;
+        }
+
+        return prevState;
+      });
+    }
+  }, [isFocusWithin, isTop]);
 
   if ("separator" in props) {
     return (
       <li
         {...removeProps<HTMLAttributes<HTMLLIElement>>(props, ["separator"])}
-        className={clsx(className, classes?.root, styles.root)}
+        className={clsx(className, classes?.separator, styles.separator)}
+        onClick={() => {
+          topButtonRef.current?.focus();
+
+          inactivate();
+        }}
+        onMouseEnter={(e) => {
+          props.onMouseEnter?.(e);
+
+          if (isActive) {
+            (e.target as HTMLElement).focus();
+          }
+        }}
         role="separator"
+        tabIndex={-1}
       />
     );
   }
 
-  const { onKeyDown, onMouseEnter } = props;
   const Icon = "Icon" in props && props.Icon;
   const checked = ("checked" in props && props.checked) ?? false;
   const disabled = ("disabled" in props && props.disabled) ?? false;
@@ -113,91 +133,247 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const title = "title" in props ? props.title : undefined;
   const type = "type" in props ? props.type : undefined;
 
+  const haspopup = Boolean(children);
+
+  const getChildMenuitemButtons = (): HTMLElement[] =>
+    Array.from(
+      rootRef.current?.querySelectorAll(
+        `:scope > [role="menu"] > .${styles.menuitem} > .${styles.button}`
+      ) ?? []
+    );
+  const onActivate = (): void => {
+    if (!checked && !disabled) {
+      onClick?.();
+    }
+
+    if (haspopup && !isExpanded) {
+      setTabIndex(0);
+      setIsExpanded(true);
+      getChildMenuitemButtons().at(0)?.focus();
+    } else {
+      topButtonRef.current?.focus();
+      inactivate();
+    }
+  };
+
   return (
     <li
       {...removeProps<HTMLAttributes<HTMLLIElement>>(props, [
         "checked",
         "disabled",
         "Icon",
+        "onBlur",
         "onClick",
-        "onKeyDown",
-        "onMouseEnter",
+        "onFocus",
+        "role",
         "title",
-        "type",
       ])}
-      aria-checked={type ? checked : undefined}
-      aria-disabled={disabled}
-      aria-expanded={children ? isExpanded : undefined}
-      aria-haspopup={children ? "menu" : undefined}
-      aria-labelledby={`${id}-title`}
-      className={clsx(className, classes?.root, styles.root)}
-      onBlur={(e: FocusEvent<HTMLLIElement>) => {
+      className={clsx(
+        className,
+        classes?.menuitem,
+        styles.menuitem,
+        styles[orientation],
+        {
+          [styles.top]: isTop,
+        }
+      )}
+      onBlur={(e) => {
         props.onBlur?.(e);
 
         if (
-          !rootRef.current?.contains(e.relatedTarget ?? document.activeElement)
+          haspopup &&
+          document.hasFocus() &&
+          !e.currentTarget?.contains(e.relatedTarget)
         ) {
           setIsExpanded(false);
-          setTabIndex(-1);
+
+          if (isTop) {
+            setTabIndex(-1);
+          }
         }
       }}
-      onClick={
-        checked || disabled
-          ? undefined
-          : () => {
-              onClick?.();
-
-              if (children) {
-                if (!isExpanded) {
-                  getChildMenuitems(rootRef.current)[0]?.focus();
-                }
-
-                setIsExpanded((prevState) => !prevState);
-                setTabIndex((prevState) => (prevState === 0 ? -1 : 0));
-              }
-            }
-      }
-      onKeyDown={
-        checked || disabled
-          ? onKeyDown
-          : (e) => {
-              onKeyDown?.(e);
-
-              if (children && e.key === "Enter") {
-                // @todo
-              }
-            }
-      }
-      onMouseEnter={
-        checked || disabled
-          ? onMouseEnter
-          : (e) => {
-              onMouseEnter?.(e);
-
-              if (isFocusWithin) {
-                setIsExpanded(true);
-                setTabIndex(0);
-
-                (
-                  getChildMenuitems(rootRef.current)[0] ?? rootRef.current
-                )?.focus();
-              }
-            }
-      }
       ref={rootRef}
-      role={
-        (type === "checkbox" && "menuitemcheckbox") ||
-        (type === "radio" && "menuitemradio") ||
-        "menuitem"
-      }
-      tabIndex={tabIndex}>
-      {Icon && (
-        <Icon aria-hidden className={clsx(classes?.icon, styles.icon)} />
-      )}
-      <span className={clsx(classes?.title, styles.title)} id={`${id}-title`}>
-        {title}
-      </span>
-      {children}
+      role="none">
+      <button
+        aria-checked={type ? checked : undefined}
+        aria-disabled={disabled}
+        aria-expanded={haspopup ? isExpanded : undefined}
+        aria-haspopup={haspopup ? "menu" : undefined}
+        aria-labelledby={`${id}-title`}
+        className={clsx(classes?.button, styles.button, {
+          [styles.checkbox]: type === "checkbox",
+          [styles.checked]: checked,
+          [styles.disabled]: disabled,
+          [styles.expanded]: isExpanded,
+          [styles.haspopup]: haspopup,
+          [styles.pointer]: isPointer,
+          [styles.radio]: type === "radio",
+        })}
+        onClick={onActivate}
+        onKeyDown={(e) => {
+          const parentMenuitem =
+            rootRef.current?.parentElement?.closest<HTMLElement>(
+              `.${styles.menuitem}`
+            );
+          const parentMenuitemButton =
+            parentMenuitem?.querySelector<HTMLElement>(`.${styles.button}`);
+          const childMenuitemButtons = getChildMenuitemButtons();
+          const siblingMenuitemButtons = Array.from<HTMLElement>(
+            rootRef.current?.parentElement?.querySelectorAll(
+              `:scope > .${styles.menuitem} > .${styles.button}`
+            ) ?? []
+          );
+          const index = siblingMenuitemButtons.indexOf(e.target as HTMLElement);
+          const isFirstMenuitem = index === 0;
+          const isLastMenuitem = index === siblingMenuitemButtons.length - 1;
+
+          switch (e.key) {
+            case "ArrowDown":
+              if (isTop && orientation === "horizontal") {
+                setIsExpanded(true);
+                childMenuitemButtons.at(0)?.focus();
+              } else {
+                siblingMenuitemButtons
+                  .at(isLastMenuitem ? 0 : index + 1)
+                  ?.focus();
+              }
+              break;
+            case "ArrowLeft":
+              if (isTop) {
+                if (orientation === "horizontal") {
+                  siblingMenuitemButtons.at(index - 1)?.focus();
+                }
+              } else {
+                parentCollapse();
+
+                if (
+                  parentMenuitemButton &&
+                  parentMenuitem?.matches(`.${styles.horizontal}`)
+                ) {
+                  const parentMenuitemButtons = Array.from<HTMLElement>(
+                    parentMenuitem?.parentElement?.querySelectorAll(
+                      `:scope > .${styles.menuitem} > .${styles.button}`
+                    ) ?? []
+                  );
+                  const parentIndex =
+                    parentMenuitemButtons.indexOf(parentMenuitemButton);
+                  const prevMenuitemButton = parentMenuitemButtons.at(
+                    parentIndex - 1
+                  );
+
+                  prevMenuitemButton?.focus();
+                } else {
+                  parentMenuitemButton?.focus();
+                }
+              }
+              break;
+            case "ArrowRight":
+              if (isTop) {
+                if (orientation === "horizontal") {
+                  siblingMenuitemButtons
+                    .at(isLastMenuitem ? 0 : index + 1)
+                    ?.focus();
+                } else if (haspopup) {
+                  setIsExpanded(true);
+                  childMenuitemButtons.at(0)?.focus();
+                }
+              } else {
+                if (haspopup) {
+                  setIsExpanded(true);
+                  childMenuitemButtons.at(0)?.focus();
+                } else {
+                  const topMenuitemButton = topButtonRef.current;
+                  const topMenuitem = topMenuitemButton?.closest(
+                    `.${styles.menuitem}`
+                  );
+
+                  if (
+                    topMenuitemButton &&
+                    topMenuitem?.matches(`.${styles.horizontal}`)
+                  ) {
+                    const topMenuitemButtons = Array.from<HTMLElement>(
+                      topMenuitem?.parentElement?.querySelectorAll(
+                        `:scope > .${styles.menuitem} > .${styles.button}`
+                      ) ?? []
+                    );
+                    const topIndex =
+                      topMenuitemButtons.indexOf(topMenuitemButton);
+                    const nextMenuitemButton = topMenuitemButtons.at(
+                      topIndex === topMenuitemButtons.length - 1
+                        ? 0
+                        : topIndex + 1
+                    );
+
+                    nextMenuitemButton?.focus();
+                  } else {
+                    parentMenuitemButton?.focus();
+                  }
+                }
+              }
+              break;
+            case "ArrowUp":
+              if (isTop && orientation === "horizontal") {
+                setIsExpanded(true);
+                childMenuitemButtons.at(-1)?.focus();
+              } else {
+                siblingMenuitemButtons
+                  .at(isFirstMenuitem ? -1 : index - 1)
+                  ?.focus();
+              }
+              break;
+            case "Enter":
+            case " ":
+              e.preventDefault();
+              onActivate();
+              break;
+            case "Escape":
+              parentCollapse();
+              parentMenuitemButton?.focus();
+              break;
+          }
+        }}
+        onMouseEnter={(e) => {
+          if (isActive) {
+            if (isTop) {
+              setTabIndex(0);
+            }
+
+            if (haspopup) {
+              setIsExpanded(true);
+              getChildMenuitemButtons().at(0)?.focus();
+            } else {
+              (e.target as HTMLElement).focus();
+            }
+          }
+        }}
+        onPointerDown={(e) => {
+          if (haspopup && isExpanded) {
+            e.preventDefault();
+          }
+        }}
+        ref={buttonRef}
+        role={
+          (type === "checkbox" && "menuitemcheckbox") ||
+          (type === "radio" && "menuitemradio") ||
+          "menuitem"
+        }
+        tabIndex={tabIndex}
+        type="button">
+        {Icon && (
+          <Icon aria-hidden className={clsx(classes?.icon, styles.icon)} />
+        )}
+        <span className={clsx(classes?.title, styles.title)} id={`${id}-title`}>
+          {title}
+        </span>
+      </button>
+      <MenuitemContext.Provider
+        value={{
+          collapse,
+          isExpanded,
+          topButtonRef,
+        }}>
+        {children}
+      </MenuitemContext.Provider>
     </li>
   );
 };

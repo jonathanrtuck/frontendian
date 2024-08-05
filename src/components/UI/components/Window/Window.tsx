@@ -122,10 +122,12 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
 
         setIsDragging(true);
       }}
-      onStop={(_, { x: left, y: top }) => {
+      onStop={(_, { x, y }) => {
         setIsDragging(false);
 
-        moveWindow({ id, left, top });
+        if (x !== left || y !== top) {
+          moveWindow({ id, left: x, top: y });
+        }
       }}>
       <section
         aria-current={focused}

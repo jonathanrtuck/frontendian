@@ -4,21 +4,26 @@ import {
   forwardRef,
   HTMLAttributes,
   KeyboardEvent,
-  MouseEvent,
+  PointerEvent,
   PropsWithChildren,
-  useImperativeHandle,
-  useRef,
+  useCallback,
+  useContext,
   useState,
 } from "react";
 
-import { MenubarContext } from "@/contexts";
-import { getChildMenuitems, removeProps } from "@/utils";
+import { MenuContext, MenuitemContext } from "@/contexts";
+import { removeProps } from "@/utils";
 
 import styles from "./Menu.module.css";
 
 export * from "./components/Menuitem";
 
-export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
+export type MenuProps = PropsWithChildren<
+  Omit<
+    HTMLAttributes<HTMLMenuElement>,
+    "aria-hidden" | "aria-orientation" | "role"
+  >
+> &
   (
     | ({
         bar: true;
@@ -36,90 +41,97 @@ export type MenuProps = PropsWithChildren<HTMLAttributes<HTMLMenuElement>> &
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
   (
-    { children, className, onBlur, onClick, onFocus, onKeyDown, ...props },
+    {
+      children,
+      className,
+      onBlur,
+      onFocus,
+      onKeyDown,
+      onPointerDown,
+      ...props
+    },
     ref
   ) => {
-    const rootRef = useRef<HTMLMenuElement>(null);
+    const {
+      inactivate: parentInactivate,
+      isActive: isParentActive,
+      isPointer: isParentPointer,
+    } = useContext(MenuContext);
+    const { isExpanded } = useContext(MenuitemContext);
 
-    useImperativeHandle(ref, () => rootRef.current as HTMLMenuElement);
-
+    const [isActive, setIsActive] = useState<boolean>(false);
     const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
+    const [isPointer, setIsPointer] = useState<boolean>(false);
+
+    const inactivate = useCallback(() => {
+      setIsActive(false);
+    }, []);
 
     const bar = "bar" in props;
     const horizontal = "horizontal" in props;
 
     return (
       <menu
-        {...removeProps(props, ["bar", "horizontal", "vertical"])}
-        aria-hidden={bar ? undefined : !isFocusWithin}
+        {...removeProps<HTMLAttributes<HTMLMenuElement>>(props, [
+          "bar",
+          "horizontal",
+          "vertical",
+        ])}
+        aria-hidden={bar ? undefined : !isExpanded}
         aria-orientation={
           bar ? (horizontal ? "horizontal" : "vertical") : undefined
         }
-        className={clsx(className, styles.root)}
+        className={clsx(className, styles.root, {
+          [styles.bar]: bar,
+          [styles.hidden]: !bar && !isExpanded,
+          [styles.horizontal]: horizontal,
+          [styles.vertical]: !horizontal,
+        })}
         onBlur={(e: FocusEvent<HTMLMenuElement>) => {
           onBlur?.(e);
 
           if (
-            !rootRef.current?.contains(
-              e.relatedTarget ?? document.activeElement
-            )
+            document.hasFocus() &&
+            !e.currentTarget?.contains(e.relatedTarget)
           ) {
+            setIsActive(false);
             setIsFocusWithin(false);
+            setIsPointer(false);
           }
         }}
-        onClick={
-          bar
-            ? (e: MouseEvent<HTMLMenuElement>) => {
-                onClick?.(e);
-
-                const menuitem = (e.target as HTMLElement).closest(
-                  '[role^="menuitem"]'
-                );
-                const hasPopup =
-                  menuitem?.matches('[aria-haspopup="menu"]') ?? false;
-                const isExpanded = menuitem?.matches('[aria-expanded="true"]');
-
-                if (!hasPopup || isExpanded) {
-                  getChildMenuitems(rootRef.current)[0]?.focus();
-
-                  setIsFocusWithin(false);
-                }
-              }
-            : onClick
-        }
         onFocus={(e: FocusEvent<HTMLMenuElement>) => {
           onFocus?.(e);
 
-          /**
-           * this conditional is needed to handle a case in which the menubar
-           * has focus within but `isFocusWithin` is `false`, and the browser
-           * window loses then regains focus, firing another focus event; where
-           * we want to keep the same `isFocusWithin` state
-           */
-          if (bar === (rootRef.current?.contains(e.relatedTarget) ?? false)) {
-            setIsFocusWithin(true);
+          setIsActive(true);
+          setIsFocusWithin(true);
+        }}
+        onKeyDown={(e: KeyboardEvent<HTMLMenuElement>) => {
+          onKeyDown?.(e);
+
+          if (bar) {
+            setIsPointer(false);
           }
         }}
-        onKeyDown={
-          bar
-            ? (e: KeyboardEvent<HTMLMenuElement>) => {
-                onKeyDown?.(e);
+        onPointerDown={(e: PointerEvent<HTMLMenuElement>) => {
+          onPointerDown?.(e);
 
-                if (e.key === "Enter") {
-                  // @todo
-                }
-              }
-            : onKeyDown
-        }
-        ref={rootRef}
+          if (bar) {
+            setIsPointer(true);
+          }
+        }}
+        ref={ref}
         role={bar ? "menubar" : "menu"}>
-        {bar ? (
-          <MenubarContext.Provider value={{ isFocusWithin }}>
-            {children}
-          </MenubarContext.Provider>
-        ) : (
-          children
-        )}
+        <MenuContext.Provider
+          value={{
+            inactivate: bar ? inactivate : parentInactivate,
+            isActive: bar ? isActive : isParentActive,
+            isFocusWithin,
+            isPointer: bar ? isPointer : isParentPointer,
+            isTop: Boolean(bar),
+            orientation: bar && horizontal ? "horizontal" : "vertical",
+          }}>
+          {children}
+        </MenuContext.Provider>
       </menu>
     );
   }

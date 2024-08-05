@@ -4,6 +4,7 @@ import {
   FunctionComponent,
   PropsWithChildren,
   useContext,
+  useLayoutEffect,
   useState,
 } from "react";
 import { Resizable } from "react-resizable";
@@ -22,8 +23,18 @@ const MIN_WIDTH = 16 * 7; // 7rem
 export type ContentProps = PropsWithChildren;
 
 export const Content: FunctionComponent<ContentProps> = ({ children }) => {
-  const { height, id, inert, menubarRef, scrollable, width, zoomed } =
-    useContext(WindowContext);
+  const {
+    height: heightState,
+    id,
+    inert,
+    menubarRef,
+    scrollable,
+    width: widthState,
+    zoomed,
+  } = useContext(WindowContext);
+
+  const [height, setHeight] = useState<number>(heightState);
+  const [width, setWidth] = useState<number>(widthState);
 
   const [isResizing, setIsResizing] = useState<boolean>(false);
 
@@ -36,6 +47,14 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     "--content-scrollbar-size"
   );
   const scrollbarSize = scrollable ? scrollbarSizeProperty : 0;
+
+  useLayoutEffect(() => {
+    setHeight(heightState);
+  }, [heightState]);
+
+  useLayoutEffect(() => {
+    setWidth(widthState);
+  }, [widthState]);
 
   return (
     <Resizable
@@ -60,13 +79,18 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         MIN_HEIGHT,
       ]}
       onResize={(_, { size }) => {
-        resizeWindow({ id, ...size });
+        setHeight(size.height);
+        setWidth(size.width);
       }}
       onResizeStart={() => {
         setIsResizing(true);
       }}
       onResizeStop={() => {
         setIsResizing(false);
+
+        if (height !== heightState || width !== widthState) {
+          resizeWindow({ height, id, width });
+        }
       }}
       width={width}>
       <div className={styles.root}>

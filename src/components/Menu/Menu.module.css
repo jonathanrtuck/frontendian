@@ -5,7 +5,7 @@
   padding: 0;
 }
 
-.root[aria-hidden="true"] {
+.root:where(.hidden) {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
   height: 1px;
@@ -15,11 +15,11 @@
   width: 1px;
 }
 
-.root[role="menubar"] {
+.root:where(.bar) {
   flex-direction: row;
 }
 
-.root[role="menu"] {
+.root:not(.bar) {
   background-color: rgb(224, 224, 224);
   border-width: var(--border-width);
   color: rgb(0, 0, 0);
@@ -30,7 +30,7 @@
   z-index: 100;
 }
 
-.root[aria-orientation="horizontal"] {
+.root:where(.horizontal) {
   background-image: linear-gradient(
     to bottom,
     rgb(227, 227, 227),
@@ -40,21 +40,21 @@
   height: 1.5rem;
 }
 
-.root[aria-orientation="vertical"] {
+.root:where(.vertical) {
   flex-direction: column;
 }
 
-[aria-orientation="horizontal"] .root {
+.bar:where(.horizontal) .root {
   left: 0;
   top: 100%;
 }
 
-[aria-orientation="vertical"] .root {
+.bar:where(.vertical) .root {
   right: 100%;
   top: 0;
 }
 
-[role="menu"] .root {
+.root:not(.bar) .root {
   left: 100%;
   top: 0;
 }

@@ -1,6 +1,27 @@
-.root[role^="menuitem"] {
+.separator {
+  background-clip: content-box;
+  background-color: var(--border-color);
+  box-sizing: content-box;
+  height: 0.0625rem;
+  padding: 0.25rem 0;
+}
+
+.separator:focus {
+  outline: 0;
+}
+
+.menuitem {
+  display: flex;
+  position: relative;
+}
+
+.menuitem:where(.top.vertical) + .menuitem {
+  border-width: var(--border-width) 0 0;
+}
+
+.button {
   align-items: center;
-  display: inline-flex;
+  display: flex;
   font-size: 0.875rem;
   font-weight: 500;
   gap: 0.5rem;
@@ -9,39 +30,23 @@
   user-select: none;
 }
 
-.root[role="separator"] {
-  background-clip: content-box;
-  background-color: var(--border-color);
-  box-sizing: content-box;
-  height: 0.0625rem;
-  padding: 0.25rem 0;
-}
-
-.root:focus {
-  outline: 0;
-}
-
-[aria-orientation="horizontal"] > .root[role^="menuitem"] {
+.menuitem:where(.horizontal) > .button {
   padding: 0 0.5rem;
 }
 
-[aria-orientation="vertical"] > .root[role^="menuitem"] {
+.menuitem:where(.vertical) > .button {
   background-image: linear-gradient(
     to bottom,
     rgb(227, 227, 227),
     rgb(209, 209, 209)
   );
   padding: 0.25rem 0.5rem;
+  width: 100%;
 }
 
-[aria-orientation="vertical"]
-  > .root[role^="menuitem"]
-  + .root[role^="menuitem"] {
-  border-width: var(--border-width) 0 0;
-}
-
-[role="menu"] > .root[role^="menuitem"] {
+.menuitem:where(:not(.top)) > .button {
   align-items: center;
+  background-image: unset;
   display: flex;
   gap: 0.5rem;
   height: 1.5rem;
@@ -50,16 +55,21 @@
   width: 100%;
 }
 
-.root[aria-disabled="true"] {
+.button:focus {
+  outline: 0;
+}
+
+.button:focus:not(.pointer) {
+  background-color: rgb(196, 196, 196);
+  background-image: unset;
+}
+
+.button:where(.disabled) {
   color: var(--text-color--disabled);
 }
 
-.root[role^="menuitem"][aria-expanded="true"],
-.root[role^="menuitem"][aria-expanded="true"]
-  .root[role^="menuitem"]:not(
-    [aria-checked="true"],
-    [aria-disabled="true"]
-  ):hover {
+.button:is(.expanded),
+.menuitem:not(.top) > .button:not(.checked, .disabled):hover {
   background-image: linear-gradient(
     to bottom,
     rgb(146, 146, 146),
@@ -67,18 +77,18 @@
   );
 }
 
-.root[role="menuitemcheckbox"]::before,
-.root[role="menuitemradio"]::before {
+.checkbox::before,
+.radio::before {
   content: "";
   font-size: 0.625rem;
   width: 0.75rem;
 }
 
-.root[aria-checked="true"]::before {
+.checked::before {
   content: "✔️";
 }
 
-[role="menu"] > .root[aria-haspopup="menu"]::after {
+.menuitem:not(.top) > .button:where(.haspopup)::after {
   content: "▶";
   font-size: 0.5rem;
   margin-right: -0.5rem;
