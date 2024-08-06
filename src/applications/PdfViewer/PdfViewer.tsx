@@ -8,11 +8,8 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 
 import styles from "./PdfViewer.module.css";
 
-// @see https://github.com/wojtekmaj/react-pdf/tree/main?tab=readme-ov-file#import-worker-recommended
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString();
+// @see https://github.com/wojtekmaj/react-pdf/tree/main#use-external-cdn
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 // @see https://github.com/wojtekmaj/react-pdf
 export const PdfViewer: ApplicationComponent = ({
