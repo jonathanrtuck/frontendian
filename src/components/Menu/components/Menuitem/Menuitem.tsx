@@ -327,6 +327,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
               onActivate();
               break;
             case "Escape":
+              e.preventDefault();
               parentCollapse();
               parentMenuitemButton?.focus();
               break;

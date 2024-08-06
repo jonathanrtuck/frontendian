@@ -20,6 +20,7 @@ export const Item: FunctionComponent<IconProps> = ({
     className={styles.root}
     draggable
     onDoubleClick={onClick}
+    tabIndex={0}
     title={title}
     type="button">
     <Icon aria-hidden className={styles.icon} />

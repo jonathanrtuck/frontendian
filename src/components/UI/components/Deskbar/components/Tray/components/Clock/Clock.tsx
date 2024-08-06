@@ -14,7 +14,11 @@ export const Clock: FunctionComponent<ClockProps> = ({
   const date = useClock();
 
   return (
-    <button {...props} className={clsx(className, styles.root)} type="button">
+    <button
+      {...props}
+      className={clsx(className, styles.root)}
+      tabIndex={0}
+      type="button">
       <time
         // remove milliseconds to prevent (more) frequent dom updates
         dateTime={date.toISOString().replace(/\.\d+/, "")}
