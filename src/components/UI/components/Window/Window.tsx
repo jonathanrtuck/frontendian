@@ -57,44 +57,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
 
   const application = applications.find(({ windowIds }) =>
     windowIds.includes(id)
-  );
-
-  const onAbout = useCallback((node: ReactNode) => {
-    setAboutDialogContent(node);
-  }, []);
-  const onClose = useCallback(() => {
-    closeWindow({ id });
-  }, [id]);
-  const onNew = useCallback(() => {
-    if (application?.id) {
-      openWindow({ id: application.id });
-    }
-  }, [application?.id]);
-  const onOpen = useCallback(
-    (fileId: ID) => {
-      openFile({
-        id: fileId,
-        windowId: id,
-      });
-    },
-    [id]
-  );
-  const onQuit = useCallback(() => {
-    if (application?.id) {
-      closeApplication({ id: application.id });
-    }
-  }, [application?.id]);
-  const onResize = useCallback(
-    (height: number, width: number) => {
-      resizeWindow({ height, id, width });
-    },
-    [id]
-  );
-
-  if (!application?.Component) {
-    return null;
-  }
-
+  )!;
   const file = fileId ? files.find(({ id }) => id === fileId) : undefined;
   const openableFiles = Object.entries(types)
     .filter(
@@ -105,6 +68,34 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
         acc.concat(files.filter((file) => file.type === type)),
       []
     );
+
+  const onAbout = useCallback((node: ReactNode) => {
+    setAboutDialogContent(node);
+  }, []);
+  const onClose = useCallback(() => {
+    closeWindow({ id });
+  }, [id]);
+  const onNew = useCallback(() => {
+    openWindow({ id: application.id });
+  }, [application.id]);
+  const onOpen = useCallback(
+    (fileId: ID) => {
+      openFile({
+        id: fileId,
+        windowId: id,
+      });
+    },
+    [id]
+  );
+  const onQuit = useCallback(() => {
+    closeApplication({ id: application.id });
+  }, [application.id]);
+  const onResize = useCallback(
+    (height: number, width: number) => {
+      resizeWindow({ height, id, width });
+    },
+    [id]
+  );
 
   return (
     <Draggable

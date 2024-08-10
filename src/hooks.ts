@@ -48,7 +48,7 @@ export const useComputedCustomProperty = (property: string): number =>
       property
     );
 
-    // @todo handle other css units as needed (e.g. `%`, `em`, `vw`, etc…)
+    // handle other css units as needed (e.g. `%`, `em`, `vw`, etc…)
     if (value.endsWith("rem")) {
       return parseFloat(value) * fontSize;
     }
@@ -94,9 +94,9 @@ export const useFocus = ({
   useEffect(
     () => {
       if (deps.every(Boolean) && ref.current) {
-        const element = (
-          selector ? ref.current.querySelector(selector) : ref.current
-        ) as HTMLElement;
+        const element: HTMLElement | null = selector
+          ? ref.current.querySelector(selector)
+          : ref.current;
 
         if (element && !element.contains(document.activeElement)) {
           element.focus();

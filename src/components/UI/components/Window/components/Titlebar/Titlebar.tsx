@@ -10,6 +10,7 @@ import {
   moveWindowTitlebar,
   zoomWindow,
 } from "@/store";
+import { getTargetElement } from "@/utils";
 
 import styles from "./Titlebar.module.css";
 
@@ -57,9 +58,8 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
           [styles.dragging]: isDragging,
         })}
         onDoubleClick={(e) => {
-          const isButton = (e.target as HTMLElement)?.classList.contains(
-            styles.button
-          );
+          const targetElement = getTargetElement(e);
+          const isButton = targetElement?.classList.contains(styles.button);
 
           if (!isButton) {
             hideWindow({ id });
@@ -67,9 +67,8 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
         }}
         onPointerUp={(e) => {
           const now = Date.now();
-          const isButton = (e.target as HTMLElement)?.classList.contains(
-            styles.button
-          );
+          const targetElement = getTargetElement(e);
+          const isButton = targetElement?.classList.contains(styles.button);
 
           if (!isButton) {
             const isDoubleClick = now - touchRef.current < 500;

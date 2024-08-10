@@ -155,7 +155,7 @@ export const StyledEdit: ApplicationComponent = ({
             className={clsx(styles.root, styles.markdown)}
             cols={numInputCols}
             onInput={(e) => {
-              setInput((e.target as HTMLTextAreaElement).value);
+              setInput(e.currentTarget.value);
             }}
             rows={numInputRows}
             value={input}

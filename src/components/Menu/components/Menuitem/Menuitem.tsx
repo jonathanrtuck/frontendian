@@ -117,7 +117,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
           props.onMouseEnter?.(e);
 
           if (isActive) {
-            (e.target as HTMLElement).focus();
+            e.currentTarget.focus();
           }
         }}
         role="separator"
@@ -223,7 +223,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
               `:scope > .${styles.menuitem} > .${styles.button}`
             ) ?? []
           );
-          const index = siblingMenuitemButtons.indexOf(e.target as HTMLElement);
+          const index = siblingMenuitemButtons.indexOf(e.currentTarget);
           const isFirstMenuitem = index === 0;
           const isLastMenuitem = index === siblingMenuitemButtons.length - 1;
 
@@ -343,7 +343,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
               setIsExpanded(true);
               getChildMenuitemButtons().at(0)?.focus();
             } else {
-              (e.target as HTMLElement).focus();
+              e.currentTarget.focus();
             }
           }
         }}
