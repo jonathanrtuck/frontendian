@@ -7,11 +7,12 @@ import {
   useContext,
   useId,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 
-import { MenuContext, MenuitemContext } from "@/contexts";
+import { MenuContext, MenuitemContext, MenuitemContextValue } from "@/contexts";
 import { IconComponent } from "@/types";
 import { removeProps } from "@/utils";
 
@@ -71,12 +72,21 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
 
+  const topButtonRef = isTop ? buttonRef : parentTopButtonRef;
+
   const collapse = useCallback(() => {
     setIsExpanded(false);
     rootRef.current?.focus();
   }, []);
 
-  const topButtonRef = isTop ? buttonRef : parentTopButtonRef;
+  const menuitemContextValue = useMemo<MenuitemContextValue>(
+    () => ({
+      collapse,
+      isExpanded,
+      topButtonRef,
+    }),
+    [collapse, isExpanded, topButtonRef]
+  );
 
   useLayoutEffect(() => {
     if (!isActive) {
@@ -126,7 +136,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
     );
   }
 
-  const Icon = "Icon" in props && props.Icon;
+  const Icon = ("Icon" in props && props.Icon) || undefined;
   const checked = ("checked" in props && props.checked) ?? false;
   const disabled = ("disabled" in props && props.disabled) ?? false;
   const onClick = "onClick" in props ? props.onClick : undefined;
@@ -360,19 +370,14 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         }
         tabIndex={tabIndex}
         type="button">
-        {Icon && (
+        {!!Icon && (
           <Icon aria-hidden className={clsx(classes?.icon, styles.icon)} />
         )}
         <span className={clsx(classes?.title, styles.title)} id={`${id}-title`}>
           {title}
         </span>
       </button>
-      <MenuitemContext.Provider
-        value={{
-          collapse,
-          isExpanded,
-          topButtonRef,
-        }}>
+      <MenuitemContext.Provider value={menuitemContextValue}>
         {children}
       </MenuitemContext.Provider>
     </li>

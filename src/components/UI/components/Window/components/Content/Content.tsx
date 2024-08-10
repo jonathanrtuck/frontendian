@@ -59,7 +59,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   return (
     <Resizable
       axis={zoomed ? "none" : "both"}
-      handle={(_, ref) =>
+      handle={
         scrollable ? (
           <ResizeHandle
             aria-hidden
@@ -67,10 +67,9 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
               [styles.resizing]: isResizing,
               [styles.zoomed]: zoomed,
             })}
-            ref={ref}
           />
         ) : (
-          <Fragment />
+          <Fragment /> // eslint-disable-line react/jsx-no-useless-fragment
         )
       }
       height={height}

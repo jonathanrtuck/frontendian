@@ -49,7 +49,26 @@
     ],
     "rules": {
       "no-console": "warn",
+      "react/button-has-type": "warn",
+      "react/display-name": "error",
+      "react/hook-use-state": "warn",
+      "react/jsx-boolean-value": [
+        "error",
+        "never"
+      ],
+      "react/jsx-curly-brace-presence": [
+        "warn",
+        {
+          "children": "never",
+          "props": "never"
+        }
+      ],
+      "react/jsx-no-leaked-render": "error",
+      "react/jsx-no-useless-fragment": "warn",
       "react/jsx-sort-props": "warn",
+      "react/no-access-state-in-setstate": "error",
+      "react/no-array-index-key": "warn",
+      "react/no-unstable-nested-components": "warn",
       "sort-keys": [
         "warn",
         "asc",
@@ -63,9 +82,9 @@
   "name": "frontendian",
   "scripts": {
     "build": "craco build",
-    "eject": "craco eject",
-    "start": "craco start",
-    "test": "craco test"
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src",
+    "start": "craco start"
   },
-  "version": "2.3.0"
+  "version": "2.3.1"
 }

@@ -94,7 +94,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
           title="Close"
           type="button"
         />
-        {scrollable && (
+        {Boolean(scrollable) && (
           <button
             aria-label="Zoom"
             className={clsx(styles.button, styles.zoom)}

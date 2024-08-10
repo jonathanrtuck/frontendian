@@ -11,7 +11,3 @@
 .page :global(.textLayer :where(span, br)) {
   cursor: var(--cursor--text);
 }
-
-.iframe {
-  display: none;
-}

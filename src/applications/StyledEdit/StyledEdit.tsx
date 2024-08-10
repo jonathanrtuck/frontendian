@@ -148,9 +148,9 @@ export const StyledEdit: ApplicationComponent = ({
         </Menuitem>
       </Menubar>
       <Content>
-        {isLoading && "loading…"}
-        {!isLoading && error && "error…"}
-        {!isLoading && !error && view === "markdown" && (
+        {Boolean(isLoading) && "loading…"}
+        {Boolean(!isLoading && error) && "error…"}
+        {Boolean(!isLoading && !error && view === "markdown") && (
           <textarea
             autoFocus
             className={clsx(styles.root, styles.markdown)}
@@ -162,7 +162,7 @@ export const StyledEdit: ApplicationComponent = ({
             value={input}
           />
         )}
-        {!isLoading && !error && view === "preview" && (
+        {Boolean(!isLoading && !error && view === "preview") && (
           <samp className={clsx(styles.root, styles.preview)}>
             <Markdown>{deferredInput}</Markdown>
           </samp>

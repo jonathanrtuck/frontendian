@@ -93,25 +93,20 @@ export const PdfViewer: ApplicationComponent = ({
             <Document
               className={styles.root}
               file={file.url}
-              loading={<Fragment />}
+              loading={<Fragment />} // eslint-disable-line react/jsx-no-useless-fragment
               onLoadSuccess={({ numPages }) => {
                 setNumPages(numPages);
               }}>
               {Array.from(new Array(numPages)).map((_, i) => (
                 <Page
                   className={styles.page}
-                  key={i}
+                  key={i} // eslint-disable-line react/no-array-index-key
                   pageIndex={i}
                   scale={1.25}
                 />
               ))}
             </Document>
-            <iframe
-              className={styles.iframe}
-              ref={iframeRef}
-              src={file.url}
-              title={file.title}
-            />
+            <iframe hidden ref={iframeRef} src={file.url} title={file.title} />
           </>
         ) : null}
       </Content>

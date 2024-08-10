@@ -22,7 +22,7 @@ export const Tray: FunctionComponent = () => {
           setIsCalendarOpen(true);
         }}
       />
-      {isCalendarOpen && (
+      {Boolean(isCalendarOpen) && (
         <Calendar
           onClose={() => {
             setIsCalendarOpen(false);

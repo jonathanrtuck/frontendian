@@ -3,6 +3,7 @@ import {
   FunctionComponent,
   ReactNode,
   useCallback,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -11,7 +12,7 @@ import Draggable from "react-draggable";
 import { Dialog } from "@/components/Dialog";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Menu, Menuitem } from "@/components/Menu";
-import { WindowContext } from "@/contexts";
+import { WindowContext, WindowContextValue } from "@/contexts";
 import { useElementDimensions, useFocus } from "@/hooks";
 import {
   blurWindow,
@@ -68,6 +69,15 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
         acc.concat(files.filter((file) => file.type === type)),
       []
     );
+
+  const windowContextValue = useMemo<WindowContextValue>(
+    () => ({
+      ...props,
+      inert: Boolean(aboutDialogContent),
+      menubarRef,
+    }),
+    [aboutDialogContent, props]
+  );
 
   const onAbout = useCallback((node: ReactNode) => {
     setAboutDialogContent(node);
@@ -151,14 +161,9 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           zIndex: stackingOrder.indexOf(id),
         }}
         tabIndex={-1}>
-        <WindowContext.Provider
-          value={{
-            ...props,
-            inert: Boolean(aboutDialogContent),
-            menubarRef,
-          }}>
+        <WindowContext.Provider value={windowContextValue}>
           <Titlebar maxWidth={rootWidth} />
-          {aboutDialogContent && (
+          {Boolean(aboutDialogContent) && (
             <Dialog className={styles.dialog} draggable={false}>
               {aboutDialogContent}
               <footer>

@@ -185,7 +185,10 @@ export const Minesweeper: ApplicationComponent = ({
           </header>
           <div className={styles.grid}>
             {squares.map((row, rowIndex) => (
-              <div className={styles.row} key={rowIndex}>
+              <div
+                className={styles.row}
+                key={rowIndex} // eslint-disable-line react/no-array-index-key
+              >
                 {row.map((_, columnIndex) => {
                   const { hasFlag, hasMine, isRevealed, numAdjacentMines } =
                     squares[rowIndex][columnIndex];
@@ -206,7 +209,7 @@ export const Minesweeper: ApplicationComponent = ({
                         [styles.number]: isRevealed,
                         [styles.revealed]: isRevealed,
                       })}
-                      key={columnIndex}
+                      key={columnIndex} // eslint-disable-line react/no-array-index-key
                       onClick={
                         isRevealed || isGameOver || hasFlag
                           ? undefined
@@ -303,15 +306,16 @@ export const Minesweeper: ApplicationComponent = ({
                             }
                       }
                       type="button">
-                      {(isRevealedMine || (hasFlag && isLost && !hasMine)) &&
-                        "💣"}
-                      {((!isGameOver && hasFlag) ||
-                        ((isWon || hasFlag) && hasMine)) &&
-                        "🚩"}
-                      {isRevealed &&
-                        !isRevealedMine &&
-                        numAdjacentMines !== 0 &&
-                        numAdjacentMines}
+                      {Boolean(
+                        isRevealedMine || (hasFlag && isLost && !hasMine)
+                      ) && "💣"}
+                      {Boolean(
+                        (!isGameOver && hasFlag) ||
+                          ((isWon || hasFlag) && hasMine)
+                      ) && "🚩"}
+                      {Boolean(
+                        isRevealed && !isRevealedMine && numAdjacentMines !== 0
+                      ) && numAdjacentMines}
                     </button>
                   );
                 })}

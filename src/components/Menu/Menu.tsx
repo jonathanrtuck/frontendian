@@ -8,10 +8,11 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from "react";
 
-import { MenuContext, MenuitemContext } from "@/contexts";
+import { MenuContext, MenuContextValue, MenuitemContext } from "@/contexts";
 import { removeProps } from "@/utils";
 
 import styles from "./Menu.module.css";
@@ -63,12 +64,34 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
     const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
     const [isPointer, setIsPointer] = useState<boolean>(false);
 
+    const bar = "bar" in props;
+    const horizontal = "horizontal" in props;
+
     const inactivate = useCallback(() => {
       setIsActive(false);
     }, []);
 
-    const bar = "bar" in props;
-    const horizontal = "horizontal" in props;
+    const menuContextValue = useMemo<MenuContextValue>(
+      () => ({
+        inactivate: bar ? inactivate : parentInactivate,
+        isActive: bar ? isActive : isParentActive,
+        isFocusWithin,
+        isPointer: bar ? isPointer : isParentPointer,
+        isTop: Boolean(bar),
+        orientation: bar && horizontal ? "horizontal" : "vertical",
+      }),
+      [
+        bar,
+        horizontal,
+        inactivate,
+        isActive,
+        isFocusWithin,
+        isParentActive,
+        isParentPointer,
+        isPointer,
+        parentInactivate,
+      ]
+    );
 
     return (
       <menu
@@ -121,15 +144,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
         }}
         ref={ref}
         role={bar ? "menubar" : "menu"}>
-        <MenuContext.Provider
-          value={{
-            inactivate: bar ? inactivate : parentInactivate,
-            isActive: bar ? isActive : isParentActive,
-            isFocusWithin,
-            isPointer: bar ? isPointer : isParentPointer,
-            isTop: Boolean(bar),
-            orientation: bar && horizontal ? "horizontal" : "vertical",
-          }}>
+        <MenuContext.Provider value={menuContextValue}>
           {children}
         </MenuContext.Provider>
       </menu>
