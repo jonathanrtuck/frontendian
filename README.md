@@ -15,7 +15,3 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 - Double-click a windowʼs titlebar to hide the window
   - Hidden windows can be shown again using the appliationʼs menu in the *Deskbar*
 - Click the *Deskbar*ʼs clock to open a calendar
-
-## Todo
-
-- Test in *Edge* and *iOS*
