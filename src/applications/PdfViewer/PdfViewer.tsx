@@ -39,6 +39,7 @@ export const PdfViewer: ApplicationComponent = ({
               <Menu>
                 {openableFiles.map(({ id, title }) => (
                   <Menuitem
+                    disabled={id === file?.id}
                     key={id}
                     onClick={() => {
                       onOpen(id);

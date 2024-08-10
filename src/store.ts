@@ -17,11 +17,11 @@ export const useStore = create<State>()(() => INITIAL_STATE);
 
 if (process.env.NODE_ENV === "development") {
   // eslint-disable-next-line no-console
-  console.debug("store", useStore.getState());
+  console.debug("state", useStore.getState());
 
   useStore.subscribe((state) => {
     // eslint-disable-next-line no-console
-    console.debug("store", state);
+    console.debug("state", state);
   });
 }
 

@@ -54,7 +54,7 @@ export type File = {
 );
 
 export type Font = {
-  format: "opentype"; // add other formats as needed
+  format: "opentype"; // add others as needed
   id: ID;
   title: string;
   url: URL;

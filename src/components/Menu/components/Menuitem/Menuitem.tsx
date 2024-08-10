@@ -334,7 +334,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
           }
         }}
         onMouseEnter={(e) => {
-          if (isActive) {
+          if (document.hasFocus() && isActive) {
             if (isTop) {
               setTabIndex(0);
             }

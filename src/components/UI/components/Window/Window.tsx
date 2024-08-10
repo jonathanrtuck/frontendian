@@ -129,13 +129,19 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
         })}
         hidden={hidden}
         id={id}
-        onBlur={({ relatedTarget }) => {
-          if (!rootRef.current?.contains(relatedTarget)) {
+        onBlur={(e) => {
+          if (
+            document.hasFocus() &&
+            !e.currentTarget?.contains(e.relatedTarget)
+          ) {
             blurWindow({ id });
           }
         }}
-        onFocus={({ relatedTarget }) => {
-          if (!relatedTarget || !rootRef.current?.contains(relatedTarget)) {
+        onFocus={(e) => {
+          if (
+            !focused &&
+            (!e.relatedTarget || !e.currentTarget?.contains(e.relatedTarget))
+          ) {
             focusWindow({ id });
           }
         }}

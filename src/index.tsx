@@ -2,14 +2,21 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import { UI } from "@/components/UI";
-import reportWebVitals from "@/reportWebVitals";
 
 import "./index.css";
 
-reportWebVitals(
+if (process.env.NODE_ENV === "development") {
   // eslint-disable-next-line no-console
-  process.env.NODE_ENV === "development" ? console.debug : undefined
-);
+  const reportHandler = console.debug;
+
+  import("web-vitals").then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+    getCLS(reportHandler);
+    getFID(reportHandler);
+    getFCP(reportHandler);
+    getLCP(reportHandler);
+    getTTFB(reportHandler);
+  });
+}
 
 createRoot(document.body).render(
   <StrictMode>
