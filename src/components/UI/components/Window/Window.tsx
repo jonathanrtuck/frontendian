@@ -97,6 +97,8 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     [id]
   );
 
+  console.debug(stackingOrder, id);
+
   return (
     <Draggable
       cancel={'[draggable="false"]'}
@@ -213,3 +215,5 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     </Draggable>
   );
 };
+
+Window.displayName = "Window";
