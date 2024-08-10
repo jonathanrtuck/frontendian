@@ -27,3 +27,5 @@ export const Item: FunctionComponent<IconProps> = ({
     <span className={styles.title}>{title}</span>
   </button>
 );
+
+Item.displayName = "Item";

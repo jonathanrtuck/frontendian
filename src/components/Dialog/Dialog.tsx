@@ -16,3 +16,5 @@ export const Dialog: FunctionComponent<DialogProps> = ({
     {children}
   </dialog>
 );
+
+Dialog.displayName = "Dialog";

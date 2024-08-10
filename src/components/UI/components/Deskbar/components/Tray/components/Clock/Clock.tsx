@@ -30,3 +30,5 @@ export const Clock: FunctionComponent<ClockProps> = ({
     </button>
   );
 };
+
+Clock.displayName = "Clock";

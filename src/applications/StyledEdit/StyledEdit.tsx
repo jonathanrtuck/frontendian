@@ -171,3 +171,5 @@ export const StyledEdit: ApplicationComponent = ({
     </>
   );
 };
+
+StyledEdit.displayName = "StyledEdit";

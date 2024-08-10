@@ -32,3 +32,5 @@ export const Tray: FunctionComponent = () => {
     </aside>
   );
 };
+
+Tray.displayName = "Tray";

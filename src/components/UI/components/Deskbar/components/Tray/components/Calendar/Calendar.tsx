@@ -46,3 +46,5 @@ export const Calendar: FunctionComponent<CalendarProps> = ({ onClose }) => {
     </section>
   );
 };
+
+Calendar.displayName = "Calendar";

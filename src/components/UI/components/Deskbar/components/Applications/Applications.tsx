@@ -80,3 +80,5 @@ export const Applications: FunctionComponent = () => {
     </Menu>
   );
 };
+
+Applications.displayName = "Applications";

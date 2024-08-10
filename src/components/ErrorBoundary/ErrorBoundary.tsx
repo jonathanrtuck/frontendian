@@ -13,6 +13,8 @@ export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
+  static displayName = "ErrorBoundary";
+
   state = {
     hasError: false,
   };

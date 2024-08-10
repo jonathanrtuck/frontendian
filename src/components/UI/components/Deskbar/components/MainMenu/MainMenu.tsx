@@ -44,3 +44,5 @@ export const MainMenu: FunctionComponent = () => {
     </Menu>
   );
 };
+
+MainMenu.displayName = "MainMenu";

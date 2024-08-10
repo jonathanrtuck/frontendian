@@ -118,3 +118,5 @@ export const PdfViewer: ApplicationComponent = ({
     </>
   );
 };
+
+PdfViewer.displayName = "PdfViewer";

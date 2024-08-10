@@ -378,3 +378,5 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
     </li>
   );
 };
+
+Menuitem.displayName = "Menuitem";

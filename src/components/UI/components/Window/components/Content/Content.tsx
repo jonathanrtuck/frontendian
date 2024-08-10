@@ -116,3 +116,5 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     </Resizable>
   );
 };
+
+Content.displayName = "Content";

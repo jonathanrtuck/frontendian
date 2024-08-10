@@ -22,3 +22,5 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
     </Menu>
   );
 };
+
+Menubar.displayName = "Menubar";

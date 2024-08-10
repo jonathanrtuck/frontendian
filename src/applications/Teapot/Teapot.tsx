@@ -56,3 +56,5 @@ export const Teapot: ApplicationComponent = ({
     </>
   );
 };
+
+Teapot.displayName = "Teapot";

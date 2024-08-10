@@ -323,3 +323,5 @@ export const Minesweeper: ApplicationComponent = ({
     </>
   );
 };
+
+Minesweeper.displayName = "Minesweeper";

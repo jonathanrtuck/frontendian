@@ -48,3 +48,5 @@ export const UI: FunctionComponent = () => {
     </>
   );
 };
+
+UI.displayName = "UI";

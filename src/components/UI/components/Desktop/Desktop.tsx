@@ -129,3 +129,5 @@ export const Desktop: FunctionComponent = () => {
     </div>
   );
 };
+
+Desktop.displayName = "Desktop";

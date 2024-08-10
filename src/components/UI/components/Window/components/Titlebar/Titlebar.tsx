@@ -110,3 +110,5 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
     </Draggable>
   );
 };
+
+Titlebar.displayName = "Titlebar";

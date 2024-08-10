@@ -35,3 +35,5 @@ export const Deskbar: FunctionComponent = () => {
     </header>
   );
 };
+
+Deskbar.displayName = "Deskbar";
