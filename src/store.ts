@@ -306,6 +306,10 @@ export const openFile = (payload: ActionIds & { windowId?: ID }) =>
         if (existingWindow) {
           return {
             ...state,
+            stackingOrder: [
+              ...state.stackingOrder.filter((id) => id !== existingWindow.id),
+              existingWindow.id,
+            ],
             windows: state.windows.map((window) =>
               window.id === existingWindow.id
                 ? {
@@ -351,6 +355,7 @@ export const openFile = (payload: ActionIds & { windowId?: ID }) =>
           openApplicationIds: isApplicationOpen
             ? state.openApplicationIds
             : [...state.openApplicationIds, applicationId],
+          stackingOrder: [...state.stackingOrder, window.id],
           windows: [
             ...state.windows.map((window) => ({
               ...window,
