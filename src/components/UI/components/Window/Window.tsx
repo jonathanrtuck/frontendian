@@ -97,6 +97,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     [id]
   );
 
+  // eslint-disable-next-line no-console
   console.debug(stackingOrder, id);
 
   return (
