@@ -6,6 +6,7 @@ import {
   DEFAULT_WINDOW,
   DEFAULT_WINDOW_POSITION_INCREMENT,
   DEFAULT_WINDOW_POSITION_OFFSET,
+  DESKBAR_ID,
   INITIAL_STATE,
   UNTITLED_WINDOW_TITLE,
 } from "@/constants";
@@ -14,16 +15,6 @@ import { ID, State, Window } from "@/types";
 type ActionIds = { id: ID } | { ids: ID[] };
 
 export const useStore = create<State>()(() => INITIAL_STATE);
-
-if (process.env.NODE_ENV === "development") {
-  // eslint-disable-next-line no-console
-  console.debug("state", useStore.getState());
-
-  useStore.subscribe((state) => {
-    // eslint-disable-next-line no-console
-    console.debug("state", state);
-  });
-}
 
 const getFirstOpenWindowPosition = (windows: Window[]): number => {
   for (let i = 0; i !== windows.length; i++) {
@@ -48,8 +39,35 @@ const isPayloadId = (payload: ActionIds, id: ID): boolean =>
   ("id" in payload && id === payload.id) ||
   ("ids" in payload && payload.ids.includes(id));
 
-export const activateWindow = (payload: ActionIds): void =>
-  useStore.setState((prevState) => ({
+const setState =
+  <T>(
+    actionType: string,
+    updater: (payload: T) => (prevState: State) => State
+  ) =>
+  (payload: T): void => {
+    if (process.env.NODE_ENV === "development") {
+      /* eslint-disable no-console */
+      console.groupCollapsed(actionType);
+
+      if (payload) {
+        console.debug(payload);
+      }
+      /* eslint-enable no-console */
+    }
+
+    useStore.setState(updater(payload));
+
+    if (process.env.NODE_ENV === "development") {
+      /* eslint-disable no-console */
+      console.debug(useStore.getState());
+      console.groupEnd();
+      /* eslint-enable no-console */
+    }
+  };
+
+export const activateWindow = setState<ActionIds>(
+  "activateWindow",
+  (payload) => (prevState) => ({
     ...prevState,
     windows: prevState.windows.map((window) =>
       isPayloadId(payload, window.id)
@@ -59,10 +77,12 @@ export const activateWindow = (payload: ActionIds): void =>
           }
         : window
     ),
-  }));
+  })
+);
 
-export const blurWindow = (payload: ActionIds): void =>
-  useStore.setState((prevState) => ({
+export const blurWindow = setState<ActionIds>(
+  "blurWindow",
+  (payload) => (prevState) => ({
     ...prevState,
     windows: prevState.windows.map((window) =>
       isPayloadId(payload, window.id)
@@ -72,10 +92,12 @@ export const blurWindow = (payload: ActionIds): void =>
           }
         : window
     ),
-  }));
+  })
+);
 
-export const closeApplication = (payload: ActionIds): void =>
-  useStore.setState((prevState) =>
+export const closeApplication = setState<ActionIds>(
+  "closeApplication",
+  (payload) => (prevState) =>
     prevState.applications
       .filter(({ id }) => isPayloadId(payload, id))
       .reduce(
@@ -101,10 +123,11 @@ export const closeApplication = (payload: ActionIds): void =>
         }),
         prevState
       )
-  );
+);
 
-export const closeWindow = (payload: ActionIds) =>
-  useStore.setState((prevState) =>
+export const closeWindow = setState<ActionIds>(
+  "closeWindow",
+  (payload) => (prevState) =>
     prevState.windows
       .filter(({ id }) => isPayloadId(payload, id))
       .reduce((prevState, { id }) => {
@@ -139,10 +162,26 @@ export const closeWindow = (payload: ActionIds) =>
           windows: prevState.windows.filter((window) => window.id !== id),
         };
       }, prevState)
-  );
+);
 
-export const focusWindow = (payload: ActionIds) =>
-  useStore.setState((prevState) => ({
+export const focusDeskbar = setState<void>(
+  "focusDeskbar",
+  () => (prevState) => ({
+    ...prevState,
+    stackingOrder: [
+      ...prevState.stackingOrder.filter((id) => id !== DESKBAR_ID),
+      DESKBAR_ID,
+    ],
+    windows: prevState.windows.map((window) => ({
+      ...window,
+      focused: false,
+    })),
+  })
+);
+
+export const focusWindow = setState<ActionIds>(
+  "focusWindow",
+  (payload) => (prevState) => ({
     ...prevState,
     stackingOrder: [
       ...prevState.stackingOrder.filter((id) => !isPayloadId(payload, id)),
@@ -153,10 +192,12 @@ export const focusWindow = (payload: ActionIds) =>
       focused: isPayloadId(payload, window.id),
       hidden: isPayloadId(payload, window.id) ? false : window.hidden,
     })),
-  }));
+  })
+);
 
-export const hideWindow = (payload: ActionIds) =>
-  useStore.setState((prevState) => ({
+export const hideWindow = setState<ActionIds>(
+  "hideWindow",
+  (payload) => (prevState) => ({
     ...prevState,
     stackingOrder: [
       ...("id" in payload ? [payload.id] : payload.ids),
@@ -171,10 +212,12 @@ export const hideWindow = (payload: ActionIds) =>
           }
         : window
     ),
-  }));
+  })
+);
 
-export const inactivateWindow = (payload: ActionIds): void =>
-  useStore.setState((prevState) => ({
+export const inactivateWindow = setState<ActionIds>(
+  "inactivateWindow",
+  (payload) => (prevState) => ({
     ...prevState,
     windows: prevState.windows.map((window) =>
       isPayloadId(payload, window.id)
@@ -184,12 +227,12 @@ export const inactivateWindow = (payload: ActionIds): void =>
           }
         : window
     ),
-  }));
+  })
+);
 
-export const moveWindow = (
-  payload: ActionIds & { left: number; top: number }
-) =>
-  useStore.setState((prevState) => ({
+export const moveWindow = setState<ActionIds & { left: number; top: number }>(
+  "moveWindow",
+  (payload) => (prevState) => ({
     ...prevState,
     windows: prevState.windows.map((window) =>
       isPayloadId(payload, window.id)
@@ -200,10 +243,12 @@ export const moveWindow = (
           }
         : window
     ),
-  }));
+  })
+);
 
-export const moveWindowTitlebar = (payload: ActionIds & { left: number }) =>
-  useStore.setState((prevState) => ({
+export const moveWindowTitlebar = setState<ActionIds & { left: number }>(
+  "moveWindowTitlebar",
+  (payload) => (prevState) => ({
     ...prevState,
     windows: prevState.windows.map((window) =>
       isPayloadId(payload, window.id)
@@ -213,10 +258,12 @@ export const moveWindowTitlebar = (payload: ActionIds & { left: number }) =>
           }
         : window
     ),
-  }));
+  })
+);
 
-export const openApplication = (payload: ActionIds) =>
-  useStore.setState((prevState) =>
+export const openApplication = setState<ActionIds>(
+  "openApplication",
+  (payload) => (prevState) =>
     prevState.applications
       .filter(({ id }) => isPayloadId(payload, id))
       .reduce((state, { id, getWindow, windowIds }) => {
@@ -282,10 +329,11 @@ export const openApplication = (payload: ActionIds) =>
           ],
         };
       }, prevState)
-  );
+);
 
-export const openFile = (payload: ActionIds & { windowId?: ID }) =>
-  useStore.setState((prevState) =>
+export const openFile = setState<ActionIds & { windowId?: ID }>(
+  "openFile",
+  (payload) => (prevState) =>
     prevState.files
       .filter(({ id }) => isPayloadId(payload, id))
       .reduce((state, file) => {
@@ -399,10 +447,11 @@ export const openFile = (payload: ActionIds & { windowId?: ID }) =>
           ],
         };
       }, prevState)
-  );
+);
 
-export const openWindow = (payload: ActionIds) =>
-  useStore.setState((prevState) =>
+export const openWindow = setState<ActionIds>(
+  "openWindow",
+  (payload) => (prevState) =>
     prevState.applications
       .filter(({ id }) => isPayloadId(payload, id))
       .reduce((state, { getWindow, id }) => {
@@ -441,26 +490,26 @@ export const openWindow = (payload: ActionIds) =>
           ],
         };
       }, prevState)
-  );
+);
 
-export const resizeWindow = (
-  payload: ActionIds & { height: number; width: number }
-) =>
-  useStore.setState((prevState) => ({
-    ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            height: payload.height,
-            width: payload.width,
-          }
-        : window
-    ),
-  }));
+export const resizeWindow = setState<
+  ActionIds & { height: number; width: number }
+>("resizeWindow", (payload) => (prevState) => ({
+  ...prevState,
+  windows: prevState.windows.map((window) =>
+    isPayloadId(payload, window.id)
+      ? {
+          ...window,
+          height: payload.height,
+          width: payload.width,
+        }
+      : window
+  ),
+}));
 
-export const showWindow = (payload: ActionIds) =>
-  useStore.setState((prevState) => ({
+export const showWindow = setState<ActionIds>(
+  "showWindow",
+  (payload) => (prevState) => ({
     ...prevState,
     stackingOrder: [
       ...prevState.stackingOrder.filter((id) => !isPayloadId(payload, id)),
@@ -475,10 +524,12 @@ export const showWindow = (payload: ActionIds) =>
           }
         : window
     ),
-  }));
+  })
+);
 
-export const zoomWindow = (payload: ActionIds) =>
-  useStore.setState((prevState) => ({
+export const zoomWindow = setState<ActionIds>(
+  "zoomWindow",
+  (payload) => (prevState) => ({
     ...prevState,
     windows: prevState.windows.map((window) =>
       isPayloadId(payload, window.id)
@@ -488,4 +539,5 @@ export const zoomWindow = (payload: ActionIds) =>
           }
         : window
     ),
-  }));
+  })
+);

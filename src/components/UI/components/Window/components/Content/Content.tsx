@@ -57,6 +57,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   const siblingWindowIds = windows
     .map((window) => window.id)
     .filter((windowId) => windowId !== id);
+  const hasSiblingWindows = siblingWindowIds.length !== 0;
 
   useLayoutEffect(() => {
     setHeight(heightState);
@@ -92,11 +93,15 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         setWidth(size.width);
       }}
       onResizeStart={() => {
-        inactivateWindow({ ids: siblingWindowIds });
+        if (hasSiblingWindows) {
+          inactivateWindow({ ids: siblingWindowIds });
+        }
         setIsResizing(true);
       }}
       onResizeStop={() => {
-        activateWindow({ ids: siblingWindowIds });
+        if (hasSiblingWindows) {
+          activateWindow({ ids: siblingWindowIds });
+        }
         setIsResizing(false);
 
         if (height !== heightState || width !== widthState) {

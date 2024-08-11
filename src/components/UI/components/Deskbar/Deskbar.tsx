@@ -1,7 +1,7 @@
 import { FunctionComponent, useRef } from "react";
 
 import { DESKBAR_ID } from "@/constants";
-import { focusWindow, useStore } from "@/store";
+import { focusDeskbar, useStore } from "@/store";
 
 import { Applications } from "./components/Applications";
 import { MainMenu } from "./components/MainMenu";
@@ -14,19 +14,25 @@ export const Deskbar: FunctionComponent = () => {
 
   const rootRef = useRef<HTMLElement>(null);
 
+  const zIndex = stackingOrder.indexOf(DESKBAR_ID);
+  const isFocused = stackingOrder.at(-1) === DESKBAR_ID;
+
   return (
     <header
       aria-label="Deskbar"
       className={styles.root}
       id={DESKBAR_ID}
       onFocus={({ relatedTarget }) => {
-        if (!relatedTarget || !rootRef.current?.contains(relatedTarget)) {
-          focusWindow({ id: DESKBAR_ID });
+        if (
+          !isFocused &&
+          (!relatedTarget || !rootRef.current?.contains(relatedTarget))
+        ) {
+          focusDeskbar();
         }
       }}
       ref={rootRef}
       style={{
-        zIndex: stackingOrder.indexOf(DESKBAR_ID),
+        zIndex,
       }}
       tabIndex={-1}>
       <MainMenu />
