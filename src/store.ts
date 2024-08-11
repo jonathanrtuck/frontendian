@@ -48,6 +48,19 @@ const isPayloadId = (payload: ActionIds, id: ID): boolean =>
   ("id" in payload && id === payload.id) ||
   ("ids" in payload && payload.ids.includes(id));
 
+export const activateWindow = (payload: ActionIds): void =>
+  useStore.setState((prevState) => ({
+    ...prevState,
+    windows: prevState.windows.map((window) =>
+      isPayloadId(payload, window.id)
+        ? {
+            ...window,
+            active: true,
+          }
+        : window
+    ),
+  }));
+
 export const blurWindow = (payload: ActionIds): void =>
   useStore.setState((prevState) => ({
     ...prevState,
@@ -78,6 +91,9 @@ export const closeApplication = (payload: ActionIds): void =>
           ),
           openApplicationIds: prevState.openApplicationIds.filter(
             (id) => id === APPLICATION_TRACKER.id || !isPayloadId(payload, id)
+          ),
+          stackingOrder: prevState.stackingOrder.filter(
+            (id) => !windowIds.includes(id)
           ),
           windows: prevState.windows.filter(
             ({ id }) => !windowIds.includes(id)
@@ -152,6 +168,19 @@ export const hideWindow = (payload: ActionIds) =>
             ...window,
             focused: false,
             hidden: true,
+          }
+        : window
+    ),
+  }));
+
+export const inactivateWindow = (payload: ActionIds): void =>
+  useStore.setState((prevState) => ({
+    ...prevState,
+    windows: prevState.windows.map((window) =>
+      isPayloadId(payload, window.id)
+        ? {
+            ...window,
+            active: false,
           }
         : window
     ),
@@ -243,6 +272,7 @@ export const openApplication = (payload: ActionIds) =>
           openApplicationIds: isApplicationOpen
             ? state.openApplicationIds
             : [...state.openApplicationIds, id],
+          stackingOrder: [...state.stackingOrder, window.id],
           windows: [
             ...state.windows.map((window) => ({
               ...window,
@@ -268,6 +298,10 @@ export const openFile = (payload: ActionIds & { windowId?: ID }) =>
           if (fileWindow.hidden) {
             return {
               ...state,
+              stackingOrder: [
+                ...state.stackingOrder.filter((id) => id !== fileWindow.id),
+                fileWindow.id,
+              ],
               windows: state.windows.map((window) => ({
                 ...window,
                 focused: window.id === fileWindow.id,
@@ -397,6 +431,7 @@ export const openWindow = (payload: ActionIds) =>
           openApplicationIds: isApplicationOpen
             ? state.openApplicationIds
             : [...state.openApplicationIds, id],
+          stackingOrder: [...state.stackingOrder, window.id],
           windows: [
             ...state.windows.map((window) => ({
               ...window,

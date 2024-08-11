@@ -11,7 +11,12 @@ import { Resizable } from "react-resizable";
 
 import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty } from "@/hooks";
-import { resizeWindow } from "@/store";
+import {
+  activateWindow,
+  inactivateWindow,
+  resizeWindow,
+  useStore,
+} from "@/store";
 
 import { ResizeHandle } from "./components/ResizeHandle";
 
@@ -24,14 +29,16 @@ export type ContentProps = PropsWithChildren;
 
 export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   const {
+    active,
     height: heightState,
     id,
-    inert,
     menubarRef,
     scrollable,
     width: widthState,
     zoomed,
   } = useContext(WindowContext);
+
+  const windows = useStore((state) => state.windows);
 
   const [height, setHeight] = useState<number>(heightState);
   const [width, setWidth] = useState<number>(widthState);
@@ -47,6 +54,9 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     "--content-scrollbar-size"
   );
   const scrollbarSize = scrollable ? scrollbarSizeProperty : 0;
+  const siblingWindowIds = windows
+    .map((window) => window.id)
+    .filter((windowId) => windowId !== id);
 
   useLayoutEffect(() => {
     setHeight(heightState);
@@ -82,9 +92,11 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         setWidth(size.width);
       }}
       onResizeStart={() => {
+        inactivateWindow({ ids: siblingWindowIds });
         setIsResizing(true);
       }}
       onResizeStop={() => {
+        activateWindow({ ids: siblingWindowIds });
         setIsResizing(false);
 
         if (height !== heightState || width !== widthState) {
@@ -100,7 +112,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
             [styles.zoomed]: zoomed,
           })}
           draggable={false}
-          inert={inert ? "" : undefined}
+          inert={!active ? "" : undefined}
           style={
             zoomed
               ? undefined

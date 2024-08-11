@@ -15,10 +15,12 @@ import { Menu, Menuitem } from "@/components/Menu";
 import { WindowContext, WindowContextValue } from "@/contexts";
 import { useElementDimensions, useFocus } from "@/hooks";
 import {
+  activateWindow,
   blurWindow,
   closeApplication,
   closeWindow,
   focusWindow,
+  inactivateWindow,
   moveWindow,
   openFile,
   openWindow,
@@ -73,15 +75,18 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
   const windowContextValue = useMemo<WindowContextValue>(
     () => ({
       ...props,
-      inert: Boolean(aboutDialogContent),
       menubarRef,
     }),
-    [aboutDialogContent, props]
+    [props]
   );
 
-  const onAbout = useCallback((node: ReactNode) => {
-    setAboutDialogContent(node);
-  }, []);
+  const onAbout = useCallback(
+    (node: ReactNode) => {
+      setAboutDialogContent(node);
+      inactivateWindow({ id });
+    },
+    [id]
+  );
   const onClose = useCallback(() => {
     closeWindow({ id });
   }, [id]);
@@ -172,6 +177,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
                   formMethod="dialog"
                   onClick={() => {
                     setAboutDialogContent(null);
+                    activateWindow({ id });
                   }}
                   type="reset">
                   OK

@@ -101,6 +101,7 @@ export type State = {
 export type URL = string;
 
 export type Window = {
+  active: boolean;
   fileId?: ID;
   focused: boolean;
   height: number;

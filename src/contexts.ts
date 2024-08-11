@@ -33,7 +33,6 @@ export const MenuitemContext = createContext<MenuitemContextValue>({
 });
 
 export type WindowContextValue = Window & {
-  inert: boolean;
   menubarRef: RefObject<HTMLMenuElement>;
 };
 
