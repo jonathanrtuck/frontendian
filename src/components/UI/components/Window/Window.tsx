@@ -12,7 +12,7 @@ import Draggable from "react-draggable";
 import { Dialog } from "@/components/Dialog";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Menu, Menuitem } from "@/components/Menu";
-import { WindowContext, WindowContextValue } from "@/contexts";
+import { WindowContext, WindowContextType } from "@/contexts";
 import { useElementDimensions, useFocus } from "@/hooks";
 import {
   activateWindow,
@@ -72,7 +72,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
       []
     );
 
-  const windowContextValue = useMemo<WindowContextValue>(
+  const contextValue = useMemo<WindowContextType>(
     () => ({
       ...props,
       menubarRef,
@@ -166,7 +166,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           zIndex: stackingOrder.indexOf(id),
         }}
         tabIndex={-1}>
-        <WindowContext.Provider value={windowContextValue}>
+        <WindowContext.Provider value={contextValue}>
           <Titlebar maxWidth={rootWidth} />
           {Boolean(aboutDialogContent) && (
             <Dialog className={styles.dialog} draggable={false}>

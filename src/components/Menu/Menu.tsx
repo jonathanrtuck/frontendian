@@ -12,7 +12,7 @@ import {
   useState,
 } from "react";
 
-import { MenuContext, MenuContextValue, MenuitemContext } from "@/contexts";
+import { MenuContext, MenuContextType, MenuitemContext } from "@/contexts";
 import { removeProps } from "@/utils";
 
 import styles from "./Menu.module.css";
@@ -71,7 +71,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
       setIsActive(false);
     }, []);
 
-    const menuContextValue = useMemo<MenuContextValue>(
+    const contextValue = useMemo<MenuContextType>(
       () => ({
         inactivate: bar ? inactivate : parentInactivate,
         isActive: bar ? isActive : isParentActive,
@@ -144,7 +144,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
         }}
         ref={ref}
         role={bar ? "menubar" : "menu"}>
-        <MenuContext.Provider value={menuContextValue}>
+        <MenuContext.Provider value={contextValue}>
           {children}
         </MenuContext.Provider>
       </menu>

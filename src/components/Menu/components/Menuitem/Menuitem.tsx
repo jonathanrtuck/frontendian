@@ -12,7 +12,7 @@ import {
   useState,
 } from "react";
 
-import { MenuContext, MenuitemContext, MenuitemContextValue } from "@/contexts";
+import { MenuContext, MenuitemContext, MenuitemContextType } from "@/contexts";
 import { IconComponent } from "@/types";
 import { removeProps } from "@/utils";
 
@@ -79,7 +79,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
     rootRef.current?.focus();
   }, []);
 
-  const menuitemContextValue = useMemo<MenuitemContextValue>(
+  const contextValue = useMemo<MenuitemContextType>(
     () => ({
       collapse,
       isExpanded,
@@ -377,7 +377,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
           {title}
         </span>
       </button>
-      <MenuitemContext.Provider value={menuitemContextValue}>
+      <MenuitemContext.Provider value={contextValue}>
         {children}
       </MenuitemContext.Provider>
     </li>
