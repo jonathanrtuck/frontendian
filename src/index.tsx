@@ -2,10 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import { UI } from "@/components/UI";
+import { IS_DEBUG_MODE } from "@/constants";
 
 import "./index.css";
 
-if (process.env.NODE_ENV === "development") {
+if (IS_DEBUG_MODE) {
   // eslint-disable-next-line no-console
   const reportHandler = console.debug;
 

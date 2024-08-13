@@ -1,5 +1,7 @@
 import { Component, ErrorInfo, PropsWithChildren, ReactElement } from "react";
 
+import { IS_DEBUG_MODE } from "@/constants";
+
 export type ErrorBoundaryProps = PropsWithChildren<{
   fallback?: ReactElement;
   onError?(error: Error): void;
@@ -26,8 +28,10 @@ export class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, { componentStack }: ErrorInfo) {
-    // eslint-disable-next-line no-console
-    console.error(error, componentStack);
+    if (IS_DEBUG_MODE) {
+      // eslint-disable-next-line no-console
+      console.error(error, componentStack);
+    }
 
     this.props.onError?.(error);
   }

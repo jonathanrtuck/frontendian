@@ -8,6 +8,7 @@ import {
   DEFAULT_WINDOW_POSITION_OFFSET,
   DESKBAR_ID,
   INITIAL_STATE,
+  IS_DEBUG_MODE,
   UNTITLED_WINDOW_TITLE,
 } from "@/constants";
 import { ID, State, Window } from "@/types";
@@ -45,7 +46,7 @@ const setState =
     updater: (payload: T) => (prevState: State) => State
   ) =>
   (payload: T): void => {
-    if (process.env.NODE_ENV === "development") {
+    if (IS_DEBUG_MODE) {
       /* eslint-disable no-console */
       console.groupCollapsed(actionType);
 
@@ -57,7 +58,7 @@ const setState =
 
     useStore.setState(updater(payload));
 
-    if (process.env.NODE_ENV === "development") {
+    if (IS_DEBUG_MODE) {
       /* eslint-disable no-console */
       console.debug(useStore.getState());
       console.groupEnd();
