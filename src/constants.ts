@@ -37,6 +37,9 @@ export const INITIAL_STATE: State = {
   files: Object.values(files),
   fonts: Object.values(fonts),
   openApplicationIds: [APPLICATION_TRACKER.id],
+  settings: {
+    theme: "mac-os-classic",
+  },
   stackingOrder: [DESKBAR_ID],
   types: {
     [MimeType.ApplicationPdf]: {

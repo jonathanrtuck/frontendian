@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useEffect, useLayoutEffect } from "react";
 import { Helmet } from "react-helmet";
 
 import { Dialog } from "@/components/Dialog";
@@ -8,16 +8,22 @@ import { openFile, useStore } from "@/store";
 
 import { Deskbar } from "./components/Deskbar";
 import { Desktop } from "./components/Desktop";
+import { Menubar } from "./components/Menubar";
 import { Window } from "./components/Window";
 
 export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);
   const fonts = useStore((state) => state.fonts);
+  const settings = useStore((state) => state.settings);
   const windows = useStore((state) => state.windows);
 
   useEffect(() => {
     openFile({ id: FILE_README_MD.id });
   }, []);
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.theme = settings.theme;
+  }, [settings.theme]);
 
   return (
     <>
@@ -40,7 +46,8 @@ export const UI: FunctionComponent = () => {
           </Dialog>
         }>
         <Desktop />
-        <Deskbar />
+        {settings.theme === "mac-os-classic" && <Menubar />}
+        {settings.theme === "beos" && <Deskbar />}
         {windows.map((window) => (
           <Window key={window.id} {...window} />
         ))}

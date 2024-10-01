@@ -79,12 +79,17 @@ export const enum MimeType {
   TextMarkdown = "text/markdown",
 }
 
+export type Settings = {
+  theme: "beos" | "mac-os-classic";
+};
+
 export type State = {
   applications: Application[]; // the order is used as the display order in the Deskbar MainMenu
   desktop: ID[]; // the order is used as the display order on the Desktop
   files: File[];
   fonts: Font[];
   openApplicationIds: ID[]; // the order is used as the display order in the Deskbar Applications Menu
+  settings: Settings;
   stackingOrder: ID[];
   types: Partial<
     Record<
