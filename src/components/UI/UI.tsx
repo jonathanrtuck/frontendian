@@ -22,7 +22,7 @@ export const UI: FunctionComponent = () => {
   }, []);
 
   useLayoutEffect(() => {
-    document.documentElement.dataset.theme = settings.theme;
+    document.documentElement.id = settings.theme;
   }, [settings.theme]);
 
   return (

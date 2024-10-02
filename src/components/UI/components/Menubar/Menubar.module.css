@@ -1,3 +1,7 @@
 .root {
   border-radius: var(--border-radius) var(--border-radius) 0 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
 }

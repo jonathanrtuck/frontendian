@@ -1,15 +1,33 @@
+:root {
+  --desktop-padding: 1rem;
+}
+:root:where(:global(#beos)) {
+  --desktop-background-color: rgb(51, 102, 152);
+}
+:root:where(:global(#mac-os-classic)) {
+  --desktop-background-color: rgb(99, 99, 152);
+}
+
 .root {
   align-items: start;
+  background-color: var(--desktop-background-color);
+  border-radius: var(--border-radius);
   bottom: 0;
   display: grid;
-  gap: 1rem;
+  gap: var(--desktop-padding);
   grid-template-columns: repeat(auto-fill, 6rem);
   justify-items: center;
   left: 0;
-  padding: 1rem calc(var(--deskbar-width) + 1rem) 1rem 1rem;
+  padding: var(--desktop-padding)
+    calc(var(--deskbar-width) + var(--desktop-padding)) var(--desktop-padding)
+    var(--desktop-padding);
   position: fixed;
   right: 0;
   top: 0;
+}
+
+:root:where(:global(#mac-os-classic)) .root {
+  padding-top: calc(var(--desktop-padding) + var(--menu--bar-height));
 }
 
 .root::after {

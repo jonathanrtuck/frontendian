@@ -1,3 +1,7 @@
+:root {
+  --menu--bar-height: 1.5rem;
+}
+
 .root {
   display: flex;
   list-style: none;
@@ -37,7 +41,7 @@
     rgb(209, 209, 209)
   );
   border-width: var(--border-width) var(--border-width) 0;
-  height: 1.5rem;
+  height: var(--menu--bar-height);
 }
 
 .root:where(.vertical) {

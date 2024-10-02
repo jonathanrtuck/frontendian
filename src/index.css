@@ -1,5 +1,4 @@
 :root {
-  --background-color: rgb(51, 102, 152);
   --border-color: rgb(160, 160, 160);
   --border-radius: 0.75rem;
   --border-width: 0.0625rem;
@@ -26,7 +25,6 @@
 }
 
 body {
-  background-color: var(--background-color);
   bottom: 0;
   color: var(--text-color);
   cursor: var(--cursor--default);
@@ -35,10 +33,6 @@ body {
   position: fixed;
   right: 0;
   top: 0;
-}
-
-:root:where([data-theme="mac-os-classic"]) body {
-  border-radius: var(--border-radius);
 }
 
 *,
