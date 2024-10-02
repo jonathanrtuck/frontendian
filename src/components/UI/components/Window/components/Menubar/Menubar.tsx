@@ -14,9 +14,9 @@ import styles from "./Menubar.module.css";
 export type MenubarProps = PropsWithChildren;
 
 export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
-  const settings = useStore((state) => state.settings);
-
   const { active, menubarRef } = useContext(WindowContext);
+
+  const settings = useStore((state) => state.settings);
 
   useEffect(() => {
     if (settings.theme === "mac-os-classic") {

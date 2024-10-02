@@ -1,4 +1,4 @@
-:root {
+:root:where(:global(#beos)) {
   --titlebar-background--active: linear-gradient(
     to bottom,
     rgb(255, 237, 172),
@@ -24,15 +24,28 @@
   --titlebar_button-border-color: rgb(173, 136, 0);
   --titlebar_button-border-radius: 0.125rem;
 }
+:root:where(:global(#mac-os-classic)) {
+  --titlebar-height: 1rem;
+  --titlebar-padding: 0.25rem;
+
+  --titlebar_button-background: linear-gradient(
+    to bottom right,
+    rgb(154, 154, 154),
+    rgb(241, 241, 241)
+  );
+}
 
 .root {
   align-items: center;
   background-color: var(--window-background-color);
-  border-width: var(--border-width) var(--border-width) 0;
-  bottom: 100%;
   box-sizing: content-box;
   height: var(--titlebar-height);
   display: flex;
+  padding: var(--titlebar-padding);
+}
+:root:where(:global(#beos)) .root {
+  border-width: var(--border-width) var(--border-width) 0;
+  bottom: 100%;
   left: 0;
   margin: 0 calc((var(--border-width) + var(--window-padding)) * -1);
   max-width: calc(100% - var(--window-padding) - var(--window-padding));
@@ -40,9 +53,25 @@
   position: absolute;
   z-index: 1;
 }
+:root:where(:global(#mac-os-classic)) .root {
+  border-width: 0 0 var(--border-width);
+  gap: 0.25rem;
+}
+:root:where(:global(#mac-os-classic)) .root::before {
+  border-color: rgb(235, 235, 235) rgb(138, 138, 138) rgb(138, 138, 138)
+    rgb(235, 235, 235);
+  border-width: var(--border-width);
+  bottom: 0;
+  content: "";
+  gap: 0.25rem;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 
 [aria-current="true"] .root {
-  background-image: var(--titlebar-background--active);
+  background-image: var(--titlebar-background--active, none);
 }
 
 .root:where(.dragging) {
@@ -51,20 +80,66 @@
 
 .title {
   flex: 1 1 auto;
-  font-size: 1rem;
-  margin: 0 1rem;
+  margin: 0;
   order: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   user-select: none;
   white-space: nowrap;
 }
+:root:where(:global(#beos)) .title {
+  font-size: 1rem;
+  margin: 0 1rem;
+}
+:root:where(:global(#mac-os-classic)) .title {
+  display: flex;
+  flex: 1 1 auto;
+  font-family: var(--font-family--charcoal);
+  font-size: 0.875rem;
+  gap: 0.5rem;
+}
+:root:where(:global(#mac-os-classic)) .title::before,
+:root:where(:global(#mac-os-classic)) .title::after {
+  background: repeating-linear-gradient(
+    rgb(221, 221, 221),
+    rgb(221, 221, 221) var(--border-width),
+    rgb(153, 153, 153) var(--border-width),
+    rgb(153, 153, 153) calc(var(--border-width) * 2)
+  );
+  border-color: transparent rgba(0, 0, 0, 0.1) transparent
+    rgba(255, 255, 255, 0.3);
+  border-width: 0 var(--border-width);
+  content: "";
+  flex: 1 1 auto;
+  margin: 0.125rem 0;
+}
 
 .button {
+  background-image: var(--titlebar_button-background);
+  border-width: var(--border-width);
   cursor: var(--cursor--default);
   flex: 0 0 var(--titlebar-height);
   height: var(--titlebar-height);
+  position: relative;
   width: var(--titlebar-height);
+}
+:root:where(:global(#mac-os-classic)) .button {
+  border-color: rgb(128, 128, 128) rgb(255, 255, 255) rgb(255, 255, 255)
+    rgb(128, 128, 128);
+}
+:root:where(:global(#mac-os-classic)) .button::before {
+  border-color: rgb(255, 255, 255) rgb(128, 128, 128) rgb(128, 128, 128)
+    rgb(255, 255, 255);
+  border-width: var(--border-width);
+  bottom: var(--border-width);
+  content: "";
+  left: var(--border-width);
+  outline-color: rgb(38, 38, 38);
+  outline-width: var(--border-width);
+  outline-style: solid;
+  position: absolute;
+  right: var(--border-width);
+  top: var(--border-width);
 }
 
 .button:focus {
@@ -72,62 +147,86 @@
 }
 
 .close {
-  background-image: var(--titlebar_button-background);
-  border-color: var(--titlebar_button-border-color);
-  border-radius: var(--titlebar_button-border-radius);
-  border-width: var(--border-width);
   order: 1;
 }
+:root:where(:global(#beos)) .close {
+  border-color: var(--titlebar_button-border-color, --border-color);
+  border-radius: var(--titlebar_button-border-radius);
+}
 
-[aria-current="true"] .close {
+:root:where(:global(#beos)) [aria-current="true"] .close {
   background-image: var(--titlebar--active_button-background);
 }
 
-.close:active,
-.close:focus-visible {
+:root:where(:global(#beos)) .close:active,
+:root:where(:global(#beos)) .close:focus-visible {
   background-image: var(--titlebar_button-background--active);
 }
 
 .zoom {
   order: 3;
-  position: relative;
 }
 
-.zoom::before,
-.zoom::after {
+:root:where(:global(#beos)) .zoom::before,
+:root:where(:global(#beos)) .zoom::after {
   background-image: var(--titlebar_button-background);
-  border-color: var(--titlebar_button-border-color);
+  border-color: var(--titlebar_button-border-color, --border-color);
   border-radius: var(--titlebar_button-border-radius);
   border-width: var(--border-width);
   content: "";
   display: block;
   position: absolute;
 }
-
-.zoom::before {
+:root:where(:global(#beos)) .zoom::before {
   height: calc((var(--titlebar-height)) / 1.8);
   left: 0;
   top: 0;
   width: calc((var(--titlebar-height)) / 1.8);
   z-index: 2;
 }
-
-.zoom::after {
+:root:where(:global(#beos)) .zoom::after {
   bottom: 0;
   height: calc((var(--titlebar-height)) / 1.4);
   right: 0;
   width: calc((var(--titlebar-height)) / 1.4);
   z-index: 1;
 }
-
-[aria-current="true"] .zoom::before,
-[aria-current="true"] .zoom::after {
-  background-image: var(--titlebar--active_button-background);
+:root:where(:global(#mac-os-classic)) .zoom::after {
+  bottom: 33%;
+  border-color: var(--border-color);
+  border-width: 0 calc(var(--border-width) * 1.5)
+    calc(var(--border-width) * 1.5) 0;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 33%;
+  top: 0;
 }
 
-.zoom:active::before,
-.zoom:active::after,
-.zoom:focus-visible::before,
-.zoom:focus-visible::after {
-  background-image: var(--titlebar_button-background--active);
+:root:where(:global(#beos)) [aria-current="true"] .zoom::before,
+:root:where(:global(#beos)) [aria-current="true"] .zoom::after {
+  background-image: var(--titlebar--active_button-background, none);
+}
+
+:root:where(:global(#beos)) .zoom:active::before,
+:root:where(:global(#beos)) .zoom:active::after,
+:root:where(:global(#beos)) .zoom:focus-visible::before,
+:root:where(:global(#beos)) .zoom:focus-visible::after {
+  background-image: var(--titlebar_button-background--active, none);
+}
+
+.collapse {
+  order: 4;
+}
+
+:root:where(:global(#mac-os-classic)) .collapse::after {
+  bottom: 33%;
+  border-color: var(--border-color);
+  border-width: calc(var(--border-width) * 1.5) 0
+    calc(var(--border-width) * 1.5);
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 33%;
 }

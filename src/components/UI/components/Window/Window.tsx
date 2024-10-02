@@ -42,6 +42,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
 
   const applications = useStore((state) => state.applications);
   const files = useStore((state) => state.files);
+  const settings = useStore((state) => state.settings);
   const stackingOrder = useStore((state) => state.stackingOrder);
   const types = useStore((state) => state.types);
 
@@ -142,7 +143,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           [styles.dragging]: isDragging,
           [styles.zoomed]: zoomed,
         })}
-        hidden={hidden}
+        hidden={settings.theme === "beos" && hidden}
         id={id}
         onBlur={(e) => {
           if (

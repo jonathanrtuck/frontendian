@@ -25,7 +25,6 @@
   right: 0;
   top: 0;
 }
-
 :root:where(:global(#mac-os-classic)) .root {
   padding-top: calc(var(--desktop-padding) + var(--menu--bar-height));
 }

@@ -8,6 +8,8 @@ import {
   closeWindow,
   hideWindow,
   moveWindowTitlebar,
+  showWindow,
+  useStore,
   zoomWindow,
 } from "@/store";
 import { getTargetElement } from "@/utils";
@@ -19,7 +21,10 @@ export type TitlebarProps = {
 };
 
 export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
-  const { id, scrollable, title, titlebarLeft } = useContext(WindowContext);
+  const settings = useStore((state) => state.settings);
+
+  const { hidden, id, scrollable, title, titlebarLeft } =
+    useContext(WindowContext);
 
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<number>(0);
@@ -57,29 +62,41 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
         className={clsx(styles.root, {
           [styles.dragging]: isDragging,
         })}
-        onDoubleClick={(e) => {
-          const targetElement = getTargetElement(e);
-          const isButton = targetElement?.classList.contains(styles.button);
+        onDoubleClick={
+          settings.theme === "beos"
+            ? (e) => {
+                const targetElement = getTargetElement(e);
+                const isButton = targetElement?.classList.contains(
+                  styles.button
+                );
 
-          if (!isButton) {
-            hideWindow({ id });
-          }
-        }}
-        onPointerUp={(e) => {
-          const now = Date.now();
-          const targetElement = getTargetElement(e);
-          const isButton = targetElement?.classList.contains(styles.button);
+                if (!isButton) {
+                  hideWindow({ id });
+                }
+              }
+            : undefined
+        }
+        onPointerUp={
+          settings.theme === "beos"
+            ? (e) => {
+                const now = Date.now();
+                const targetElement = getTargetElement(e);
+                const isButton = targetElement?.classList.contains(
+                  styles.button
+                );
 
-          if (!isButton) {
-            const isDoubleClick = now - touchRef.current < 500;
+                if (!isButton) {
+                  const isDoubleClick = now - touchRef.current < 500;
 
-            if (isDoubleClick) {
-              hideWindow({ id });
-            }
+                  if (isDoubleClick) {
+                    hideWindow({ id });
+                  }
 
-            touchRef.current = now;
-          }
-        }}
+                  touchRef.current = now;
+                }
+              }
+            : undefined
+        }
         ref={rootRef}>
         <h1 className={styles.title} id={`${id}-title`} title={title}>
           {title}
@@ -103,6 +120,18 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
               zoomWindow({ id });
             }}
             title="Zoom"
+            type="button"
+          />
+        )}
+        {settings.theme === "mac-os-classic" && (
+          <button
+            aria-label="Collapse"
+            className={clsx(styles.button, styles.collapse)}
+            draggable={false}
+            onClick={() => {
+              hidden ? showWindow({ id }) : hideWindow({ id });
+            }}
+            title="Collapse"
             type="button"
           />
         )}

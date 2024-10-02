@@ -1,5 +1,12 @@
 import { Font } from "@/types";
 
+export const FONT_CHARCOAL: Font = {
+  format: "truetype",
+  id: "font-charcoal",
+  title: "Charcoal",
+  url: `${process.env.PUBLIC_URL}/fonts/Charcoal.ttf`,
+};
+
 export const FONT_DIGITAL_DISMAY: Font = {
   format: "opentype",
   id: "font-digital-dismay",

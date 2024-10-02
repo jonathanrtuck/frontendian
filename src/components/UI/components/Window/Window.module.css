@@ -1,7 +1,12 @@
-:root {
+:root:where(:global(#beos)) {
   --window-background-color: rgb(232, 232, 232);
-  --window--active-background-color: rgb(224, 224, 224);
   --window-padding: 0.125rem;
+  --window--active-background-color: rgb(224, 224, 224);
+}
+:root:where(:global(#mac-os-classic)) {
+  --window-background-color: rgb(204, 204, 204);
+  --window-padding: 0;
+  --window--active-background-color: rgb(204, 204, 204);
 }
 
 .root {

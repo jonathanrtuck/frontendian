@@ -9,12 +9,17 @@
 }
 
 .content {
-  background-color: rgb(255, 255, 255);
-  border-width: var(--border-width);
   box-sizing: content-box;
   cursor: var(--cursor--default);
   flex: 1 1 auto;
   overflow: hidden;
+}
+:root:where(:global(#beos)) .content {
+  background-color: rgb(255, 255, 255);
+  border-width: var(--border-width);
+}
+:root:where(:global(#mac-os-classic)) .content {
+  background-color: rgb(238, 238, 238);
 }
 
 .content:where(.resizing) {

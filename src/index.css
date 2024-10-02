@@ -1,5 +1,4 @@
 :root {
-  --border-color: rgb(160, 160, 160);
   --border-radius: 0.75rem;
   --border-width: 0.0625rem;
   --cursor--default: url("/public/cursors/Default.svg"), default;
@@ -11,6 +10,7 @@
     "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
     "Helvetica Neue", sans-serif;
   --font-family--digital-dismay: "DigitalDismay";
+  --font-family--charcoal: "Charcoal";
   --font-family--mine-sweeper: "MineSweeper";
   --font-family--monospace: ui-monospace, Menlo, Monaco, "Cascadia Mono",
     "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
@@ -22,6 +22,12 @@
   font-family: var(--font-family--default);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+:root:where(#beos) {
+  --border-color: rgb(160, 160, 160);
+}
+:root:where(#mac-os-classic) {
+  --border-color: rgb(38, 38, 38);
 }
 
 body {

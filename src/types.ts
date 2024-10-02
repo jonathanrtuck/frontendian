@@ -54,7 +54,15 @@ export type File = {
 );
 
 export type Font = {
-  format: "opentype"; // add others as needed
+  // @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src#font_formats
+  format:
+    | "collection"
+    | "embedded-opentype"
+    | "opentype"
+    | "svg"
+    | "truetype"
+    | "woff"
+    | "woff2";
   id: ID;
   title: string;
   url: URL;
