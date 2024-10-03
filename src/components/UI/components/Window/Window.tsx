@@ -143,7 +143,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           [styles.dragging]: isDragging,
           [styles.zoomed]: zoomed,
         })}
-        hidden={settings.theme === "beos" && hidden}
+        hidden={settings.theme === "BeOS" && hidden}
         id={id}
         onBlur={(e) => {
           if (

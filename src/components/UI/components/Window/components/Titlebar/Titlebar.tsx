@@ -1,3 +1,4 @@
+import { css, CSSObject } from "@emotion/react";
 import clsx from "clsx";
 import Draggable from "react-draggable";
 import { FunctionComponent, useContext, useRef, useState } from "react";
@@ -12,6 +13,7 @@ import {
   useStore,
   zoomWindow,
 } from "@/store";
+import { byTheme } from "@/theme";
 import { getTargetElement } from "@/utils";
 
 import styles from "./Titlebar.module.css";
@@ -55,7 +57,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
         }
       }}
       position={
-        settings.theme === "beos"
+        settings.theme === "BeOS"
           ? {
               x: Math.min(titlebarLeft + offset, maxWidth - rootWidth + offset),
               y: 0,
@@ -63,11 +65,36 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
           : undefined
       }>
       <header
-        className={clsx(styles.root, {
-          [styles.dragging]: isDragging,
-        })}
+        css={css(
+          {
+            alignItems: "center",
+            backgroundColor: "var(--window-background-color)",
+            boxSizing: "content-box",
+            display: "flex",
+            height: "var(--titlebar-height)",
+            padding: "var(--titlebar-padding)",
+          },
+          byTheme({
+            BeOS: {
+              borderWidth: "var(--border-width) var(--border-width) 0",
+              bottom: "100%",
+              left: 0,
+              margin:
+                "0 calc((var(--border-width) + var(--window-padding)) * -1)",
+              maxWidth:
+                "calc(100% - var(--window-padding) - var(--window-padding))",
+              padding: "var(--window-padding)",
+              position: "absolute",
+              zIndex: 1,
+            },
+            MacOSClassic: {
+              borderWidth: "0 0 var(--border-width)",
+              gap: "0.25rem",
+            },
+          })
+        )}
         onDoubleClick={
-          settings.theme === "beos"
+          settings.theme === "BeOS"
             ? (e) => {
                 const targetElement = getTargetElement(e);
                 const isButton = targetElement?.classList.contains(
@@ -81,7 +108,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
             : undefined
         }
         onPointerUp={
-          settings.theme === "beos"
+          settings.theme === "BeOS"
             ? (e) => {
                 const now = Date.now();
                 const targetElement = getTargetElement(e);
@@ -127,7 +154,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
             type="button"
           />
         )}
-        {settings.theme === "mac-os-classic" && (
+        {settings.theme === "MacOSClassic" && (
           <button
             aria-label="Collapse"
             className={clsx(styles.button, styles.collapse)}

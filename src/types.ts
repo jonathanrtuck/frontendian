@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import { MenuProps, MenuitemProps } from "@/components/Menu";
+import { THEMES } from "@/constants";
 
 export type Application = ApplicationConfiguration & {
   windowIds: ID[];
@@ -88,7 +89,7 @@ export const enum MimeType {
 }
 
 export type Settings = {
-  theme: "beos" | "mac-os-classic";
+  theme: Theme;
 };
 
 export type State = {
@@ -110,6 +111,8 @@ export type State = {
   >;
   windows: Window[];
 };
+
+export type Theme = (typeof THEMES)[number];
 
 export type URL = string;
 

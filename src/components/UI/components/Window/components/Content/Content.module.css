@@ -14,11 +14,11 @@
   flex: 1 1 auto;
   overflow: hidden;
 }
-:root:where(:global(#beos)) .content {
+:root:where(:global(#BeOS)) .content {
   background-color: rgb(255, 255, 255);
   border-width: var(--border-width);
 }
-:root:where(:global(#mac-os-classic)) .content {
+:root:where(:global(#MacOSClassic)) .content {
   background-color: rgb(238, 238, 238);
 }
 

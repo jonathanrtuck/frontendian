@@ -1,10 +1,10 @@
 :root {
   --desktop-padding: 1rem;
 }
-:root:where(:global(#beos)) {
+:root:where(:global(#BeOS)) {
   --desktop-background-color: rgb(51, 102, 152);
 }
-:root:where(:global(#mac-os-classic)) {
+:root:where(:global(#MacOSClassic)) {
   --desktop-background-color: rgb(99, 99, 152);
 }
 
@@ -25,7 +25,7 @@
   right: 0;
   top: 0;
 }
-:root:where(:global(#mac-os-classic)) .root {
+:root:where(:global(#MacOSClassic)) .root {
   padding-top: calc(var(--desktop-padding) + var(--menu--bar-height));
 }
 

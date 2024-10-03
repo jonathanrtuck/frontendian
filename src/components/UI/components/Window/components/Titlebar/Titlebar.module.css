@@ -1,4 +1,4 @@
-:root:where(:global(#beos)) {
+:root:where(:global(#BeOS)) {
   --titlebar-background--active: linear-gradient(
     to bottom,
     rgb(255, 237, 172),
@@ -24,7 +24,7 @@
   --titlebar_button-border-color: rgb(173, 136, 0);
   --titlebar_button-border-radius: 0.125rem;
 }
-:root:where(:global(#mac-os-classic)) {
+:root:where(:global(#MacOSClassic)) {
   --titlebar-height: 1rem;
   --titlebar-padding: 0.25rem;
 
@@ -39,11 +39,11 @@
   align-items: center;
   background-color: var(--window-background-color);
   box-sizing: content-box;
-  height: var(--titlebar-height);
   display: flex;
+  height: var(--titlebar-height);
   padding: var(--titlebar-padding);
 }
-:root:where(:global(#beos)) .root {
+:root:where(:global(#BeOS)) .root {
   border-width: var(--border-width) var(--border-width) 0;
   bottom: 100%;
   left: 0;
@@ -53,11 +53,11 @@
   position: absolute;
   z-index: 1;
 }
-:root:where(:global(#mac-os-classic)) .root {
+:root:where(:global(#MacOSClassic)) .root {
   border-width: 0 0 var(--border-width);
   gap: 0.25rem;
 }
-:root:where(:global(#mac-os-classic)) .root::before {
+:root:where(:global(#MacOSClassic)) .root::before {
   border-color: rgb(235, 235, 235) rgb(138, 138, 138) rgb(138, 138, 138)
     rgb(235, 235, 235);
   border-width: var(--border-width);
@@ -87,19 +87,19 @@
   user-select: none;
   white-space: nowrap;
 }
-:root:where(:global(#beos)) .title {
+:root:where(:global(#BeOS)) .title {
   font-size: 1rem;
   margin: 0 1rem;
 }
-:root:where(:global(#mac-os-classic)) .title {
+:root:where(:global(#MacOSClassic)) .title {
   display: flex;
   flex: 1 1 auto;
   font-family: var(--font-family--charcoal);
   font-size: 0.875rem;
   gap: 0.5rem;
 }
-:root:where(:global(#mac-os-classic)) .title::before,
-:root:where(:global(#mac-os-classic)) .title::after {
+:root:where(:global(#MacOSClassic)) .title::before,
+:root:where(:global(#MacOSClassic)) .title::after {
   background: repeating-linear-gradient(
     rgb(221, 221, 221),
     rgb(221, 221, 221) var(--border-width),
@@ -123,11 +123,11 @@
   position: relative;
   width: var(--titlebar-height);
 }
-:root:where(:global(#mac-os-classic)) .button {
+:root:where(:global(#MacOSClassic)) .button {
   border-color: rgb(128, 128, 128) rgb(255, 255, 255) rgb(255, 255, 255)
     rgb(128, 128, 128);
 }
-:root:where(:global(#mac-os-classic)) .button::before {
+:root:where(:global(#MacOSClassic)) .button::before {
   border-color: rgb(255, 255, 255) rgb(128, 128, 128) rgb(128, 128, 128)
     rgb(255, 255, 255);
   border-width: var(--border-width);
@@ -149,17 +149,17 @@
 .close {
   order: 1;
 }
-:root:where(:global(#beos)) .close {
+:root:where(:global(#BeOS)) .close {
   border-color: var(--titlebar_button-border-color, --border-color);
   border-radius: var(--titlebar_button-border-radius);
 }
 
-:root:where(:global(#beos)) [aria-current="true"] .close {
+:root:where(:global(#BeOS)) [aria-current="true"] .close {
   background-image: var(--titlebar--active_button-background);
 }
 
-:root:where(:global(#beos)) .close:active,
-:root:where(:global(#beos)) .close:focus-visible {
+:root:where(:global(#BeOS)) .close:active,
+:root:where(:global(#BeOS)) .close:focus-visible {
   background-image: var(--titlebar_button-background--active);
 }
 
@@ -167,8 +167,8 @@
   order: 3;
 }
 
-:root:where(:global(#beos)) .zoom::before,
-:root:where(:global(#beos)) .zoom::after {
+:root:where(:global(#BeOS)) .zoom::before,
+:root:where(:global(#BeOS)) .zoom::after {
   background-image: var(--titlebar_button-background);
   border-color: var(--titlebar_button-border-color, --border-color);
   border-radius: var(--titlebar_button-border-radius);
@@ -177,21 +177,21 @@
   display: block;
   position: absolute;
 }
-:root:where(:global(#beos)) .zoom::before {
+:root:where(:global(#BeOS)) .zoom::before {
   height: calc((var(--titlebar-height)) / 1.8);
   left: 0;
   top: 0;
   width: calc((var(--titlebar-height)) / 1.8);
   z-index: 2;
 }
-:root:where(:global(#beos)) .zoom::after {
+:root:where(:global(#BeOS)) .zoom::after {
   bottom: 0;
   height: calc((var(--titlebar-height)) / 1.4);
   right: 0;
   width: calc((var(--titlebar-height)) / 1.4);
   z-index: 1;
 }
-:root:where(:global(#mac-os-classic)) .zoom::after {
+:root:where(:global(#MacOSClassic)) .zoom::after {
   bottom: 33%;
   border-color: var(--border-color);
   border-width: 0 calc(var(--border-width) * 1.5)
@@ -203,15 +203,15 @@
   top: 0;
 }
 
-:root:where(:global(#beos)) [aria-current="true"] .zoom::before,
-:root:where(:global(#beos)) [aria-current="true"] .zoom::after {
+:root:where(:global(#BeOS)) [aria-current="true"] .zoom::before,
+:root:where(:global(#BeOS)) [aria-current="true"] .zoom::after {
   background-image: var(--titlebar--active_button-background, none);
 }
 
-:root:where(:global(#beos)) .zoom:active::before,
-:root:where(:global(#beos)) .zoom:active::after,
-:root:where(:global(#beos)) .zoom:focus-visible::before,
-:root:where(:global(#beos)) .zoom:focus-visible::after {
+:root:where(:global(#BeOS)) .zoom:active::before,
+:root:where(:global(#BeOS)) .zoom:active::after,
+:root:where(:global(#BeOS)) .zoom:focus-visible::before,
+:root:where(:global(#BeOS)) .zoom:focus-visible::after {
   background-image: var(--titlebar_button-background--active, none);
 }
 
@@ -219,7 +219,7 @@
   order: 4;
 }
 
-:root:where(:global(#mac-os-classic)) .collapse::after {
+:root:where(:global(#MacOSClassic)) .collapse::after {
   bottom: 33%;
   border-color: var(--border-color);
   border-width: calc(var(--border-width) * 1.5) 0

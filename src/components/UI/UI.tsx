@@ -46,8 +46,8 @@ export const UI: FunctionComponent = () => {
           </Dialog>
         }>
         <Desktop />
-        {settings.theme === "mac-os-classic" && <Menubar />}
-        {settings.theme === "beos" && <Deskbar />}
+        {settings.theme === "BeOS" && <Deskbar />}
+        {settings.theme === "MacOSClassic" && <Menubar />}
         {windows.map((window) => (
           <Window key={window.id} {...window} />
         ))}

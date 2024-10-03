@@ -38,7 +38,7 @@ export const INITIAL_STATE: State = {
   fonts: Object.values(fonts),
   openApplicationIds: [APPLICATION_TRACKER.id],
   settings: {
-    theme: "mac-os-classic",
+    theme: "MacOSClassic",
   },
   stackingOrder: [DESKBAR_ID],
   types: {
@@ -54,4 +54,5 @@ export const INITIAL_STATE: State = {
   windows: [],
 };
 export const IS_DEBUG_MODE = process.env.NODE_ENV === "development";
+export const THEMES = ["BeOS", "MacOSClassic"] as const;
 export const UNTITLED_WINDOW_TITLE = "Untitled";

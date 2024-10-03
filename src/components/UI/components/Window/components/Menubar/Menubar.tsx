@@ -19,13 +19,13 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
   const settings = useStore((state) => state.settings);
 
   useEffect(() => {
-    if (settings.theme === "mac-os-classic") {
+    if (settings.theme === "MacOSClassic") {
       console.debug(children);
     }
   }, [children, settings.theme]);
 
   switch (settings.theme) {
-    case "mac-os-classic":
+    case "MacOSClassic":
       return null;
     default:
       return (
