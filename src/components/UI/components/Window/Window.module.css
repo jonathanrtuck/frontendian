@@ -5,7 +5,7 @@
 }
 :root:where(:global(#mac-os-classic)) {
   --window-background-color: rgb(204, 204, 204);
-  --window-padding: 0;
+  --window-padding: 0.25rem;
   --window--active-background-color: rgb(204, 204, 204);
 }
 

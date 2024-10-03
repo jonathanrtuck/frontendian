@@ -54,10 +54,14 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
           moveWindowTitlebar({ id, left: x - offset });
         }
       }}
-      position={{
-        x: Math.min(titlebarLeft + offset, maxWidth - rootWidth + offset),
-        y: 0,
-      }}>
+      position={
+        settings.theme === "beos"
+          ? {
+              x: Math.min(titlebarLeft + offset, maxWidth - rootWidth + offset),
+              y: 0,
+            }
+          : undefined
+      }>
       <header
         className={clsx(styles.root, {
           [styles.dragging]: isDragging,
