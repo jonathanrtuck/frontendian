@@ -9,7 +9,6 @@ import {
 } from "react";
 
 import { MenuProps, MenuitemProps } from "@/components/Menu";
-import { THEMES } from "@/constants";
 
 export type Application = ApplicationConfiguration & {
   windowIds: ID[];
@@ -88,18 +87,14 @@ export const enum MimeType {
   TextMarkdown = "text/markdown",
 }
 
-export type Settings = {
-  theme: Theme;
-};
-
 export type State = {
   applications: Application[]; // the order is used as the display order in the Deskbar MainMenu
   desktop: ID[]; // the order is used as the display order on the Desktop
   files: File[];
   fonts: Font[];
   openApplicationIds: ID[]; // the order is used as the display order in the Deskbar Applications Menu
-  settings: Settings;
   stackingOrder: ID[];
+  theme: Theme;
   types: Partial<
     Record<
       MimeType,
@@ -112,7 +107,30 @@ export type State = {
   windows: Window[];
 };
 
-export type Theme = (typeof THEMES)[number];
+export type Theme = {
+  borderColor: string;
+  borderWidth: string;
+  deskbar: {
+    hidden: boolean;
+  };
+  id: ID;
+  menubar: {
+    windowed: boolean;
+  };
+  titlebar: {
+    collapsible: boolean;
+    doubleClick: boolean;
+    draggable: boolean;
+    height: string;
+    padding: string;
+  };
+  window: {
+    backgroundColor: string;
+    backgroundColorActive: string;
+    hidable: boolean;
+    padding: string;
+  };
+};
 
 export type URL = string;
 

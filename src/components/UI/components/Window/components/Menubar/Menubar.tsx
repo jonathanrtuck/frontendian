@@ -16,30 +16,29 @@ export type MenubarProps = PropsWithChildren;
 export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
   const { active, menubarRef } = useContext(WindowContext);
 
-  const settings = useStore((state) => state.settings);
+  const theme = useStore((state) => state.theme);
 
   useEffect(() => {
-    if (settings.theme === "MacOSClassic") {
+    if (!theme.menubar.windowed) {
       console.debug(children);
     }
-  }, [children, settings.theme]);
+  }, [children, theme]);
 
-  switch (settings.theme) {
-    case "MacOSClassic":
-      return null;
-    default:
-      return (
-        <Menu
-          bar
-          className={styles.root}
-          draggable={false}
-          horizontal
-          inert={!active ? "" : undefined}
-          ref={menubarRef}>
-          {children}
-        </Menu>
-      );
+  if (theme.menubar.windowed) {
+    return (
+      <Menu
+        bar
+        className={styles.root}
+        draggable={false}
+        horizontal
+        inert={!active ? "" : undefined}
+        ref={menubarRef}>
+        {children}
+      </Menu>
+    );
   }
+
+  return null;
 };
 
 Menubar.displayName = "Menubar";

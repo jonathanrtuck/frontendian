@@ -2,11 +2,13 @@ import * as applicationConfigurations from "@/applications";
 import * as files from "@/files";
 import * as fonts from "@/fonts";
 import { Pdf, Text } from "@/icons";
+import * as themes from "@/themes";
 import { ID, MimeType, State, Window } from "@/types";
 
 const { APPLICATION_PDF_VIEWER, APPLICATION_STYLED_EDIT, APPLICATION_TRACKER } =
   applicationConfigurations;
 
+export const CLASSNAME_PREFIX = "c-";
 export const DEFAULT_WINDOW_HEIGHT = 450;
 export const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
 export const DEFAULT_WINDOW_POSITION_OFFSET = 96;
@@ -37,10 +39,8 @@ export const INITIAL_STATE: State = {
   files: Object.values(files),
   fonts: Object.values(fonts),
   openApplicationIds: [APPLICATION_TRACKER.id],
-  settings: {
-    theme: "MacOSClassic",
-  },
   stackingOrder: [DESKBAR_ID],
+  theme: themes.THEME_BEOS,
   types: {
     [MimeType.ApplicationPdf]: {
       application: APPLICATION_PDF_VIEWER.id,
@@ -54,5 +54,4 @@ export const INITIAL_STATE: State = {
   windows: [],
 };
 export const IS_DEBUG_MODE = process.env.NODE_ENV === "development";
-export const THEMES = ["BeOS", "MacOSClassic"] as const;
 export const UNTITLED_WINDOW_TITLE = "Untitled";

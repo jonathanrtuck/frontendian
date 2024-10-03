@@ -23,12 +23,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-:root:where(#BeOS) {
-  --border-color: rgb(160, 160, 160);
-}
-:root:where(#MacOSClassic) {
-  --border-color: rgb(38, 38, 38);
-}
 
 body {
   bottom: 0;

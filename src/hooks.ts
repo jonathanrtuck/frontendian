@@ -1,3 +1,4 @@
+import { css, CSSObject, SerializedStyles } from "@emotion/react";
 import {
   DependencyList,
   RefObject,
@@ -6,6 +7,9 @@ import {
   useMemo,
   useState,
 } from "react";
+
+import * as themes from "@/themes";
+import { Theme } from "@/types";
 
 type Dimensions = { height: number; width: number };
 
@@ -56,6 +60,14 @@ export const useComputedCustomProperty = (property: string): number =>
     // px values
     return parseFloat(value);
   }, [property]);
+
+export const useCssByTheme = (
+  theme: Theme
+): ((...args: CSSObject[]) => SerializedStyles) => {
+  const index = Object.values(themes).findIndex(({ id }) => id === theme.id);
+
+  return (...args) => css(args[index] ?? {});
+};
 
 export const useElementDimensions = (
   ref: RefObject<HTMLElement>,
