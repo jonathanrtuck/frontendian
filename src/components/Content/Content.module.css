@@ -90,3 +90,89 @@
     }
   }
 }
+
+:root:global(.theme-mac-os-classic) {
+  --content-scrollbar-size: 1rem;
+
+  .root {
+    flex: 1 1 auto;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .content {
+    background-color: rgb(255, 255, 255);
+    border-width: var(--border-width);
+    box-sizing: content-box;
+    cursor: var(--cursor--default);
+    flex: 1 1 auto;
+    overflow: hidden;
+
+    &:where(.resizing) {
+      pointer-events: none;
+    }
+  }
+
+  .scrollable {
+    overflow: scroll;
+
+    /* note: custom scrollbar styles not supported in ios >14 😔 */
+    &::-webkit-scrollbar {
+      appearance: none;
+      background-color: rgb(170, 170, 170);
+      height: var(--content-scrollbar-size);
+      width: var(--content-scrollbar-size);
+    }
+
+    &::-webkit-scrollbar-button {
+      display: none;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-color: var(--border-color);
+      border-style: solid;
+    }
+
+    &::-webkit-scrollbar-thumb:horizontal {
+      background-color: rgb(153, 153, 248);
+      border-width: var(--border-width) var(--border-width) 0
+        var(--border-width);
+    }
+
+    &::-webkit-scrollbar-thumb:vertical {
+      background-color: rgb(153, 153, 248);
+      border-width: var(--border-width) 0 var(--border-width)
+        var(--border-width);
+    }
+
+    &::-webkit-scrollbar-track {
+      border-color: var(--border-color);
+      border-style: solid;
+    }
+
+    &::-webkit-scrollbar-track:horizontal {
+      border-width: var(--border-width) 0 0 0;
+    }
+
+    &::-webkit-scrollbar-track:vertical {
+      border-width: 0 0 0 var(--border-width);
+    }
+  }
+
+  [aria-current="false"] .scrollable {
+    &::-webkit-scrollbar {
+      background-color: rgb(239, 239, 239);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      display: none;
+    }
+  }
+
+  .resize {
+    [aria-current="false"] & {
+      color: transparent;
+      pointer-events: none;
+    }
+  }
+}

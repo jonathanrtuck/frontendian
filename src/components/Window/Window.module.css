@@ -68,3 +68,32 @@
     z-index: 1;
   }
 }
+
+:root:global(.theme-mac-os-classic) {
+  --window-background-color: rgb(221, 221, 221);
+  --window-padding: 0.25rem;
+  --window--active-background-color: rgb(204, 204, 204);
+
+  .root {
+    background-color: var(--window-background-color);
+    border-width: var(--border-width);
+    padding: var(--window-padding);
+    position: fixed;
+
+    &:focus-within {
+      background-color: var(--window--active-background-color);
+      outline: 0;
+    }
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  .content {
+    cursor: var(--cursor--default);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+}

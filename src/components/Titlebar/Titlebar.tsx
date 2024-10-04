@@ -130,6 +130,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
         {Boolean(theme.titlebar.collapsible) && (
           <button
             aria-label="Collapse"
+            className={clsx(styles.button, styles.collapse)}
             draggable={false}
             onClick={() => {
               hidden ? showWindow({ id }) : hideWindow({ id });
