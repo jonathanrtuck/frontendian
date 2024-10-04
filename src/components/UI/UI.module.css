@@ -1,4 +1,5 @@
 :root {
+  --font-family--charcoal: "Charcoal";
   --font-family--digital-dismay: "DigitalDismay";
   --font-family--mine-sweeper: "MineSweeper";
 }
@@ -20,6 +21,10 @@
     "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
   --text-color: rgb(255, 255, 255);
   --text-color--disabled: rgb(160, 160, 160);
+
+  body {
+    font-family: var(--font-family--default);
+  }
 }
 
 :root:global(.theme-mac-os-classic) {
@@ -42,5 +47,6 @@
 
   body {
     border-radius: 0.5rem;
+    font-family: var(--font-family--charcoal);
   }
 }
