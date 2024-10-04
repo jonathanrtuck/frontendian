@@ -2,6 +2,7 @@ import * as applicationConfigurations from "@/applications";
 import * as files from "@/files";
 import * as fonts from "@/fonts";
 import { Pdf, Text } from "@/icons";
+import * as themes from "@/themes";
 import { ID, MimeType, State, Window } from "@/types";
 
 const { APPLICATION_PDF_VIEWER, APPLICATION_STYLED_EDIT, APPLICATION_TRACKER } =
@@ -38,6 +39,7 @@ export const INITIAL_STATE: State = {
   fonts: Object.values(fonts),
   openApplicationIds: [APPLICATION_TRACKER.id],
   stackingOrder: [DESKBAR_ID],
+  theme: themes.THEME_BEOS,
   types: {
     [MimeType.ApplicationPdf]: {
       application: APPLICATION_PDF_VIEWER.id,

@@ -1,10 +1,11 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useEffect, useLayoutEffect } from "react";
 import { Helmet } from "react-helmet";
 
 import { Dialog } from "@/components/Dialog";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FILE_README_MD } from "@/files";
 import { openFile, useStore } from "@/store";
+import * as themes from "@/themes";
 
 import { Deskbar } from "./components/Deskbar";
 import { Desktop } from "./components/Desktop";
@@ -13,11 +14,18 @@ import { Window } from "./components/Window";
 export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);
   const fonts = useStore((state) => state.fonts);
+  const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
 
   useEffect(() => {
     openFile({ id: FILE_README_MD.id });
   }, []);
+
+  useLayoutEffect(() => {
+    Object.values(themes).forEach(({ id }) => {
+      document.documentElement.classList.toggle(id, id === theme.id);
+    });
+  }, [theme]);
 
   return (
     <>

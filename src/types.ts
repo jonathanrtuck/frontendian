@@ -86,6 +86,7 @@ export type State = {
   fonts: Font[];
   openApplicationIds: ID[]; // the order is used as the display order in the Deskbar Applications Menu
   stackingOrder: ID[];
+  theme: Theme;
   types: Partial<
     Record<
       MimeType,
@@ -96,6 +97,24 @@ export type State = {
     >
   >;
   windows: Window[];
+};
+
+export type Theme = {
+  deskbar: {
+    hidden: boolean;
+  };
+  id: ID;
+  menubar: {
+    windowed: boolean;
+  };
+  titlebar: {
+    collapsible: boolean;
+    doubleClick: boolean;
+    draggable: boolean;
+  };
+  window: {
+    hidable: boolean;
+  };
 };
 
 export type URL = string;
