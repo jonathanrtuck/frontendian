@@ -1,0 +1,40 @@
+import { FunctionComponent, useRef } from "react";
+
+import { Applications, MainMenu, Tray } from "@/components";
+import { DESKBAR_ID } from "@/constants";
+import { focusDeskbar, useStore } from "@/store";
+
+export const Deskbar: FunctionComponent = () => {
+  const stackingOrder = useStore((state) => state.stackingOrder);
+
+  const rootRef = useRef<HTMLElement>(null);
+
+  const zIndex = stackingOrder.indexOf(DESKBAR_ID);
+  const isFocused = stackingOrder.at(-1) === DESKBAR_ID;
+
+  return (
+    <header
+      aria-label="Deskbar"
+      className="deskbar"
+      id={DESKBAR_ID}
+      onFocus={({ relatedTarget }) => {
+        if (
+          !isFocused &&
+          (!relatedTarget || !rootRef.current?.contains(relatedTarget))
+        ) {
+          focusDeskbar();
+        }
+      }}
+      ref={rootRef}
+      style={{
+        zIndex,
+      }}
+      tabIndex={-1}>
+      <MainMenu />
+      <Tray />
+      <Applications />
+    </header>
+  );
+};
+
+Deskbar.displayName = "Deskbar";

@@ -8,7 +8,7 @@ import {
   SVGAttributes,
 } from "react";
 
-import { MenuProps, MenuitemProps } from "@/components/Menu";
+import { MenuProps, MenuitemProps } from "@/components";
 
 export type Application = ApplicationConfiguration & {
   windowIds: ID[];
@@ -108,28 +108,24 @@ export type State = {
 };
 
 export type Theme = {
-  borderColor: string;
-  borderWidth: string;
-  deskbar: {
-    hidden: boolean;
+  components: {
+    deskbar: {
+      hidden: boolean;
+    };
+    menubar: {
+      windowed: boolean;
+    };
+    titlebar: {
+      collapsible: boolean;
+      doubleClick: boolean;
+      draggable: boolean;
+    };
+    window: {
+      hidable: boolean;
+    };
   };
   id: ID;
-  menubar: {
-    windowed: boolean;
-  };
-  titlebar: {
-    collapsible: boolean;
-    doubleClick: boolean;
-    draggable: boolean;
-    height: string;
-    padding: string;
-  };
-  window: {
-    backgroundColor: string;
-    backgroundColorActive: string;
-    hidable: boolean;
-    padding: string;
-  };
+  url: URL;
 };
 
 export type URL = string;

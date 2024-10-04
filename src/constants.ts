@@ -8,7 +8,6 @@ import { ID, MimeType, State, Window } from "@/types";
 const { APPLICATION_PDF_VIEWER, APPLICATION_STYLED_EDIT, APPLICATION_TRACKER } =
   applicationConfigurations;
 
-export const CLASSNAME_PREFIX = "c-";
 export const DEFAULT_WINDOW_HEIGHT = 450;
 export const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
 export const DEFAULT_WINDOW_POSITION_OFFSET = 96;

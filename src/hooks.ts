@@ -1,4 +1,3 @@
-import { css, CSSObject, SerializedStyles } from "@emotion/react";
 import {
   DependencyList,
   RefObject,
@@ -8,8 +7,7 @@ import {
   useState,
 } from "react";
 
-import * as themes from "@/themes";
-import { Theme } from "@/types";
+import { useStore } from "@/store";
 
 type Dimensions = { height: number; width: number };
 
@@ -42,8 +40,10 @@ export const useClock = (): Date => {
 };
 
 // get the current value of a css variable in px
-export const useComputedCustomProperty = (property: string): number =>
-  useMemo<number>(() => {
+export const useComputedCustomProperty = (property: string): number => {
+  const theme = useStore((state) => state.theme);
+
+  return useMemo<number>(() => {
     const fontSize = parseInt(
       getComputedStyle(document.documentElement).fontSize,
       10
@@ -59,14 +59,7 @@ export const useComputedCustomProperty = (property: string): number =>
 
     // px values
     return parseFloat(value);
-  }, [property]);
-
-export const useCssByTheme = (
-  theme: Theme
-): ((...args: CSSObject[]) => SerializedStyles) => {
-  const index = Object.values(themes).findIndex(({ id }) => id === theme.id);
-
-  return (...args) => css(args[index] ?? {});
+  }, [property, theme.id]);
 };
 
 export const useElementDimensions = (
