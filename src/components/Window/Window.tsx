@@ -45,6 +45,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
   const applications = useStore((state) => state.applications);
   const files = useStore((state) => state.files);
   const stackingOrder = useStore((state) => state.stackingOrder);
+  const theme = useStore((state) => state.theme);
   const types = useStore((state) => state.types);
 
   const menubarRef = useRef<HTMLMenuElement>(null);
@@ -144,7 +145,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           [styles.dragging]: isDragging,
           [styles.zoomed]: zoomed,
         })}
-        hidden={hidden}
+        hidden={Boolean(theme.window.hidable) && hidden}
         id={id}
         onBlur={(e) => {
           if (
