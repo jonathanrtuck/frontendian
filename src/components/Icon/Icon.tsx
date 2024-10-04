@@ -3,16 +3,16 @@ import { FunctionComponent } from "react";
 import { File } from "@/icons";
 import { IconComponent } from "@/types";
 
-import styles from "./Item.module.css";
+import styles from "./Icon.module.css";
 
 export type IconProps = {
-  Icon?: IconComponent;
+  Component?: IconComponent;
   onClick(): void;
   title: string;
 };
 
-export const Item: FunctionComponent<IconProps> = ({
-  Icon = File,
+export const Icon: FunctionComponent<IconProps> = ({
+  Component = File,
   onClick,
   title,
 }) => (
@@ -23,9 +23,9 @@ export const Item: FunctionComponent<IconProps> = ({
     tabIndex={0}
     title={title}
     type="button">
-    <Icon aria-hidden className={styles.icon} />
+    <Component aria-hidden className={styles.icon} />
     <span className={styles.title}>{title}</span>
   </button>
 );
 
-Item.displayName = "Item";
+Icon.displayName = "Icon";

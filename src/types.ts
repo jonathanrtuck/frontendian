@@ -8,7 +8,7 @@ import {
   SVGAttributes,
 } from "react";
 
-import { MenuProps, MenuitemProps } from "@/components/Menu";
+import { MenuProps, MenuitemProps } from "@/components";
 
 export type Application = ApplicationConfiguration & {
   windowIds: ID[];

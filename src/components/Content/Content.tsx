@@ -9,6 +9,7 @@ import {
 } from "react";
 import { Resizable } from "react-resizable";
 
+import { ResizeHandle } from "@/components";
 import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty } from "@/hooks";
 import {
@@ -17,8 +18,6 @@ import {
   resizeWindow,
   useStore,
 } from "@/store";
-
-import { ResizeHandle } from "./components/ResizeHandle";
 
 import styles from "./Content.module.css";
 

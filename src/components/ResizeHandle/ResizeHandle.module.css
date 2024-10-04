@@ -1,0 +1,22 @@
+:root:global(.theme-beos) {
+  .root {
+    background-color: var(--window-background-color);
+    border-color: var(--border-color) var(--window-background-color)
+      var(--window-background-color) var(--border-color);
+    border-width: var(--border-width);
+    bottom: var(--window-padding);
+    color: rgba(0, 0, 0, 0.2);
+    cursor: var(--cursor--grab);
+    height: calc(var(--content-scrollbar-size) + var(--border-width));
+    position: absolute;
+    right: var(--window-padding);
+    width: calc(var(--content-scrollbar-size) + var(--border-width));
+    z-index: 3;
+
+    [aria-current="true"] & {
+      background-color: var(--window--active-background-color);
+      border-color: var(--border-color) var(--window--active-background-color)
+        var(--window--active-background-color) var(--border-color);
+    }
+  }
+}

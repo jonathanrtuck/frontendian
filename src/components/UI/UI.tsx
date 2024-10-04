@@ -1,15 +1,10 @@
 import { FunctionComponent, useEffect, useLayoutEffect } from "react";
 import { Helmet } from "react-helmet";
 
-import { Dialog } from "@/components/Dialog";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Deskbar, Desktop, Dialog, ErrorBoundary, Window } from "@/components";
 import { FILE_README_MD } from "@/files";
 import { openFile, useStore } from "@/store";
 import * as themes from "@/themes";
-
-import { Deskbar } from "./components/Deskbar";
-import { Desktop } from "./components/Desktop";
-import { Window } from "./components/Window";
 
 export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);

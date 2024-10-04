@@ -7,9 +7,8 @@ import {
   useState,
 } from "react";
 
+import { Icon } from "@/components";
 import { openApplication, openFile, useStore } from "@/store";
-
-import { Item } from "./components/Item";
 
 import styles from "./Desktop.module.css";
 
@@ -114,8 +113,8 @@ export const Desktop: FunctionComponent = () => {
       }>
       {icons.map((obj) =>
         obj ? (
-          <Item
-            Icon={"windowIds" in obj ? obj.Icon : types[obj.type]?.Icon}
+          <Icon
+            Component={"windowIds" in obj ? obj.Icon : types[obj.type]?.Icon}
             key={obj.id}
             onClick={() => {
               "windowIds" in obj

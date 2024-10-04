@@ -9,9 +9,15 @@ import {
 } from "react";
 import Draggable from "react-draggable";
 
-import { Dialog } from "@/components/Dialog";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { Menu, Menuitem } from "@/components/Menu";
+import {
+  Content,
+  Dialog,
+  ErrorBoundary,
+  Menu,
+  Menubar,
+  Menuitem,
+  Titlebar,
+} from "@/components";
 import { WindowContext, WindowContextType } from "@/contexts";
 import { useElementDimensions, useFocus } from "@/hooks";
 import {
@@ -28,10 +34,6 @@ import {
   useStore,
 } from "@/store";
 import { File, ID, Window as WindowType } from "@/types";
-
-import { Content } from "./components/Content";
-import { Menubar } from "./components/Menubar";
-import { Titlebar } from "./components/Titlebar";
 
 import styles from "./Window.module.css";
 

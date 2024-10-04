@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 
 import { APPLICATION_TRACKER } from "@/applications";
-import { Menu, Menuitem } from "@/components/Menu";
+import { Menu, Menuitem } from "@/components";
 import { FILE_README_MD } from "@/files";
 import { openApplication, openFile, useStore } from "@/store";
 

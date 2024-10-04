@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { UI } from "@/components/UI";
+import { UI } from "@/components";
 import { IS_DEBUG_MODE } from "@/constants";
 
 import "./index.css";

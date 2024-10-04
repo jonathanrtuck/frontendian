@@ -1,6 +1,6 @@
 import { FunctionComponent, PropsWithChildren, useContext } from "react";
 
-import { Menu } from "@/components/Menu";
+import { Menu } from "@/components";
 import { WindowContext } from "@/contexts";
 
 import styles from "./Menubar.module.css";
