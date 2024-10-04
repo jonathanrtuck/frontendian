@@ -24,6 +24,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
   const { hidden, id, scrollable, title, titlebarLeft } =
     useContext(WindowContext);
 
+  const applications = useStore((state) => state.applications);
   const theme = useStore((state) => state.theme);
 
   const rootRef = useRef<HTMLElement>(null);
@@ -31,6 +32,9 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  const application = applications.find(({ windowIds }) =>
+    windowIds.includes(id)
+  )!;
   const offset = useComputedCustomProperty("--window-padding");
   const { width: rootWidth } = useElementDimensions(rootRef, [maxWidth, title]);
 
@@ -103,6 +107,9 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
         }
         ref={rootRef}>
         <h1 className={styles.title} id={`${id}-title`} title={title}>
+          {Boolean(theme.titlebar.icon) && application.Icon !== undefined && (
+            <application.Icon aria-hidden className={styles.icon} />
+          )}
           {title}
         </h1>
         <button

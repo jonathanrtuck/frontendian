@@ -12,6 +12,7 @@ export const THEME_BEOS: Theme = {
     collapsible: false,
     doubleClick: true,
     draggable: true,
+    icon: false,
   },
   window: {
     hidable: true,
@@ -30,6 +31,7 @@ export const THEME_MAC_OS_CLASSIC: Theme = {
     collapsible: true,
     doubleClick: false,
     draggable: false,
+    icon: true,
   },
   window: {
     hidable: false,

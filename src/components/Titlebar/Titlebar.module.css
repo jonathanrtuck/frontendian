@@ -160,6 +160,10 @@
     user-select: none;
     white-space: nowrap;
 
+    [aria-current="false"] & {
+      filter: opacity(40%);
+    }
+
     &::before,
     &::after {
       background: repeating-linear-gradient(
@@ -180,6 +184,11 @@
     [aria-current="false"] &::after {
       visibility: hidden;
     }
+  }
+
+  .icon {
+    height: var(--titlebar-height);
+    width: var(--titlebar-height);
   }
 
   .button {

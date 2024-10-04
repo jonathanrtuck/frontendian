@@ -119,6 +119,7 @@ export type Theme = {
     collapsible: boolean;
     doubleClick: boolean;
     draggable: boolean;
+    icon: boolean;
   };
   window: {
     hidable: boolean;
