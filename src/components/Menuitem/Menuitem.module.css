@@ -5,19 +5,19 @@
     box-sizing: content-box;
     height: 0.0625rem;
     padding: 0.25rem 0;
-  }
 
-  .separator:focus {
-    outline: 0;
+    &:focus {
+      outline: 0;
+    }
   }
 
   .menuitem {
     display: flex;
     position: relative;
-  }
 
-  .menuitem:where(.top.vertical) + .menuitem {
-    border-width: var(--border-width) 0 0;
+    &:where(.top.vertical) + & {
+      border-width: var(--border-width) 0 0;
+    }
   }
 
   .button {
@@ -29,53 +29,60 @@
     line-height: 1.4;
     position: relative;
     user-select: none;
-  }
 
-  .menuitem:where(.horizontal) > .button {
-    padding: 0 0.5rem;
-  }
+    .menuitem:where(.horizontal) > & {
+      padding: 0 0.5rem;
+    }
 
-  .menuitem:where(.vertical) > .button {
-    background-image: linear-gradient(
-      to bottom,
-      rgb(227, 227, 227),
-      rgb(209, 209, 209)
-    );
-    padding: 0.25rem 0.5rem;
-    width: 100%;
-  }
+    .menuitem:where(.vertical) > & {
+      background-image: linear-gradient(
+        to bottom,
+        rgb(227, 227, 227),
+        rgb(209, 209, 209)
+      );
+      padding: 0.25rem 0.5rem;
+      width: 100%;
+    }
 
-  .menuitem:where(:not(.top)) > .button {
-    align-items: center;
-    background-image: unset;
-    display: flex;
-    gap: 0.5rem;
-    height: 1.5rem;
-    padding: 0 1rem;
-    position: relative;
-    width: 100%;
-  }
+    .menuitem:where(:not(.top)) > & {
+      align-items: center;
+      background-image: unset;
+      display: flex;
+      gap: 0.5rem;
+      height: 1.5rem;
+      padding: 0 1rem;
+      position: relative;
+      width: 100%;
+    }
 
-  .button:focus {
-    outline: 0;
-  }
+    &:focus {
+      outline: 0;
 
-  .button:focus:not(.pointer) {
-    background-color: rgb(196, 196, 196);
-    background-image: unset;
-  }
+      &:not(.pointer) {
+        background-color: rgb(196, 196, 196);
+        background-image: unset;
+      }
+    }
 
-  .button:where(.disabled) {
-    color: var(--text-color--disabled);
-  }
+    &:where(.disabled) {
+      color: var(--text-color--disabled);
+    }
 
-  .button:is(.expanded),
-  .menuitem:not(.top) > .button:not(.checked, .disabled):hover {
-    background-image: linear-gradient(
-      to bottom,
-      rgb(146, 146, 146),
-      rgb(163, 163, 163)
-    );
+    &:is(.expanded),
+    .menuitem:not(.top) > &:not(.checked, .disabled):hover {
+      background-image: linear-gradient(
+        to bottom,
+        rgb(146, 146, 146),
+        rgb(163, 163, 163)
+      );
+    }
+
+    .menuitem:not(.top) > &:where(.haspopup)::after {
+      content: "▶";
+      font-size: 0.5rem;
+      margin-right: -0.5rem;
+      padding-left: 0.5rem;
+    }
   }
 
   .checkbox::before,
@@ -87,13 +94,6 @@
 
   .checked::before {
     content: "✔️";
-  }
-
-  .menuitem:not(.top) > .button:where(.haspopup)::after {
-    content: "▶";
-    font-size: 0.5rem;
-    margin-right: -0.5rem;
-    padding-left: 0.5rem;
   }
 
   .title {

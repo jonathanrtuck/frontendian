@@ -1,14 +1,14 @@
 :root:global(.theme-beos) {
   .button {
     justify-content: center;
-  }
 
-  .button[aria-expanded="true"] {
-    background-image: linear-gradient(
-      to bottom,
-      rgb(206, 206, 206),
-      rgb(219, 219, 219)
-    );
+    &[aria-expanded="true"] {
+      background-image: linear-gradient(
+        to bottom,
+        rgb(206, 206, 206),
+        rgb(219, 219, 219)
+      );
+    }
   }
 
   .title {

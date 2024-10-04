@@ -16,34 +16,32 @@
       0 0;
     padding: var(--window-padding);
     position: fixed;
-  }
 
-  .root:focus-within {
-    background-color: var(--window--active-background-color);
-    outline: 0;
-  }
+    &:focus-within {
+      background-color: var(--window--active-background-color);
+      outline: 0;
+    }
 
-  .root[hidden] {
-    display: none;
-  }
+    &[hidden] {
+      display: none;
+    }
 
-  .root:where(.dragging) {
-    cursor: var(--cursor--grabbing);
-  }
+    &:where(.dragging) {
+      cursor: var(--cursor--grabbing);
+    }
 
-  .root:where(.zoomed) {
-    cursor: unset;
-    height: calc(
-      100dvh - var(--window-padding) - var(--titlebar-height) -
-        var(--window-padding)
-    );
-    transform: translate(0, 0) !important;
-    width: calc(100dvw - var(--deskbar-width));
-  }
+    &:where(.zoomed) {
+      cursor: unset;
+      height: calc(
+        100dvh - var(--window-padding) - var(--titlebar-height) -
+          var(--window-padding)
+      );
+      transform: translate(0, 0) !important;
+      width: calc(100dvw - var(--deskbar-width));
 
-  @media (width <= 600px) {
-    .root:where(.zoomed) {
-      width: 100dvw;
+      @media (width <= 600px) {
+        width: 100dvw;
+      }
     }
   }
 

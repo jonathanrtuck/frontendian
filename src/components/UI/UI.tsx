@@ -13,6 +13,8 @@ import { FILE_README_MD } from "@/files";
 import { openFile, useStore } from "@/store";
 import * as themes from "@/themes";
 
+import "./UI.module.css";
+
 export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);
   const fonts = useStore((state) => state.fonts);

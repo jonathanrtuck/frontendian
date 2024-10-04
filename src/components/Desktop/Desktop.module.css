@@ -1,6 +1,7 @@
 :root:global(.theme-beos) {
   .root {
     align-items: start;
+    background-color: var(--background-color);
     bottom: 0;
     display: grid;
     gap: 1rem;
@@ -11,18 +12,49 @@
     position: fixed;
     right: 0;
     top: 0;
-  }
 
-  .root::after {
-    background: rgba(128, 187, 255, 0.2);
-    border-color: rgba(0, 0, 204, 0.5);
-    border-width: var(--border-width);
-    content: "";
-    display: var(--desktop-selection-display);
-    height: var(--desktop-selection-height);
-    left: var(--desktop-selection-left);
-    position: absolute;
-    top: var(--desktop-selection-top);
-    width: var(--desktop-selection-width);
+    &::after {
+      background: rgba(128, 187, 255, 0.2);
+      border-color: rgba(0, 0, 204, 0.5);
+      border-width: var(--border-width);
+      content: "";
+      display: var(--desktop-selection-display);
+      height: var(--desktop-selection-height);
+      left: var(--desktop-selection-left);
+      position: absolute;
+      top: var(--desktop-selection-top);
+      width: var(--desktop-selection-width);
+    }
+  }
+}
+
+:root:global(.theme-mac-os-classic) {
+  .root {
+    align-items: start;
+    background-color: var(--background-color);
+    border-radius: 1rem;
+    bottom: 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, 6rem);
+    justify-items: center;
+    left: 0;
+    padding: 1rem;
+    position: fixed;
+    right: 0;
+    top: 0;
+
+    &::after {
+      border-color: rgba(0, 0, 0, 0.5);
+      border-style: dotted;
+      border-width: var(--border-width);
+      content: "";
+      display: var(--desktop-selection-display);
+      height: var(--desktop-selection-height);
+      left: var(--desktop-selection-left);
+      position: absolute;
+      top: var(--desktop-selection-top);
+      width: var(--desktop-selection-width);
+    }
   }
 }
