@@ -1,6 +1,6 @@
 :root:global(.theme-beos) {
   --window-background-color: rgb(232, 232, 232);
-  --window--active-background-color: rgb(224, 224, 224);
+  --window-background-color--active: rgb(224, 224, 224);
   --window-padding: 0.125rem;
 
   .root {
@@ -17,8 +17,8 @@
     padding: var(--window-padding);
     position: fixed;
 
-    &:focus-within {
-      background-color: var(--window--active-background-color);
+    &[aria-current="true"] {
+      background-color: var(--window-background-color--active);
       outline: 0;
     }
 
@@ -71,29 +71,51 @@
 
 :root:global(.theme-mac-os-classic) {
   --window-background-color: rgb(221, 221, 221);
+  --window-background-color--active: rgb(204, 204, 204);
   --window-padding: 0.25rem;
-  --window--active-background-color: rgb(204, 204, 204);
 
   .root {
     background-color: var(--window-background-color);
     border-width: var(--border-width);
+    box-shadow: 0.125rem 0.125rem 0.0625rem rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
     padding: var(--window-padding);
     position: fixed;
 
-    &:focus-within {
-      background-color: var(--window--active-background-color);
+    &[aria-current="true"] {
+      background-color: var(--window-background-color--active);
       outline: 0;
     }
-  }
 
-  &[hidden] {
-    display: none;
+    &::before {
+      border-color: rgb(255, 255, 255) rgb(128, 128, 128) rgb(128, 128, 128)
+        rgb(255, 255, 255);
+      border-width: var(--border-width);
+      content: "";
+      inset: 0;
+      position: absolute;
+      z-index: -1;
+    }
+
+    &[hidden] {
+      display: none;
+    }
+
+    &:where(.zoomed) {
+      cursor: unset;
+      height: 100dvh;
+      transform: translate(0, 0) !important;
+      width: 100dvw;
+    }
   }
 
   .content {
     cursor: var(--cursor--default);
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
     height: 100%;
+    overflow: hidden;
   }
 }

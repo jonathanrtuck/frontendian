@@ -117,7 +117,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
 
   return (
     <Draggable
-      cancel={'[draggable="false"]'}
+      cancel="[draggable='false']"
       defaultPosition={{
         x: left,
         y: top,

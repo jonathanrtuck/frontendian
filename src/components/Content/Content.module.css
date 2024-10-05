@@ -95,17 +95,19 @@
   --content-scrollbar-size: 1rem;
 
   .root {
+    border-color: rgb(128, 128, 128) rgb(255, 255, 255) rgb(255, 255, 255)
+      rgb(128, 128, 128);
+    border-width: var(--border-width);
     flex: 1 1 auto;
-    height: 100%;
     overflow: hidden;
   }
 
   .content {
     background-color: rgb(255, 255, 255);
     border-width: var(--border-width);
-    box-sizing: content-box;
     cursor: var(--cursor--default);
     flex: 1 1 auto;
+    height: 100%;
     overflow: hidden;
 
     &:where(.resizing) {
@@ -126,6 +128,13 @@
 
     &::-webkit-scrollbar-button {
       display: none;
+    }
+
+    &::-webkit-scrollbar-corner {
+      background-color: var(--window-background-color--active);
+      border-color: var(--border-color);
+      border-style: solid;
+      border-width: var(--border-width) 0 0 var(--border-width);
     }
 
     &::-webkit-scrollbar-thumb {
@@ -164,12 +173,21 @@
       background-color: rgb(239, 239, 239);
     }
 
+    &::-webkit-scrollbar-corner {
+      background-color: var(--window-background-color);
+    }
+
     &::-webkit-scrollbar-thumb {
       display: none;
     }
   }
 
   .resize {
+    &.zoomed {
+      color: transparent;
+      pointer-events: none;
+    }
+
     [aria-current="false"] & {
       color: transparent;
       pointer-events: none;
