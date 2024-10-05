@@ -106,10 +106,10 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
             : undefined
         }
         ref={rootRef}>
+        {Boolean(theme.titlebar.icon) && application.Icon !== undefined && (
+          <application.Icon aria-hidden className={styles.icon} />
+        )}
         <h1 className={styles.title} id={`${id}-title`} title={title}>
-          {Boolean(theme.titlebar.icon) && application.Icon !== undefined && (
-            <application.Icon aria-hidden className={styles.icon} />
-          )}
           {title}
         </h1>
         <button

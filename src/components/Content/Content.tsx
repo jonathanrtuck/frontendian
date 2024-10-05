@@ -22,7 +22,7 @@ import {
 import styles from "./Content.module.css";
 
 const MIN_HEIGHT = 16 * 7; // 7rem
-const MIN_WIDTH = 16 * 7; // 7rem
+const MIN_WIDTH = 16 * 10; // 10rem
 
 export type ContentProps = PropsWithChildren;
 

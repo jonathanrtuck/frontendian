@@ -80,7 +80,8 @@
     box-shadow: 0.125rem 0.125rem 0.0625rem rgb(0, 0, 0);
     display: flex;
     flex-direction: column;
-    padding: var(--window-padding);
+    padding: calc(var(--titlebar-height) + var(--window-padding) * 2)
+      var(--window-padding) var(--window-padding);
     position: fixed;
 
     &[aria-current="true"] {
