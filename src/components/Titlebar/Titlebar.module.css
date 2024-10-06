@@ -138,6 +138,11 @@
     rgb(154, 154, 154),
     rgb(248, 248, 248)
   );
+  --titlebar_button-background--active: linear-gradient(
+    to bottom right,
+    rgb(90, 90, 90),
+    rgb(157, 157, 157)
+  );
 
   .root {
     align-items: center;
@@ -159,8 +164,8 @@
         rgb(153, 153, 153) var(--border-width),
         rgb(153, 153, 153) calc(var(--border-width) * 2)
       );
-      border-color: transparent rgba(0, 0, 0, 0.1) transparent
-        rgba(255, 255, 255, 0.3);
+      border-color: transparent var(--lowlight-color) transparent
+        var(--highlight-color);
       border-width: 0 var(--border-width);
       content: "";
       flex: 1 1 auto;
@@ -206,8 +211,8 @@
 
   .button {
     background-image: var(--titlebar_button-background);
-    border-color: rgb(128, 128, 128) rgb(255, 255, 255) rgb(255, 255, 255)
-      rgb(128, 128, 128);
+    border-color: var(--lowlight-color) var(--highlight-color)
+      var(--highlight-color) var(--lowlight-color);
     border-width: var(--border-width);
     cursor: var(--cursor--default);
     flex: 0 0 var(--titlebar-height);
@@ -219,9 +224,18 @@
       outline: 0;
     }
 
+    &:active,
+    &:focus-visible {
+      background-image: var(--titlebar_button-background--active);
+
+      &::before {
+        border-color: var(--lowlight-color);
+      }
+    }
+
     &::before {
-      border-color: rgb(255, 255, 255) rgb(128, 128, 128) rgb(128, 128, 128)
-        rgb(255, 255, 255);
+      border-color: var(--highlight-color) var(--lowlight-color)
+        var(--lowlight-color) var(--highlight-color);
       border-width: var(--border-width);
       content: "";
       inset: var(--border-width);
