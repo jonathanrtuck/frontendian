@@ -69,7 +69,10 @@ export type Font = {
 };
 
 export type IconComponent = ForwardRefExoticComponent<
-  SVGAttributes<SVGSVGElement> & RefAttributes<SVGSVGElement>
+  {
+    themeId?: ID;
+  } & SVGAttributes<SVGSVGElement> &
+    RefAttributes<SVGSVGElement>
 >;
 
 export type ID = string;
