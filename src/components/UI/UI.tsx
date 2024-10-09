@@ -2,6 +2,7 @@ import { FunctionComponent, useEffect, useLayoutEffect } from "react";
 import { Helmet } from "react-helmet";
 
 import {
+  ControlStrip,
   Deskbar,
   Desktop,
   Dialog,
@@ -54,6 +55,7 @@ export const UI: FunctionComponent = () => {
         <Desktop />
         {!theme.deskbar.hidden && <Deskbar />}
         {!theme.menubar.windowed && <Menubar />}
+        {!theme.controlStrip.hidden && <ControlStrip />}
         {windows.map((window) => (
           <Window key={window.id} {...window} />
         ))}

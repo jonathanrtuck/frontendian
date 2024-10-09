@@ -17,7 +17,7 @@ export const MenuContext = createContext<MenuContextType>({
   isActive: false,
   isFocusWithin: false,
   isPointer: false,
-  isTop: false,
+  isTop: true,
   orientation: "horizontal",
 });
 

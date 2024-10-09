@@ -111,6 +111,9 @@ export type State = {
 };
 
 export type Theme = {
+  controlStrip: {
+    hidden: boolean;
+  };
   deskbar: {
     hidden: boolean;
   };

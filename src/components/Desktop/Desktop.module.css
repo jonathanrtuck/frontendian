@@ -32,14 +32,15 @@
   .root {
     align-items: start;
     background-color: var(--background-color);
-    border-radius: 1rem;
+    background-image: url(/src/images/mac-os-classic.png);
+    border-radius: var(--border-radius);
     bottom: 0;
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fill, 6rem);
     justify-items: center;
     left: 0;
-    padding: 1rem;
+    padding: calc(var(--menubar-height) + 1rem) 1rem 1rem;
     position: fixed;
     right: 0;
     top: 0;

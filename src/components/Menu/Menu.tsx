@@ -134,6 +134,8 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
           }
         }}
         onPointerDown={(e: PointerEvent<HTMLMenuElement>) => {
+          console.debug("pointer");
+
           onPointerDown?.(e);
 
           if (bar) {

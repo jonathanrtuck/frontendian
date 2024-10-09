@@ -18,6 +18,7 @@ import {
   Menuitem,
   Titlebar,
 } from "@/components";
+import { MENUBAR_ID } from "@/constants";
 import { WindowContext, WindowContextType } from "@/contexts";
 import { useElementDimensions, useFocus } from "@/hooks";
 import {
@@ -150,7 +151,9 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
         onBlur={(e) => {
           if (
             document.hasFocus() &&
-            !e.currentTarget?.contains(e.relatedTarget)
+            !e.currentTarget?.contains(e.relatedTarget) &&
+            (theme.menubar.windowed ||
+              !document.getElementById(MENUBAR_ID)?.contains(e.relatedTarget))
           ) {
             blurWindow({ id });
           }

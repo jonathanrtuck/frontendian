@@ -1,6 +1,9 @@
 import { Theme } from "@/types";
 
 export const THEME_BEOS: Theme = {
+  controlStrip: {
+    hidden: true,
+  },
   deskbar: {
     hidden: false,
   },
@@ -20,6 +23,9 @@ export const THEME_BEOS: Theme = {
 };
 
 export const THEME_MAC_OS_CLASSIC: Theme = {
+  controlStrip: {
+    hidden: false,
+  },
   deskbar: {
     hidden: true,
   },

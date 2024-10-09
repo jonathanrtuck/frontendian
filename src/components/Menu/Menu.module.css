@@ -60,3 +60,60 @@
     }
   }
 }
+
+:root:global(.theme-mac-os-classic) {
+  .root {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &:where(.hidden) {
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+
+    &:where(.bar) {
+      flex-direction: row;
+    }
+
+    &:not(.bar) {
+      background-color: rgb(224, 224, 224);
+      border-width: var(--border-width);
+      color: rgb(0, 0, 0);
+      flex-direction: column;
+      max-width: 20rem;
+      min-width: 5rem;
+      position: absolute;
+      z-index: 100;
+    }
+
+    &:where(.horizontal) {
+      height: 100%;
+    }
+
+    &:where(.vertical) {
+      flex-direction: column;
+    }
+
+    .bar:where(.horizontal) & {
+      left: 0;
+      top: 100%;
+    }
+
+    .bar:where(.vertical) & {
+      right: 100%;
+      top: 0;
+    }
+
+    &:not(.bar) & {
+      left: 100%;
+      top: 0;
+    }
+  }
+}
