@@ -29,6 +29,7 @@ export type ContentProps = PropsWithChildren;
 export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   const {
     active,
+    collapsed,
     height: heightState,
     id,
     menubarRef,
@@ -68,7 +69,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     <Resizable
       axis={zoomed ? "none" : "both"}
       handle={
-        scrollable ? (
+        scrollable && !collapsed ? (
           <ResizeHandle
             aria-hidden
             className={clsx(styles.resize, {

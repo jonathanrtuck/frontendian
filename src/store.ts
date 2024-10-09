@@ -165,6 +165,36 @@ export const closeWindow = setState<ActionIds>(
       }, prevState)
 );
 
+export const collapseWindow = setState<ActionIds>(
+  "collapseWindow",
+  (payload) => (prevState) => ({
+    ...prevState,
+    windows: prevState.windows.map((window) =>
+      isPayloadId(payload, window.id)
+        ? {
+            ...window,
+            collapsed: true,
+          }
+        : window
+    ),
+  })
+);
+
+export const expandWindow = setState<ActionIds>(
+  "expandWindow",
+  (payload) => (prevState) => ({
+    ...prevState,
+    windows: prevState.windows.map((window) =>
+      isPayloadId(payload, window.id)
+        ? {
+            ...window,
+            collapsed: false,
+          }
+        : window
+    ),
+  })
+);
+
 export const focusDeskbar = setState<void>(
   "focusDeskbar",
   () => (prevState) => ({

@@ -41,7 +41,8 @@ import styles from "./Window.module.css";
 export type WindowProps = WindowType;
 
 export const Window: FunctionComponent<WindowProps> = (props) => {
-  const { fileId, focused, hidden, id, left, top, width, zoomed } = props;
+  const { collapsed, fileId, focused, hidden, id, left, top, width, zoomed } =
+    props;
 
   const applications = useStore((state) => state.applications);
   const files = useStore((state) => state.files);
@@ -143,10 +144,11 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
         aria-current={focused}
         aria-labelledby={`${id}-title`}
         className={clsx(styles.root, {
+          [styles.collapsed]: collapsed,
           [styles.dragging]: isDragging,
           [styles.zoomed]: zoomed,
         })}
-        hidden={Boolean(theme.window.hidable) && hidden}
+        hidden={hidden}
         id={id}
         onBlur={(e) => {
           if (
@@ -191,7 +193,10 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
               </footer>
             </Dialog>
           )}
-          <div className={styles.content} draggable="false">
+          <div
+            className={styles.content}
+            draggable="false"
+            hidden={Boolean(theme.window.collapsible && collapsed)}>
             <ErrorBoundary
               fallback={
                 <Content>

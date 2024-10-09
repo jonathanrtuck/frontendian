@@ -103,6 +103,11 @@
       display: none;
     }
 
+    &:where(.collapsed) {
+      padding: calc(var(--titlebar-height) + var(--window-padding))
+        var(--window-padding) var(--window-padding);
+    }
+
     &:where(.zoomed) {
       cursor: unset;
       height: calc(100dvh - var(--menubar-height));
@@ -118,5 +123,9 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden;
+
+    &[hidden] {
+      height: 0;
+    }
   }
 }

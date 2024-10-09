@@ -12,12 +12,12 @@ export const THEME_BEOS: Theme = {
     windowed: true,
   },
   titlebar: {
-    collapsible: false,
     doubleClick: true,
     draggable: true,
     icon: false,
   },
   window: {
+    collapsible: false,
     hidable: true,
   },
 };
@@ -34,12 +34,12 @@ export const THEME_MAC_OS_CLASSIC: Theme = {
     windowed: false,
   },
   titlebar: {
-    collapsible: true,
     doubleClick: false,
     draggable: false,
     icon: true,
   },
   window: {
+    collapsible: true,
     hidable: false,
   },
 };

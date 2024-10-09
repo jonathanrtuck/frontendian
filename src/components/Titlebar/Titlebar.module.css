@@ -151,7 +151,6 @@
     display: flex;
     gap: 0.25rem;
     left: var(--window-padding);
-    padding: 0 0 var(--window-padding);
     position: absolute;
     right: var(--window-padding);
     top: var(--window-padding);

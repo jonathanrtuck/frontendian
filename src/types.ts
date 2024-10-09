@@ -122,12 +122,12 @@ export type Theme = {
     windowed: boolean;
   };
   titlebar: {
-    collapsible: boolean;
     doubleClick: boolean;
     draggable: boolean;
     icon: boolean;
   };
   window: {
+    collapsible: boolean;
     hidable: boolean;
   };
 };
@@ -136,6 +136,7 @@ export type URL = string;
 
 export type Window = {
   active: boolean;
+  collapsed: boolean;
   fileId?: ID;
   focused: boolean;
   height: number;

@@ -6,9 +6,10 @@ import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty, useElementDimensions } from "@/hooks";
 import {
   closeWindow,
+  collapseWindow,
+  expandWindow,
   hideWindow,
   moveWindowTitlebar,
-  showWindow,
   useStore,
   zoomWindow,
 } from "@/store";
@@ -21,7 +22,7 @@ export type TitlebarProps = {
 };
 
 export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
-  const { hidden, id, scrollable, title, titlebarLeft } =
+  const { collapsed, id, scrollable, title, titlebarLeft, width } =
     useContext(WindowContext);
 
   const applications = useStore((state) => state.applications);
@@ -134,13 +135,13 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
             type="button"
           />
         )}
-        {Boolean(theme.titlebar.collapsible) && (
+        {Boolean(theme.window.collapsible) && (
           <button
             aria-label="Collapse"
             className={clsx(styles.button, styles.collapse)}
             draggable={false}
             onClick={() => {
-              hidden ? showWindow({ id }) : hideWindow({ id });
+              collapsed ? expandWindow({ id }) : collapseWindow({ id });
             }}
             title="Collapse"
             type="button"
