@@ -1,13 +1,26 @@
-import { FunctionComponent, PropsWithChildren, useContext } from "react";
+import {
+  FunctionComponent,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 
-import { Menu, Menuitem } from "@/components";
+import { Clock, ClockProps, Menu, Menuitem } from "@/components";
 import { MENUBAR_ID } from "@/constants";
 import { WindowContext } from "@/contexts";
 import { Apple } from "@/icons";
 import { blurWindow, useStore } from "@/store";
 
 import styles from "./Menubar.module.css";
+
+const DATE_PROP: ClockProps = {
+  dateStyle: "short",
+};
+const TIME_PROP: ClockProps = {
+  timeStyle: "short",
+};
 
 export type MenubarProps = PropsWithChildren;
 
@@ -16,6 +29,20 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
 
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
+
+  const [clockProps, setClockProps] = useState<ClockProps>(TIME_PROP);
+
+  useEffect(() => {
+    if (clockProps.dateStyle) {
+      const timeout = setTimeout(() => {
+        setClockProps(TIME_PROP);
+      }, 5000);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [clockProps]);
 
   if (theme.menubar.windowed) {
     return (
@@ -73,6 +100,15 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
           {appleMenuitem}
         </Menu>
       )}
+      <Clock
+        {...clockProps}
+        className={styles.clock}
+        onClick={() => {
+          setClockProps((prevState) =>
+            prevState.timeStyle ? DATE_PROP : TIME_PROP
+          );
+        }}
+      />
     </header>
   );
 };

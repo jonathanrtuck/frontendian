@@ -16,6 +16,7 @@
       inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
         var(--lowlight-color);
     display: flex;
+    justify-content: space-between;
     left: 0;
     padding: var(--border-width) 1rem;
     position: fixed;
@@ -27,5 +28,10 @@
   .menubar {
     background: inherit;
     height: var(--menubar-height);
+    order: 1;
+  }
+
+  .clock {
+    order: 2;
   }
 }

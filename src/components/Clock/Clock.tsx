@@ -5,10 +5,16 @@ import { useClock } from "@/hooks";
 
 import styles from "./Clock.module.css";
 
-export type ClockProps = Omit<HTMLAttributes<HTMLButtonElement>, "type">;
+export type ClockProps = Intl.DateTimeFormatOptions &
+  Omit<HTMLAttributes<HTMLButtonElement>, "type">;
 
 export const Clock: FunctionComponent<ClockProps> = ({
   className,
+  dateStyle,
+  dayPeriod,
+  formatMatcher,
+  fractionalSecondDigits,
+  timeStyle,
   ...props
 }) => {
   const date = useClock();
@@ -25,7 +31,14 @@ export const Clock: FunctionComponent<ClockProps> = ({
         title={date.toLocaleDateString(navigator.language, {
           dateStyle: "full",
         })}>
-        {date.toLocaleTimeString(navigator.language)}
+        {Boolean(dateStyle) &&
+          date.toLocaleDateString(navigator.language, {
+            dateStyle,
+          })}
+        {Boolean(timeStyle) &&
+          date.toLocaleTimeString(navigator.language, {
+            timeStyle,
+          })}
       </time>
     </button>
   );

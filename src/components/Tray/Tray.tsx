@@ -19,6 +19,7 @@ export const Tray: FunctionComponent = () => {
         onClick={() => {
           setIsCalendarOpen(true);
         }}
+        timeStyle="medium"
       />
       {Boolean(isCalendarOpen) && (
         <Calendar
