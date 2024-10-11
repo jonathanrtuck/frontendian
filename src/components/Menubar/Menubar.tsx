@@ -1,13 +1,10 @@
 import { FunctionComponent, PropsWithChildren, useContext } from "react";
 import { createPortal } from "react-dom";
 
-import { Menu, Menuitem, Tray } from "@/components";
+import { MainMenu, Menu, Tray } from "@/components";
 import { MENUBAR_ID } from "@/constants";
 import { WindowContext } from "@/contexts";
-import { FILE_README_MD } from "@/files";
-import { Apple } from "@/icons";
-import { blurWindow, changeTheme, openFile, useStore } from "@/store";
-import * as themes from "@/themes";
+import { blurWindow, useStore } from "@/store";
 
 import styles from "./Menubar.module.css";
 
@@ -33,40 +30,11 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
     );
   }
 
-  const appleMenuitem = (
-    <Menuitem Icon={Apple} classes={{ title: "visually-hidden" }} title="Apple">
-      <Menu>
-        <Menuitem
-          onClick={() => {
-            openFile({ id: FILE_README_MD.id });
-          }}
-          title={FILE_README_MD.title}
-        />
-        <Menuitem separator />
-        <Menuitem title="Theme">
-          <Menu>
-            {Object.values(themes).map(({ id, title }) => (
-              <Menuitem
-                checked={id === theme.id}
-                key={id}
-                onClick={() => {
-                  changeTheme({ id });
-                }}
-                title={title}
-                type="radio"
-              />
-            ))}
-          </Menu>
-        </Menuitem>
-      </Menu>
-    </Menuitem>
-  );
-
   if (id) {
     return focused
       ? createPortal(
           <Menu bar className={styles.menubar} draggable="false" horizontal>
-            {appleMenuitem}
+            <MainMenu />
             {children}
           </Menu>,
           document.getElementById(MENUBAR_ID)!
@@ -93,7 +61,7 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
       tabIndex={-1}>
       {!focusedWindowId && (
         <Menu bar className={styles.menubar} draggable="false" horizontal>
-          {appleMenuitem}
+          <MainMenu />
         </Menu>
       )}
       <Tray className={styles.tray} />
