@@ -121,6 +121,7 @@ export type Theme = {
   menubar: {
     windowed: boolean;
   };
+  title: string;
   titlebar: {
     doubleClick: boolean;
     draggable: boolean;

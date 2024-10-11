@@ -3,12 +3,14 @@ import { FunctionComponent } from "react";
 import { APPLICATION_TRACKER } from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { FILE_README_MD } from "@/files";
-import { openApplication, openFile, useStore } from "@/store";
+import { changeTheme, openApplication, openFile, useStore } from "@/store";
+import * as themes from "@/themes";
 
 import styles from "./MainMenu.module.css";
 
 export const MainMenu: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
+  const theme = useStore((state) => state.theme);
 
   return (
     <Menu bar vertical>
@@ -26,6 +28,22 @@ export const MainMenu: FunctionComponent = () => {
             }}
             title={FILE_README_MD.title}
           />
+          <Menuitem separator />
+          <Menuitem title="Theme">
+            <Menu>
+              {Object.values(themes).map(({ id, title }) => (
+                <Menuitem
+                  checked={id === theme.id}
+                  key={id}
+                  onClick={() => {
+                    changeTheme({ id });
+                  }}
+                  title={title}
+                  type="radio"
+                />
+              ))}
+            </Menu>
+          </Menuitem>
           <Menuitem separator />
           {applications
             .filter(({ id }) => id !== APPLICATION_TRACKER.id)

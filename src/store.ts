@@ -11,6 +11,7 @@ import {
   IS_DEBUG_MODE,
   UNTITLED_WINDOW_TITLE,
 } from "@/constants";
+import * as themes from "@/themes";
 import { ID, State, Window } from "@/types";
 
 type ActionIds = { id: ID } | { ids: ID[] };
@@ -93,6 +94,16 @@ export const blurWindow = setState<ActionIds>(
           }
         : window
     ),
+  })
+);
+
+export const changeTheme = setState<ActionIds>(
+  "changeTheme",
+  (payload) => (prevState) => ({
+    ...prevState,
+    theme:
+      Object.values(themes).find((theme) => isPayloadId(payload, theme.id)) ??
+      prevState.theme,
   })
 );
 

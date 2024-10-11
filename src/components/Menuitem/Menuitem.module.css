@@ -77,11 +77,15 @@
       );
     }
 
-    .menuitem:not(.top) > &:where(.haspopup)::after {
-      content: "▶";
-      font-size: 0.5rem;
-      margin-right: -0.5rem;
-      padding-left: 0.5rem;
+    .menuitem:not(.top) > &:where(.haspopup) {
+      justify-content: space-between;
+
+      &::after {
+        content: "▶";
+        font-size: 0.5rem;
+        margin-right: -0.5rem;
+        padding-left: 0.5rem;
+      }
     }
   }
 
@@ -180,11 +184,15 @@
       color: rgb(255, 255, 255);
     }
 
-    .menuitem:not(.top) > &:where(.haspopup)::after {
-      content: "▶";
-      font-size: 0.5rem;
-      margin-right: -0.5rem;
-      padding-left: 0.5rem;
+    .menuitem:not(.top) > &:where(.haspopup) {
+      justify-content: space-between;
+
+      &::after {
+        content: "▶";
+        font-size: 0.5rem;
+        margin-right: -0.5rem;
+        padding-left: 0.5rem;
+      }
     }
   }
 

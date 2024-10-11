@@ -11,6 +11,7 @@ export const THEME_BEOS: Theme = {
   menubar: {
     windowed: true,
   },
+  title: "BeOS",
   titlebar: {
     doubleClick: true,
     draggable: true,
@@ -33,6 +34,7 @@ export const THEME_MAC_OS_CLASSIC: Theme = {
   menubar: {
     windowed: false,
   },
+  title: "Mac OS Classic",
   titlebar: {
     doubleClick: false,
     draggable: false,
