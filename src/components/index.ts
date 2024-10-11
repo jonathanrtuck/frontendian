@@ -2,7 +2,6 @@ export * from "./Applications";
 export * from "./Calendar";
 export * from "./Clock";
 export * from "./Content";
-export * from "./ControlStrip";
 export * from "./Deskbar";
 export * from "./Desktop";
 export * from "./Dialog";

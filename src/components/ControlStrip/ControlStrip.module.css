@@ -1,9 +1,0 @@
-:root:global(.theme-mac-os-classic) {
-  .root {
-    bottom: 0;
-    display: flex;
-    left: 0;
-    margin: 0;
-    position: fixed;
-  }
-}
