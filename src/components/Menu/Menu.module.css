@@ -1,4 +1,6 @@
 :root:global(.theme-beos) {
+  --menu-background-color: rgb(224, 224, 224);
+
   .root {
     display: flex;
     list-style: none;
@@ -20,7 +22,7 @@
     }
 
     &:not(.bar) {
-      background-color: rgb(224, 224, 224);
+      background-color: var(--menu-background-color);
       border-width: var(--border-width);
       color: rgb(0, 0, 0);
       flex-direction: column;
@@ -31,11 +33,7 @@
     }
 
     &:where(.horizontal) {
-      background-image: linear-gradient(
-        to bottom,
-        rgb(227, 227, 227),
-        rgb(209, 209, 209)
-      );
+      background-color: rgb(222, 222, 222);
       border-width: var(--border-width) var(--border-width) 0;
       height: 1.5rem;
     }
@@ -86,6 +84,7 @@
     &:not(.bar) {
       background-color: rgb(224, 224, 224);
       border-width: var(--border-width);
+      box-shadow: 0.125rem 0.125rem 0.0625rem var(--lowlight-color);
       color: rgb(0, 0, 0);
       flex-direction: column;
       max-width: 20rem;

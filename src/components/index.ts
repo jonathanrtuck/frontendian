@@ -1,5 +1,4 @@
 export * from "./Applications";
-export * from "./Calendar";
 export * from "./Clock";
 export * from "./Content";
 export * from "./Deskbar";

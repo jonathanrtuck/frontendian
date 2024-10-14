@@ -34,26 +34,17 @@
     }
 
     &::-webkit-scrollbar-thumb {
+      background-color: rgb(222, 222, 222);
       border-color: var(--border-color);
       border-style: solid;
     }
 
     &::-webkit-scrollbar-thumb:horizontal {
-      background-image: linear-gradient(
-        to bottom,
-        rgb(240, 240, 240),
-        rgb(200, 200, 200)
-      );
       border-width: var(--border-width) var(--border-width) 0
         var(--border-width);
     }
 
     &::-webkit-scrollbar-thumb:vertical {
-      background-image: linear-gradient(
-        to right,
-        rgb(240, 240, 240),
-        rgb(200, 200, 200)
-      );
       border-width: var(--border-width) 0 var(--border-width)
         var(--border-width);
     }

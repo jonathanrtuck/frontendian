@@ -1,33 +1,14 @@
 :root:global(.theme-beos) {
-  .button {
-    justify-content: center;
-
-    &[aria-expanded="true"] {
-      background-image: linear-gradient(
-        to bottom,
-        rgb(206, 206, 206),
-        rgb(219, 219, 219)
-      );
+  .root {
+    & > .button[aria-haspopup="menu"] {
+      justify-content: center;
+      padding: 0.125rem 0;
     }
-  }
 
-  .title {
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: 0.0625rem;
-    text-shadow: 0 0 0.25rem rgb(255, 255, 255);
-  }
-}
-
-:root:global(.theme-mac-os-classic) {
-  .title {
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
+    .icon {
+      flex: 0 0 8rem;
+      height: 2rem;
+      width: unset;
+    }
   }
 }

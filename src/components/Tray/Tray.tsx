@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from "react";
 
-import { Calendar, Clock, ClockProps } from "@/components";
+import { Applications, Clock, ClockProps } from "@/components";
 import { Network } from "@/icons";
 import { useStore } from "@/store";
 
@@ -20,7 +20,6 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
   const theme = useStore((state) => state.theme);
 
   const [clockProps, setClockProps] = useState<ClockProps>(TIME_PROP);
-  const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (clockProps.dateStyle) {
@@ -45,6 +44,15 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
             );
           }}
         />
+        <button
+          className={styles.button}
+          onClick={() => {
+            //
+          }}
+          role="presentation"
+          type="button"
+        />
+        <Applications />
       </aside>
     );
   }
@@ -57,18 +65,13 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
         </li>
       </ul>
       <Clock
+        {...clockProps}
         onClick={() => {
-          setIsCalendarOpen(true);
+          setClockProps((prevState) =>
+            prevState.timeStyle ? DATE_PROP : TIME_PROP
+          );
         }}
-        timeStyle="medium"
       />
-      {Boolean(isCalendarOpen) && (
-        <Calendar
-          onClose={() => {
-            setIsCalendarOpen(false);
-          }}
-        />
-      )}
     </aside>
   );
 };

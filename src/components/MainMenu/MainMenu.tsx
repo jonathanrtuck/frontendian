@@ -3,11 +3,21 @@ import { FunctionComponent } from "react";
 import { APPLICATION_TRACKER } from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { FILE_README_MD } from "@/files";
-import { Apple } from "@/icons";
+import { Apple, BeOS } from "@/icons";
 import { changeTheme, openApplication, openFile, useStore } from "@/store";
+import { IconComponent, Theme } from "@/types";
 import * as themes from "@/themes";
 
 import styles from "./MainMenu.module.css";
+
+const IconByTheme = ({ id }: Theme): IconComponent | undefined => {
+  switch (id) {
+    case "theme-beos":
+      return BeOS;
+    case "theme-mac-os-classic":
+      return Apple;
+  }
+};
 
 export const MainMenu: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
@@ -15,11 +25,12 @@ export const MainMenu: FunctionComponent = () => {
 
   return (
     <Menuitem
-      Icon={theme.id === "theme-mac-os-classic" ? Apple : undefined}
-      className={styles.menuitem}
+      Icon={IconByTheme(theme)}
       classes={{
         button: styles.button,
-        title: styles.title,
+        icon: styles.icon,
+        menuitem: styles.root,
+        title: "visually-hidden",
       }}
       title="frontendian">
       <Menu>

@@ -1,0 +1,10 @@
+:root:global(.theme-mac-os-classic) {
+  .menubar {
+    .menuitem {
+      .menu {
+        left: unset;
+        right: 0%;
+      }
+    }
+  }
+}

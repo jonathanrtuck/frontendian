@@ -2,7 +2,7 @@ import { File, MimeType } from "@/types";
 
 export const FILE_README_MD: File = {
   id: "file-README.md",
-  title: "About frontendian",
+  title: "About this site",
   type: MimeType.TextMarkdown,
   url: "https://raw.githubusercontent.com/jonathanrtuck/frontendian/main/README.md",
 };

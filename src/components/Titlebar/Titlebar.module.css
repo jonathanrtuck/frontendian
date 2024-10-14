@@ -1,9 +1,4 @@
 :root:global(.theme-beos) {
-  --titlebar-background--active: linear-gradient(
-    to bottom,
-    rgb(255, 237, 172),
-    rgb(255, 200, 0)
-  );
   --titlebar-height: 1.25rem;
   --titlebar_button-background: linear-gradient(
     to bottom right,
@@ -39,7 +34,7 @@
     z-index: 1;
 
     [aria-current="true"] & {
-      background-image: var(--titlebar-background--active);
+      background-color: rgb(248, 208, 70);
     }
 
     &:where(.dragging) {

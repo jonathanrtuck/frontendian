@@ -23,3 +23,34 @@
     width: 1rem;
   }
 }
+
+:root:global(.theme-mac-os-classic) {
+  .root {
+    display: flex;
+  }
+
+  .button {
+    border-color: var(--highlight-color) var(--lowlight-color)
+      var(--lowlight-color) var(--highlight-color);
+    border-width: var(--border-width);
+    inset: var(--border-width);
+    margin: calc(var(--border-width) * -1) 0;
+
+    &:active {
+      border-color: var(--lowlight-color) var(--highlight-color)
+        var(--highlight-color) var(--lowlight-color);
+    }
+
+    &::after {
+      color: rgb(221, 221, 221);
+      content: "⁞";
+      font-family: var(--font-family--monospace);
+      font-size: 1.25rem;
+      line-height: var(--menubar-height);
+      text-shadow: calc(var(--border-width) * -0.5)
+          calc(var(--border-width) * -0.5) 0 var(--lowlight-color),
+        calc(var(--border-width) * 0.5) calc(var(--border-width) * 0.5) 0
+          var(--highlight-color);
+    }
+  }
+}

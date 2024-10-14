@@ -35,11 +35,6 @@
     }
 
     .menuitem:where(.vertical) > & {
-      background-image: linear-gradient(
-        to bottom,
-        rgb(227, 227, 227),
-        rgb(209, 209, 209)
-      );
       padding: 0.25rem 0.5rem;
       width: 100%;
     }
@@ -70,21 +65,26 @@
 
     &:is(.expanded),
     .menuitem:not(.top) > &:not(.checked, .disabled):hover {
-      background-image: linear-gradient(
-        to bottom,
-        rgb(146, 146, 146),
-        rgb(163, 163, 163)
-      );
+      background-color: rgb(156, 156, 156);
     }
 
     .menuitem:not(.top) > &:where(.haspopup) {
       justify-content: space-between;
 
       &::after {
+        color: var(--menu-background-color);
         content: "▶";
-        font-size: 0.5rem;
+        font-size: 1rem;
         margin-right: -0.5rem;
         padding-left: 0.5rem;
+        text-shadow: calc(var(--border-width) * -1) var(--border-width)
+            rgba(0, 0, 0, 0.25),
+          calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+            rgba(0, 0, 0, 0.25),
+          var(--border-width) calc(var(--border-width) * -1) rgba(0, 0, 0, 0.25),
+          var(--border-width) var(--border-width) rgba(0, 0, 0, 0.25),
+          var(--border-width) var(--border-width) var(--border-width)
+            rgba(0, 0, 0, 0.75);
       }
     }
   }
@@ -115,11 +115,9 @@
 
 :root:global(.theme-mac-os-classic) {
   .separator {
-    background-clip: content-box;
-    background-color: var(--border-color);
-    box-sizing: content-box;
-    height: 0.0625rem;
-    padding: 0.25rem 0;
+    border-color: var(--lowlight-color) transparent var(--highlight-color);
+    border-width: var(--border-width) 0;
+    margin: 0.25rem 0;
 
     &:focus {
       outline: 0;
@@ -160,7 +158,7 @@
       display: flex;
       gap: 0.5rem;
       height: 1.5rem;
-      padding: 0 1rem;
+      padding: 0 1.5rem;
       position: relative;
       width: 100%;
     }
@@ -190,8 +188,8 @@
       &::after {
         content: "▶";
         font-size: 0.5rem;
-        margin-right: -0.5rem;
-        padding-left: 0.5rem;
+        margin-right: -1rem;
+        width: 0.5rem;
       }
     }
   }
@@ -200,11 +198,14 @@
   .radio::before {
     content: "";
     font-size: 0.625rem;
-    width: 0.75rem;
+    margin-left: -0.5rem;
+    width: 0.5rem;
   }
 
   .checked::before {
-    content: "✔️";
+    content: "✔︎";
+    font-family: var(--font-family--default);
+    font-size: 0.75rem;
   }
 
   .title {
