@@ -154,7 +154,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           if (
             document.hasFocus() &&
             !e.currentTarget?.contains(e.relatedTarget) &&
-            (theme.menubar.windowed ||
+            (theme.components.menubar.windowed ||
               !document.getElementById(MENUBAR_ID)?.contains(e.relatedTarget))
           ) {
             blurWindow({ id });
@@ -196,7 +196,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           <div
             className={styles.content}
             draggable="false"
-            hidden={Boolean(theme.window.collapsible && collapsed)}>
+            hidden={Boolean(theme.components.window.collapsible && collapsed)}>
             <ErrorBoundary
               fallback={
                 <Content>

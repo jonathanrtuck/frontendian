@@ -1,10 +1,8 @@
-:root:global(.theme-beos) {
+:root[data-theme-id="beos"] {
   .separator {
-    background-clip: content-box;
-    background-color: var(--border-color);
-    box-sizing: content-box;
-    height: 0.0625rem;
-    padding: 0.25rem 0;
+    border-color: var(--lowlight-color) transparent var(--highlight-color);
+    border-width: var(--border-width) 0;
+    margin: 0.25rem 0;
 
     &:focus {
       outline: 0;
@@ -72,7 +70,7 @@
       justify-content: space-between;
 
       &::after {
-        color: var(--menu-background-color);
+        color: rgb(238, 238, 238);
         content: "▶";
         font-size: 1rem;
         margin-right: -0.5rem;
@@ -113,7 +111,7 @@
   }
 }
 
-:root:global(.theme-mac-os-classic) {
+:root[data-theme-id="mac-os-classic"] {
   .separator {
     border-color: var(--lowlight-color) transparent var(--highlight-color);
     border-width: var(--border-width) 0;

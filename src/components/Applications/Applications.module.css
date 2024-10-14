@@ -1,4 +1,4 @@
-:root:global(.theme-mac-os-classic) {
+:root[data-theme-id="mac-os-classic"] {
   .menubar {
     .menuitem {
       .menu {

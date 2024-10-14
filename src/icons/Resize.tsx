@@ -5,7 +5,7 @@ import { IconComponent } from "@/types";
 export const Resize: IconComponent = forwardRef(
   ({ themeId, ...props }, ref) => {
     switch (themeId) {
-      case "theme-beos":
+      case "beos":
         return (
           <svg
             {...props}
@@ -25,7 +25,7 @@ export const Resize: IconComponent = forwardRef(
             <circle cx="60" cy="60" fill="currentColor" r="4" />
           </svg>
         );
-      case "theme-mac-os-classic":
+      case "mac-os-classic":
         return (
           <svg
             {...props}

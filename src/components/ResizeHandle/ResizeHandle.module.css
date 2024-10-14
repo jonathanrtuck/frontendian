@@ -1,50 +1,42 @@
-:root:global(.theme-beos) {
+.root {
+  background-color: var(--window-background-color);
+  border-color: var(--border-color) var(--window-background-color)
+    var(--window-background-color) var(--border-color);
+  border-width: var(--border-width);
+  bottom: var(--window-padding);
+  color: rgba(0, 0, 0, 0.2);
+  height: calc(var(--scrollbar-size) + var(--border-width));
+  position: absolute;
+  right: var(--window-padding);
+  width: calc(var(--scrollbar-size) + var(--border-width));
+  z-index: 3;
+
+  [aria-current="true"] & {
+    background-color: var(--window-background-color--active);
+    border-color: var(--border-color) var(--window-background-color--active)
+      var(--window-background-color--active) var(--border-color);
+  }
+}
+
+:root[data-theme-id="beos"] {
   .root {
-    background-color: var(--window-background-color);
     border-color: var(--border-color) var(--window-background-color)
       var(--window-background-color) var(--border-color);
-    border-width: var(--border-width);
-    bottom: var(--window-padding);
-    color: rgba(0, 0, 0, 0.2);
     cursor: var(--cursor--grab);
-    height: calc(var(--scrollbar-size) + var(--border-width));
-    position: absolute;
-    right: var(--window-padding);
-    width: calc(var(--scrollbar-size) + var(--border-width));
-    z-index: 3;
 
     [aria-current="true"] & {
-      background-color: var(--window-background-color--active);
       border-color: var(--border-color) var(--window-background-color--active)
         var(--window-background-color--active) var(--border-color);
     }
   }
 }
 
-:root:global(.theme-mac-os-classic) {
+:root[data-theme-id="mac-os-classic"] {
   .root {
-    background-color: var(--window-background-color);
     border-color: rgb(255, 255, 255) var(--window-background-color)
       var(--window-background-color) rgb(255, 255, 255);
-    border-width: var(--border-width);
-    bottom: var(--window-padding);
-    color: rgba(0, 0, 0, 0.2);
-    cursor: var(--cursor--grab);
-    height: calc(var(--scrollbar-size) + var(--border-width));
-    position: absolute;
-    right: var(--window-padding);
-    width: calc(var(--scrollbar-size) + var(--border-width));
-    z-index: 3;
-
-    &::before {
-      background-color: red;
-      content: "";
-      inset: 0;
-      position: absolute;
-    }
 
     [aria-current="true"] & {
-      background-color: var(--window-background-color--active);
       border-color: rgb(255, 255, 255) var(--window-background-color--active)
         var(--window-background-color--active) rgb(255, 255, 255);
     }

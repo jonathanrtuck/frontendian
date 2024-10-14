@@ -1,41 +1,45 @@
 import { Theme } from "@/types";
 
 export const THEME_BEOS: Theme = {
-  deskbar: {
-    hidden: false,
+  components: {
+    deskbar: {
+      hidden: false,
+    },
+    menubar: {
+      windowed: true,
+    },
+    titlebar: {
+      doubleClick: true,
+      draggable: true,
+      icon: false,
+    },
+    window: {
+      collapsible: false,
+      hidable: true,
+    },
   },
-  id: "theme-beos",
-  menubar: {
-    windowed: true,
-  },
+  id: "beos",
   title: "BeOS",
-  titlebar: {
-    doubleClick: true,
-    draggable: true,
-    icon: false,
-  },
-  window: {
-    collapsible: false,
-    hidable: true,
-  },
 };
 
 export const THEME_MAC_OS_CLASSIC: Theme = {
-  deskbar: {
-    hidden: true,
+  components: {
+    deskbar: {
+      hidden: true,
+    },
+    menubar: {
+      windowed: false,
+    },
+    titlebar: {
+      doubleClick: false,
+      draggable: false,
+      icon: true,
+    },
+    window: {
+      collapsible: true,
+      hidable: false,
+    },
   },
-  id: "theme-mac-os-classic",
-  menubar: {
-    windowed: false,
-  },
+  id: "mac-os-classic",
   title: "Mac OS Classic",
-  titlebar: {
-    doubleClick: false,
-    draggable: false,
-    icon: true,
-  },
-  window: {
-    collapsible: true,
-    hidable: false,
-  },
 };

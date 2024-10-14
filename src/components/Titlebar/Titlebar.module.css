@@ -1,4 +1,4 @@
-:root:global(.theme-beos) {
+:root[data-theme-id="beos"] {
   --titlebar-height: 1.25rem;
   --titlebar_button-background: linear-gradient(
     to bottom right,
@@ -126,7 +126,7 @@
   }
 }
 
-:root:global(.theme-mac-os-classic) {
+:root[data-theme-id="mac-os-classic"] {
   --titlebar-height: 1rem;
   --titlebar_button-background: linear-gradient(
     to bottom right,

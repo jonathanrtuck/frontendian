@@ -1,9 +1,12 @@
-:root:global(.theme-beos) {
+.root {
+  display: flex;
+}
+
+:root[data-theme-id="beos"] {
   .root {
     align-items: center;
     background-color: rgba(0, 0, 0, 0.125);
     border-width: var(--border-width) 0;
-    display: flex;
     gap: 0.25rem;
     justify-content: space-between;
     padding: 0.25rem 0.5rem;
@@ -24,11 +27,7 @@
   }
 }
 
-:root:global(.theme-mac-os-classic) {
-  .root {
-    display: flex;
-  }
-
+:root[data-theme-id="mac-os-classic"] {
   .button {
     border-color: var(--highlight-color) var(--lowlight-color)
       var(--lowlight-color) var(--highlight-color);

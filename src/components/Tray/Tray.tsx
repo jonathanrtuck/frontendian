@@ -33,7 +33,7 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
     }
   }, [clockProps]);
 
-  if (!theme.menubar.windowed) {
+  if (!theme.components.menubar.windowed) {
     return (
       <aside {...props} className={clsx(className, styles.root)}>
         <Clock

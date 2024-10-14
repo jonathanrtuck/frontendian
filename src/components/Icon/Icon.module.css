@@ -1,73 +1,46 @@
-:root:global(.theme-beos) {
-  .root {
-    align-items: center;
-    border-radius: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    font-family: inherit;
-    gap: 0.25rem;
-    max-height: 100%;
-    width: 100%;
+.root {
+  align-items: center;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  gap: 0.25rem;
+  max-height: 100%;
+  width: 100%;
 
-    &:focus {
-      outline: 0;
-    }
+  &:focus {
+    outline: 0;
   }
+}
 
-  .icon {
-    aspect-ratio: 1 / 1;
-    margin: 0 25%;
-    width: 50%;
-  }
+.icon {
+  aspect-ratio: 1 / 1;
+  margin: 0 25%;
+  width: 50%;
+}
 
-  .title {
-    font-size: 0.875rem;
-    font-weight: 400;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+.title {
+  font-size: 0.875rem;
+  font-weight: 400;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
+:root[data-theme-id="beos"] {
   .root:focus .title {
     background-color: rgba(0, 0, 0, 0.4);
   }
 }
 
-:root:global(.theme-mac-os-classic) {
-  .root {
-    align-items: center;
-    border-radius: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    font-family: inherit;
-    gap: 0.25rem;
-    max-height: 100%;
-    width: 100%;
-
-    &:focus {
-      outline: 0;
-    }
-  }
-
-  .icon {
-    aspect-ratio: 1 / 1;
-    margin: 0 25%;
-    width: 50%;
-  }
-
+:root[data-theme-id="mac-os-classic"] {
   .root:focus .icon {
     filter: brightness(0.4);
   }
 
   .title {
     background-color: var(--highlight-color);
-    font-size: 0.875rem;
-    font-weight: 400;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .root:focus .title {

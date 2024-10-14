@@ -1,4 +1,4 @@
-:root:global(.theme-beos) {
+:root[data-theme-id="beos"] {
   .root {
     & > .button[aria-haspopup="menu"] {
       justify-content: center;

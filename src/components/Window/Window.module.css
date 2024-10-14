@@ -1,4 +1,4 @@
-:root:global(.theme-beos) {
+:root[data-theme-id="beos"] {
   --window-background-color: rgb(232, 232, 232);
   --window-background-color--active: rgb(224, 224, 224);
   --window-padding: 0.125rem;
@@ -37,11 +37,7 @@
           var(--window-padding)
       );
       transform: translate(0, 0) !important;
-      width: calc(100dvw - var(--deskbar-width));
-
-      @media (width <= 600px) {
-        width: 100dvw;
-      }
+      width: 100dvw;
     }
   }
 
@@ -69,7 +65,7 @@
   }
 }
 
-:root:global(.theme-mac-os-classic) {
+:root[data-theme-id="mac-os-classic"] {
   --window-background-color: rgb(221, 221, 221);
   --window-background-color--active: rgb(204, 204, 204);
   --window-padding: 0.25rem;

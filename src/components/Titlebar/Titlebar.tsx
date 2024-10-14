@@ -60,7 +60,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
         }
       }}
       position={
-        theme.titlebar.draggable
+        theme.components.titlebar.draggable
           ? {
               x: Math.min(titlebarLeft + offset, maxWidth - rootWidth + offset),
               y: 0,
@@ -72,7 +72,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
           [styles.dragging]: isDragging,
         })}
         onDoubleClick={
-          theme.titlebar.doubleClick
+          theme.components.titlebar.doubleClick
             ? (e) => {
                 const targetElement = getTargetElement(e);
                 const isButton = targetElement?.classList.contains(
@@ -86,7 +86,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
             : undefined
         }
         onPointerUp={
-          theme.titlebar.doubleClick
+          theme.components.titlebar.doubleClick
             ? (e) => {
                 const now = Date.now();
                 const targetElement = getTargetElement(e);
@@ -107,9 +107,10 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
             : undefined
         }
         ref={rootRef}>
-        {Boolean(theme.titlebar.icon) && application.Icon !== undefined && (
-          <application.Icon aria-hidden className={styles.icon} />
-        )}
+        {Boolean(theme.components.titlebar.icon) &&
+          application.Icon !== undefined && (
+            <application.Icon aria-hidden className={styles.icon} />
+          )}
         <h1 className={styles.title} id={`${id}-title`} title={title}>
           {title}
         </h1>
@@ -135,7 +136,7 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
             type="button"
           />
         )}
-        {Boolean(theme.window.collapsible) && (
+        {Boolean(theme.components.window.collapsible) && (
           <button
             aria-label="Collapse"
             className={clsx(styles.button, styles.collapse)}

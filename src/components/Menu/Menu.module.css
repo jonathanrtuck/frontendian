@@ -1,29 +1,22 @@
-:root:global(.theme-beos) {
-  --menu-background-color: rgb(224, 224, 224);
-
+:root[data-theme-id="beos"] {
   .root {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
 
-    &:where(.hidden) {
-      clip: rect(0 0 0 0);
-      clip-path: inset(50%);
-      height: 1px;
-      overflow: hidden;
-      position: absolute;
-      white-space: nowrap;
-      width: 1px;
-    }
-
     &:where(.bar) {
       flex-direction: row;
     }
 
     &:not(.bar) {
-      background-color: var(--menu-background-color);
+      background-color: rgb(224, 224, 224);
       border-width: var(--border-width);
+      box-shadow: inset var(--border-width) var(--border-width)
+          var(--highlight-color),
+        inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+          var(--lowlight-color);
+      margin: 0 calc(var(--border-width) * -1);
       color: rgb(0, 0, 0);
       flex-direction: column;
       max-width: 20rem;
@@ -60,22 +53,12 @@
   }
 }
 
-:root:global(.theme-mac-os-classic) {
+:root[data-theme-id="mac-os-classic"] {
   .root {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
-
-    &:where(.hidden) {
-      clip: rect(0 0 0 0);
-      clip-path: inset(50%);
-      height: 1px;
-      overflow: hidden;
-      position: absolute;
-      white-space: nowrap;
-      width: 1px;
-    }
 
     &:where(.bar) {
       flex-direction: row;

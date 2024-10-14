@@ -16,7 +16,7 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
 
-  if (theme.menubar.windowed) {
+  if (theme.components.menubar.windowed) {
     return (
       <Menu
         bar

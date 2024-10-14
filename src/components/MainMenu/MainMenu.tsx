@@ -12,10 +12,20 @@ import styles from "./MainMenu.module.css";
 
 const IconByTheme = ({ id }: Theme): IconComponent | undefined => {
   switch (id) {
-    case "theme-beos":
+    case "beos":
       return BeOS;
-    case "theme-mac-os-classic":
+    case "mac-os-classic":
       return Apple;
+  }
+};
+const titleByTheme = ({ id }: Theme): string => {
+  switch (id) {
+    case "beos":
+      return "BeOS Menu";
+    case "mac-os-classic":
+      return "Apple Menu";
+    default:
+      return "Main Menu";
   }
 };
 
@@ -32,7 +42,7 @@ export const MainMenu: FunctionComponent = () => {
         menuitem: styles.root,
         title: "visually-hidden",
       }}
-      title="frontendian">
+      title={titleByTheme(theme)}>
       <Menu>
         <Menuitem
           onClick={() => {

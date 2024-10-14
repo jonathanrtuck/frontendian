@@ -1,5 +1,5 @@
-import { FunctionComponent, useEffect, useLayoutEffect } from "react";
-import { Helmet } from "react-helmet";
+import { FunctionComponent, useEffect, useMemo } from "react";
+import { Helmet, HelmetProps } from "react-helmet";
 
 import {
   Deskbar,
@@ -11,7 +11,6 @@ import {
 } from "@/components";
 import { FILE_README_MD } from "@/files";
 import { openFile, useStore } from "@/store";
-import * as themes from "@/themes";
 
 import "./UI.module.css";
 
@@ -21,22 +20,39 @@ export const UI: FunctionComponent = () => {
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
 
+  const htmlAttributes = useMemo<HelmetProps["htmlAttributes"]>(
+    () =>
+      Object.entries(theme.components).reduce(
+        (acc, [component, obj]) => {
+          Object.entries(obj).forEach(([key, value]) => {
+            if (acc) {
+              acc[`data-theme-${component}-${key}`] = String(value);
+            }
+          });
+
+          return acc;
+        },
+        {
+          "data-theme-id": theme.id,
+        } as HelmetProps["htmlAttributes"]
+      ),
+    [theme]
+  );
+  const style = useMemo<HelmetProps["style"]>(
+    () =>
+      fonts.map(({ format, title, url }) => ({
+        cssText: `@font-face { font-family: "${title}"; src: url("${url}") format("${format}") }`,
+      })),
+    [fonts]
+  );
+
   useEffect(() => {
     openFile({ id: FILE_README_MD.id });
   }, []);
 
-  useLayoutEffect(() => {
-    Object.values(themes).forEach(({ id }) => {
-      document.documentElement.classList.toggle(id, id === theme.id);
-    });
-  }, [theme]);
-
   return (
     <>
-      <Helmet
-        style={fonts.map(({ format, title, url }) => ({
-          cssText: `@font-face { font-family: "${title}"; src: url("${url}") format("${format}") }`,
-        }))}>
+      <Helmet htmlAttributes={htmlAttributes} style={style}>
         {files.map(({ id, url }) => (
           <link href={url} key={id} rel="preconnect" />
         ))}
@@ -52,8 +68,8 @@ export const UI: FunctionComponent = () => {
           </Dialog>
         }>
         <Desktop />
-        {!theme.deskbar.hidden && <Deskbar />}
-        {!theme.menubar.windowed && <Menubar />}
+        {!theme.components.deskbar.hidden && <Deskbar />}
+        {!theme.components.menubar.windowed && <Menubar />}
         {windows.map((window) => (
           <Window key={window.id} {...window} />
         ))}

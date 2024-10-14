@@ -103,8 +103,8 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
           bar ? (horizontal ? "horizontal" : "vertical") : undefined
         }
         className={clsx(className, styles.root, {
+          "visually-hidden": !bar && !isExpanded,
           [styles.bar]: bar,
-          [styles.hidden]: !bar && !isExpanded,
           [styles.horizontal]: horizontal,
           [styles.vertical]: !horizontal,
         })}

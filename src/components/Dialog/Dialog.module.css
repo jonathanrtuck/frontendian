@@ -1,4 +1,4 @@
-:root:global(.theme-beos) {
+:root[data-theme-id="beos"] {
   .root {
     left: 50%;
     margin: 0;

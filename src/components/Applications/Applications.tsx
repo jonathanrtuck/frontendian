@@ -29,7 +29,7 @@ export const Applications: FunctionComponent = () => {
       : applications.find(({ id }) => id === APPLICATION_TRACKER.id)
   )!;
 
-  if (!theme.menubar.windowed) {
+  if (!theme.components.menubar.windowed) {
     return (
       <Menu bar className={styles.menubar} horizontal>
         <Menuitem

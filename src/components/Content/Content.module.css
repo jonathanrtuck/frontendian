@@ -1,26 +1,48 @@
-:root:global(.theme-beos) {
+.root {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.content {
+  background-color: rgb(255, 255, 255);
+  border-width: var(--border-width);
+  cursor: var(--cursor--default);
+  flex: 1 1 auto;
+  overflow: hidden;
+
+  &:where(.resizing) {
+    pointer-events: none;
+  }
+}
+
+.scrollable {
+  overflow: scroll;
+}
+
+.zoomed {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.resize {
+  &.zoomed,
+  [aria-current="false"] & {
+    color: transparent;
+    pointer-events: none;
+  }
+}
+
+:root[data-theme-id="beos"] {
   .root {
-    flex: 1 1 auto;
     height: 100%;
-    overflow: hidden;
   }
 
   .content {
-    background-color: rgb(255, 255, 255);
-    border-width: var(--border-width);
     box-sizing: content-box;
     cursor: var(--cursor--default);
-    flex: 1 1 auto;
-    overflow: hidden;
-
-    &:where(.resizing) {
-      pointer-events: none;
-    }
   }
 
   .scrollable {
-    overflow: scroll;
-
     /* note: custom scrollbar styles not supported in ios >14 😔 */
     &::-webkit-scrollbar {
       appearance: none;
@@ -72,39 +94,21 @@
     &.resizing {
       cursor: var(--cursor--grabbing);
     }
-
-    &.zoomed {
-      color: transparent;
-      pointer-events: none;
-    }
   }
 }
 
-:root:global(.theme-mac-os-classic) {
+:root[data-theme-id="mac-os-classic"] {
   .root {
     border-color: var(--lowlight-color) var(--highlight-color)
       var(--highlight-color) var(--lowlight-color);
     border-width: var(--border-width);
-    flex: 1 1 auto;
-    overflow: hidden;
   }
 
   .content {
-    background-color: rgb(255, 255, 255);
-    border-width: var(--border-width);
-    cursor: var(--cursor--default);
-    flex: 1 1 auto;
     height: 100%;
-    overflow: hidden;
-
-    &:where(.resizing) {
-      pointer-events: none;
-    }
   }
 
   .scrollable {
-    overflow: scroll;
-
     /* note: custom scrollbar styles not supported in ios >14 😔 */
     &::-webkit-scrollbar {
       appearance: none;
@@ -221,18 +225,6 @@
 
     &::-webkit-scrollbar-track {
       box-shadow: none;
-    }
-  }
-
-  .resize {
-    &.zoomed {
-      color: transparent;
-      pointer-events: none;
-    }
-
-    [aria-current="false"] & {
-      color: transparent;
-      pointer-events: none;
     }
   }
 }

@@ -1,10 +1,10 @@
-:root:global(.theme-beos) {
+:root[data-theme-id="beos"] {
   .root {
     cursor: var(--cursor--default);
   }
 }
 
-:root:global(.theme-mac-os-classic) {
+:root[data-theme-id="mac-os-classic"] {
   --menubar-height: 1.5rem;
 
   .root {

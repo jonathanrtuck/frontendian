@@ -111,23 +111,25 @@ export type State = {
 };
 
 export type Theme = {
-  deskbar: {
-    hidden: boolean;
+  components: {
+    deskbar: {
+      hidden: boolean;
+    };
+    menubar: {
+      windowed: boolean;
+    };
+    titlebar: {
+      doubleClick: boolean;
+      draggable: boolean;
+      icon: boolean;
+    };
+    window: {
+      collapsible: boolean;
+      hidable: boolean;
+    };
   };
   id: ID;
-  menubar: {
-    windowed: boolean;
-  };
   title: string;
-  titlebar: {
-    doubleClick: boolean;
-    draggable: boolean;
-    icon: boolean;
-  };
-  window: {
-    collapsible: boolean;
-    hidable: boolean;
-  };
 };
 
 export type URL = string;
