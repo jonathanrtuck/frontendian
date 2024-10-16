@@ -152,7 +152,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const getChildMenuitemButtons = (): HTMLElement[] =>
     Array.from(
       rootRef.current?.querySelectorAll(
-        `:scope > [role="menu"] > .${styles.menuitem} > .${styles.button}`
+        `:scope > [role="menu"] > .${styles.root} > .${styles.button}`
       ) ?? []
     );
   const onActivate = (): void => {
@@ -221,14 +221,14 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         onKeyDown={(e) => {
           const parentMenuitem =
             rootRef.current?.parentElement?.closest<HTMLElement>(
-              `.${styles.menuitem}`
+              `.${styles.root}`
             );
           const parentMenuitemButton =
             parentMenuitem?.querySelector<HTMLElement>(`.${styles.button}`);
           const childMenuitemButtons = getChildMenuitemButtons();
           const siblingMenuitemButtons = Array.from<HTMLElement>(
             rootRef.current?.parentElement?.querySelectorAll(
-              `:scope > .${styles.menuitem} > .${styles.button}`
+              `:scope > .${styles.root} > .${styles.button}`
             ) ?? []
           );
           const index = siblingMenuitemButtons.indexOf(e.currentTarget);
@@ -260,7 +260,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
                 ) {
                   const parentMenuitemButtons = Array.from<HTMLElement>(
                     parentMenuitem?.parentElement?.querySelectorAll(
-                      `:scope > .${styles.menuitem} > .${styles.button}`
+                      `:scope > .${styles.root} > .${styles.button}`
                     ) ?? []
                   );
                   const parentIndex =
@@ -292,7 +292,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
                 } else {
                   const topMenuitemButton = topButtonRef.current;
                   const topMenuitem = topMenuitemButton?.closest(
-                    `.${styles.menuitem}`
+                    `.${styles.root}`
                   );
 
                   if (
@@ -301,7 +301,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
                   ) {
                     const topMenuitemButtons = Array.from<HTMLElement>(
                       topMenuitem?.parentElement?.querySelectorAll(
-                        `:scope > .${styles.menuitem} > .${styles.button}`
+                        `:scope > .${styles.root} > .${styles.button}`
                       ) ?? []
                     );
                     const topIndex =
@@ -345,9 +345,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
           if (document.hasFocus() && isActive) {
             if (isTop) {
               setTabIndex(0);
-            }
-
-            if (haspopup) {
+            } else if (haspopup) {
               setIsExpanded(true);
               getChildMenuitemButtons().at(0)?.focus();
             } else {

@@ -24,6 +24,7 @@
   user-select: none;
 
   .root:where(.horizontal) > & {
+    height: 100%;
     padding: 0 0.5rem;
   }
 
@@ -35,12 +36,58 @@
   .root:where(.top.vertical) > & {
     box-shadow: var(--box-shadow--high);
   }
+
+  &:where(.disabled) {
+    color: var(--text-color--disabled);
+  }
+
+  &:is(.expanded),
+  .root:not(.top) > &:not(.checked, .disabled):hover {
+    background-color: rgb(160, 160, 160);
+    box-shadow: none;
+  }
+
+  .root:not(.top) > &:where(.haspopup) {
+    &::after {
+      color: rgb(238, 238, 238);
+      content: "▶";
+      font-size: 1rem;
+      margin-right: -0.5rem;
+      padding-left: 0.5rem;
+      text-shadow: calc(var(--border-width) * -1) var(--border-width)
+          rgba(0, 0, 0, 0.25),
+        calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+          rgba(0, 0, 0, 0.25),
+        var(--border-width) calc(var(--border-width) * -1) rgba(0, 0, 0, 0.25),
+        var(--border-width) var(--border-width) rgba(0, 0, 0, 0.25),
+        var(--border-width) var(--border-width) var(--border-width)
+          rgba(0, 0, 0, 0.75);
+    }
+  }
 }
 
 .icon {
   flex: 0 0 1rem;
   height: 1rem;
   width: 1rem;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radio::before {
+  content: "";
+  font-size: 0.625rem;
+  width: 0.5rem;
+}
+
+.checked::before {
+  content: "✔︎";
+  font-family: var(--font-family--default);
+  font-size: 0.75rem;
 }
 
 /*
