@@ -7,10 +7,13 @@ import { useStore } from "@/store";
 
 import styles from "./Tray.module.css";
 
-const DATE_PROP: ClockProps = {
+const DATE_STYLE_SHORT: ClockProps = {
   dateStyle: "short",
 };
-const TIME_PROP: ClockProps = {
+const TIME_STYLE_MEDIUM: ClockProps = {
+  timeStyle: "medium",
+};
+const TIME_STYLE_SHORT: ClockProps = {
   timeStyle: "short",
 };
 
@@ -19,19 +22,24 @@ export type TrayProps = HTMLAttributes<HTMLElement>;
 export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
   const theme = useStore((state) => state.theme);
 
-  const [clockProps, setClockProps] = useState<ClockProps>(TIME_PROP);
+  const dateProps = DATE_STYLE_SHORT;
+  const timeProps = theme.components.menubar.windowed
+    ? TIME_STYLE_MEDIUM
+    : TIME_STYLE_SHORT;
+
+  const [clockProps, setClockProps] = useState<ClockProps>(timeProps);
 
   useEffect(() => {
     if (clockProps.dateStyle) {
       const timeout = setTimeout(() => {
-        setClockProps(TIME_PROP);
+        setClockProps(timeProps);
       }, 5000);
 
       return () => {
         clearTimeout(timeout);
       };
     }
-  }, [clockProps]);
+  }, [clockProps, timeProps]);
 
   if (!theme.components.menubar.windowed) {
     return (
@@ -40,7 +48,7 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
           {...clockProps}
           onClick={() => {
             setClockProps((prevState) =>
-              prevState.timeStyle ? DATE_PROP : TIME_PROP
+              prevState.timeStyle ? dateProps : timeProps
             );
           }}
         />
@@ -59,19 +67,21 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
 
   return (
     <aside {...props} className={clsx(className, styles.root)}>
-      <ul className={styles.icons}>
-        <li className={styles.icon}>
-          <Network />
-        </li>
-      </ul>
-      <Clock
-        {...clockProps}
-        onClick={() => {
-          setClockProps((prevState) =>
-            prevState.timeStyle ? DATE_PROP : TIME_PROP
-          );
-        }}
-      />
+      <div className={styles.content}>
+        <ul className={styles.icons}>
+          <li className={styles.icon}>
+            <Network />
+          </li>
+        </ul>
+        <Clock
+          {...clockProps}
+          onClick={() => {
+            setClockProps((prevState) =>
+              prevState.timeStyle ? dateProps : timeProps
+            );
+          }}
+        />
+      </div>
     </aside>
   );
 };

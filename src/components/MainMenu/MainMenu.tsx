@@ -34,53 +34,54 @@ export const MainMenu: FunctionComponent = () => {
   const theme = useStore((state) => state.theme);
 
   return (
-    <Menuitem
-      Icon={IconByTheme(theme)}
-      classes={{
-        button: styles.button,
-        icon: styles.icon,
-        menuitem: styles.root,
-        title: "visually-hidden",
-      }}
-      title={titleByTheme(theme)}>
-      <Menu>
-        <Menuitem
-          onClick={() => {
-            openFile({ id: FILE_README_MD.id });
-          }}
-          title={FILE_README_MD.title}
-        />
-        <Menuitem separator />
-        <Menuitem title="Theme">
-          <Menu>
-            {Object.values(themes).map(({ id, title }) => (
+    <Menu bar vertical>
+      <Menuitem
+        Icon={IconByTheme(theme)}
+        classes={{
+          button: styles.button,
+          icon: styles.icon,
+          title: "visually-hidden",
+        }}
+        title={titleByTheme(theme)}>
+        <Menu>
+          <Menuitem
+            onClick={() => {
+              openFile({ id: FILE_README_MD.id });
+            }}
+            title={FILE_README_MD.title}
+          />
+          <Menuitem separator />
+          <Menuitem title="Theme">
+            <Menu>
+              {Object.values(themes).map(({ id, title }) => (
+                <Menuitem
+                  checked={id === theme.id}
+                  key={id}
+                  onClick={() => {
+                    changeTheme({ id });
+                  }}
+                  title={title}
+                  type="radio"
+                />
+              ))}
+            </Menu>
+          </Menuitem>
+          <Menuitem separator />
+          {applications
+            .filter(({ id }) => id !== APPLICATION_TRACKER.id)
+            .map(({ Icon, id, title }) => (
               <Menuitem
-                checked={id === theme.id}
+                Icon={Icon}
                 key={id}
                 onClick={() => {
-                  changeTheme({ id });
+                  openApplication({ id });
                 }}
                 title={title}
-                type="radio"
               />
             ))}
-          </Menu>
-        </Menuitem>
-        <Menuitem separator />
-        {applications
-          .filter(({ id }) => id !== APPLICATION_TRACKER.id)
-          .map(({ Icon, id, title }) => (
-            <Menuitem
-              Icon={Icon}
-              key={id}
-              onClick={() => {
-                openApplication({ id });
-              }}
-              title={title}
-            />
-          ))}
-      </Menu>
-    </Menuitem>
+        </Menu>
+      </Menuitem>
+    </Menu>
   );
 };
 

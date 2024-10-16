@@ -1,13 +1,77 @@
 :root {
+  --font-family--charcoal: "Charcoal";
+  --font-family--digital-dismay: "DigitalDismay";
+  --font-family--courier-10-pitch: "Courier10Pitch";
+  --font-family--mine-sweeper: "MineSweeper";
+  --font-family--monospace: ui-monospace, Menlo, Monaco, "Cascadia Mono",
+    "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
+    "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  --font-family--sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(0, 0, 0);
+}
+
+:root[data-theme-id="beos"] {
+  --background-color--default: rgb(222, 222, 222);
+  --border-color: rgb(160, 160, 160);
+  --border-width: 0.0625rem;
+  --box-shadow--high: inset var(--border-width) var(--border-width)
+      var(--color--highlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--lowlight);
+  --box-shadow--low: inset var(--border-width) var(--border-width)
+      var(--color--lowlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--highlight);
+  --color--highlight: rgba(255, 255, 255, 0.6);
+  --color--lowlight: rgba(0, 0, 0, 0.2);
+  --color--selection: rgb(0, 0, 0);
+  --cursor--default: url("/public/themes/beos/cursors/Default.svg"), default;
+  --cursor--grab: url("/public/themes/beos/cursors/Grab.svg"), grab;
+  --cursor--grabbing: url("/public/themes/beos/cursors/Grabbing.svg"), grabbing;
+  --cursor--pointer: url("/public/themes/beos/cursors/Pointer.svg"), pointer;
+  --cursor--text: url("/public/themes/beos/cursors/Text.svg") 2 8, text;
+  --font-family--default: Helvetica;
+  --font-family--monospace: var(--font-family--courier-10-pitch);
+  --scrollbar-size: 1rem;
+  --text-color--dark: rgb(0, 0, 0);
+  --text-color--default: var(--text-color--light);
+  --text-color--disabled: rgb(160, 160, 160);
+  --text-color--light: rgb(255, 255, 255);
+}
+
+:root[data-theme-id="mac-os-classic"] {
+  --border-color: rgb(38, 38, 38);
+  --border-radius: 0.75rem;
+  --border-width: 0.0625rem;
+  --box-shadow--high: inset var(--border-width) var(--border-width)
+      var(--color--highlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--lowlight);
+  --box-shadow--low: inset var(--border-width) var(--border-width)
+      var(--color--lowlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--highlight);
+  --color--highlight: rgba(255, 255, 255, 0.6);
+  --color--lowlight: rgba(0, 0, 0, 0.4);
+  --color--selection: rgb(204, 204, 253);
+  --font-family--default: var(--font-family--charcoal);
+  --scrollbar-size: 1rem;
+  --text-color--dark: rgb(0, 0, 0);
+  --text-color--default: var(--text-color--dark);
+  --text-color--disabled: rgb(160, 160, 160);
+  --text-color--light: rgb(255, 255, 255);
 }
 
 body {
-  background-color: rgb(0, 0, 0);
   bottom: 0;
-  color: var(--text-color);
+  color: var(--text-color--default);
   cursor: var(--cursor--default);
+  font-family: var(--font-family--default);
   left: 0;
   margin: 0;
   position: fixed;
@@ -25,7 +89,8 @@ body {
 }
 
 *::selection {
-  color: var(--text-color);
+  background-color: var(--color--selection);
+  color: var(--text-color--default);
 }
 
 :link {

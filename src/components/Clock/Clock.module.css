@@ -1,20 +1,15 @@
 .root {
   font-size: 0.875rem;
   user-select: none;
-}
 
-:root[data-theme-id="beos"] {
-  .root {
-    color: rgba(0, 0, 0, 0.7);
-    font-family: var(--font-family--monospace);
-    font-weight: 600;
+  :root[data-theme-id="beos"] & {
+    font-size: 0.875rem;
+    font-weight: 500;
     margin-right: -0.25rem;
     padding: 0 0.25rem;
   }
-}
 
-:root[data-theme-id="mac-os-classic"] {
-  .root {
+  :root[data-theme-id="mac-os-classic"] & {
     padding: 0 0.5rem;
   }
 }

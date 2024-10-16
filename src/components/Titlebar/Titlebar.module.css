@@ -1,5 +1,41 @@
 :root[data-theme-id="beos"] {
   --titlebar-height: 1.25rem;
+}
+:root[data-theme-id="mac-os-classic"] {
+  --titlebar-height: 1rem;
+}
+
+.root {
+  align-items: center;
+  display: flex;
+  height: var(--titlebar-height);
+}
+
+.title {
+  flex: 1 1 auto;
+  font-size: 1rem;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.button {
+  cursor: var(--cursor--default);
+  flex: 0 0 var(--titlebar-height);
+  height: var(--titlebar-height);
+  position: relative;
+  width: var(--titlebar-height);
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+/*
+:root[data-theme-id="beos"] {
+  --titlebar-height: 1.25rem;
   --titlebar_button-background: linear-gradient(
     to bottom right,
     rgb(255, 255, 255),
@@ -158,8 +194,8 @@
         rgb(153, 153, 153) var(--border-width),
         rgb(153, 153, 153) calc(var(--border-width) * 2)
       );
-      border-color: transparent var(--lowlight-color) transparent
-        var(--highlight-color);
+      border-color: transparent var(--color--lowlight) transparent
+        var(--color--highlight);
       border-width: 0 var(--border-width);
       content: "";
       flex: 1 1 auto;
@@ -205,8 +241,8 @@
 
   .button {
     background-image: var(--titlebar_button-background);
-    border-color: var(--lowlight-color) var(--highlight-color)
-      var(--highlight-color) var(--lowlight-color);
+    border-color: var(--color--lowlight) var(--color--highlight)
+      var(--color--highlight) var(--color--lowlight);
     border-width: var(--border-width);
     cursor: var(--cursor--default);
     flex: 0 0 var(--titlebar-height);
@@ -223,13 +259,13 @@
       background-image: var(--titlebar_button-background--active);
 
       &::before {
-        border-color: var(--lowlight-color);
+        border-color: var(--color--lowlight);
       }
     }
 
     &::before {
-      border-color: var(--highlight-color) var(--lowlight-color)
-        var(--lowlight-color) var(--highlight-color);
+      border-color: var(--color--highlight) var(--color--lowlight)
+        var(--color--lowlight) var(--color--highlight);
       border-width: var(--border-width);
       content: "";
       inset: var(--border-width);
@@ -274,3 +310,4 @@
     }
   }
 }
+*/

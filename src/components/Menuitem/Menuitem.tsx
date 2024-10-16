@@ -25,7 +25,6 @@ export type MenuitemProps = Omit<
   classes?: {
     button?: string;
     icon?: string;
-    menuitem?: string;
     separator?: string;
     title?: string;
   };
@@ -117,7 +116,12 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
     return (
       <li
         {...removeProps<HTMLAttributes<HTMLLIElement>>(props, ["separator"])}
-        className={clsx(className, classes?.separator, styles.separator)}
+        className={clsx(
+          className,
+          classes?.separator,
+          styles.root,
+          styles.separator
+        )}
         onClick={() => {
           topButtonRef.current?.focus();
 
@@ -178,15 +182,9 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         "role",
         "title",
       ])}
-      className={clsx(
-        className,
-        classes?.menuitem,
-        styles.menuitem,
-        styles[orientation],
-        {
-          [styles.top]: isTop,
-        }
-      )}
+      className={clsx(className, styles.root, styles[orientation], {
+        [styles.top]: isTop,
+      })}
       onBlur={(e) => {
         props.onBlur?.(e);
 

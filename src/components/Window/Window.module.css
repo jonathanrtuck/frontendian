@@ -1,52 +1,76 @@
+.root {
+  background-color: var(--background-color--default);
+  border-width: var(--border-width);
+  box-shadow: var(--box-shadow--high);
+  color: var(--text-color--dark);
+  position: fixed;
+}
+
+/*
+.root {
+  background-color: var(--window-background-color);
+  border-width: var(--border-width);
+  box-shadow: inset var(--border-width) var(--border-width)
+      var(--color--highlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--lowlight);
+  color: rgb(0, 0, 0);
+  cursor: var(--cursor--grab);
+  display: flex;
+  flex-direction: column;
+  margin: calc(
+      var(--window-padding) + var(--titlebar-height) + var(--window-padding)
+    )
+    0 0;
+  padding: var(--window-padding);
+  position: fixed;
+
+  &[aria-current="true"] {
+    background-color: var(--window-background-color--active);
+    outline: 0;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:where(.dragging) {
+    cursor: var(--cursor--grabbing);
+  }
+
+  &:where(.zoomed) {
+    cursor: unset;
+    height: calc(
+      100dvh - var(--window-padding) - var(--titlebar-height) -
+        var(--window-padding)
+    );
+    transform: translate(0, 0) !important;
+    width: 100dvw;
+  }
+}
+
+.content {
+  box-shadow: inset var(--border-width) var(--border-width)
+      var(--color--lowlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--highlight);
+  cursor: var(--cursor--default);
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: var(--window-padding);
+
+  &[hidden] {
+    height: 0;
+  }
+}
+
 :root[data-theme-id="beos"] {
   --window-background-color: rgb(232, 232, 232);
   --window-background-color--active: rgb(224, 224, 224);
   --window-padding: 0.125rem;
-
-  .root {
-    background-color: var(--window-background-color);
-    border-width: var(--border-width);
-    color: rgb(0, 0, 0);
-    cursor: var(--cursor--grab);
-    display: flex;
-    flex-direction: column;
-    margin: calc(
-        var(--window-padding) + var(--titlebar-height) + var(--window-padding)
-      )
-      0 0;
-    padding: var(--window-padding);
-    position: fixed;
-
-    &[aria-current="true"] {
-      background-color: var(--window-background-color--active);
-      outline: 0;
-    }
-
-    &[hidden] {
-      display: none;
-    }
-
-    &:where(.dragging) {
-      cursor: var(--cursor--grabbing);
-    }
-
-    &:where(.zoomed) {
-      cursor: unset;
-      height: calc(
-        100dvh - var(--window-padding) - var(--titlebar-height) -
-          var(--window-padding)
-      );
-      transform: translate(0, 0) !important;
-      width: 100dvw;
-    }
-  }
-
-  .content {
-    cursor: var(--cursor--default);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
 
   .dialog {
     background-color: var(--window-background-color);
@@ -73,7 +97,7 @@
   .root {
     background-color: var(--window-background-color);
     border-width: var(--border-width);
-    box-shadow: 0.125rem 0.125rem 0.0625rem var(--lowlight-color);
+    box-shadow: 0.125rem 0.125rem 0.0625rem var(--color--lowlight);
     display: flex;
     flex-direction: column;
     padding: calc(var(--titlebar-height) + var(--window-padding) * 2)
@@ -125,3 +149,4 @@
     }
   }
 }
+*/

@@ -35,42 +35,42 @@ export const Resize: IconComponent = forwardRef(
             xmlns="http://www.w3.org/2000/svg">
             <g strokeWidth="4">
               <line
-                stroke="var(--highlight-color)"
+                stroke="var(--color--highlight)"
                 x1="12"
                 x2="38"
                 y1="38"
                 y2="12"
               />
               <line
-                stroke="var(--lowlight-color)"
+                stroke="var(--color--lowlight)"
                 x1="16"
                 x2="42"
                 y1="42"
                 y2="16"
               />
               <line
-                stroke="var(--highlight-color)"
+                stroke="var(--color--highlight)"
                 x1="20"
                 x2="46"
                 y1="46"
                 y2="20"
               />
               <line
-                stroke="var(--lowlight-color)"
+                stroke="var(--color--lowlight)"
                 x1="24"
                 x2="50"
                 y1="50"
                 y2="24"
               />
               <line
-                stroke="var(--highlight-color)"
+                stroke="var(--color--highlight)"
                 x1="28"
                 x2="54"
                 y1="54"
                 y2="28"
               />
               <line
-                stroke="var(--lowlight-color)"
+                stroke="var(--color--lowlight)"
                 x1="32"
                 x2="58"
                 y1="58"

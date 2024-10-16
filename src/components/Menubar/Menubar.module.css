@@ -1,3 +1,4 @@
+/*
 :root[data-theme-id="beos"] {
   .root {
     cursor: var(--cursor--default);
@@ -9,12 +10,12 @@
 
   .root {
     background: rgb(221, 221, 221);
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    border-radius: var(--border-radius, 0) var(--border-radius, 0) 0 0;
     border-width: 0 0 var(--border-width);
     box-shadow: inset var(--border-width) var(--border-width)
-        var(--highlight-color),
+        var(--color--highlight),
       inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
-        var(--lowlight-color);
+        var(--color--lowlight);
     display: flex;
     justify-content: space-between;
     left: 0;
@@ -35,3 +36,4 @@
     order: 2;
   }
 }
+*/

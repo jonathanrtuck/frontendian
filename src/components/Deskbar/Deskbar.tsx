@@ -1,6 +1,6 @@
 import { FunctionComponent, useRef } from "react";
 
-import { Applications, MainMenu, Menu, Tray } from "@/components";
+import { Applications, MainMenu, Tray } from "@/components";
 import { DESKBAR_ID } from "@/constants";
 import { focusDeskbar, useStore } from "@/store";
 
@@ -32,9 +32,7 @@ export const Deskbar: FunctionComponent = () => {
         zIndex,
       }}
       tabIndex={-1}>
-      <Menu bar vertical>
-        <MainMenu />
-      </Menu>
+      <MainMenu />
       <Tray />
       <Applications />
     </header>

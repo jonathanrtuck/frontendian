@@ -1,103 +1,96 @@
-:root[data-theme-id="beos"] {
+.root {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &:where(.bar.horizontal) {
+    flex-direction: row;
+    height: 1.5rem;
+  }
+
+  &:where(.bar.vertical) {
+    flex-direction: column;
+  }
+
+  &:not(.bar) {
+    background-color: var(--background-color--default);
+    border-width: var(--border-width);
+    box-shadow: var(--box-shadow--high);
+    color: var(--text-color--dark);
+    flex-direction: column;
+    max-width: 20rem;
+    min-width: 5rem;
+    position: absolute;
+    z-index: 100;
+  }
+}
+
+/*
+.root {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &:where(.bar) {
+    flex-direction: row;
+  }
+
+  &:not(.bar) {
+    background-color: rgb(224, 224, 224);
+    border-width: var(--border-width);
+    box-shadow: inset var(--border-width) var(--border-width)
+        var(--color--highlight),
+      inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+        var(--color--lowlight);
+    margin: 0 calc(var(--border-width) * -1);
+    color: rgb(0, 0, 0);
+    flex-direction: column;
+    max-width: 20rem;
+    min-width: 5rem;
+    position: absolute;
+    z-index: 100;
+  }
+
+  &:where(.horizontal) {
+    height: 1.5rem;
+  }
+
+  &:where(.vertical) {
+    flex-direction: column;
+  }
+
+  .bar:where(.horizontal) & {
+    left: var(--border-width);
+    top: 100%;
+  }
+
+  .bar:where(.vertical) & {
+    right: 100%;
+    top: 0;
+  }
+
+  &:not(.bar) & {
+    left: 100%;
+    right: unset;
+    top: 0;
+  }
+}
+
+:root[data-theme-menubar-windowed="true"] {
   .root {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    &:where(.bar) {
-      flex-direction: row;
-    }
-
-    &:not(.bar) {
-      background-color: rgb(224, 224, 224);
-      border-width: var(--border-width);
-      box-shadow: inset var(--border-width) var(--border-width)
-          var(--highlight-color),
-        inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
-          var(--lowlight-color);
-      margin: 0 calc(var(--border-width) * -1);
-      color: rgb(0, 0, 0);
-      flex-direction: column;
-      max-width: 20rem;
-      min-width: 5rem;
-      position: absolute;
-      z-index: 100;
-    }
-
     &:where(.horizontal) {
-      background-color: rgb(222, 222, 222);
       border-width: var(--border-width) var(--border-width) 0;
-      height: 1.5rem;
-    }
-
-    &:where(.vertical) {
-      flex-direction: column;
-    }
-
-    .bar:where(.horizontal) & {
-      left: 0;
-      top: 100%;
-    }
-
-    .bar:where(.vertical) & {
-      right: 100%;
-      top: 0;
-    }
-
-    &:not(.bar) & {
-      left: 100%;
-      right: unset;
-      top: 0;
     }
   }
 }
 
 :root[data-theme-id="mac-os-classic"] {
   .root {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    &:where(.bar) {
-      flex-direction: row;
-    }
-
     &:not(.bar) {
-      background-color: rgb(224, 224, 224);
-      border-width: var(--border-width);
-      box-shadow: 0.125rem 0.125rem 0.0625rem var(--lowlight-color);
-      color: rgb(0, 0, 0);
-      flex-direction: column;
-      max-width: 20rem;
-      min-width: 5rem;
-      position: absolute;
-      z-index: 100;
-    }
-
-    &:where(.horizontal) {
-      height: 100%;
-    }
-
-    &:where(.vertical) {
-      flex-direction: column;
-    }
-
-    .bar:where(.horizontal) & {
-      left: 0;
-      top: 100%;
-    }
-
-    .bar:where(.vertical) & {
-      right: 100%;
-      top: 0;
-    }
-
-    &:not(.bar) & {
-      left: 100%;
-      right: unset;
-      top: 0;
+      box-shadow: 0.125rem 0.125rem 0.0625rem var(--color--lowlight);
     }
   }
 }
+*/
