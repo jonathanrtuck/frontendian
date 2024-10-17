@@ -18,7 +18,6 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 
 ## Todo
 
-- scrollbar background images
 - zoomed `Window` size/location
 - prevent potential `TitleBar` position overflow on `Window` resize
 - test `Menu` keyboard interaction
@@ -30,3 +29,4 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
   - e.g. *Tracker* vs *Finder*
   - use something like i18next?
 - create a `README.md` for each theme
+- update minor version
