@@ -1,8 +1,10 @@
 import clsx from "clsx";
 import {
+  Children,
   FocusEvent,
   forwardRef,
   HTMLAttributes,
+  isValidElement,
   KeyboardEvent,
   PointerEvent,
   PropsWithChildren,
@@ -69,8 +71,16 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
       setIsActive(false);
     }, []);
 
+    const hasPopup = useMemo<boolean>(
+      () =>
+        Children.toArray(children)
+          .filter(isValidElement)
+          .some(({ props }) => "children" in (props as any)),
+      [children]
+    );
     const contextValue = useMemo<MenuContextType>(
       () => ({
+        hasPopup,
         inactivate: bar ? inactivate : parentInactivate,
         isActive: bar ? isActive : isParentActive,
         isFocusWithin,
@@ -80,6 +90,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
       }),
       [
         bar,
+        hasPopup,
         horizontal,
         inactivate,
         isActive,

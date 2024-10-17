@@ -63,6 +63,10 @@
     background-color: rgb(160, 160, 160);
   }
 
+  .root:where(:not(.top)) > &:where(.hasPopup) {
+    padding-right: 2rem;
+  }
+
   .root:where(:not(.top)) > &:where([aria-haspopup="menu"]) {
     &::after {
       color: rgb(240, 240, 240);
@@ -95,9 +99,17 @@
 }
 
 .title {
+  flex: 1 1 auto;
   overflow: hidden;
+  text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.hasPopup {
+}
+
+.pointer {
 }
 
 /*

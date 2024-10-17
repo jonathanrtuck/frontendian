@@ -4,6 +4,7 @@ import { DEFAULT_WINDOW } from "@/constants";
 import { Window } from "@/types";
 
 export type MenuContextType = {
+  hasPopup: boolean;
   inactivate(): void;
   isActive: boolean;
   isFocusWithin: boolean;
@@ -13,6 +14,7 @@ export type MenuContextType = {
 };
 
 export const MenuContext = createContext<MenuContextType>({
+  hasPopup: false,
   inactivate: () => {},
   isActive: false,
   isFocusWithin: false,

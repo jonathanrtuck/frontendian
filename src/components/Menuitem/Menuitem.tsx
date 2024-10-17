@@ -58,8 +58,15 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   classes,
   ...props
 }) => {
-  const { inactivate, isActive, isFocusWithin, isPointer, isTop, orientation } =
-    useContext(MenuContext);
+  const {
+    hasPopup,
+    inactivate,
+    isActive,
+    isFocusWithin,
+    isPointer,
+    isTop,
+    orientation,
+  } = useContext(MenuContext);
   const { collapse: parentCollapse, topButtonRef: parentTopButtonRef } =
     useContext(MenuitemContext);
 
@@ -209,6 +216,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         aria-haspopup={haspopup ? "menu" : undefined}
         aria-labelledby={`${id}-title`}
         className={clsx(classes?.button, styles.button, {
+          [styles.hasPopup]: hasPopup,
           [styles.pointer]: isPointer,
         })}
         onClick={onActivate}
