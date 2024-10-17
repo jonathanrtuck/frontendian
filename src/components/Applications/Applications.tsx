@@ -103,7 +103,7 @@ export const Applications: FunctionComponent = () => {
             Icon={application.Icon}
             key={applicationId}
             title={application.title}>
-            <Menu>
+            <Menu className="qwerty">
               {applicationWindows.length === 0 ? (
                 <Menuitem disabled title="No windows" />
               ) : (

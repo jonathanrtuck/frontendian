@@ -27,6 +27,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     height: heightState,
     id,
     menubarRef,
+    resizable,
     scrollable,
     width: widthState,
   } = useContext(WindowContext);
@@ -73,7 +74,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     <Resizable
       axis="both"
       handle={
-        scrollable && !collapsed ? (
+        resizable && !collapsed ? (
           <Resize aria-hidden className={styles.resize} themeId={theme.id} />
         ) : (
           <Fragment /> // eslint-disable-line react/jsx-no-useless-fragment
@@ -100,6 +101,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         className={clsx(styles.root, {
           [styles.overflowHorizontal]: hasHorizontalOverflow,
           [styles.overflowVertical]: hasVerticalOverflow,
+          [styles.resizable]: resizable,
           [styles.resizing]: isResizing,
           [styles.scrollable]: scrollable,
         })}

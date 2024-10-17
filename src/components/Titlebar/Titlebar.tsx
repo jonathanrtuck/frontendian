@@ -17,7 +17,7 @@ import { getTargetElement } from "@/utils";
 import styles from "./Titlebar.module.css";
 
 export const Titlebar: FunctionComponent = () => {
-  const { collapsed, id, scrollable, title, titlebarLeft } =
+  const { collapsed, id, resizable, title, titlebarLeft } =
     useContext(WindowContext);
 
   const applications = useStore((state) => state.applications);
@@ -128,7 +128,7 @@ export const Titlebar: FunctionComponent = () => {
           title="Close"
           type="button"
         />
-        {Boolean(scrollable) && (
+        {Boolean(resizable) && (
           <button
             aria-label="Zoom"
             className={clsx(styles.button, styles.zoom)}

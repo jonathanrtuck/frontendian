@@ -142,6 +142,7 @@ export type Window = {
   hidden: boolean;
   id: ID;
   left: number;
+  resizable: boolean;
   scrollable: boolean;
   title: string;
   titlebarLeft: number;

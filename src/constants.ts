@@ -19,6 +19,7 @@ export const DEFAULT_WINDOW: Window = {
   hidden: false,
   id: "",
   left: DEFAULT_WINDOW_POSITION_OFFSET,
+  resizable: true,
   scrollable: true,
   title: "",
   titlebarLeft: 0,

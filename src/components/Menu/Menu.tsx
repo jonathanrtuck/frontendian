@@ -71,11 +71,18 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
       setIsActive(false);
     }, []);
 
+    // if has grandchildren (Menu -> Menuitem -> Menu)
     const hasPopup = useMemo<boolean>(
       () =>
         Children.toArray(children)
           .filter(isValidElement)
-          .some(({ props }) => "children" in (props as any)),
+          .some(({ props }) =>
+            Children.toArray((props as any).children)
+              .filter(isValidElement)
+              .some(
+                ({ props }) => Children.count((props as any).children) !== 0
+              )
+          ),
       [children]
     );
     const contextValue = useMemo<MenuContextType>(

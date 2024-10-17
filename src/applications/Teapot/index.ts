@@ -7,6 +7,7 @@ export const APPLICATION_TEAPOT: ApplicationConfiguration = {
   Component: Teapot,
   getWindow: () => ({
     height: 300,
+    scrollable: false,
     title: "Teapot",
     width: 300,
   }),

@@ -8,6 +8,7 @@ export const APPLICATION_MINESWEEPER: ApplicationConfiguration = {
   Component: Minesweeper,
   getWindow: () => ({
     height: DEFAULT_STATE[DEFAULT_LEVEL].height,
+    resizable: false,
     scrollable: false,
     title: "Minesweeper",
     width: DEFAULT_STATE[DEFAULT_LEVEL].width,
