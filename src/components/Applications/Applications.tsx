@@ -64,9 +64,6 @@ export const Applications: FunctionComponent = () => {
               const application = applications.find(
                 (application) => application.id === applicationId
               )!;
-              const applicationWindows = windows.filter((window) =>
-                application.windowIds.includes(window.id)
-              );
 
               return (
                 <Menuitem
