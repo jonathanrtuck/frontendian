@@ -5,6 +5,7 @@ import {
   PropsWithChildren,
   useContext,
   useLayoutEffect,
+  useRef,
   useState,
 } from "react";
 import { Resizable } from "react-resizable";
@@ -31,9 +32,15 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     zoomed,
   } = useContext(WindowContext);
 
+  const rootRef = useRef<HTMLDivElement>(null);
+
   const [height, setHeight] = useState<number>(heightState);
   const [width, setWidth] = useState<number>(widthState);
 
+  const [hasHorizontalOverflow, setHasHorizontalOverflow] =
+    useState<boolean>(false);
+  const [hasVerticalOverflow, setHasVerticalOverflow] =
+    useState<boolean>(false);
   const [isResizing, setIsResizing] = useState<boolean>(false);
 
   const minWidth = menubarRef.current
@@ -49,6 +56,17 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   useLayoutEffect(() => {
     setWidth(widthState);
   }, [widthState]);
+
+  useLayoutEffect(() => {
+    if (rootRef.current) {
+      setHasHorizontalOverflow(
+        rootRef.current.scrollWidth > rootRef.current.clientWidth
+      );
+      setHasVerticalOverflow(
+        rootRef.current.scrollHeight > rootRef.current.clientHeight
+      );
+    }
+  }, [children, height, width]);
 
   return (
     <Resizable
@@ -85,11 +103,14 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
       width={width}>
       <div
         className={clsx(styles.root, {
+          [styles.overflowHorizontal]: hasHorizontalOverflow,
+          [styles.overflowVertical]: hasVerticalOverflow,
           [styles.resizing]: isResizing,
           [styles.scrollable]: scrollable,
           [styles.zoomed]: zoomed,
         })}
         draggable={false}
+        ref={rootRef}
         style={
           zoomed
             ? undefined
