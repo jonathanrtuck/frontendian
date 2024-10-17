@@ -4,6 +4,48 @@
   overflow: hidden;
 }
 
+.scrollable {
+  overflow: scroll;
+
+  &::-webkit-scrollbar {
+    appearance: none;
+    background-color: rgb(239, 239, 239);
+    height: var(--scrollbar-size);
+    width: var(--scrollbar-size);
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(222, 222, 222);
+    border-color: var(--border-color--dark);
+    border-style: solid;
+  }
+
+  &::-webkit-scrollbar-thumb:horizontal {
+    border-width: var(--border-width) var(--border-width) 0 var(--border-width);
+  }
+
+  &::-webkit-scrollbar-thumb:vertical {
+    border-width: var(--border-width) 0 var(--border-width) var(--border-width);
+  }
+
+  &::-webkit-scrollbar-track {
+    border-color: var(--border-color--dark);
+    border-style: solid;
+  }
+
+  &::-webkit-scrollbar-track:horizontal {
+    border-width: var(--border-width) 0 0 0;
+  }
+
+  &::-webkit-scrollbar-track:vertical {
+    border-width: 0 0 0 var(--border-width);
+  }
+}
+
 /*
 .root {
   flex: 1 1 auto;

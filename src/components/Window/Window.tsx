@@ -23,12 +23,10 @@ import { MENUBAR_ID } from "@/constants";
 import { WindowContext, WindowContextType } from "@/contexts";
 import { useFocus } from "@/hooks";
 import {
-  activateWindow,
   blurWindow,
   closeApplication,
   closeWindow,
   focusWindow,
-  inactivateWindow,
   moveWindow,
   openFile,
   openWindow,
@@ -83,13 +81,9 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     [props]
   );
 
-  const onAbout = useCallback(
-    (node: ReactNode) => {
-      setAboutDialogContent(node);
-      inactivateWindow({ id });
-    },
-    [id]
-  );
+  const onAbout = useCallback((node: ReactNode) => {
+    setAboutDialogContent(node);
+  }, []);
   const onClose = useCallback(() => {
     closeWindow({ id });
   }, [id]);
@@ -232,7 +226,6 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
             formMethod="dialog"
             onClick={() => {
               setAboutDialogContent(null);
-              activateWindow({ id });
             }}
             type="reset">
             Close

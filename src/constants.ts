@@ -13,7 +13,6 @@ export const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
 export const DEFAULT_WINDOW_POSITION_OFFSET = 96;
 export const DEFAULT_WINDOW_WIDTH = 600;
 export const DEFAULT_WINDOW: Window = {
-  active: true,
   collapsed: false,
   focused: true,
   height: DEFAULT_WINDOW_HEIGHT,

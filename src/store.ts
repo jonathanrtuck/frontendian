@@ -67,21 +67,6 @@ const setState =
     }
   };
 
-export const activateWindow = setState<ActionIds>(
-  "activateWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            active: true,
-          }
-        : window
-    ),
-  })
-);
-
 export const blurWindow = setState<ActionIds>(
   "blurWindow",
   (payload) => (prevState) => ({
@@ -251,21 +236,6 @@ export const hideWindow = setState<ActionIds>(
             ...window,
             focused: false,
             hidden: true,
-          }
-        : window
-    ),
-  })
-);
-
-export const inactivateWindow = setState<ActionIds>(
-  "inactivateWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            active: false,
           }
         : window
     ),

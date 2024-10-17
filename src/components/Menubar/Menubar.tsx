@@ -11,7 +11,7 @@ import styles from "./Menubar.module.css";
 export type MenubarProps = PropsWithChildren;
 
 export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
-  const { active, focused, id, menubarRef } = useContext(WindowContext);
+  const { focused, id, menubarRef } = useContext(WindowContext);
 
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
@@ -23,7 +23,6 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
         className={styles.root}
         draggable={false}
         horizontal
-        inert={!active ? "" : undefined}
         ref={menubarRef}>
         {children}
       </Menu>

@@ -11,12 +11,7 @@ import { Resizable } from "react-resizable";
 
 import { ResizeHandle } from "@/components";
 import { WindowContext } from "@/contexts";
-import {
-  activateWindow,
-  inactivateWindow,
-  resizeWindow,
-  useStore,
-} from "@/store";
+import { resizeWindow } from "@/store";
 
 import styles from "./Content.module.css";
 
@@ -27,7 +22,6 @@ export type ContentProps = PropsWithChildren;
 
 export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   const {
-    active,
     collapsed,
     height: heightState,
     id,
@@ -36,8 +30,6 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     width: widthState,
     zoomed,
   } = useContext(WindowContext);
-
-  const windows = useStore((state) => state.windows);
 
   const [height, setHeight] = useState<number>(heightState);
   const [width, setWidth] = useState<number>(widthState);
@@ -49,10 +41,6 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         .map((element) => (element as HTMLElement).offsetWidth)
         .reduce((acc, width) => acc + width, 0)
     : 0;
-  const siblingWindowIds = windows
-    .map((window) => window.id)
-    .filter((windowId) => windowId !== id);
-  const hasSiblingWindows = siblingWindowIds.length !== 0;
 
   useLayoutEffect(() => {
     setHeight(heightState);
@@ -85,15 +73,9 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         setWidth(size.width);
       }}
       onResizeStart={() => {
-        if (hasSiblingWindows) {
-          inactivateWindow({ ids: siblingWindowIds });
-        }
         setIsResizing(true);
       }}
       onResizeStop={() => {
-        if (hasSiblingWindows) {
-          activateWindow({ ids: siblingWindowIds });
-        }
         setIsResizing(false);
 
         if (height !== heightState || width !== widthState) {
@@ -101,25 +83,22 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         }
       }}
       width={width}>
-      <div className={styles.root}>
-        <div
-          className={clsx(styles.content, {
-            [styles.resizing]: isResizing,
-            [styles.scrollable]: scrollable,
-            [styles.zoomed]: zoomed,
-          })}
-          draggable={false}
-          inert={!active ? "" : undefined}
-          style={
-            zoomed
-              ? undefined
-              : {
-                  height,
-                  width,
-                }
-          }>
-          {children}
-        </div>
+      <div
+        className={clsx(styles.root, {
+          [styles.resizing]: isResizing,
+          [styles.scrollable]: scrollable,
+          [styles.zoomed]: zoomed,
+        })}
+        draggable={false}
+        style={
+          zoomed
+            ? undefined
+            : {
+                height,
+                width,
+              }
+        }>
+        {children}
       </div>
     </Resizable>
   );

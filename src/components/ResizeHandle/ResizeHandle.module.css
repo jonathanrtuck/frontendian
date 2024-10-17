@@ -6,11 +6,11 @@
   box-shadow: calc(var(--border-width) * -1) calc(var(--border-width) * -1)
     var(--border-color--light);
   color: rgba(0, 0, 0, 0.2);
-  height: var(--scrollbar-size);
+  height: calc(var(--scrollbar-size) + var(--border-width));
   padding: var(--border-width);
   position: absolute;
   right: var(--window-padding);
-  width: var(--scrollbar-size);
+  width: calc(var(--scrollbar-size) + var(--border-width));
   z-index: 3;
 }
 

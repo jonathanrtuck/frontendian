@@ -135,7 +135,6 @@ export type Theme = {
 export type URL = string;
 
 export type Window = {
-  active: boolean;
   collapsed: boolean;
   fileId?: ID;
   focused: boolean;
