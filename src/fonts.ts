@@ -21,13 +21,6 @@ export const FONT_DIGITAL_DISMAY: Font = {
   url: `${process.env.PUBLIC_URL}/fonts/DigitalDismay.otf`,
 };
 
-export const FONT_KONATU: Font = {
-  format: "truetype",
-  id: "font-konatu",
-  title: "Konatu",
-  url: `${process.env.PUBLIC_URL}/fonts/Konatu.ttf`,
-};
-
 export const FONT_MINE_SWEEPER: Font = {
   format: "opentype",
   id: "font-mine-sweeper",

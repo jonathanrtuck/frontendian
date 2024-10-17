@@ -11,7 +11,6 @@ import { Resizable } from "react-resizable";
 
 import { ResizeHandle } from "@/components";
 import { WindowContext } from "@/contexts";
-import { useComputedCustomProperty } from "@/hooks";
 import {
   activateWindow,
   inactivateWindow,
@@ -50,8 +49,6 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         .map((element) => (element as HTMLElement).offsetWidth)
         .reduce((acc, width) => acc + width, 0)
     : 0;
-  const scrollbarSizeProperty = useComputedCustomProperty("--scrollbar-size");
-  const scrollbarSize = scrollable ? scrollbarSizeProperty : 0;
   const siblingWindowIds = windows
     .map((window) => window.id)
     .filter((windowId) => windowId !== id);
@@ -82,10 +79,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         )
       }
       height={height}
-      minConstraints={[
-        Math.max(minWidth, MIN_WIDTH) - scrollbarSize,
-        MIN_HEIGHT,
-      ]}
+      minConstraints={[Math.max(minWidth, MIN_WIDTH), MIN_HEIGHT]}
       onResize={(_, { size }) => {
         setHeight(size.height);
         setWidth(size.width);
@@ -120,8 +114,8 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
             zoomed
               ? undefined
               : {
-                  height: height + scrollbarSize,
-                  width: width + scrollbarSize,
+                  height,
+                  width,
                 }
           }>
           {children}

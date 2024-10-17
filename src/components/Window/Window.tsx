@@ -20,7 +20,7 @@ import {
 } from "@/components";
 import { MENUBAR_ID } from "@/constants";
 import { WindowContext, WindowContextType } from "@/contexts";
-import { useElementDimensions, useFocus } from "@/hooks";
+import { useFocus } from "@/hooks";
 import {
   activateWindow,
   blurWindow,
@@ -41,8 +41,7 @@ import styles from "./Window.module.css";
 export type WindowProps = WindowType;
 
 export const Window: FunctionComponent<WindowProps> = (props) => {
-  const { collapsed, fileId, focused, hidden, id, left, top, width, zoomed } =
-    props;
+  const { collapsed, fileId, focused, hidden, id, left, top, zoomed } = props;
 
   const applications = useStore((state) => state.applications);
   const files = useStore((state) => state.files);
@@ -60,8 +59,6 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     deps: [focused],
     ref: rootRef,
   });
-
-  const { width: rootWidth } = useElementDimensions(rootRef, [width, zoomed]);
 
   const application = applications.find(({ windowIds }) =>
     windowIds.includes(id)
@@ -118,89 +115,79 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
   );
 
   return (
-    <Draggable
-      cancel="[draggable='false']"
-      defaultPosition={{
-        x: left,
-        y: top,
-      }}
-      disabled={zoomed}
-      nodeRef={rootRef}
-      onStart={(e) => {
-        if (e.shiftKey) {
-          return false;
-        }
-
-        setIsDragging(true);
-      }}
-      onStop={(_, { x, y }) => {
-        setIsDragging(false);
-
-        if (x !== left || y !== top) {
-          moveWindow({ id, left: x, top: y });
-        }
-      }}>
-      <section
-        aria-current={focused}
-        aria-labelledby={`${id}-title`}
-        className={clsx(styles.root, {
-          [styles.collapsed]: collapsed,
-          [styles.dragging]: isDragging,
-          [styles.zoomed]: zoomed,
-        })}
-        hidden={hidden}
-        id={id}
-        onBlur={(e) => {
-          if (
-            document.hasFocus() &&
-            !e.currentTarget?.contains(e.relatedTarget) &&
-            (theme.components.menubar.windowed ||
-              !document.getElementById(MENUBAR_ID)?.contains(e.relatedTarget))
-          ) {
-            blurWindow({ id });
+    <>
+      <Draggable
+        cancel="[draggable='false']"
+        defaultPosition={{
+          x: left,
+          y: top,
+        }}
+        disabled={zoomed}
+        nodeRef={rootRef}
+        onStart={(e) => {
+          if (e.shiftKey) {
+            return false;
           }
+
+          setIsDragging(true);
         }}
-        onFocus={(e) => {
-          if (
-            !focused &&
-            (!e.relatedTarget || !e.currentTarget?.contains(e.relatedTarget))
-          ) {
-            focusWindow({ id });
+        onStop={(_, { x, y }) => {
+          setIsDragging(false);
+
+          if (x !== left || y !== top) {
+            moveWindow({ id, left: x, top: y });
           }
-        }}
-        ref={rootRef}
-        role="dialog"
-        style={{
-          zIndex: stackingOrder.indexOf(id),
-        }}
-        tabIndex={-1}>
-        <WindowContext.Provider value={contextValue}>
-          <Titlebar maxWidth={rootWidth} />
-          {Boolean(aboutDialogContent) && (
-            <Dialog className={styles.dialog} draggable={false}>
-              {aboutDialogContent}
-              <footer>
-                <button
-                  autoFocus
-                  formMethod="dialog"
-                  onClick={() => {
-                    setAboutDialogContent(null);
-                    activateWindow({ id });
-                  }}
-                  type="reset">
-                  OK
-                </button>
-              </footer>
-            </Dialog>
-          )}
-          <div
-            className={styles.content}
-            draggable="false"
-            hidden={Boolean(theme.components.window.collapsible && collapsed)}>
-            <ErrorBoundary
-              fallback={
-                <Content>
-                  <Dialog className={styles.dialog} draggable={false}>
+        }}>
+        <section
+          aria-current={focused}
+          aria-labelledby={`${id}-title`}
+          className={clsx(styles.root, {
+            [styles.collapsed]: collapsed,
+            [styles.dragging]: isDragging,
+            [styles.zoomed]: zoomed,
+          })}
+          hidden={hidden}
+          id={id}
+          onBlur={(e) => {
+            if (
+              document.hasFocus() &&
+              !e.currentTarget?.contains(e.relatedTarget) &&
+              (theme.components.menubar.windowed ||
+                !document.getElementById(MENUBAR_ID)?.contains(e.relatedTarget))
+            ) {
+              blurWindow({ id });
+            }
+          }}
+          onFocus={(e) => {
+            if (
+              !focused &&
+              (!e.relatedTarget || !e.currentTarget?.contains(e.relatedTarget))
+            ) {
+              focusWindow({ id });
+            }
+          }}
+          ref={rootRef}
+          role="dialog"
+          style={{
+            zIndex: stackingOrder.indexOf(id),
+          }}
+          tabIndex={-1}>
+          <WindowContext.Provider value={contextValue}>
+            <Titlebar />
+            <div
+              className={styles.content}
+              draggable="false"
+              hidden={Boolean(
+                theme.components.window.collapsible && collapsed
+              )}>
+              <ErrorBoundary
+                fallback={
+                  <Dialog
+                    className={styles.dialog}
+                    draggable={false}
+                    modal
+                    open
+                    type="error">
                     <p>{application.title} has encountered an unknown error.</p>
                     <footer>
                       <button
@@ -212,27 +199,46 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
                       </button>
                     </footer>
                   </Dialog>
-                </Content>
-              }>
-              <application.Component
-                Content={Content}
-                Menu={Menu}
-                Menubar={Menubar}
-                Menuitem={Menuitem}
-                file={file}
-                onAbout={onAbout}
-                onClose={onClose}
-                onNew={onNew}
-                onOpen={onOpen}
-                onQuit={onQuit}
-                onResize={onResize}
-                openableFiles={openableFiles}
-              />
-            </ErrorBoundary>
-          </div>
-        </WindowContext.Provider>
-      </section>
-    </Draggable>
+                }>
+                <application.Component
+                  Content={Content}
+                  Menu={Menu}
+                  Menubar={Menubar}
+                  Menuitem={Menuitem}
+                  file={file}
+                  onAbout={onAbout}
+                  onClose={onClose}
+                  onNew={onNew}
+                  onOpen={onOpen}
+                  onQuit={onQuit}
+                  onResize={onResize}
+                  openableFiles={openableFiles}
+                />
+              </ErrorBoundary>
+            </div>
+          </WindowContext.Provider>
+        </section>
+      </Draggable>
+      <Dialog
+        className={styles.dialog}
+        modal
+        open={Boolean(aboutDialogContent)}
+        type="info">
+        {aboutDialogContent}
+        <footer>
+          <button
+            autoFocus
+            formMethod="dialog"
+            onClick={() => {
+              setAboutDialogContent(null);
+              activateWindow({ id });
+            }}
+            type="reset">
+            OK
+          </button>
+        </footer>
+      </Dialog>
+    </>
   );
 };
 

@@ -60,7 +60,7 @@ export const UI: FunctionComponent = () => {
       </Helmet>
       <ErrorBoundary
         fallback={
-          <Dialog>
+          <Dialog modal open type="error">
             <p>An unknown error has occured.</p>
             <p>Please reload the page.</p>
           </Dialog>

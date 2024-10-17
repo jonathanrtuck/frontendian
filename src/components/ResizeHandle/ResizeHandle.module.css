@@ -1,8 +1,8 @@
 /*
 .root {
   background-color: var(--window-background-color);
-  border-color: var(--border-color) var(--window-background-color)
-    var(--window-background-color) var(--border-color);
+  border-color: var(--border-color--dark) var(--window-background-color)
+    var(--window-background-color) var(--border-color--dark);
   border-width: var(--border-width);
   bottom: var(--window-padding);
   color: rgba(0, 0, 0, 0.2);
@@ -14,20 +14,20 @@
 
   [aria-current="true"] & {
     background-color: var(--window-background-color--active);
-    border-color: var(--border-color) var(--window-background-color--active)
-      var(--window-background-color--active) var(--border-color);
+    border-color: var(--border-color--dark) var(--window-background-color--active)
+      var(--window-background-color--active) var(--border-color--dark);
   }
 }
 
 :root[data-theme-id="beos"] {
   .root {
-    border-color: var(--border-color) var(--window-background-color)
-      var(--window-background-color) var(--border-color);
+    border-color: var(--border-color--dark) var(--window-background-color)
+      var(--window-background-color) var(--border-color--dark);
     cursor: var(--cursor--grab);
 
     [aria-current="true"] & {
-      border-color: var(--border-color) var(--window-background-color--active)
-        var(--window-background-color--active) var(--border-color);
+      border-color: var(--border-color--dark) var(--window-background-color--active)
+        var(--window-background-color--active) var(--border-color--dark);
     }
   }
 }

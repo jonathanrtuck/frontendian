@@ -209,13 +209,7 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         aria-haspopup={haspopup ? "menu" : undefined}
         aria-labelledby={`${id}-title`}
         className={clsx(classes?.button, styles.button, {
-          [styles.checkbox]: type === "checkbox",
-          [styles.checked]: checked,
-          [styles.disabled]: disabled,
-          [styles.expanded]: isExpanded,
-          [styles.haspopup]: haspopup,
           [styles.pointer]: isPointer,
-          [styles.radio]: type === "radio",
         })}
         onClick={onActivate}
         onKeyDown={(e) => {

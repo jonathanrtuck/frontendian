@@ -3,7 +3,6 @@ import Draggable from "react-draggable";
 import { FunctionComponent, useContext, useRef, useState } from "react";
 
 import { WindowContext } from "@/contexts";
-import { useComputedCustomProperty, useElementDimensions } from "@/hooks";
 import {
   closeWindow,
   collapseWindow,
@@ -17,12 +16,8 @@ import { getTargetElement } from "@/utils";
 
 import styles from "./Titlebar.module.css";
 
-export type TitlebarProps = {
-  maxWidth: number;
-};
-
-export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
-  const { collapsed, id, scrollable, title, titlebarLeft, width } =
+export const Titlebar: FunctionComponent = () => {
+  const { collapsed, id, scrollable, title, titlebarLeft } =
     useContext(WindowContext);
 
   const applications = useStore((state) => state.applications);
@@ -33,16 +28,25 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  const maxLeft =
+    (rootRef.current?.closest<HTMLElement>("[aria-current]")?.offsetWidth ??
+      0) - (rootRef.current?.offsetWidth ?? 0);
+
   const application = applications.find(({ windowIds }) =>
     windowIds.includes(id)
   )!;
-  const offset = useComputedCustomProperty("--window-padding");
-  const { width: rootWidth } = useElementDimensions(rootRef, [maxWidth, title]);
 
   return (
     <Draggable
       axis="x"
-      bounds="parent"
+      bounds={
+        rootRef.current
+          ? {
+              left: 0,
+              right: maxLeft,
+            }
+          : undefined
+      }
       cancel={`.${styles.button}`}
       nodeRef={rootRef}
       onStart={(e) => {
@@ -55,14 +59,14 @@ export const Titlebar: FunctionComponent<TitlebarProps> = ({ maxWidth }) => {
       onStop={(_, { x }) => {
         setIsDragging(false);
 
-        if (x - offset !== titlebarLeft) {
-          moveWindowTitlebar({ id, left: x - offset });
+        if (x !== titlebarLeft) {
+          moveWindowTitlebar({ id, left: x });
         }
       }}
       position={
         theme.components.titlebar.draggable
           ? {
-              x: Math.min(titlebarLeft + offset, maxWidth - rootWidth + offset),
+              x: Math.min(titlebarLeft, maxLeft),
               y: 0,
             }
           : undefined

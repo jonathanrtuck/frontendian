@@ -6,9 +6,63 @@
 }
 
 .root {
-  align-items: center;
+  box-sizing: content-box;
   display: flex;
   height: var(--titlebar-height);
+  padding: var(--window-padding);
+
+  :root[data-theme-id="beos"] & {
+    --titlebar-button-background-image: linear-gradient(
+      to bottom right,
+      rgb(255, 255, 255),
+      rgb(216, 216, 216)
+    );
+    --titlebar-button-background-image--active: linear-gradient(
+      to top left,
+      rgb(255, 255, 255),
+      rgb(216, 216, 216)
+    );
+
+    background-color: var(--background-color--inactive);
+    border-color: var(--border-color--light) var(--border-color--dark)
+      var(--background-color--inactive) var(--border-color--light);
+    border-width: var(--border-width);
+    box-shadow: inset var(--border-width) var(--border-width)
+        var(--color--highlight),
+      inset calc(var(--border-width) * -1) 0 var(--color--lowlight);
+    gap: 1.25rem;
+    left: calc(var(--border-width) * -1);
+    max-width: 100%;
+    position: absolute;
+    top: calc(
+      (
+          var(--border-width) + var(--window-padding) + var(--titlebar-height) +
+            var(--window-padding)
+        ) * -1
+    );
+    z-index: 1;
+  }
+
+  [aria-current="true"] & {
+    :root[data-theme-id="beos"] & {
+      --titlebar-button-background-image: linear-gradient(
+        to bottom right,
+        rgb(248, 248, 96),
+        rgb(224, 182, 60)
+      );
+      --titlebar-button-background-image--active: linear-gradient(
+        to top left,
+        rgb(248, 248, 96),
+        rgb(224, 182, 60)
+      );
+
+      background-color: rgb(240, 202, 68);
+      border-bottom-color: var(--background-color--default);
+    }
+  }
+}
+
+.dragging {
 }
 
 .title {
@@ -19,17 +73,98 @@
   text-overflow: ellipsis;
   user-select: none;
   white-space: nowrap;
+
+  :root[data-theme-id="beos"] & {
+    order: 2;
+  }
+  :root[data-theme-id="mac-os-classic"] & {
+    order: 2;
+  }
 }
 
 .button {
+  aspect-ratio: 1 / 1;
   cursor: var(--cursor--default);
   flex: 0 0 var(--titlebar-height);
-  height: var(--titlebar-height);
   position: relative;
-  width: var(--titlebar-height);
 
   &:focus {
     outline: 0;
+  }
+}
+
+.close {
+  :root[data-theme-id="beos"] & {
+    background-image: var(--titlebar-button-background-image);
+    border-color: var(--color--lowlight) var(--color--highlight)
+      var(--color--highlight) var(--color--lowlight);
+    border-width: var(--border-width);
+    box-shadow: inset var(--border-width) var(--border-width)
+        var(--color--highlight),
+      inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+        var(--color--lowlight);
+    order: 1;
+
+    &:active,
+    &:focus-visible {
+      background-image: var(--titlebar-button-background-image--active);
+      box-shadow: inset var(--border-width) var(--border-width)
+          var(--color--lowlight),
+        inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+          var(--color--highlight);
+    }
+  }
+  :root[data-theme-id="mac-os-classic"] & {
+    order: 1;
+  }
+}
+
+.zoom {
+  :root[data-theme-id="beos"] & {
+    order: 3;
+
+    &::before,
+    &::after {
+      background-image: var(--titlebar-button-background-image);
+      border-color: var(--color--lowlight) var(--color--highlight)
+        var(--color--highlight) var(--color--lowlight);
+      border-width: var(--border-width);
+      box-shadow: inset var(--border-width) var(--border-width)
+          var(--color--highlight),
+        inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+          var(--color--lowlight);
+      content: "";
+      position: absolute;
+    }
+    &::before {
+      height: calc((var(--titlebar-height)) / 1.8);
+      left: 0;
+      top: 0;
+      width: calc((var(--titlebar-height)) / 1.8);
+      z-index: 2;
+    }
+    &::after {
+      bottom: 0;
+      height: calc((var(--titlebar-height)) / 1.4);
+      right: 0;
+      width: calc((var(--titlebar-height)) / 1.4);
+      z-index: 1;
+    }
+
+    &:active,
+    &:focus-visible {
+      &::before,
+      &::after {
+        background-image: var(--titlebar-button-background-image--active);
+        box-shadow: inset var(--border-width) var(--border-width)
+            var(--color--lowlight),
+          inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+            var(--color--highlight);
+      }
+    }
+  }
+  :root[data-theme-id="mac-os-classic"] & {
+    order: 3;
   }
 }
 
@@ -288,7 +423,7 @@
     order: 6;
 
     &::after {
-      border-color: var(--border-color);
+      border-color: var(--border-color--dark);
       border-width: 0 calc(var(--border-width) * 1.5)
         calc(var(--border-width) * 1.5) 0;
       content: "";
@@ -301,7 +436,7 @@
     order: 7;
 
     &::after {
-      border-color: var(--border-color);
+      border-color: var(--border-color--dark);
       border-width: calc(var(--border-width) * 1.5) 0
         calc(var(--border-width) * 1.5);
       content: "";
