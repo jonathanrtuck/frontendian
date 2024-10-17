@@ -34,6 +34,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
 
   const theme = useStore((state) => state.theme);
 
+  const contentRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const [height, setHeight] = useState<number>(heightState);
@@ -60,13 +61,27 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   }, [widthState]);
 
   useLayoutEffect(() => {
-    if (rootRef.current) {
-      setHasHorizontalOverflow(
-        rootRef.current.scrollWidth > rootRef.current.clientWidth
-      );
-      setHasVerticalOverflow(
-        rootRef.current.scrollHeight > rootRef.current.clientHeight
-      );
+    const rootElement = rootRef.current;
+    const contentElement = contentRef.current;
+
+    if (rootElement && contentElement) {
+      const setOverflow = () => {
+        setHasHorizontalOverflow(
+          contentElement.clientWidth > rootElement.clientWidth
+        );
+        setHasVerticalOverflow(
+          contentElement.clientHeight > rootElement.clientHeight
+        );
+      };
+      const resizeObserver = new ResizeObserver(setOverflow);
+
+      resizeObserver.observe(contentElement);
+
+      setOverflow();
+
+      return () => {
+        resizeObserver.unobserve(contentElement);
+      };
     }
   }, [children, height, width]);
 
@@ -111,7 +126,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
           height,
           width,
         }}>
-        {children}
+        <div ref={contentRef}>{children}</div>
       </div>
     </Resizable>
   );
