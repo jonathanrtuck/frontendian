@@ -11,7 +11,6 @@ export * from "./MainMenu";
 export * from "./Menu";
 export * from "./Menubar";
 export * from "./Menuitem";
-export * from "./ResizeHandle";
 export * from "./Titlebar";
 export * from "./Tray";
 export * from "./UI";

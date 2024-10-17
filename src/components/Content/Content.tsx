@@ -10,9 +10,9 @@ import {
 } from "react";
 import { Resizable } from "react-resizable";
 
-import { ResizeHandle } from "@/components";
+import { Resize } from "@/icons";
 import { WindowContext } from "@/contexts";
-import { resizeWindow } from "@/store";
+import { resizeWindow, useStore } from "@/store";
 
 import styles from "./Content.module.css";
 
@@ -29,8 +29,9 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     menubarRef,
     scrollable,
     width: widthState,
-    zoomed,
   } = useContext(WindowContext);
+
+  const theme = useStore((state) => state.theme);
 
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -70,16 +71,10 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
 
   return (
     <Resizable
-      axis={zoomed ? "none" : "both"}
+      axis="both"
       handle={
         scrollable && !collapsed ? (
-          <ResizeHandle
-            aria-hidden
-            className={clsx(styles.resize, {
-              [styles.resizing]: isResizing,
-              [styles.zoomed]: zoomed,
-            })}
-          />
+          <Resize aria-hidden className={styles.resize} themeId={theme.id} />
         ) : (
           <Fragment /> // eslint-disable-line react/jsx-no-useless-fragment
         )
@@ -107,18 +102,13 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
           [styles.overflowVertical]: hasVerticalOverflow,
           [styles.resizing]: isResizing,
           [styles.scrollable]: scrollable,
-          [styles.zoomed]: zoomed,
         })}
         draggable={false}
         ref={rootRef}
-        style={
-          zoomed
-            ? undefined
-            : {
-                height,
-                width,
-              }
-        }>
+        style={{
+          height,
+          width,
+        }}>
         {children}
       </div>
     </Resizable>

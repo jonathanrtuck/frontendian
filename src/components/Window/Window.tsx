@@ -40,7 +40,7 @@ import styles from "./Window.module.css";
 export type WindowProps = WindowType;
 
 export const Window: FunctionComponent<WindowProps> = (props) => {
-  const { collapsed, fileId, focused, hidden, id, left, top, zoomed } = props;
+  const { collapsed, fileId, focused, hidden, id, left, top } = props;
 
   const applications = useStore((state) => state.applications);
   const files = useStore((state) => state.files);
@@ -117,7 +117,6 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           x: left,
           y: top,
         }}
-        disabled={zoomed}
         nodeRef={rootRef}
         onStart={(e) => {
           if (e.shiftKey) {
@@ -139,7 +138,6 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           className={clsx(styles.root, {
             [styles.collapsed]: collapsed,
             [styles.dragging]: isDragging,
-            [styles.zoomed]: zoomed,
           })}
           hidden={hidden}
           id={id}
