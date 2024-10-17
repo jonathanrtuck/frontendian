@@ -10,8 +10,9 @@ import {
 } from "react";
 import { Resizable } from "react-resizable";
 
-import { Resize } from "@/icons";
 import { WindowContext } from "@/contexts";
+import { useComputedCustomProperty } from "@/hooks";
+import { Resize } from "@/icons";
 import { resizeWindow, useStore } from "@/store";
 
 import styles from "./Content.module.css";
@@ -46,11 +47,14 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     useState<boolean>(false);
   const [isResizing, setIsResizing] = useState<boolean>(false);
 
+  const scrollbarSize = useComputedCustomProperty("--scrollbar-size");
   const minWidth = menubarRef.current
     ? Array.from(menubarRef.current.children)
         .map((element) => (element as HTMLElement).offsetWidth)
         .reduce((acc, width) => acc + width, 0)
     : 0;
+
+  //console.debug("scrollbarSize", scrollbarSize);
 
   useLayoutEffect(() => {
     setHeight(heightState);
@@ -131,11 +135,29 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         })}
         draggable={false}
         ref={rootRef}
-        style={{
-          height,
-          width,
-        }}>
-        <div ref={contentRef}>{children}</div>
+        style={
+          scrollable
+            ? {
+                height: height + scrollbarSize,
+                width: width + scrollbarSize,
+              }
+            : {
+                height,
+                width,
+              }
+        }>
+        <div
+          ref={contentRef}
+          style={
+            scrollable
+              ? undefined
+              : {
+                  height,
+                  width,
+                }
+          }>
+          {children}
+        </div>
       </div>
     </Resizable>
   );

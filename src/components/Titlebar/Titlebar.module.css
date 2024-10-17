@@ -1,5 +1,5 @@
 :root[data-theme-id="beos"] {
-  --titlebar-height: 1.25rem;
+  --titlebar-height: 1.125rem;
 }
 :root[data-theme-id="mac-os-classic"] {
   --titlebar-height: 1rem;
@@ -68,6 +68,7 @@
 .title {
   flex: 1 1 auto;
   font-size: 1rem;
+  line-height: 1;
   margin: 0;
   overflow: hidden;
   padding: 0 0.75rem;
