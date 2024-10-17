@@ -3,7 +3,7 @@
 }
 
 .root {
-  background-color: var(--background-color--inactive);
+  background-color: var(--window-background-color);
   border-color: var(--border-color--light) var(--border-color--dark)
     var(--border-color--dark) var(--border-color--light);
   border-width: var(--border-width);
@@ -18,13 +18,15 @@
   }
 
   :root[data-theme-id="beos"] & {
+    --window-background-color: var(--background-color--inactive);
+
     margin: calc(
         var(--window-padding) + var(--titlebar-height) + var(--window-padding)
       )
       0 0;
 
     &[aria-current="true"] {
-      background-color: var(--background-color--default);
+      --window-background-color: var(--background-color--default);
     }
   }
 

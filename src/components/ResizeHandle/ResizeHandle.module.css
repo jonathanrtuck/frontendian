@@ -1,24 +1,20 @@
-/*
 .root {
   background-color: var(--window-background-color);
-  border-color: var(--border-color--dark) var(--window-background-color)
-    var(--window-background-color) var(--border-color--dark);
-  border-width: var(--border-width);
+  border-color: var(--color--highlight);
+  border-width: var(--border-width) 0 0 var(--border-width);
   bottom: var(--window-padding);
+  box-shadow: calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+    var(--border-color--light);
   color: rgba(0, 0, 0, 0.2);
-  height: calc(var(--scrollbar-size) + var(--border-width));
+  height: var(--scrollbar-size);
+  padding: var(--border-width);
   position: absolute;
   right: var(--window-padding);
-  width: calc(var(--scrollbar-size) + var(--border-width));
+  width: var(--scrollbar-size);
   z-index: 3;
-
-  [aria-current="true"] & {
-    background-color: var(--window-background-color--active);
-    border-color: var(--border-color--dark) var(--window-background-color--active)
-      var(--window-background-color--active) var(--border-color--dark);
-  }
 }
 
+/*
 :root[data-theme-id="beos"] {
   .root {
     border-color: var(--border-color--dark) var(--window-background-color)

@@ -23,9 +23,9 @@
       rgb(216, 216, 216)
     );
 
-    background-color: var(--background-color--inactive);
+    background-color: var(--window-background-color);
     border-color: var(--border-color--light) var(--border-color--dark)
-      var(--background-color--inactive) var(--border-color--light);
+      var(--window-background-color) var(--border-color--light);
     border-width: var(--border-width);
     box-shadow: inset var(--border-width) var(--border-width)
         var(--color--highlight),
