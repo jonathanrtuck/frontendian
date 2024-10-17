@@ -19,8 +19,8 @@ export const AlertInfo: IconComponent = forwardRef((props, ref) => {
           x2="56.75"
           y1="-43.14"
           y2="-34.42">
-          <stop offset="0" stop-color="#227aff" />
-          <stop offset="1" stop-color="#0025e5" />
+          <stop offset="0" stopColor="#227aff" />
+          <stop offset="1" stopColor="#0025e5" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -29,8 +29,8 @@ export const AlertInfo: IconComponent = forwardRef((props, ref) => {
           x2="65.47"
           y1="-64.5"
           y2="-60.17">
-          <stop offset="0" stop-color="#000081" />
-          <stop offset="1" stop-color="#0909b7" />
+          <stop offset="0" stopColor="#000081" />
+          <stop offset="1" stopColor="#0909b7" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -39,8 +39,8 @@ export const AlertInfo: IconComponent = forwardRef((props, ref) => {
           x2="65.47"
           y1="-64.5"
           y2="-60.17">
-          <stop offset="0" stop-color="#000081" />
-          <stop offset="1" stop-color="#0909b7" />
+          <stop offset="0" stopColor="#000081" />
+          <stop offset="1" stopColor="#0909b7" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -49,8 +49,8 @@ export const AlertInfo: IconComponent = forwardRef((props, ref) => {
           x2="29.9"
           y1="37.58"
           y2="31.35">
-          <stop offset="0" stop-color="#050ec5" />
-          <stop offset="1" stop-color="#062fe3" />
+          <stop offset="0" stopColor="#050ec5" />
+          <stop offset="1" stopColor="#062fe3" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -59,8 +59,8 @@ export const AlertInfo: IconComponent = forwardRef((props, ref) => {
           x2="12.76"
           y1="21.52"
           y2="10.9">
-          <stop offset="0" stop-color="#67b5ff" />
-          <stop offset="1" stop-color="#3b79f6" />
+          <stop offset="0" stopColor="#67b5ff" />
+          <stop offset="1" stopColor="#3b79f6" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -69,8 +69,8 @@ export const AlertInfo: IconComponent = forwardRef((props, ref) => {
           x2="12.76"
           y1="21.52"
           y2="10.9">
-          <stop offset="0" stop-color="#67b5ff" />
-          <stop offset="1" stop-color="#3b79f6" />
+          <stop offset="0" stopColor="#67b5ff" />
+          <stop offset="1" stopColor="#3b79f6" />
         </linearGradient>
         <radialGradient
           cx="0"
@@ -79,8 +79,8 @@ export const AlertInfo: IconComponent = forwardRef((props, ref) => {
           gradientUnits="userSpaceOnUse"
           id={`${id}-6`}
           r="64">
-          <stop offset="0" stop-color="#0530d1" />
-          <stop offset="1" stop-color="#67b5ff" />
+          <stop offset="0" stopColor="#0530d1" />
+          <stop offset="1" stopColor="#67b5ff" />
         </radialGradient>
         <radialGradient
           cx="0"
@@ -89,10 +89,10 @@ export const AlertInfo: IconComponent = forwardRef((props, ref) => {
           gradientUnits="userSpaceOnUse"
           id={`${id}-7`}
           r="64">
-          <stop offset="0" stop-color="#3787ff" />
-          <stop offset="0.3369" stop-color="#1b76ff" />
-          <stop offset="1" stop-color="#031d8c" />
-          <stop offset="0.8586" stop-color="#000081" />
+          <stop offset="0" stopColor="#3787ff" />
+          <stop offset="0.3369" stopColor="#1b76ff" />
+          <stop offset="1" stopColor="#031d8c" />
+          <stop offset="0.8586" stopColor="#000081" />
         </radialGradient>
         <radialGradient
           cx="0"
@@ -101,8 +101,8 @@ export const AlertInfo: IconComponent = forwardRef((props, ref) => {
           gradientUnits="userSpaceOnUse"
           id={`${id}-8`}
           r="64">
-          <stop offset="0" stop-color="#ffffff" />
-          <stop offset="1" stop-color="#3787ff" />
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#3787ff" />
         </radialGradient>
       </defs>
       <path

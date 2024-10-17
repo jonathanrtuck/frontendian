@@ -16,6 +16,7 @@
 }
 
 :root[data-theme-id="beos"] {
+  --background-color--dark: rgb(184, 184, 184);
   --background-color--default: rgb(222, 222, 222);
   --background-color--inactive: rgb(232, 232, 232);
   --border-color--dark: rgb(96, 96, 96);

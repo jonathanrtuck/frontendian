@@ -19,10 +19,10 @@ export const AlertError: IconComponent = forwardRef((props, ref) => {
           gradientUnits="userSpaceOnUse"
           id={`${id}-0`}
           r="64">
-          <stop offset="0" stop-color="#ffffff" />
-          <stop offset="0.25" stop-color="#ff3930" />
-          <stop offset="1" stop-color="#bf0000" />
-          <stop offset="0.8152" stop-color="#800000" />
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="0.25" stopColor="#ff3930" />
+          <stop offset="1" stopColor="#bf0000" />
+          <stop offset="0.8152" stopColor="#800000" />
         </radialGradient>
         <radialGradient
           cx="0"
@@ -31,10 +31,10 @@ export const AlertError: IconComponent = forwardRef((props, ref) => {
           gradientUnits="userSpaceOnUse"
           id={`${id}-1`}
           r="64">
-          <stop offset="0" stop-color="#ff756e" />
-          <stop offset="0.3007" stop-color="#d50f05" />
-          <stop offset="1" stop-color="#bf0000" />
-          <stop offset="0.8152" stop-color="#800000" />
+          <stop offset="0" stopColor="#ff756e" />
+          <stop offset="0.3007" stopColor="#d50f05" />
+          <stop offset="1" stopColor="#bf0000" />
+          <stop offset="0.8152" stopColor="#800000" />
         </radialGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -43,8 +43,8 @@ export const AlertError: IconComponent = forwardRef((props, ref) => {
           x2="76.04"
           y1="-28.46"
           y2="-10.2">
-          <stop offset="0" stop-color="#ff6159" />
-          <stop offset="1" stop-color="#e40000" />
+          <stop offset="0" stopColor="#ff6159" />
+          <stop offset="1" stopColor="#e40000" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -53,8 +53,8 @@ export const AlertError: IconComponent = forwardRef((props, ref) => {
           x2="56.59"
           y1="-23.39"
           y2="-20.34">
-          <stop offset="0" stop-color="#800000" />
-          <stop offset="1" stop-color="#a00404" />
+          <stop offset="0" stopColor="#800000" />
+          <stop offset="1" stopColor="#a00404" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -63,8 +63,8 @@ export const AlertError: IconComponent = forwardRef((props, ref) => {
           x2="36"
           y1="-20"
           y2="-20">
-          <stop offset="0" stop-color="#ffc6c0" />
-          <stop offset="1" stop-color="#ff7575" />
+          <stop offset="0" stopColor="#ffc6c0" />
+          <stop offset="1" stopColor="#ff7575" />
         </linearGradient>
       </defs>
       <path

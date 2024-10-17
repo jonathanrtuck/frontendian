@@ -10,6 +10,7 @@ import {
 import Draggable from "react-draggable";
 
 import {
+  Button,
   Content,
   Dialog,
   ErrorBoundary,
@@ -226,7 +227,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
         type="info">
         {aboutDialogContent}
         <footer>
-          <button
+          <Button
             autoFocus
             formMethod="dialog"
             onClick={() => {
@@ -234,8 +235,8 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
               activateWindow({ id });
             }}
             type="reset">
-            OK
-          </button>
+            Close
+          </Button>
         </footer>
       </Dialog>
     </>

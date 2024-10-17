@@ -20,8 +20,8 @@ export const TrackerIcon: IconComponent = forwardRef((props, ref) => {
           x2="102.74"
           y1="8.5"
           y2="47.07">
-          <stop offset="0" stop-color="#face79" />
-          <stop offset="1" stop-color="#bc4105" />
+          <stop offset="0" stopColor="#face79" />
+          <stop offset="1" stopColor="#bc4105" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -30,8 +30,8 @@ export const TrackerIcon: IconComponent = forwardRef((props, ref) => {
           x2="103.39"
           y1="12.68"
           y2="55.34">
-          <stop offset="0" stop-color="#ffffff" />
-          <stop offset="1" stop-color="#8e8e8e" />
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#8e8e8e" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -40,8 +40,8 @@ export const TrackerIcon: IconComponent = forwardRef((props, ref) => {
           x2="101.46"
           y1="-26.66"
           y2="12.94">
-          <stop offset="0" stop-color="#9a9a9a" />
-          <stop offset="1" stop-color="#505050" />
+          <stop offset="0" stopColor="#9a9a9a" />
+          <stop offset="1" stopColor="#505050" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -50,8 +50,8 @@ export const TrackerIcon: IconComponent = forwardRef((props, ref) => {
           x2="97.54"
           y1="9.59"
           y2="51.29">
-          <stop offset="0" stop-color="#ffe2ac" />
-          <stop offset="1" stop-color="#f49806" />
+          <stop offset="0" stopColor="#ffe2ac" />
+          <stop offset="1" stopColor="#f49806" />
         </linearGradient>
       </defs>
       <path
