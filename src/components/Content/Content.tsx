@@ -67,10 +67,10 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     if (rootElement && contentElement) {
       const setOverflow = () => {
         setHasHorizontalOverflow(
-          contentElement.clientWidth > rootElement.clientWidth
+          contentElement.scrollWidth > rootElement.clientWidth
         );
         setHasVerticalOverflow(
-          contentElement.clientHeight > rootElement.clientHeight
+          contentElement.scrollHeight > rootElement.clientHeight
         );
       };
       const resizeObserver = new ResizeObserver(setOverflow);
@@ -89,8 +89,17 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     <Resizable
       axis="both"
       handle={
+        // @see https://github.com/react-grid-layout/react-resizable?tab=readme-ov-file#custom-function
         resizable && !collapsed ? (
-          <Resize aria-hidden className={styles.resize} themeId={theme.id} />
+          // eslint-disable-next-line react/no-unstable-nested-components
+          (_, ref) => (
+            <Resize
+              aria-hidden
+              className={styles.resize}
+              ref={ref}
+              themeId={theme.id}
+            />
+          )
         ) : (
           <Fragment /> // eslint-disable-line react/jsx-no-useless-fragment
         )
