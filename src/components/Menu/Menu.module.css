@@ -9,7 +9,6 @@
     height: 1.5rem;
 
     &:where(.bar) {
-      xborder-width: var(--border-width) 0;
       box-shadow: var(--box-shadow--high);
     }
   }
