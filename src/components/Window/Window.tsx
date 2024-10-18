@@ -169,7 +169,6 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
             <Titlebar />
             <div
               className={styles.content}
-              draggable="false"
               hidden={Boolean(
                 theme.components.window.collapsible && collapsed
               )}>

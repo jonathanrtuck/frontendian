@@ -35,7 +35,6 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     useState<boolean>(false);
   const [hasVerticalOverflow, setHasVerticalOverflow] =
     useState<boolean>(false);
-  const [isResizing, setIsResizing] = useState<boolean>(false);
 
   const scrollbarSize = useComputedCustomProperty("--scrollbar-size");
   const minWidth = menubarRef.current
@@ -94,10 +93,10 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         resizeWindow({ height, id, width });
       }}
       onResizeStart={() => {
-        setIsResizing(true);
+        document.body.classList.add("grabbing");
       }}
       onResizeStop={() => {
-        setIsResizing(false);
+        document.body.classList.remove("grabbing");
       }}
       width={width}>
       <div
@@ -105,7 +104,6 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
           [styles.overflowHorizontal]: hasHorizontalOverflow,
           [styles.overflowVertical]: hasVerticalOverflow,
           [styles.resizable]: resizable,
-          [styles.resizing]: isResizing,
           [styles.scrollable]: scrollable,
         })}
         draggable={false}

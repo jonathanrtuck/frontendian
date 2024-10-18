@@ -77,6 +77,10 @@ body {
   inset: 0;
   margin: 0;
   position: fixed;
+
+  &:where(.grabbing) {
+    cursor: var(--cursor--grabbing, grabbing) !important;
+  }
 }
 
 *,

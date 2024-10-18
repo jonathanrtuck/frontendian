@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useContext, useRef, useState } from "react";
+import { FunctionComponent, useContext, useRef } from "react";
 
 import { WindowContext } from "@/contexts";
 import {
@@ -26,8 +26,6 @@ export const Titlebar: FunctionComponent = () => {
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<number>(0);
 
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-
   const application = applications.find(({ windowIds }) =>
     windowIds.includes(id)
   )!;
@@ -43,10 +41,10 @@ export const Titlebar: FunctionComponent = () => {
           return false;
         }
 
-        setIsDragging(true);
+        document.body.classList.add("grabbing");
       }}
       onStop={(_, { x }) => {
-        setIsDragging(false);
+        document.body.classList.remove("grabbing");
 
         if (x !== titlebarLeft) {
           moveWindowTitlebar({ id, left: x });
@@ -61,9 +59,7 @@ export const Titlebar: FunctionComponent = () => {
           : undefined
       }>
       <header
-        className={clsx(styles.root, {
-          [styles.dragging]: isDragging,
-        })}
+        className={styles.root}
         onDoubleClick={
           theme.components.titlebar.doubleClick
             ? (e) => {

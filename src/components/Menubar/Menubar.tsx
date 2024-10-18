@@ -32,7 +32,7 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
   if (id) {
     return focused
       ? createPortal(
-          <Menu bar className={styles.menubar} draggable="false" horizontal>
+          <Menu bar className={styles.menubar} draggable={false} horizontal>
             <MainMenu />
             {children}
           </Menu>,
@@ -59,7 +59,7 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
       }}
       tabIndex={-1}>
       {!focusedWindowId && (
-        <Menu bar className={styles.menubar} draggable="false" horizontal>
+        <Menu bar className={styles.menubar} draggable={false} horizontal>
           <MainMenu />
         </Menu>
       )}
