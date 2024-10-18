@@ -165,14 +165,14 @@
   background-color: var(--window-background-color);
   border-color: var(--color--highlight);
   border-width: var(--border-width) 0 0 var(--border-width);
-  bottom: var(--window-padding);
+  bottom: calc(var(--border-width) * -1);
   box-shadow: calc(var(--border-width) * -1) calc(var(--border-width) * -1)
     var(--border-color--light);
   color: rgba(0, 0, 0, 0.2);
   height: calc(var(--scrollbar-size) + var(--border-width));
   padding: var(--border-width);
   position: absolute;
-  right: var(--window-padding);
+  right: calc(var(--border-width) * -1);
   width: calc(var(--scrollbar-size) + var(--border-width));
   z-index: 3;
 

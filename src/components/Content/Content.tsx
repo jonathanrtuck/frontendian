@@ -23,23 +23,13 @@ const MIN_WIDTH = 16 * 10; // 10rem
 export type ContentProps = PropsWithChildren;
 
 export const Content: FunctionComponent<ContentProps> = ({ children }) => {
-  const {
-    collapsed,
-    height: heightState,
-    id,
-    menubarRef,
-    resizable,
-    scrollable,
-    width: widthState,
-  } = useContext(WindowContext);
+  const { collapsed, height, id, menubarRef, resizable, scrollable, width } =
+    useContext(WindowContext);
 
   const theme = useStore((state) => state.theme);
 
   const contentRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
-
-  const [height, setHeight] = useState<number>(heightState);
-  const [width, setWidth] = useState<number>(widthState);
 
   const [hasHorizontalOverflow, setHasHorizontalOverflow] =
     useState<boolean>(false);
@@ -53,16 +43,6 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         .map((element) => (element as HTMLElement).offsetWidth)
         .reduce((acc, width) => acc + width, 0)
     : 0;
-
-  //console.debug("scrollbarSize", scrollbarSize);
-
-  useLayoutEffect(() => {
-    setHeight(heightState);
-  }, [heightState]);
-
-  useLayoutEffect(() => {
-    setWidth(widthState);
-  }, [widthState]);
 
   useLayoutEffect(() => {
     const rootElement = rootRef.current;
@@ -110,19 +90,14 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
       }
       height={height}
       minConstraints={[Math.max(minWidth, MIN_WIDTH), MIN_HEIGHT]}
-      onResize={(_, { size }) => {
-        setHeight(size.height);
-        setWidth(size.width);
+      onResize={(_, { size: { height, width } }) => {
+        resizeWindow({ height, id, width });
       }}
       onResizeStart={() => {
         setIsResizing(true);
       }}
       onResizeStop={() => {
         setIsResizing(false);
-
-        if (height !== heightState || width !== widthState) {
-          resizeWindow({ height, id, width });
-        }
       }}
       width={width}>
       <div

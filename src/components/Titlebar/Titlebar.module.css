@@ -31,7 +31,7 @@
         var(--color--highlight),
       inset calc(var(--border-width) * -1) 0 var(--color--lowlight);
     gap: 0.5rem;
-    left: calc(var(--border-width) * -1);
+    left: 0;
     max-width: 100%;
     position: absolute;
     top: calc(
@@ -41,6 +41,16 @@
         ) * -1
     );
     z-index: 1;
+
+    &::after {
+      background-color: var(--window-background-color);
+      bottom: calc(var(--border-width) * -2);
+      content: "";
+      height: var(--border-width);
+      left: 0;
+      position: absolute;
+      right: 0;
+    }
   }
 
   [aria-current="true"] & {

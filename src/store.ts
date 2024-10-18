@@ -513,6 +513,10 @@ export const resizeWindow = setState<
       ? {
           ...window,
           height: payload.height,
+          titlebarLeft:
+            payload.width === 0
+              ? 0
+              : window.titlebarLeft * (payload.width / window.width),
           width: payload.width,
         }
       : window

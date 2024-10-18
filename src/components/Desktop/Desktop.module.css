@@ -9,16 +9,13 @@
 .root {
   align-items: start;
   background: var(--desktop-background, rgb(48, 48, 48));
-  bottom: 0;
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fill, 6rem);
+  inset: 0;
   justify-items: center;
-  left: 0;
   padding: 1rem;
   position: fixed;
-  right: 0;
-  top: 0;
 
   :root[data-theme-id="beos"] & {
     padding-right: calc(var(--deskbar-width) + 1rem);

@@ -28,10 +28,6 @@ export const Titlebar: FunctionComponent = () => {
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  const maxLeft =
-    (rootRef.current?.closest<HTMLElement>("[aria-current]")?.offsetWidth ??
-      0) - (rootRef.current?.offsetWidth ?? 0);
-
   const application = applications.find(({ windowIds }) =>
     windowIds.includes(id)
   )!;
@@ -39,14 +35,7 @@ export const Titlebar: FunctionComponent = () => {
   return (
     <Draggable
       axis="x"
-      bounds={
-        rootRef.current
-          ? {
-              left: 0,
-              right: maxLeft,
-            }
-          : undefined
-      }
+      bounds="parent"
       cancel={`.${styles.button}`}
       nodeRef={rootRef}
       onStart={(e) => {
@@ -66,7 +55,7 @@ export const Titlebar: FunctionComponent = () => {
       position={
         theme.components.titlebar.draggable
           ? {
-              x: Math.min(titlebarLeft, maxLeft),
+              x: titlebarLeft,
               y: 0,
             }
           : undefined
