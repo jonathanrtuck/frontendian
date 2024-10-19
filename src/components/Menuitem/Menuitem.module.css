@@ -113,7 +113,7 @@
 }
 
 /*
-:root[data-theme-id="beos"] {
+:root:global(.theme-beos) {
   .separator {
     border-color: var(--color--lowlight) transparent var(--color--highlight);
     border-width: var(--border-width) 0;
@@ -226,7 +226,7 @@
   }
 }
 
-:root[data-theme-id="mac-os-classic"] {
+:root:global(.theme-mac-os-classic) {
   .separator {
     border-color: var(--color--lowlight) transparent var(--color--highlight);
     border-width: var(--border-width) 0;

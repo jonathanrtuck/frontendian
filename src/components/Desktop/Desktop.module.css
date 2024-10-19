@@ -1,8 +1,8 @@
-:root[data-theme-id="beos"] {
+:root:global(.theme-beos) {
   --desktop-background: rgb(51, 102, 152);
 }
 
-:root[data-theme-id="mac-os-classic"] {
+:root:global(.theme-mac-os-classic) {
   --desktop-background: url(/src/images/mac-os-classic.png);
 }
 
@@ -17,7 +17,7 @@
   padding: 1rem;
   position: fixed;
 
-  :root[data-theme-id="beos"] & {
+  :root:global(.theme-beos) & {
     padding-right: calc(var(--deskbar-width) + 1rem);
 
     &::after {
@@ -34,7 +34,7 @@
     }
   }
 
-  :root[data-theme-id="mac-os-classic"] & {
+  :root:global(.theme-mac-os-classic) & {
     border-radius: var(--border-radius);
     padding-top: calc(var(--menubar-height) + 1rem);
 

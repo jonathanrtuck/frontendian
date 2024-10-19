@@ -12,17 +12,17 @@ import styles from "./MainMenu.module.css";
 
 const IconByTheme = ({ id }: Theme): IconComponent | undefined => {
   switch (id) {
-    case "beos":
+    case "theme-beos":
       return BeOS;
-    case "mac-os-classic":
+    case "theme-mac-os-classic":
       return Apple;
   }
 };
 const titleByTheme = ({ id }: Theme): string => {
   switch (id) {
-    case "beos":
+    case "theme-beos":
       return "BeOS Menu";
-    case "mac-os-classic":
+    case "theme-mac-os-classic":
       return "Apple Menu";
     default:
       return "Main Menu";

@@ -18,7 +18,7 @@
   margin: 0 25%;
   width: 50%;
 
-  :root[data-theme-id="mac-os-classic"] .root:focus & {
+  :root:global(.theme-mac-os-classic) .root:focus & {
     filter: brightness(0.4);
   }
 }
@@ -31,14 +31,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  :root[data-theme-id="mac-os-classic"] & {
+  :root:global(.theme-mac-os-classic) & {
     background-color: var(--color--highlight);
   }
 
-  :root[data-theme-id="beos"] .root:focus & {
+  :root:global(.theme-beos) .root:focus & {
     background-color: rgba(0, 0, 0, 0.4);
   }
-  :root[data-theme-id="mac-os-classic"] .root:focus & {
+  :root:global(.theme-mac-os-classic) .root:focus & {
     background-color: var(--color--lowlight);
     color: rgb(191, 191, 191);
   }

@@ -1,4 +1,4 @@
-:root[data-theme-id="beos"] {
+:root:global(.theme-beos) {
   --deskbar-width: 11rem;
 }
 

@@ -18,7 +18,7 @@ export const THEME_BEOS: Theme = {
       hidable: true,
     },
   },
-  id: "beos",
+  id: "theme-beos",
   title: "BeOS",
 };
 
@@ -40,6 +40,6 @@ export const THEME_MAC_OS_CLASSIC: Theme = {
       hidable: false,
     },
   },
-  id: "mac-os-classic",
+  id: "theme-mac-os-classic",
   title: "Mac OS Classic",
 };

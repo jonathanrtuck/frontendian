@@ -1,4 +1,4 @@
-:root[data-theme-id="beos"] {
+:root:global(.theme-beos) {
   --window-padding: 0.25rem;
 }
 
@@ -12,7 +12,7 @@
     cursor: var(--cursor--default);
   }
 
-  :root[data-theme-id="beos"] & {
+  :root:global(.theme-beos) & {
     --window-background-color: var(--background-color--inactive);
 
     margin: calc(
@@ -109,7 +109,7 @@
   }
 }
 
-:root[data-theme-id="beos"] {
+:root:global(.theme-beos) {
   --window-background-color: rgb(232, 232, 232);
   --window-background-color--active: rgb(224, 224, 224);
   --window-padding: 0.125rem;
@@ -131,7 +131,7 @@
   }
 }
 
-:root[data-theme-id="mac-os-classic"] {
+:root:global(.theme-mac-os-classic) {
   --window-background-color: rgb(221, 221, 221);
   --window-background-color--active: rgb(204, 204, 204);
   --window-padding: 0.25rem;

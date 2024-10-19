@@ -15,7 +15,7 @@
   background-color: rgb(0, 0, 0);
 }
 
-:root[data-theme-id="beos"] {
+:root.theme-beos {
   --background-color--dark: rgb(184, 184, 184);
   --background-color--default: rgb(222, 222, 222);
   --background-color--inactive: rgb(232, 232, 232);
@@ -47,7 +47,7 @@
   --text-color--light: rgb(255, 255, 255);
 }
 
-:root[data-theme-id="mac-os-classic"] {
+:root.theme-mac-os-classic {
   --border-color: rgb(38, 38, 38);
   --border-radius: 0.75rem;
   --border-width: 0.0625rem;

@@ -32,7 +32,7 @@
   display: flex;
 }
 
-:root[data-theme-id="beos"] {
+:root:global(.theme-beos) {
   .root {
     align-items: center;
     background-color: rgba(0, 0, 0, 0.125);
@@ -57,7 +57,7 @@
   }
 }
 
-:root[data-theme-id="mac-os-classic"] {
+:root:global(.theme-mac-os-classic) {
   .button {
     border-color: var(--color--highlight) var(--color--lowlight)
       var(--color--lowlight) var(--color--highlight);

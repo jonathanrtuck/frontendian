@@ -1,7 +1,7 @@
-:root[data-theme-id="beos"] {
+:root:global(.theme-beos) {
   --titlebar-height: 1.125rem;
 }
-:root[data-theme-id="mac-os-classic"] {
+:root:global(.theme-mac-os-classic) {
   --titlebar-height: 1rem;
 }
 
@@ -9,7 +9,7 @@
   display: flex;
   padding: var(--window-padding);
 
-  :root[data-theme-id="beos"] & {
+  :root:global(.theme-beos) & {
     --titlebar-button-background-image: linear-gradient(
       to bottom right,
       rgb(255, 255, 255),
@@ -56,7 +56,7 @@
   }
 
   [aria-current="true"] & {
-    :root[data-theme-id="beos"] & {
+    :root:global(.theme-beos) & {
       --titlebar-button-background-image: linear-gradient(
         to bottom right,
         rgb(248, 248, 96),
@@ -88,10 +88,10 @@
   user-select: none;
   white-space: nowrap;
 
-  :root[data-theme-id="beos"] & {
+  :root:global(.theme-beos) & {
     order: 2;
   }
-  :root[data-theme-id="mac-os-classic"] & {
+  :root:global(.theme-mac-os-classic) & {
     order: 2;
   }
 }
@@ -108,7 +108,7 @@
 }
 
 .close {
-  :root[data-theme-id="beos"] & {
+  :root:global(.theme-beos) & {
     background-image: var(--titlebar-button-background-image);
     border-color: var(--color--lowlight) var(--color--highlight)
       var(--color--highlight) var(--color--lowlight);
@@ -128,13 +128,13 @@
           var(--color--highlight);
     }
   }
-  :root[data-theme-id="mac-os-classic"] & {
+  :root:global(.theme-mac-os-classic) & {
     order: 1;
   }
 }
 
 .zoom {
-  :root[data-theme-id="beos"] & {
+  :root:global(.theme-beos) & {
     order: 3;
 
     &::before,
@@ -177,141 +177,13 @@
       }
     }
   }
-  :root[data-theme-id="mac-os-classic"] & {
+  :root:global(.theme-mac-os-classic) & {
     order: 3;
   }
 }
 
 /*
-:root[data-theme-id="beos"] {
-  --titlebar-height: 1.25rem;
-  --titlebar_button-background: linear-gradient(
-    to bottom right,
-    rgb(255, 255, 255),
-    rgb(232, 232, 232)
-  );
-  --titlebar--active_button-background: linear-gradient(
-    to bottom right,
-    rgb(255, 255, 255),
-    rgb(255, 200, 0)
-  );
-  --titlebar_button-background--active: linear-gradient(
-    to top left,
-    rgb(255, 255, 255),
-    rgb(218, 175, 8)
-  );
-  --titlebar_button-border-color: rgb(173, 136, 0);
-  --titlebar_button-border-radius: 0.125rem;
-
-  .root {
-    align-items: center;
-    background-color: var(--window-background-color);
-    border-width: var(--border-width) var(--border-width) 0;
-    bottom: 100%;
-    box-sizing: content-box;
-    height: var(--titlebar-height);
-    display: flex;
-    left: 0;
-    margin: 0 calc((var(--border-width) + var(--window-padding)) * -1);
-    max-width: calc(100% - var(--window-padding) - var(--window-padding));
-    padding: var(--window-padding);
-    position: absolute;
-    z-index: 1;
-
-    [aria-current="true"] & {
-      background-color: rgb(248, 208, 70);
-    }
-
-    &:where(.dragging) {
-      cursor: var(--cursor--grabbing);
-    }
-  }
-
-  .title {
-    flex: 1 1 auto;
-    font-size: 1rem;
-    margin: 0 1rem;
-    order: 2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    user-select: none;
-    white-space: nowrap;
-  }
-
-  .button {
-    cursor: var(--cursor--default);
-    flex: 0 0 var(--titlebar-height);
-    height: var(--titlebar-height);
-    position: relative;
-    width: var(--titlebar-height);
-
-    &:focus {
-      outline: 0;
-    }
-  }
-
-  .close {
-    background-image: var(--titlebar_button-background);
-    border-color: var(--titlebar_button-border-color);
-    border-radius: var(--titlebar_button-border-radius);
-    border-width: var(--border-width);
-    order: 1;
-
-    [aria-current="true"] & {
-      background-image: var(--titlebar--active_button-background);
-    }
-
-    &:active,
-    &:focus-visible {
-      background-image: var(--titlebar_button-background--active);
-    }
-  }
-
-  .zoom {
-    order: 3;
-
-    &::before,
-    &::after {
-      background-image: var(--titlebar_button-background);
-      border-color: var(--titlebar_button-border-color);
-      border-radius: var(--titlebar_button-border-radius);
-      border-width: var(--border-width);
-      content: "";
-      display: block;
-      position: absolute;
-    }
-
-    &::before {
-      height: calc((var(--titlebar-height)) / 1.8);
-      left: 0;
-      top: 0;
-      width: calc((var(--titlebar-height)) / 1.8);
-      z-index: 2;
-    }
-
-    &::after {
-      bottom: 0;
-      height: calc((var(--titlebar-height)) / 1.4);
-      right: 0;
-      width: calc((var(--titlebar-height)) / 1.4);
-      z-index: 1;
-    }
-
-    [aria-current="true"] &::before,
-    [aria-current="true"] &::after {
-      background-image: var(--titlebar--active_button-background);
-    }
-
-    &:active::before,
-    &:active::after,
-    &:focus-visible::before,
-    &:focus-visible::after {
-      background-image: var(--titlebar_button-background--active);
-    }
-  }
-}
-
-:root[data-theme-id="mac-os-classic"] {
+:root:global(.theme-mac-os-classic) {
   --titlebar-height: 1rem;
   --titlebar_button-background: linear-gradient(
     to bottom right,

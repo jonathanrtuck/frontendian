@@ -1,11 +1,11 @@
 .button {
-  :root[data-theme-id="beos"] & {
+  :root:global(.theme-beos) & {
     padding: 0.125rem 0;
   }
 }
 
 .icon {
-  :root[data-theme-id="beos"] & {
+  :root:global(.theme-beos) & {
     flex: 1 1 8rem;
     height: 1.75rem;
     width: unset;

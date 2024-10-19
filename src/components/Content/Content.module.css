@@ -177,7 +177,7 @@
   z-index: 3;
 
   /*
-  :root[data-theme-id="beos"] & {
+  :root:global(.theme-beos) & {
     border-color: var(--border-color--dark) var(--window-background-color)
       var(--window-background-color) var(--border-color--dark);
     cursor: var(--cursor--grab);
@@ -188,7 +188,7 @@
     }
   }
 
-  :root[data-theme-id="mac-os-classic"] & {
+  :root:global(.theme-mac-os-classic) & {
     border-color: rgb(255, 255, 255) var(--window-background-color)
       var(--window-background-color) rgb(255, 255, 255);
 
@@ -214,7 +214,7 @@
   }
 }
 
-:root[data-theme-id="beos"] {
+:root:global(.theme-beos) {
   .root {
     height: 100%;
   }
@@ -236,7 +236,7 @@
   }
 }
 
-:root[data-theme-id="mac-os-classic"] {
+:root:global(.theme-mac-os-classic) {
   .root {
     border-color: var(--color--lowlight) var(--color--highlight)
       var(--color--highlight) var(--color--lowlight);

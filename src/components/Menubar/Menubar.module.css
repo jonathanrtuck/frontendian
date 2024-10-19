@@ -1,11 +1,11 @@
 /*
-:root[data-theme-id="beos"] {
+:root:global(.theme-beos) {
   .root {
     cursor: var(--cursor--default);
   }
 }
 
-:root[data-theme-id="mac-os-classic"] {
+:root:global(.theme-mac-os-classic) {
   --menubar-height: 1.5rem;
 
   .root {

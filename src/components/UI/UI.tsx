@@ -18,24 +18,6 @@ export const UI: FunctionComponent = () => {
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
 
-  const htmlAttributes = useMemo<HelmetProps["htmlAttributes"]>(
-    () =>
-      Object.entries(theme.components).reduce(
-        (acc, [component, obj]) => {
-          Object.entries(obj).forEach(([key, value]) => {
-            if (acc) {
-              acc[`data-theme-${component}-${key}`] = String(value);
-            }
-          });
-
-          return acc;
-        },
-        {
-          "data-theme-id": theme.id,
-        } as HelmetProps["htmlAttributes"]
-      ),
-    [theme]
-  );
   const style = useMemo<HelmetProps["style"]>(
     () =>
       fonts.map(({ format, title, url }) => ({
@@ -50,7 +32,8 @@ export const UI: FunctionComponent = () => {
 
   return (
     <>
-      <Helmet htmlAttributes={htmlAttributes} style={style}>
+      <Helmet style={style}>
+        <html className={theme.id} />
         {files.map(({ id, url }) => (
           <link href={url} key={id} rel="preconnect" />
         ))}

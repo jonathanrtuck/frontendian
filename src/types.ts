@@ -134,7 +134,7 @@ export type Theme = {
       hidable: boolean;
     };
   };
-  id: ID;
+  id: "theme-beos" | "theme-mac-os-classic";
   title: string;
 };
 
