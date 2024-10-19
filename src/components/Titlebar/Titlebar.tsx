@@ -39,6 +39,10 @@ export const Titlebar: FunctionComponent = () => {
   const application = applications.find(({ windowIds }) =>
     windowIds.includes(id)
   )!;
+  const hasIcon = theme.id === "theme-mac-os-classic";
+  const isCollapsible = theme.id === "theme-mac-os-classic";
+  const isDoubleClickable = theme.id === "theme-beos";
+  const isDraggable = theme.id === "theme-beos";
 
   const getMaxLeft = useCallback(
     () =>
@@ -85,7 +89,7 @@ export const Titlebar: FunctionComponent = () => {
         document.body.classList.remove("grabbing");
       }}
       position={
-        theme.components.titlebar.draggable
+        isDraggable
           ? {
               x,
               y: 0,
@@ -95,7 +99,7 @@ export const Titlebar: FunctionComponent = () => {
       <header
         className={styles.root}
         onDoubleClick={
-          theme.components.titlebar.doubleClick
+          isDoubleClickable
             ? (e) => {
                 const targetElement = getTargetElement(e);
                 const isButton = targetElement?.classList.contains(
@@ -109,7 +113,7 @@ export const Titlebar: FunctionComponent = () => {
             : undefined
         }
         onPointerUp={
-          theme.components.titlebar.doubleClick
+          isDoubleClickable
             ? (e) => {
                 const now = Date.now();
                 const targetElement = getTargetElement(e);
@@ -130,10 +134,9 @@ export const Titlebar: FunctionComponent = () => {
             : undefined
         }
         ref={rootRef}>
-        {Boolean(theme.components.titlebar.icon) &&
-          application.Icon !== undefined && (
-            <application.Icon aria-hidden className={styles.icon} />
-          )}
+        {hasIcon && application.Icon !== undefined ? (
+          <application.Icon aria-hidden className={styles.icon} />
+        ) : null}
         <h1 className={styles.title} id={`${id}-title`} title={title}>
           {title}
         </h1>
@@ -159,7 +162,7 @@ export const Titlebar: FunctionComponent = () => {
             type="button"
           />
         )}
-        {Boolean(theme.components.window.collapsible) && (
+        {isCollapsible ? (
           <button
             aria-label="Collapse"
             className={clsx(styles.button, styles.collapse)}
@@ -170,7 +173,7 @@ export const Titlebar: FunctionComponent = () => {
             title="Collapse"
             type="button"
           />
-        )}
+        ) : null}
       </header>
     </Draggable>
   );

@@ -117,24 +117,11 @@ export type State = {
 };
 
 export type Theme = {
-  components: {
-    deskbar: {
-      hidden: boolean;
-    };
-    menubar: {
-      windowed: boolean;
-    };
-    titlebar: {
-      doubleClick: boolean;
-      draggable: boolean;
-      icon: boolean;
-    };
-    window: {
-      collapsible: boolean;
-      hidable: boolean;
-    };
-  };
   id: "theme-beos" | "theme-mac-os-classic";
+  menu: {
+    Icon: IconComponent;
+    title: string;
+  };
   title: string;
 };
 

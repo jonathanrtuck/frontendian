@@ -63,6 +63,8 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     windowIds.includes(id)
   )!;
   const file = fileId ? files.find(({ id }) => id === fileId) : undefined;
+  const isCollapsible = theme.id === "theme-mac-os-classic";
+  const isMenubarWindowed = theme.id === "theme-beos";
   const openableFiles = Object.entries(types)
     .filter(
       ([, { application: applicationId }]) => applicationId === application.id
@@ -145,7 +147,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
             if (
               document.hasFocus() &&
               !e.currentTarget?.contains(e.relatedTarget) &&
-              (theme.components.menubar.windowed ||
+              (isMenubarWindowed ||
                 !document.getElementById(MENUBAR_ID)?.contains(e.relatedTarget))
             ) {
               blurWindow({ id });
@@ -169,9 +171,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
             <Titlebar />
             <div
               className={styles.content}
-              hidden={Boolean(
-                theme.components.window.collapsible && collapsed
-              )}>
+              hidden={Boolean(isCollapsible && collapsed)}>
               <ErrorBoundary
                 fallback={
                   <Dialog

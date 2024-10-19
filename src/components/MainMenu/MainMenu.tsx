@@ -3,31 +3,10 @@ import { FunctionComponent } from "react";
 import { APPLICATION_TRACKER } from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { FILE_README_MD } from "@/files";
-import { Apple, BeOS } from "@/icons";
 import { changeTheme, openApplication, openFile, useStore } from "@/store";
-import { IconComponent, Theme } from "@/types";
 import * as themes from "@/themes";
 
 import styles from "./MainMenu.module.css";
-
-const IconByTheme = ({ id }: Theme): IconComponent | undefined => {
-  switch (id) {
-    case "theme-beos":
-      return BeOS;
-    case "theme-mac-os-classic":
-      return Apple;
-  }
-};
-const titleByTheme = ({ id }: Theme): string => {
-  switch (id) {
-    case "theme-beos":
-      return "BeOS Menu";
-    case "theme-mac-os-classic":
-      return "Apple Menu";
-    default:
-      return "Main Menu";
-  }
-};
 
 export const MainMenu: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
@@ -36,13 +15,13 @@ export const MainMenu: FunctionComponent = () => {
   return (
     <Menu bar vertical>
       <Menuitem
-        Icon={IconByTheme(theme)}
+        Icon={theme.menu.Icon}
         classes={{
           button: styles.button,
           icon: styles.icon,
           title: "visually-hidden",
         }}
-        title={titleByTheme(theme)}>
+        title={theme.menu.title}>
         <Menu>
           <Menuitem
             onClick={() => {

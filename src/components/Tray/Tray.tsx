@@ -23,9 +23,8 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
   const theme = useStore((state) => state.theme);
 
   const dateProps = DATE_STYLE_SHORT;
-  const timeProps = theme.components.menubar.windowed
-    ? TIME_STYLE_MEDIUM
-    : TIME_STYLE_SHORT;
+  const timeProps =
+    theme.id === "theme-beos" ? TIME_STYLE_MEDIUM : TIME_STYLE_SHORT;
 
   const [clockProps, setClockProps] = useState<ClockProps>(timeProps);
 
@@ -41,49 +40,50 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
     }
   }, [clockProps, timeProps]);
 
-  if (!theme.components.menubar.windowed) {
-    return (
-      <aside {...props} className={clsx(className, styles.root)}>
-        <Clock
-          {...clockProps}
-          onClick={() => {
-            setClockProps((prevState) =>
-              prevState.timeStyle ? dateProps : timeProps
-            );
-          }}
-        />
-        <button
-          className={styles.button}
-          onClick={() => {
-            //
-          }}
-          role="presentation"
-          type="button"
-        />
-        <Applications />
-      </aside>
-    );
+  switch (theme.id) {
+    case "theme-beos":
+      return (
+        <aside {...props} className={clsx(className, styles.root)}>
+          <div className={styles.content}>
+            <ul className={styles.icons}>
+              <li className={styles.icon}>
+                <Network />
+              </li>
+            </ul>
+            <Clock
+              {...clockProps}
+              onClick={() => {
+                setClockProps((prevState) =>
+                  prevState.timeStyle ? dateProps : timeProps
+                );
+              }}
+            />
+          </div>
+        </aside>
+      );
+    case "theme-mac-os-classic":
+      return (
+        <aside {...props} className={clsx(className, styles.root)}>
+          <Clock
+            {...clockProps}
+            onClick={() => {
+              setClockProps((prevState) =>
+                prevState.timeStyle ? dateProps : timeProps
+              );
+            }}
+          />
+          <button
+            className={styles.button}
+            onClick={() => {
+              //
+            }}
+            role="presentation"
+            type="button"
+          />
+          <Applications />
+        </aside>
+      );
   }
-
-  return (
-    <aside {...props} className={clsx(className, styles.root)}>
-      <div className={styles.content}>
-        <ul className={styles.icons}>
-          <li className={styles.icon}>
-            <Network />
-          </li>
-        </ul>
-        <Clock
-          {...clockProps}
-          onClick={() => {
-            setClockProps((prevState) =>
-              prevState.timeStyle ? dateProps : timeProps
-            );
-          }}
-        />
-      </div>
-    </aside>
-  );
 };
 
 Tray.displayName = "Tray";
