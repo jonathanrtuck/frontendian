@@ -1,0 +1,38 @@
+:root:global(.theme-mac-os-classic) {
+  --desktop-background: url(/src/images/mac-os-classic.png);
+
+  .root {
+    align-items: start;
+    background: var(--desktop-background, rgb(48, 48, 48));
+    border-radius: var(--border-radius);
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, 6rem);
+    inset: 0;
+    justify-items: center;
+    padding: calc(var(--menubar-height) + 1rem) 1rem 1rem;
+    position: fixed;
+
+    &::before,
+    &::after {
+      border-color: rgba(0, 0, 0, 0.5);
+      border-style: dotted;
+      border-width: var(--border-width);
+      content: "";
+      display: var(--desktop-selection-display);
+      position: absolute;
+    }
+    &::before {
+      height: var(--desktop-selection-height);
+      left: var(--desktop-selection-left);
+      top: var(--desktop-selection-top);
+      width: var(--desktop-selection-width);
+    }
+    &::after {
+      height: calc(var(--desktop-selection-height) + (var(--border-width) * 2));
+      left: calc(var(--desktop-selection-left) - var(--border-width, 0));
+      top: calc(var(--desktop-selection-top) - var(--border-width, 0));
+      width: calc(var(--desktop-selection-width) + (var(--border-width) * 2));
+    }
+  }
+}

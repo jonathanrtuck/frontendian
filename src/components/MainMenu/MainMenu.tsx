@@ -3,19 +3,27 @@ import { FunctionComponent } from "react";
 import { APPLICATION_TRACKER } from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { FILE_README_MD } from "@/files";
+import { useStyles } from "@/hooks";
 import { changeTheme, openApplication, openFile, useStore } from "@/store";
 import * as themes from "@/themes";
 
-import styles from "./MainMenu.module.css";
+import stylesBeos from "./MainMenu.beos.module.css";
+import stylesMacOsClassic from "./MainMenu.mac-os-classic.module.css";
 
 export const MainMenu: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
   const theme = useStore((state) => state.theme);
 
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
+
   return (
-    <Menu bar vertical>
+    <Menu bar className={styles.root} vertical>
       <Menuitem
         Icon={theme.menu.Icon}
+        className={styles.menuitem}
         classes={{
           button: styles.button,
           icon: styles.icon,

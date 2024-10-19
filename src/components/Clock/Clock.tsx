@@ -1,9 +1,10 @@
 import clsx from "clsx";
 import { HTMLAttributes, FunctionComponent } from "react";
 
-import { useClock } from "@/hooks";
+import { useClock, useStyles } from "@/hooks";
 
-import styles from "./Clock.module.css";
+import stylesBeos from "./Clock.beos.module.css";
+import stylesMacOsClassic from "./Clock.mac-os-classic.module.css";
 
 export type ClockProps = Intl.DateTimeFormatOptions &
   Omit<HTMLAttributes<HTMLButtonElement>, "type">;
@@ -18,6 +19,10 @@ export const Clock: FunctionComponent<ClockProps> = ({
   ...props
 }) => {
   const date = useClock();
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
 
   return (
     <button

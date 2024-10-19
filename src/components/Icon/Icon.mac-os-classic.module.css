@@ -1,0 +1,41 @@
+:root:global(.theme-mac-os-classic) {
+  .root {
+    align-items: center;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    font-family: inherit;
+    gap: 0.25rem;
+    max-height: 100%;
+    width: 100%;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .icon {
+    aspect-ratio: 1 / 1;
+    margin: 0 25%;
+    width: 50%;
+
+    .root:focus & {
+      filter: brightness(0.4);
+    }
+  }
+
+  .title {
+    background-color: var(--color--highlight);
+    font-size: 0.875rem;
+    font-weight: 400;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    .root:focus & {
+      background-color: var(--color--lowlight);
+      color: rgb(191, 191, 191);
+    }
+  }
+}

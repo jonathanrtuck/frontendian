@@ -1,0 +1,5 @@
+:root:global(.theme-beos) {
+  .root {
+    cursor: var(--cursor--default);
+  }
+}

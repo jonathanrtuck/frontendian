@@ -1,0 +1,159 @@
+:root:global(.theme-beos) {
+  --titlebar-height: 1.125rem;
+
+  .root {
+    --titlebar-button-background-image: linear-gradient(
+      to bottom right,
+      rgb(255, 255, 255),
+      rgb(216, 216, 216)
+    );
+    --titlebar-button-background-image--active: linear-gradient(
+      to top left,
+      rgb(255, 255, 255),
+      rgb(216, 216, 216)
+    );
+
+    background-color: var(--window-background-color);
+    border-color: var(--border-color--light) var(--border-color--dark)
+      var(--window-background-color) var(--border-color--light);
+    border-width: var(--border-width);
+    box-shadow: inset var(--border-width) var(--border-width)
+        var(--color--highlight),
+      inset calc(var(--border-width) * -1) 0 var(--color--lowlight);
+    display: flex;
+    gap: 0.5rem;
+    height: calc(
+      var(--border-width) + var(--window-padding) + var(--titlebar-height) +
+        var(--window-padding) + var(--border-width)
+    );
+    left: 0;
+    max-width: 100%;
+    padding: var(--window-padding);
+    position: absolute;
+    top: calc(
+      (
+          var(--border-width) + var(--window-padding) + var(--titlebar-height) +
+            var(--window-padding)
+        ) * -1
+    );
+    z-index: 1;
+
+    &::after {
+      background-color: var(--window-background-color);
+      bottom: calc(var(--border-width) * -2);
+      content: "";
+      height: var(--border-width);
+      left: 0;
+      position: absolute;
+      right: 0;
+    }
+
+    [aria-current="true"] & {
+      --titlebar-button-background-image: linear-gradient(
+        to bottom right,
+        rgb(248, 248, 96),
+        rgb(224, 182, 60)
+      );
+      --titlebar-button-background-image--active: linear-gradient(
+        to top left,
+        rgb(248, 248, 96),
+        rgb(224, 182, 60)
+      );
+
+      background-color: rgb(240, 202, 68);
+      border-bottom-color: var(--background-color--default);
+    }
+  }
+
+  .dragging {
+  }
+
+  .title {
+    flex: 1 1 auto;
+    font-size: 1rem;
+    height: 1.25rem;
+    margin: 0;
+    order: 2;
+    overflow: hidden;
+    padding: 0 0.75rem;
+    text-overflow: ellipsis;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .button {
+    aspect-ratio: 1 / 1;
+    cursor: var(--cursor--default);
+    flex: 0 0 var(--titlebar-height);
+    position: relative;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .close {
+    background-image: var(--titlebar-button-background-image);
+    border-color: var(--color--lowlight) var(--color--highlight)
+      var(--color--highlight) var(--color--lowlight);
+    border-width: var(--border-width);
+    box-shadow: inset var(--border-width) var(--border-width)
+        var(--color--highlight),
+      inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+        var(--color--lowlight);
+    order: 1;
+
+    &:active,
+    &:focus-visible {
+      background-image: var(--titlebar-button-background-image--active);
+      box-shadow: inset var(--border-width) var(--border-width)
+          var(--color--lowlight),
+        inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+          var(--color--highlight);
+    }
+  }
+
+  .zoom {
+    order: 3;
+
+    &::before,
+    &::after {
+      background-image: var(--titlebar-button-background-image);
+      border-color: var(--color--lowlight) var(--color--highlight)
+        var(--color--highlight) var(--color--lowlight);
+      border-width: var(--border-width);
+      box-shadow: inset var(--border-width) var(--border-width)
+          var(--color--highlight),
+        inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+          var(--color--lowlight);
+      content: "";
+      position: absolute;
+    }
+    &::before {
+      height: calc((var(--titlebar-height)) / 1.8);
+      left: 0;
+      top: 0;
+      width: calc((var(--titlebar-height)) / 1.8);
+      z-index: 2;
+    }
+    &::after {
+      bottom: 0;
+      height: calc((var(--titlebar-height)) / 1.4);
+      right: 0;
+      width: calc((var(--titlebar-height)) / 1.4);
+      z-index: 1;
+    }
+
+    &:active,
+    &:focus-visible {
+      &::before,
+      &::after {
+        background-image: var(--titlebar-button-background-image--active);
+        box-shadow: inset var(--border-width) var(--border-width)
+            var(--color--lowlight),
+          inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+            var(--color--highlight);
+      }
+    }
+  }
+}

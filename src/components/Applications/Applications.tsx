@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 
 import { APPLICATION_TRACKER } from "@/applications";
 import { Menu, Menuitem } from "@/components";
+import { useStyles } from "@/hooks";
 import { WindowHidden, WindowVisible } from "@/icons";
 import {
   blurWindow,
@@ -12,13 +13,19 @@ import {
   useStore,
 } from "@/store";
 
-import styles from "./Applications.module.css";
+import stylesBeos from "./Applications.beos.module.css";
+import stylesMacOsClassic from "./Applications.mac-os-classic.module.css";
 
 export const Applications: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
   const openApplicationIds = useStore((state) => state.openApplicationIds);
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
+
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
 
   const focusedWindow = windows.find(({ focused }) => focused);
   const activeApplication = (

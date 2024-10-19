@@ -2,10 +2,12 @@ import clsx from "clsx";
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from "react";
 
 import { Applications, Clock, ClockProps } from "@/components";
+import { useStyles } from "@/hooks";
 import { Network } from "@/icons";
 import { useStore } from "@/store";
 
-import styles from "./Tray.module.css";
+import stylesBeos from "./Tray.beos.module.css";
+import stylesMacOsClassic from "./Tray.mac-os-classic.module.css";
 
 const DATE_STYLE_SHORT: ClockProps = {
   dateStyle: "short",
@@ -27,6 +29,11 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
     theme.id === "theme-beos" ? TIME_STYLE_MEDIUM : TIME_STYLE_SHORT;
 
   const [clockProps, setClockProps] = useState<ClockProps>(timeProps);
+
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
 
   useEffect(() => {
     if (clockProps.dateStyle) {

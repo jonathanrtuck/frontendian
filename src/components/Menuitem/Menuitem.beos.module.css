@@ -1,0 +1,115 @@
+:root:global(.theme-beos) {
+  .root {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .separator {
+    border-color: var(--color--lowlight) transparent var(--color--highlight);
+    border-width: var(--border-width) 0;
+    margin: 0.25rem 0.125rem;
+  }
+
+  .button {
+    align-items: center;
+    display: flex;
+    font-size: 0.875rem;
+    font-weight: 500;
+    gap: 0.5rem;
+    line-height: 1.2;
+    position: relative;
+    user-select: none;
+
+    &[role="menuitemradio"]::before {
+      content: "";
+      font-family: var(--font-family--default);
+      font-size: 0.625rem;
+      width: 0.5rem;
+    }
+
+    &[aria-checked="true"]::before {
+      content: "✔︎";
+    }
+
+    .root:where(.horizontal) > & {
+      height: 100%;
+      padding: 0 0.5rem;
+    }
+
+    .root:where(.vertical) > & {
+      padding: 0.25rem 0.5rem;
+      width: 100%;
+    }
+
+    .root:where(.top.vertical) > & {
+      box-shadow: var(--box-shadow--high);
+
+      &:is([aria-expanded="true"]) {
+        box-shadow: inset 0 var(--border-width) var(--border-color--dark);
+      }
+    }
+
+    &:where([aria-disabled="true"]) {
+      color: var(--text-color--disabled);
+    }
+
+    &:is([aria-expanded="true"]),
+    .root:where(:not(.top))
+      > &:where(:not([aria-checked="true"], [aria-disabled="true"])):hover {
+      background-color: rgb(160, 160, 160);
+    }
+
+    .root:where(:not(.top)) > &:where(.hasPopup) {
+      padding-right: 2rem;
+    }
+
+    .root:where(:not(.top)) > &:where([aria-haspopup="menu"]) {
+      &::after {
+        color: rgb(240, 240, 240);
+        content: "▶︎";
+        font-size: 0.75rem;
+        position: absolute;
+        right: 0.5rem;
+        text-shadow: var(--border-color--dark) 0 0 var(--border-width),
+          var(--border-color--dark) var(--border-width) var(--border-width)
+            var(--border-width);
+        transform: scaleY(0.7);
+      }
+    }
+
+    &:is([aria-expanded="true"]),
+    .root:where(:not(.top))
+      > &:where([aria-haspopup="menu"]):where(
+        :not([aria-checked="true"], [aria-disabled="true"])
+      ):hover {
+      &::after {
+        color: rgb(200, 200, 200);
+      }
+    }
+  }
+
+  .icon {
+    flex: 0 0 1rem;
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .title {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .hasPopup {
+  }
+
+  .pointer {
+  }
+}

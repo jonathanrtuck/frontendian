@@ -8,10 +8,12 @@ import {
 } from "react";
 
 import { Icon } from "@/components";
+import { useStyles } from "@/hooks";
 import { openApplication, openFile, useStore } from "@/store";
 import { Pixels } from "@/types";
 
-import styles from "./Desktop.module.css";
+import stylesBeos from "./Desktop.beos.module.css";
+import stylesMacOsClassic from "./Desktop.mac-os-classic.module.css";
 
 type Coordinates = {
   x: Pixels;
@@ -41,10 +43,10 @@ export const Desktop: FunctionComponent = () => {
     to?: Coordinates;
   }>({});
 
-  const applicationsAndFiles = [...applications, ...files];
-  const icons = desktop.map((id) =>
-    applicationsAndFiles.find((obj) => obj.id === id)
-  );
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
 
   const onMouseMove = useCallback(({ clientX, clientY }: MouseEvent) => {
     setSelection((prevState) => ({
@@ -61,6 +63,11 @@ export const Desktop: FunctionComponent = () => {
     setUserCanSelectText(true);
     setSelection({});
   }, [onMouseMove]);
+
+  const applicationsAndFiles = [...applications, ...files];
+  const icons = desktop.map((id) =>
+    applicationsAndFiles.find((obj) => obj.id === id)
+  );
 
   useEffect(
     () => () => {

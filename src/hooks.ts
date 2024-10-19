@@ -1,6 +1,11 @@
 import { RefObject, useEffect, useMemo, useState } from "react";
 
-import { Pixels } from "@/types";
+import { useStore } from "@/store";
+import { Pixels, Theme } from "@/types";
+
+type CssModule = {
+  readonly [key: string]: string;
+};
 
 export const useClock = (): Date => {
   const [date, setDate] = useState<Date>(new Date());
@@ -83,4 +88,10 @@ export const useFocus = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     deps
   );
+};
+
+export const useStyles = (obj: Record<Theme["id"], CssModule>): CssModule => {
+  const theme = useStore((state) => state.theme);
+
+  return obj[theme.id];
 };

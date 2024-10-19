@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import { WindowContext } from "@/contexts";
+import { useStyles } from "@/hooks";
 import {
   closeWindow,
   collapseWindow,
@@ -22,7 +23,8 @@ import {
 import { MS, Pixels } from "@/types";
 import { getTargetElement } from "@/utils";
 
-import styles from "./Titlebar.module.css";
+import stylesBeos from "./Titlebar.beos.module.css";
+import stylesMacOsClassic from "./Titlebar.mac-os-classic.module.css";
 
 export const Titlebar: FunctionComponent = () => {
   const { collapsed, id, resizable, scrollable, title, titlebarLeft, width } =
@@ -35,6 +37,11 @@ export const Titlebar: FunctionComponent = () => {
   const touchRef = useRef<MS>(0);
 
   const [x, setX] = useState<Pixels>(0);
+
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
 
   const application = applications.find(({ windowIds }) =>
     windowIds.includes(id)

@@ -2,14 +2,21 @@ import { FunctionComponent, useRef } from "react";
 
 import { Applications, MainMenu, Tray } from "@/components";
 import { DESKBAR_ID } from "@/constants";
+import { useStyles } from "@/hooks";
 import { focusDeskbar, useStore } from "@/store";
 
-import styles from "./Deskbar.module.css";
+import stylesBeos from "./Deskbar.beos.module.css";
+import stylesMacOsClassic from "./Deskbar.mac-os-classic.module.css";
 
 export const Deskbar: FunctionComponent = () => {
   const stackingOrder = useStore((state) => state.stackingOrder);
 
   const rootRef = useRef<HTMLElement>(null);
+
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
 
   const zIndex = stackingOrder.indexOf(DESKBAR_ID);
   const isFocused = stackingOrder.at(-1) === DESKBAR_ID;

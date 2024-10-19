@@ -1,0 +1,17 @@
+:root:global(.theme-beos) {
+  .root {
+    font-size: 0.875rem;
+    user-select: none;
+
+    :root:global(.theme-beos) & {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-right: -0.25rem;
+      padding: 0 0.25rem;
+    }
+
+    :root:global(.theme-mac-os-classic) & {
+      padding: 0 0.5rem;
+    }
+  }
+}

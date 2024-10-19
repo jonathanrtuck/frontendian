@@ -13,10 +13,12 @@ import {
 } from "react";
 
 import { MenuContext, MenuitemContext, MenuitemContextType } from "@/contexts";
+import { useStyles } from "@/hooks";
 import { IconComponent } from "@/types";
 import { removeProps } from "@/utils";
 
-import styles from "./Menuitem.module.css";
+import stylesBeos from "./Menuitem.beos.module.css";
+import stylesMacOsClassic from "./Menuitem.mac-os-classic.module.css";
 
 export type MenuitemProps = Omit<
   HTMLAttributes<HTMLLIElement>,
@@ -78,12 +80,17 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
 
-  const topButtonRef = isTop ? buttonRef : parentTopButtonRef;
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
 
   const collapse = useCallback(() => {
     setIsExpanded(false);
     rootRef.current?.focus();
   }, []);
+
+  const topButtonRef = isTop ? buttonRef : parentTopButtonRef;
 
   const contextValue = useMemo<MenuitemContextType>(
     () => ({

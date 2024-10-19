@@ -21,7 +21,7 @@ import {
 } from "@/components";
 import { MENUBAR_ID } from "@/constants";
 import { WindowContext, WindowContextType } from "@/contexts";
-import { useFocus } from "@/hooks";
+import { useFocus, useStyles } from "@/hooks";
 import {
   blurWindow,
   closeApplication,
@@ -35,7 +35,8 @@ import {
 } from "@/store";
 import { File, ID, Pixels, Window as WindowType } from "@/types";
 
-import styles from "./Window.module.css";
+import stylesBeos from "./Window.beos.module.css";
+import stylesMacOsClassic from "./Window.mac-os-classic.module.css";
 
 export type WindowProps = WindowType;
 
@@ -57,6 +58,11 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
   useFocus({
     deps: [focused],
     ref: rootRef,
+  });
+
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
   });
 
   const application = applications.find(({ windowIds }) =>

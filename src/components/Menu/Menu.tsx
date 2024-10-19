@@ -15,9 +15,11 @@ import {
 } from "react";
 
 import { MenuContext, MenuContextType, MenuitemContext } from "@/contexts";
+import { useStyles } from "@/hooks";
 import { removeProps } from "@/utils";
 
-import styles from "./Menu.module.css";
+import stylesBeos from "./Menu.beos.module.css";
+import stylesMacOsClassic from "./Menu.mac-os-classic.module.css";
 
 export type MenuProps = PropsWithChildren<
   Omit<
@@ -64,12 +66,17 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
     const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
     const [isPointer, setIsPointer] = useState<boolean>(false);
 
-    const bar = "bar" in props;
-    const horizontal = "horizontal" in props;
+    const styles = useStyles({
+      "theme-beos": stylesBeos,
+      "theme-mac-os-classic": stylesMacOsClassic,
+    });
 
     const inactivate = useCallback(() => {
       setIsActive(false);
     }, []);
+
+    const bar = "bar" in props;
+    const horizontal = "horizontal" in props;
 
     // if has grandchildren (Menu -> Menuitem -> Menu)
     const hasPopup = useMemo<boolean>(

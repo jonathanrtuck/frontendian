@@ -8,10 +8,12 @@ import {
   useRef,
 } from "react";
 
+import { useStyles } from "@/hooks";
 import { AlertError, AlertInfo } from "@/icons";
 import { IconComponent } from "@/types";
 
-import styles from "./Dialog.module.css";
+import stylesBeos from "./Dialog.beos.module.css";
+import stylesMacOsClassic from "./Dialog.mac-os-classic.module.css";
 
 type DialogType = "error" | "info";
 
@@ -39,6 +41,11 @@ export const Dialog: FunctionComponent<DialogProps> = ({
   ...props
 }) => {
   const rootRef = useRef<HTMLDialogElement>(null);
+
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
 
   const Icon = ICONS_BY_TYPE[type];
 

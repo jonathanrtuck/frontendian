@@ -11,11 +11,12 @@ import {
 import { Resizable } from "react-resizable";
 
 import { WindowContext } from "@/contexts";
-import { useComputedCustomProperty } from "@/hooks";
+import { useComputedCustomProperty, useStyles } from "@/hooks";
 import { Resize } from "@/icons";
 import { resizeWindow, useStore } from "@/store";
 
-import styles from "./Content.module.css";
+import stylesBeos from "./Content.beos.module.css";
+import stylesMacOsClassic from "./Content.mac-os-classic.module.css";
 
 const MIN_HEIGHT = 16 * 7; // 7rem
 const MIN_WIDTH = 16 * 10; // 10rem
@@ -37,6 +38,11 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
     useState<boolean>(false);
 
   const scrollbarSize = useComputedCustomProperty("--scrollbar-size");
+  const styles = useStyles({
+    "theme-beos": stylesBeos,
+    "theme-mac-os-classic": stylesMacOsClassic,
+  });
+
   const minWidth = menubarRef.current
     ? Array.from(menubarRef.current.children)
         .map((element) => (element as HTMLElement).offsetWidth)

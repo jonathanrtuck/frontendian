@@ -1,0 +1,15 @@
+:root:global(.theme-beos) {
+  .root {
+    .menuitem {
+      .button {
+        padding: 0.125rem 0;
+      }
+
+      .icon {
+        flex: 1 1 8rem;
+        height: 1.75rem;
+        width: unset;
+      }
+    }
+  }
+}
