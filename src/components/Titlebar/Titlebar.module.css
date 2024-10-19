@@ -6,9 +6,7 @@
 }
 
 .root {
-  box-sizing: content-box;
   display: flex;
-  height: var(--titlebar-height);
   padding: var(--window-padding);
 
   :root[data-theme-id="beos"] & {
@@ -31,6 +29,10 @@
         var(--color--highlight),
       inset calc(var(--border-width) * -1) 0 var(--color--lowlight);
     gap: 0.5rem;
+    height: calc(
+      var(--border-width) + var(--window-padding) + var(--titlebar-height) +
+        var(--window-padding) + var(--border-width)
+    );
     left: 0;
     max-width: 100%;
     position: absolute;

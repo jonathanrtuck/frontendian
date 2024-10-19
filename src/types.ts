@@ -27,7 +27,7 @@ export type ApplicationComponentProps = {
   onNew(): void;
   onOpen(fileId: ID): void;
   onQuit(): void;
-  onResize(height: number, width: number): void;
+  onResize(height: Pixels, width: Pixels): void;
   openableFiles: File[];
 };
 
@@ -46,7 +46,7 @@ export type File = {
 } & (
   | {
       type: MimeType.ApplicationPdf;
-      width: number; // page width
+      width: Pixels; // page width
     }
   | {
       type: MimeType.TextMarkdown;
@@ -89,6 +89,12 @@ export const enum MimeType {
   ApplicationPdf = "application/pdf",
   TextMarkdown = "text/markdown",
 }
+
+export type MS = number;
+
+export type Percentage = number;
+
+export type Pixels = number;
 
 export type State = {
   applications: Application[]; // the order is used as the display order in the Deskbar MainMenu
@@ -138,15 +144,15 @@ export type Window = {
   collapsed: boolean;
   fileId?: ID;
   focused: boolean;
-  height: number;
+  height: Pixels;
   hidden: boolean;
   id: ID;
-  left: number;
+  left: Pixels;
   resizable: boolean;
   scrollable: boolean;
   title: string;
-  titlebarLeft: number;
-  top: number;
-  width: number;
+  titlebarLeft: Percentage;
+  top: Pixels;
+  width: Pixels;
   zoomed: boolean;
 };

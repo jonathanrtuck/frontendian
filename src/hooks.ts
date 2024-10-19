@@ -1,5 +1,7 @@
 import { RefObject, useEffect, useMemo, useState } from "react";
 
+import { Pixels } from "@/types";
+
 export const useClock = (): Date => {
   const [date, setDate] = useState<Date>(new Date());
 
@@ -29,10 +31,10 @@ export const useClock = (): Date => {
 };
 
 // get the current value of a css variable in px
-export const useComputedCustomProperty = (property: string): number => {
+export const useComputedCustomProperty = (property: string): Pixels => {
   const { themeId } = document.documentElement.dataset;
 
-  return useMemo<number>(() => {
+  return useMemo<Pixels>(() => {
     const value = getComputedStyle(document.documentElement).getPropertyValue(
       property
     );

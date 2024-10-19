@@ -33,7 +33,7 @@ import {
   resizeWindow,
   useStore,
 } from "@/store";
-import { File, ID, Window as WindowType } from "@/types";
+import { File, ID, Pixels, Window as WindowType } from "@/types";
 
 import styles from "./Window.module.css";
 
@@ -103,7 +103,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     closeApplication({ id: application.id });
   }, [application.id]);
   const onResize = useCallback(
-    (height: number, width: number) => {
+    (height: Pixels, width: Pixels) => {
       resizeWindow({ height, id, width });
     },
     [id]

@@ -12,13 +12,13 @@ import {
   UNTITLED_WINDOW_TITLE,
 } from "@/constants";
 import * as themes from "@/themes";
-import { ID, State, Window } from "@/types";
+import { ID, Pixels, State, Window } from "@/types";
 
 type ActionIds = { id: ID } | { ids: ID[] };
 
 export const useStore = create<State>()(() => INITIAL_STATE);
 
-const getFirstOpenWindowPosition = (windows: Window[]): number => {
+const getFirstOpenWindowPosition = (windows: Window[]): Pixels => {
   for (let i = 0; i !== windows.length; i++) {
     const position =
       DEFAULT_WINDOW_POSITION_OFFSET + i * DEFAULT_WINDOW_POSITION_INCREMENT;
@@ -242,7 +242,7 @@ export const hideWindow = setState<ActionIds>(
   })
 );
 
-export const moveWindow = setState<ActionIds & { left: number; top: number }>(
+export const moveWindow = setState<ActionIds & { left: Pixels; top: Pixels }>(
   "moveWindow",
   (payload) => (prevState) => ({
     ...prevState,
@@ -258,7 +258,7 @@ export const moveWindow = setState<ActionIds & { left: number; top: number }>(
   })
 );
 
-export const moveWindowTitlebar = setState<ActionIds & { left: number }>(
+export const moveWindowTitlebar = setState<ActionIds & { left: Pixels }>(
   "moveWindowTitlebar",
   (payload) => (prevState) => ({
     ...prevState,
@@ -505,7 +505,7 @@ export const openWindow = setState<ActionIds>(
 );
 
 export const resizeWindow = setState<
-  ActionIds & { height: number; width: number }
+  ActionIds & { height: Pixels; width: Pixels }
 >("resizeWindow", (payload) => (prevState) => ({
   ...prevState,
   windows: prevState.windows.map((window) =>
@@ -513,10 +513,6 @@ export const resizeWindow = setState<
       ? {
           ...window,
           height: payload.height,
-          titlebarLeft:
-            payload.width === 0
-              ? 0
-              : window.titlebarLeft * (payload.width / window.width),
           width: payload.width,
         }
       : window

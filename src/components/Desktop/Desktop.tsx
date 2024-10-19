@@ -9,12 +9,13 @@ import {
 
 import { Icon } from "@/components";
 import { openApplication, openFile, useStore } from "@/store";
+import { Pixels } from "@/types";
 
 import styles from "./Desktop.module.css";
 
 type Coordinates = {
-  x: number;
-  y: number;
+  x: Pixels;
+  y: Pixels;
 };
 
 const setUserCanSelectText = (userCanSelectText: boolean): void => {

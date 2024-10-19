@@ -1,6 +1,13 @@
 import clsx from "clsx";
 import Draggable from "react-draggable";
-import { FunctionComponent, useContext, useRef } from "react";
+import {
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { WindowContext } from "@/contexts";
 import {
@@ -12,23 +19,47 @@ import {
   useStore,
   zoomWindow,
 } from "@/store";
+import { MS, Pixels } from "@/types";
 import { getTargetElement } from "@/utils";
 
 import styles from "./Titlebar.module.css";
 
 export const Titlebar: FunctionComponent = () => {
-  const { collapsed, id, resizable, title, titlebarLeft } =
+  const { collapsed, id, resizable, scrollable, title, titlebarLeft, width } =
     useContext(WindowContext);
 
   const applications = useStore((state) => state.applications);
   const theme = useStore((state) => state.theme);
 
   const rootRef = useRef<HTMLElement>(null);
-  const touchRef = useRef<number>(0);
+  const touchRef = useRef<MS>(0);
+
+  const [x, setX] = useState<Pixels>(0);
 
   const application = applications.find(({ windowIds }) =>
     windowIds.includes(id)
   )!;
+
+  const getMaxLeft = useCallback(
+    () =>
+      (rootRef.current
+        ?.closest<HTMLElement>("[aria-current]")
+        ?.getBoundingClientRect().width ?? 0) -
+      (rootRef.current?.getBoundingClientRect().width ?? 0),
+    []
+  );
+  const updatePosition = useCallback(() => {
+    setX(Math.max(0, titlebarLeft * getMaxLeft()));
+  }, [getMaxLeft, titlebarLeft]);
+
+  useLayoutEffect(updatePosition, [
+    resizable,
+    scrollable,
+    theme,
+    title,
+    updatePosition,
+    width,
+  ]);
 
   return (
     <Draggable
@@ -44,16 +75,19 @@ export const Titlebar: FunctionComponent = () => {
         document.body.classList.add("grabbing");
       }}
       onStop={(_, { x }) => {
-        document.body.classList.remove("grabbing");
+        const maxLeft = getMaxLeft();
+        const left = Math.max(0, Math.min(maxLeft <= 0 ? 0 : x / maxLeft, 1));
 
-        if (x !== titlebarLeft) {
-          moveWindowTitlebar({ id, left: x });
+        if (left !== titlebarLeft) {
+          moveWindowTitlebar({ id, left });
         }
+
+        document.body.classList.remove("grabbing");
       }}
       position={
         theme.components.titlebar.draggable
           ? {
-              x: titlebarLeft,
+              x,
               y: 0,
             }
           : undefined
