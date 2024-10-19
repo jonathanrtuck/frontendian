@@ -3,6 +3,7 @@
     background-color: rgb(255, 255, 255);
     color: var(--text-color--dark);
     overflow: hidden;
+    padding: 0;
   }
 
   .scrollable {
@@ -163,6 +164,12 @@
     &::-webkit-scrollbar-track-piece:vertical:end {
       border-width: 0 0 var(--border-width) 0;
     }
+  }
+
+  .overflowHorizontal {
+  }
+
+  .overflowVertical {
   }
 
   .resize {

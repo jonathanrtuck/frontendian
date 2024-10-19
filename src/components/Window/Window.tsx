@@ -176,7 +176,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           <WindowContext.Provider value={contextValue}>
             <Titlebar />
             <div
-              className={styles.content}
+              className={styles.frame}
               hidden={Boolean(isCollapsible && collapsed)}>
               <ErrorBoundary
                 fallback={

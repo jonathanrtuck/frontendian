@@ -27,15 +27,6 @@ export const Applications: FunctionComponent = () => {
     "theme-mac-os-classic": stylesMacOsClassic,
   });
 
-  const focusedWindow = windows.find(({ focused }) => focused);
-  const activeApplication = (
-    focusedWindow
-      ? applications.find(({ windowIds }) =>
-          windowIds.includes(focusedWindow.id)
-        )
-      : applications.find(({ id }) => id === APPLICATION_TRACKER.id)
-  )!;
-
   switch (theme.id) {
     case "theme-beos":
       return (
@@ -101,7 +92,16 @@ export const Applications: FunctionComponent = () => {
           })}
         </Menu>
       );
-    case "theme-mac-os-classic":
+    case "theme-mac-os-classic": {
+      const focusedWindow = windows.find(({ focused }) => focused);
+      const activeApplication = (
+        focusedWindow
+          ? applications.find(({ windowIds }) =>
+              windowIds.includes(focusedWindow.id)
+            )
+          : applications.find(({ id }) => id === APPLICATION_TRACKER.id)
+      )!;
+
       return (
         <Menu bar className={styles.menubar} horizontal>
           <Menuitem
@@ -158,6 +158,7 @@ export const Applications: FunctionComponent = () => {
           </Menuitem>
         </Menu>
       );
+    }
   }
 };
 

@@ -38,7 +38,7 @@
   }
 }
 
-.content {
+.frame {
   box-shadow: inset var(--border-width) var(--border-width)
       var(--color--lowlight),
     inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
@@ -125,7 +125,7 @@
     }
   }
 
-  .content {
+  .frame {
     cursor: var(--cursor--default);
     display: flex;
     flex: 1 1 auto;

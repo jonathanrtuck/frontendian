@@ -37,7 +37,10 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   const [hasVerticalOverflow, setHasVerticalOverflow] =
     useState<boolean>(false);
 
-  const scrollbarSize = useComputedCustomProperty("--scrollbar-size");
+  const scrollbarSize = useComputedCustomProperty(
+    rootRef.current,
+    "--scrollbar-size"
+  );
   const styles = useStyles({
     "theme-beos": stylesBeos,
     "theme-mac-os-classic": stylesMacOsClassic,
@@ -109,7 +112,6 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
         className={clsx(styles.root, {
           [styles.overflowHorizontal]: hasHorizontalOverflow,
           [styles.overflowVertical]: hasVerticalOverflow,
-          [styles.resizable]: resizable,
           [styles.scrollable]: scrollable,
         })}
         draggable={false}

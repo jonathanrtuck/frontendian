@@ -36,13 +36,18 @@ export const useClock = (): Date => {
 };
 
 // get the current value of a css variable in px
-export const useComputedCustomProperty = (property: string): Pixels => {
-  const { themeId } = document.documentElement.dataset;
+export const useComputedCustomProperty = (
+  element: HTMLElement | null,
+  property: string
+): Pixels => {
+  const theme = useStore((state) => state.theme);
 
   return useMemo<Pixels>(() => {
-    const value = getComputedStyle(document.documentElement).getPropertyValue(
-      property
-    );
+    if (!element) {
+      return 0;
+    }
+
+    const value = getComputedStyle(element).getPropertyValue(property);
 
     if (!value) {
       return 0;
@@ -61,7 +66,7 @@ export const useComputedCustomProperty = (property: string): Pixels => {
     // px values
     return parseFloat(value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [property, themeId]);
+  }, [element, property, theme]);
 };
 
 export const useFocus = ({
