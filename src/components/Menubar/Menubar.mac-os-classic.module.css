@@ -1,31 +1,4 @@
 :root:global(.theme-mac-os-classic) {
-  --menubar-height: 1.5rem;
-
   .root {
-    background: rgb(221, 221, 221);
-    border-radius: var(--border-radius, 0) var(--border-radius, 0) 0 0;
-    border-width: 0 0 var(--border-width);
-    box-shadow: inset var(--border-width) var(--border-width)
-        var(--color--highlight),
-      inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
-        var(--color--lowlight);
-    display: flex;
-    justify-content: space-between;
-    left: 0;
-    padding: var(--border-width) 1rem;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 1000;
-  }
-
-  .menubar {
-    background: inherit;
-    height: var(--menubar-height);
-    order: 1;
-  }
-
-  .tray {
-    order: 2;
   }
 }

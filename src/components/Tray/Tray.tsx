@@ -1,5 +1,4 @@
-import clsx from "clsx";
-import { FunctionComponent, HTMLAttributes, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 
 import { Applications, Clock, ClockProps } from "@/components";
 import { useStyles } from "@/hooks";
@@ -19,9 +18,7 @@ const TIME_STYLE_SHORT: ClockProps = {
   timeStyle: "short",
 };
 
-export type TrayProps = HTMLAttributes<HTMLElement>;
-
-export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
+export const Tray: FunctionComponent = () => {
   const theme = useStore((state) => state.theme);
 
   const dateProps = DATE_STYLE_SHORT;
@@ -47,50 +44,40 @@ export const Tray: FunctionComponent<TrayProps> = ({ className, ...props }) => {
     }
   }, [clockProps, timeProps]);
 
-  switch (theme.id) {
-    case "theme-beos":
-      return (
-        <aside {...props} className={clsx(className, styles.root)}>
-          <div className={styles.content}>
-            <ul className={styles.icons}>
-              <li className={styles.icon}>
-                <Network />
-              </li>
-            </ul>
-            <Clock
-              {...clockProps}
+  return (
+    <aside className={styles.root}>
+      <div className={styles.content}>
+        {theme.id === "theme-beos" && (
+          <ul className={styles.icons}>
+            <li className={styles.icon}>
+              <Network />
+            </li>
+          </ul>
+        )}
+        <Clock
+          {...clockProps}
+          onClick={() => {
+            setClockProps((prevState) =>
+              prevState.timeStyle ? dateProps : timeProps
+            );
+          }}
+        />
+        {theme.id === "theme-mac-os-classic" && (
+          <>
+            <button
+              className={styles.button}
               onClick={() => {
-                setClockProps((prevState) =>
-                  prevState.timeStyle ? dateProps : timeProps
-                );
+                //
               }}
+              role="presentation"
+              type="button"
             />
-          </div>
-        </aside>
-      );
-    case "theme-mac-os-classic":
-      return (
-        <aside {...props} className={clsx(className, styles.root)}>
-          <Clock
-            {...clockProps}
-            onClick={() => {
-              setClockProps((prevState) =>
-                prevState.timeStyle ? dateProps : timeProps
-              );
-            }}
-          />
-          <button
-            className={styles.button}
-            onClick={() => {
-              //
-            }}
-            role="presentation"
-            type="button"
-          />
-          <Applications />
-        </aside>
-      );
-  }
+            <Applications />
+          </>
+        )}
+      </div>
+    </aside>
+  );
 };
 
 Tray.displayName = "Tray";

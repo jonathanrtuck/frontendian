@@ -19,7 +19,7 @@ import {
   Menuitem,
   Titlebar,
 } from "@/components";
-import { MENUBAR_ID } from "@/constants";
+import { DESKBAR_ID } from "@/constants";
 import { WindowContext, WindowContextType } from "@/contexts";
 import { useFocus, useStyles } from "@/hooks";
 import {
@@ -154,7 +154,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
               document.hasFocus() &&
               !e.currentTarget?.contains(e.relatedTarget) &&
               (isMenubarWindowed ||
-                !document.getElementById(MENUBAR_ID)?.contains(e.relatedTarget))
+                !document.getElementById(DESKBAR_ID)?.contains(e.relatedTarget))
             ) {
               blurWindow({ id });
             }

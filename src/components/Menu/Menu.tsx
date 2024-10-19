@@ -16,41 +16,34 @@ import {
 
 import { MenuContext, MenuContextType, MenuitemContext } from "@/contexts";
 import { useStyles } from "@/hooks";
-import { removeProps } from "@/utils";
 
 import stylesBeos from "./Menu.beos.module.css";
 import stylesMacOsClassic from "./Menu.mac-os-classic.module.css";
 
 export type MenuProps = PropsWithChildren<
-  Omit<
+  {
+    horizontal?: boolean;
+    vertical?: boolean;
+    bar?: boolean;
+  } & Omit<
     HTMLAttributes<HTMLMenuElement>,
     "aria-hidden" | "aria-orientation" | "role"
   >
-> &
-  (
-    | ({
-        bar: true;
-      } & (
-        | {
-            horizontal: true;
-          }
-        | {
-            vertical: true;
-          }
-      ))
-    | {}
-  );
+>;
 
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
   (
     {
+      bar,
       children,
       className,
+      horizontal,
       onBlur,
       onFocus,
       onKeyDown,
       onPointerDown,
+      vertical,
       ...props
     },
     ref
@@ -74,9 +67,6 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
     const inactivate = useCallback(() => {
       setIsActive(false);
     }, []);
-
-    const bar = "bar" in props;
-    const horizontal = "horizontal" in props;
 
     // if has grandchildren (Menu -> Menuitem -> Menu)
     const hasPopup = useMemo<boolean>(
@@ -118,11 +108,7 @@ export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
 
     return (
       <menu
-        {...removeProps<HTMLAttributes<HTMLMenuElement>>(props, [
-          "bar",
-          "horizontal",
-          "vertical",
-        ])}
+        {...props}
         aria-hidden={bar ? undefined : !isExpanded}
         aria-orientation={
           bar ? (horizontal ? "horizontal" : "vertical") : undefined

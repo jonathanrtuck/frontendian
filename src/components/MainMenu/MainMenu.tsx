@@ -20,7 +20,12 @@ export const MainMenu: FunctionComponent = () => {
   });
 
   return (
-    <Menu bar className={styles.root} vertical>
+    <Menu
+      bar
+      className={styles.root}
+      draggable={false}
+      horizontal={theme.id === "theme-mac-os-classic"}
+      vertical={theme.id === "theme-beos"}>
       <Menuitem
         Icon={theme.menu.Icon}
         className={styles.menuitem}

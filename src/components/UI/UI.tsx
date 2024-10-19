@@ -1,14 +1,7 @@
 import { FunctionComponent, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
-import {
-  Deskbar,
-  Desktop,
-  Dialog,
-  ErrorBoundary,
-  Menubar,
-  Window,
-} from "@/components";
+import { Deskbar, Desktop, Dialog, ErrorBoundary, Window } from "@/components";
 import { FILE_README_MD } from "@/files";
 import { openFile, useStore } from "@/store";
 
@@ -44,8 +37,7 @@ export const UI: FunctionComponent = () => {
           </Dialog>
         }>
         <Desktop />
-        {theme.id === "theme-beos" && <Deskbar />}
-        {theme.id === "theme-mac-os-classic" && <Menubar />}
+        <Deskbar />
         {windows.map((window) => (
           <Window key={window.id} {...window} />
         ))}

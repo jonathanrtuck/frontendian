@@ -19,7 +19,6 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 ## Todo
 
 - zoomed `Window` size/location
-- combine `Menubar` and `Deskbar` components
 - `mac-os-classic` theme
 - test other browsers
 - different names for applications based on theme

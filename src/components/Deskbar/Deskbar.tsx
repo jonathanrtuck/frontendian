@@ -1,15 +1,17 @@
 import { FunctionComponent, useRef } from "react";
 
-import { Applications, MainMenu, Tray } from "@/components";
+import { Applications, MainMenu, Menu, Tray } from "@/components";
 import { DESKBAR_ID } from "@/constants";
 import { useStyles } from "@/hooks";
-import { focusDeskbar, useStore } from "@/store";
+import { blurWindow, focusDeskbar, useStore } from "@/store";
 
 import stylesBeos from "./Deskbar.beos.module.css";
 import stylesMacOsClassic from "./Deskbar.mac-os-classic.module.css";
 
 export const Deskbar: FunctionComponent = () => {
   const stackingOrder = useStore((state) => state.stackingOrder);
+  const theme = useStore((state) => state.theme);
+  const windows = useStore((state) => state.windows);
 
   const rootRef = useRef<HTMLElement>(null);
 
@@ -18,30 +20,62 @@ export const Deskbar: FunctionComponent = () => {
     "theme-mac-os-classic": stylesMacOsClassic,
   });
 
-  const zIndex = stackingOrder.indexOf(DESKBAR_ID);
+  const focusedWindowId = windows.find(({ focused }) => focused)?.id;
   const isFocused = stackingOrder.at(-1) === DESKBAR_ID;
+  const isMenubarWindowed = theme.id === "theme-beos";
+  const zIndex = stackingOrder.indexOf(DESKBAR_ID);
 
   return (
     <header
-      aria-label="Deskbar"
+      aria-label={theme.id === "theme-beos" ? "Deskbar" : "Menubar"}
       className={styles.root}
       id={DESKBAR_ID}
-      onFocus={({ relatedTarget }) => {
-        if (
-          !isFocused &&
-          (!relatedTarget || !rootRef.current?.contains(relatedTarget))
-        ) {
-          focusDeskbar();
-        }
-      }}
+      onBlur={
+        isMenubarWindowed
+          ? undefined
+          : (e) => {
+              if (
+                document.hasFocus() &&
+                focusedWindowId &&
+                !e.currentTarget?.contains(e.relatedTarget) &&
+                !document
+                  .getElementById(focusedWindowId)
+                  ?.contains(e.relatedTarget)
+              ) {
+                blurWindow({ id: focusedWindowId });
+              }
+            }
+      }
+      onFocus={
+        isMenubarWindowed
+          ? ({ relatedTarget }) => {
+              if (
+                !isFocused &&
+                (!relatedTarget || !rootRef.current?.contains(relatedTarget))
+              ) {
+                focusDeskbar();
+              }
+            }
+          : undefined
+      }
       ref={rootRef}
       style={{
         zIndex,
       }}
       tabIndex={-1}>
-      <MainMenu />
-      <Tray />
-      <Applications />
+      {theme.id === "theme-beos" && (
+        <>
+          <MainMenu />
+          <Tray />
+          <Applications />
+        </>
+      )}
+      {theme.id === "theme-mac-os-classic" && (
+        <>
+          {!focusedWindowId && <MainMenu />}
+          <Tray />
+        </>
+      )}
     </header>
   );
 };

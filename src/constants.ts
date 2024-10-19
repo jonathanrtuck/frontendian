@@ -54,5 +54,4 @@ export const INITIAL_STATE: State = {
   windows: [],
 };
 export const IS_DEBUG_MODE = process.env.NODE_ENV === "development";
-export const MENUBAR_ID: ID = "menubar";
 export const UNTITLED_WINDOW_TITLE = "Untitled";
