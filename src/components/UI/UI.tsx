@@ -1,5 +1,5 @@
-import { FunctionComponent, useEffect, useMemo } from "react";
-import { Helmet, HelmetProps } from "react-helmet";
+import { FunctionComponent, useEffect } from "react";
+import { Helmet } from "react-helmet";
 
 import {
   Deskbar,
@@ -18,21 +18,16 @@ export const UI: FunctionComponent = () => {
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
 
-  const style = useMemo<HelmetProps["style"]>(
-    () =>
-      fonts.map(({ format, title, url }) => ({
-        cssText: `@font-face { font-family: "${title}"; src: url("${url}") format("${format}") }`,
-      })),
-    [fonts]
-  );
-
   useEffect(() => {
     openFile({ id: FILE_README_MD.id });
   }, []);
 
   return (
     <>
-      <Helmet style={style}>
+      <Helmet
+        style={fonts.map(({ format, title, url }) => ({
+          cssText: `@font-face { font-family: "${title}"; src: url("${url}") format("${format}") }`,
+        }))}>
         <html className={theme.id} />
         {files.map(({ id, url }) => (
           <link href={url} key={id} rel="preconnect" />
