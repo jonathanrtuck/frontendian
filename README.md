@@ -19,7 +19,6 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 ## Todo
 
 - zoomed `Window` size/location
-- prevent potential `TitleBar` position overflow on `Window` resize
 - test `Menu` keyboard interaction
 - combine `Menubar` and `Deskbar` components
 - special resize handle for non-scrollable `Window`s in `beos` theme?
