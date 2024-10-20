@@ -1,6 +1,6 @@
 import { FunctionComponent, useRef } from "react";
 
-import { Applications, MainMenu, Menu, Tray } from "@/components";
+import { Applications, MainMenu, Tray } from "@/components";
 import { DESKBAR_ID } from "@/constants";
 import { useStyles } from "@/hooks";
 import { blurWindow, focusDeskbar, useStore } from "@/store";

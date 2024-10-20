@@ -4,9 +4,11 @@ import Markdown from "react-markdown";
 
 import { ApplicationComponent } from "@/types";
 
-import styles from "./StyledEdit.module.css";
+import { getTitle } from "./utils";
 
-export const StyledEdit: ApplicationComponent = ({
+import styles from "./TextEditor.module.css";
+
+export const TextEditor: ApplicationComponent = ({
   Content,
   Menu,
   Menubar,
@@ -149,7 +151,7 @@ export const StyledEdit: ApplicationComponent = ({
                   </>
                 );
               }}
-              title="About StyledEdit…"
+              title={`About ${getTitle(theme)}…`}
             />
           </Menu>
         </Menuitem>
@@ -179,4 +181,4 @@ export const StyledEdit: ApplicationComponent = ({
   );
 };
 
-StyledEdit.displayName = "StyledEdit";
+TextEditor.displayName = "TextEditor";

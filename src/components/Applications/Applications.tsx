@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 
-import { APPLICATION_TRACKER } from "@/applications";
+import { APPLICATION_FILE_MANAGER } from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { useStyles } from "@/hooks";
 import { WindowHidden, WindowVisible } from "@/icons";
@@ -100,7 +100,7 @@ export const Applications: FunctionComponent = () => {
           ? applications.find(({ windowIds }) =>
               windowIds.includes(focusedWindow.id)
             )
-          : applications.find(({ id }) => id === APPLICATION_TRACKER.id)
+          : applications.find(({ id }) => id === APPLICATION_FILE_MANAGER.id)
       )!;
 
       return (

@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 
-import { APPLICATION_TRACKER } from "@/applications";
+import { APPLICATION_FILE_MANAGER } from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { FILE_README_MD } from "@/files";
 import { useStyles } from "@/hooks";
@@ -61,7 +61,7 @@ export const MainMenu: FunctionComponent = () => {
           </Menuitem>
           <Menuitem separator />
           {applications
-            .filter(({ id }) => id !== APPLICATION_TRACKER.id)
+            .filter(({ id }) => id !== APPLICATION_FILE_MANAGER.id)
             .map((application) => (
               <Menuitem
                 Icon={application.Icon}

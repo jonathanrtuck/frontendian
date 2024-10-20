@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
-import { APPLICATION_TRACKER } from "@/applications";
+import { APPLICATION_FILE_MANAGER } from "@/applications";
 import {
   DEFAULT_WINDOW,
   DEFAULT_WINDOW_POSITION_INCREMENT,
@@ -109,7 +109,8 @@ export const closeApplication = setState<ActionIds>(
               : application
           ),
           openApplicationIds: prevState.openApplicationIds.filter(
-            (id) => id === APPLICATION_TRACKER.id || !isPayloadId(payload, id)
+            (id) =>
+              id === APPLICATION_FILE_MANAGER.id || !isPayloadId(payload, id)
           ),
           stackingOrder: prevState.stackingOrder.filter(
             (id) => !windowIds.includes(id)
@@ -133,7 +134,7 @@ export const closeWindow = setState<ActionIds>(
         );
         const isLastApplicationWindow =
           windowApplication?.windowIds.length === 1;
-        const isTracker = windowApplication?.id === APPLICATION_TRACKER.id;
+        const isTracker = windowApplication?.id === APPLICATION_FILE_MANAGER.id;
 
         return {
           ...prevState,

@@ -2,7 +2,7 @@ import { forwardRef, useId } from "react";
 
 import { IconComponent } from "@/types";
 
-export const TrackerIcon: IconComponent = forwardRef(
+export const FileManagerIcon: IconComponent = forwardRef(
   ({ theme, ...props }, ref) => {
     const id = useId();
 
@@ -97,4 +97,4 @@ export const TrackerIcon: IconComponent = forwardRef(
   }
 );
 
-TrackerIcon.displayName = "TrackerIcon";
+FileManagerIcon.displayName = "FileManagerIcon";

@@ -5,8 +5,11 @@ import { Pdf, Text } from "@/icons";
 import * as themes from "@/themes";
 import { ID, MimeType, State, Window } from "@/types";
 
-const { APPLICATION_PDF_VIEWER, APPLICATION_STYLED_EDIT, APPLICATION_TRACKER } =
-  applicationConfigurations;
+const {
+  APPLICATION_FILE_MANAGER,
+  APPLICATION_PDF_VIEWER,
+  APPLICATION_TEXT_EDITOR,
+} = applicationConfigurations;
 
 export const DEFAULT_WINDOW_HEIGHT = 450;
 export const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
@@ -38,7 +41,7 @@ export const INITIAL_STATE: State = {
   desktop: [files.FILE_RESUME_PDF.id],
   files: Object.values(files),
   fonts: Object.values(fonts),
-  openApplicationIds: [APPLICATION_TRACKER.id],
+  openApplicationIds: [APPLICATION_FILE_MANAGER.id],
   stackingOrder: [DESKBAR_ID],
   theme: themes.THEME_BEOS,
   types: {
@@ -47,7 +50,7 @@ export const INITIAL_STATE: State = {
       Icon: Pdf,
     },
     [MimeType.TextMarkdown]: {
-      application: APPLICATION_STYLED_EDIT.id,
+      application: APPLICATION_TEXT_EDITOR.id,
       Icon: Text,
     },
   },
