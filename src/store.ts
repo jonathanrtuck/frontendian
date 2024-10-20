@@ -9,6 +9,7 @@ import {
   DESKBAR_ID,
   INITIAL_STATE,
   IS_DEBUG_MODE,
+  WINDOW_DIMENSION_BUFFER,
   UNTITLED_WINDOW_TITLE,
 } from "@/constants";
 import * as themes from "@/themes";
@@ -544,13 +545,48 @@ export const zoomWindow = setState<ActionIds>(
   "zoomWindow",
   (payload) => (prevState) => ({
     ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
+    windows: prevState.windows.map((window) => {
+      if (!isPayloadId(payload, window.id)) {
+        return window;
+      }
+
+      const element = document.getElementById(window.id)!;
+      const { offsetHeight, offsetWidth } = element;
+      const { marginBottom, marginLeft, marginRight, marginTop } =
+        getComputedStyle(element);
+      const marginX = parseFloat(marginLeft) + parseFloat(marginRight);
+      const marginY = parseFloat(marginBottom) + parseFloat(marginTop);
+      const frameHeight = offsetHeight + marginY - window.height;
+      const frameWidth = offsetWidth + marginX - window.width;
+      const maxHeight = document.body.offsetHeight - frameHeight;
+      const maxWidth = document.body.offsetWidth - frameWidth;
+      const isZoomed =
+        window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
+        window.height <= maxHeight + WINDOW_DIMENSION_BUFFER &&
+        window.width >= maxWidth - WINDOW_DIMENSION_BUFFER &&
+        window.width <= maxWidth + WINDOW_DIMENSION_BUFFER;
+
+      return isZoomed
         ? {
             ...window,
-            zoomed: !window.zoomed,
+            ...window.prev,
+            prev: window.zoomed ? window.prev : undefined,
+            zoomed: false,
           }
-        : window
-    ),
+        : {
+            ...window,
+            height: maxHeight,
+            left: 0,
+            prev: {
+              height: window.height,
+              left: window.left,
+              top: window.top,
+              width: window.width,
+            },
+            top: 0,
+            width: maxWidth,
+            zoomed: true,
+          };
+    }),
   })
 );

@@ -128,7 +128,7 @@ export type Theme = {
 
 export type URL = string;
 
-export type Window = {
+export interface Window {
   collapsed: boolean;
   fileId?: ID;
   focused: boolean;
@@ -136,6 +136,7 @@ export type Window = {
   hidden: boolean;
   id: ID;
   left: Pixels;
+  prev?: Pick<this, "height" | "left" | "top" | "width">;
   resizable: boolean;
   scrollable: boolean;
   title: string;
@@ -143,4 +144,4 @@ export type Window = {
   top: Pixels;
   width: Pixels;
   zoomed: boolean;
-};
+}

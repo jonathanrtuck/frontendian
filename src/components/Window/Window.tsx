@@ -122,10 +122,6 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
     <>
       <Draggable
         cancel="[draggable='false']"
-        defaultPosition={{
-          x: left,
-          y: top,
-        }}
         nodeRef={rootRef}
         onStart={(e) => {
           if (e.shiftKey) {
@@ -140,6 +136,10 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           if (x !== left || y !== top) {
             moveWindow({ id, left: x, top: y });
           }
+        }}
+        position={{
+          x: left,
+          y: top,
         }}>
         <section
           aria-current={focused}
