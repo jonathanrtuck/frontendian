@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 
 import { useStyles } from "@/hooks";
 import { File } from "@/icons";
+import { useStore } from "@/store";
 import { IconComponent } from "@/types";
 
 import stylesBeos from "./Icon.beos.module.css";
@@ -18,6 +19,8 @@ export const Icon: FunctionComponent<IconProps> = ({
   onClick,
   title,
 }) => {
+  const theme = useStore((state) => state.theme);
+
   const styles = useStyles({
     "theme-beos": stylesBeos,
     "theme-mac-os-classic": stylesMacOsClassic,
@@ -31,7 +34,7 @@ export const Icon: FunctionComponent<IconProps> = ({
       tabIndex={0}
       title={title}
       type="button">
-      <Component aria-hidden className={styles.icon} />
+      <Component aria-hidden className={styles.icon} theme={theme} />
       <span className={styles.title}>{title}</span>
     </button>
   );

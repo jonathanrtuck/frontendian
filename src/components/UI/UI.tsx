@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 import { Deskbar, Desktop, Dialog, ErrorBoundary, Window } from "@/components";
 import { FILE_README_MD } from "@/files";
 import { openFile, useStore } from "@/store";
+import { getUrl } from "@/utils";
 
 export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);
@@ -18,19 +19,21 @@ export const UI: FunctionComponent = () => {
   return (
     <>
       <Helmet
-        style={fonts.map(({ format, title, url }) => ({
-          cssText: `@font-face { font-family: "${title}"; src: url("${url}") format("${format}") }`,
+        style={fonts.map((font) => ({
+          cssText: `@font-face { font-family: "${font.title}"; src: url("${font.url}") format("${font.format}") }`,
         }))}>
         <html className={theme.id} />
-        {files.map(({ id, url }) => (
-          <link
-            href={typeof url === "function" ? url() : url}
-            key={id}
-            rel="preconnect"
-          />
+        {files.map((file) => (
+          <link href={getUrl(file)} key={file.id} rel="preconnect" />
         ))}
-        {fonts.map(({ id, url }) => (
-          <link as="font" crossOrigin="" href={url} key={id} rel="preload" />
+        {fonts.map((font) => (
+          <link
+            as="font"
+            crossOrigin=""
+            href={font.url}
+            key={font.id}
+            rel="preload"
+          />
         ))}
       </Helmet>
       <ErrorBoundary

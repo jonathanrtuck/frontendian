@@ -29,6 +29,7 @@ export type ApplicationComponentProps = {
   onQuit(): void;
   onResize(height: Pixels, width: Pixels): void;
   openableFiles: File[];
+  theme: Theme;
 };
 
 export type ApplicationConfiguration = {
@@ -36,13 +37,13 @@ export type ApplicationConfiguration = {
   getWindow?(file?: File): Partial<Window>;
   Icon?: IconComponent;
   id: ID;
-  title: string;
+  title: string | ((theme: Theme) => string);
 };
 
 export type File = {
   id: ID;
   title: string;
-  url: URL | (() => URL);
+  url: URL | ((theme: Theme) => URL);
 } & (
   | {
       type: MimeType.ApplicationPdf;
@@ -70,7 +71,7 @@ export type Font = {
 
 export type IconComponent = ForwardRefExoticComponent<
   {
-    themeId?: ID;
+    theme?: Theme;
   } & SVGAttributes<SVGSVGElement> &
     RefAttributes<SVGSVGElement>
 >;

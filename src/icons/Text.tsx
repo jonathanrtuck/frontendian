@@ -2,7 +2,7 @@ import { forwardRef, useId } from "react";
 
 import { IconComponent } from "@/types";
 
-export const Text: IconComponent = forwardRef((props, ref) => {
+export const Text: IconComponent = forwardRef(({ theme, ...props }, ref) => {
   const id = useId();
 
   return (

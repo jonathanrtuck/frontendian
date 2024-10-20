@@ -2,10 +2,11 @@ import { forwardRef } from "react";
 
 import { IconComponent } from "@/types";
 
-export const BeOS: IconComponent = forwardRef((props, ref) => (
+export const BeOS: IconComponent = forwardRef(({ theme, ...props }, ref) => (
   <svg
     {...props}
     ref={ref}
+    version="1.1"
     viewBox="0 0 139.2732 55.9286"
     xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(3.656084 235.8174)">

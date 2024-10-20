@@ -24,6 +24,7 @@ export const PdfViewer: ApplicationComponent = ({
   onOpen,
   onQuit,
   openableFiles,
+  theme,
 }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -31,7 +32,7 @@ export const PdfViewer: ApplicationComponent = ({
 
   const url = file
     ? typeof file.url === "function"
-      ? file.url()
+      ? file.url(theme)
       : file.url
     : null;
 

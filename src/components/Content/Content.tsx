@@ -89,7 +89,7 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
               aria-hidden
               className={styles.resize}
               ref={ref}
-              themeId={theme.id}
+              theme={theme}
             />
           )
         ) : (

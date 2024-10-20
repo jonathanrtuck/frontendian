@@ -11,6 +11,7 @@ import { Icon } from "@/components";
 import { useStyles } from "@/hooks";
 import { openApplication, openFile, useStore } from "@/store";
 import { Pixels } from "@/types";
+import { getTitle } from "@/utils";
 
 import stylesBeos from "./Desktop.beos.module.css";
 import stylesMacOsClassic from "./Desktop.mac-os-classic.module.css";
@@ -129,7 +130,7 @@ export const Desktop: FunctionComponent = () => {
                 ? openApplication({ id: obj.id })
                 : openFile({ id: obj.id });
             }}
-            title={obj.title}
+            title={getTitle(obj)}
           />
         ) : null
       )}

@@ -6,6 +6,7 @@ import { FILE_README_MD } from "@/files";
 import { useStyles } from "@/hooks";
 import { changeTheme, openApplication, openFile, useStore } from "@/store";
 import * as themes from "@/themes";
+import { getTitle } from "@/utils";
 
 import stylesBeos from "./MainMenu.beos.module.css";
 import stylesMacOsClassic from "./MainMenu.mac-os-classic.module.css";
@@ -61,14 +62,14 @@ export const MainMenu: FunctionComponent = () => {
           <Menuitem separator />
           {applications
             .filter(({ id }) => id !== APPLICATION_TRACKER.id)
-            .map(({ Icon, id, title }) => (
+            .map((application) => (
               <Menuitem
-                Icon={Icon}
-                key={id}
+                Icon={application.Icon}
+                key={application.id}
                 onClick={() => {
-                  openApplication({ id });
+                  openApplication({ id: application.id });
                 }}
-                title={title}
+                title={getTitle(application)}
               />
             ))}
         </Menu>

@@ -10,6 +10,7 @@ import {
 
 import { useStyles } from "@/hooks";
 import { AlertError, AlertInfo } from "@/icons";
+import { useStore } from "@/store";
 import { IconComponent } from "@/types";
 
 import stylesBeos from "./Dialog.beos.module.css";
@@ -40,6 +41,8 @@ export const Dialog: FunctionComponent<DialogProps> = ({
   type,
   ...props
 }) => {
+  const theme = useStore((state) => state.theme);
+
   const rootRef = useRef<HTMLDialogElement>(null);
 
   const styles = useStyles({
@@ -64,7 +67,7 @@ export const Dialog: FunctionComponent<DialogProps> = ({
   return (
     <dialog {...props} className={clsx(className, styles.root)} ref={rootRef}>
       <div className={styles.content}>
-        <Icon className={styles.icon} />
+        <Icon className={styles.icon} theme={theme} />
         {children}
       </div>
     </dialog>

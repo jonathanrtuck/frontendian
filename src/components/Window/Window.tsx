@@ -34,6 +34,7 @@ import {
   useStore,
 } from "@/store";
 import { File, ID, Pixels, Window as WindowType } from "@/types";
+import { getTitle } from "@/utils";
 
 import stylesBeos from "./Window.beos.module.css";
 import stylesMacOsClassic from "./Window.mac-os-classic.module.css";
@@ -186,15 +187,17 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
                     modal
                     open
                     type="error">
-                    <p>{application.title} has encountered an unknown error.</p>
+                    <p>
+                      {getTitle(application)} has encountered an unknown error.
+                    </p>
                     <footer>
-                      <button
+                      <Button
                         autoFocus
                         formMethod="dialog"
                         onClick={onClose}
                         type="reset">
                         Close window
-                      </button>
+                      </Button>
                     </footer>
                   </Dialog>
                 }>
@@ -211,6 +214,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
                   onQuit={onQuit}
                   onResize={onResize}
                   openableFiles={openableFiles}
+                  theme={theme}
                 />
               </ErrorBoundary>
             </div>

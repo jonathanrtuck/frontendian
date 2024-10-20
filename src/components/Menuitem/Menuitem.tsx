@@ -14,6 +14,7 @@ import {
 
 import { MenuContext, MenuitemContext, MenuitemContextType } from "@/contexts";
 import { useStyles } from "@/hooks";
+import { useStore } from "@/store";
 import { IconComponent } from "@/types";
 import { removeProps } from "@/utils";
 
@@ -71,6 +72,8 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
   } = useContext(MenuContext);
   const { collapse: parentCollapse, topButtonRef: parentTopButtonRef } =
     useContext(MenuitemContext);
+
+  const theme = useStore((state) => state.theme);
 
   const id = useId();
 
@@ -376,7 +379,11 @@ export const Menuitem: FunctionComponent<MenuitemProps> = ({
         tabIndex={tabIndex}
         type="button">
         {!!Icon && (
-          <Icon aria-hidden className={clsx(classes?.icon, styles.icon)} />
+          <Icon
+            aria-hidden
+            className={clsx(classes?.icon, styles.icon)}
+            theme={theme}
+          />
         )}
         <span className={clsx(classes?.title, styles.title)} id={`${id}-title`}>
           {title}

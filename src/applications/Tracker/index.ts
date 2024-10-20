@@ -7,5 +7,12 @@ export const APPLICATION_TRACKER: ApplicationConfiguration = {
   Component: Tracker,
   Icon: TrackerIcon,
   id: "application-tracker",
-  title: "Tracker",
+  title: (theme) => {
+    switch (theme.id) {
+      case "theme-beos":
+        return "Tracker";
+      case "theme-mac-os-classic":
+        return "Finder";
+    }
+  },
 };

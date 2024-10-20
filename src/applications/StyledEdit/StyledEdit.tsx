@@ -18,6 +18,7 @@ export const StyledEdit: ApplicationComponent = ({
   onOpen,
   onQuit,
   openableFiles,
+  theme,
 }) => {
   const [content, setContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +38,7 @@ export const StyledEdit: ApplicationComponent = ({
   const url =
     file && file.type === "text/markdown"
       ? typeof file.url === "function"
-        ? file.url()
+        ? file.url(theme)
         : file.url
       : null;
 

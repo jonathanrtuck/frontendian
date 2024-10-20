@@ -12,6 +12,7 @@ import {
   showWindow,
   useStore,
 } from "@/store";
+import { getTitle } from "@/utils";
 
 import stylesBeos from "./Applications.beos.module.css";
 import stylesMacOsClassic from "./Applications.mac-os-classic.module.css";
@@ -43,7 +44,7 @@ export const Applications: FunctionComponent = () => {
               <Menuitem
                 Icon={application.Icon}
                 key={applicationId}
-                title={application.title}>
+                title={getTitle(application)}>
                 <Menu>
                   {applicationWindows.length === 0 ? (
                     <Menuitem disabled title="No windows" />
@@ -107,7 +108,7 @@ export const Applications: FunctionComponent = () => {
           <Menuitem
             Icon={activeApplication.Icon}
             className={styles.menuitem}
-            title={activeApplication.title}>
+            title={getTitle(activeApplication)}>
             <Menu className={styles.menu}>
               <Menuitem
                 disabled={false} // @todo
@@ -149,7 +150,7 @@ export const Applications: FunctionComponent = () => {
                         blurWindow({ id: focusedWindow.id });
                       }
                     }}
-                    title={application.title}
+                    title={getTitle(application)}
                     type="radio"
                   />
                 );
