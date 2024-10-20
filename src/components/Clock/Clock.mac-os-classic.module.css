@@ -1,4 +1,7 @@
 :root:global(.theme-mac-os-classic) {
   .root {
+    font-size: 0.875rem;
+    padding: 0 0.5rem;
+    user-select: none;
   }
 }

@@ -15,6 +15,7 @@
       content: "";
       inset: calc(var(--border-width) * 2);
       position: absolute;
+      z-index: -1;
     }
   }
 
