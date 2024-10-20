@@ -8,6 +8,10 @@
     font-size: 0.75rem;
     min-width: 4rem;
     padding: 0.25rem;
+
+    &:focus {
+      outline: 0;
+    }
   }
 
   .content {
@@ -21,6 +25,7 @@
 
     .root:active & {
       background-color: var(--border-color--dark);
+      color: var(--text-color--light);
     }
   }
 }

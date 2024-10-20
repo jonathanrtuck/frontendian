@@ -119,7 +119,21 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
   );
 
   return (
-    <>
+    <ErrorBoundary
+      fallback={
+        <Dialog className={styles.dialog} modal open type="error">
+          <p>{getTitle(application)} has encountered an unknown error.</p>
+          <footer>
+            <Button
+              autoFocus
+              formMethod="dialog"
+              onClick={onClose}
+              type="reset">
+              Close
+            </Button>
+          </footer>
+        </Dialog>
+      }>
       <Draggable
         cancel="[draggable='false']"
         nodeRef={rootRef}
@@ -179,44 +193,21 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
             <div
               className={styles.frame}
               hidden={Boolean(isCollapsible && collapsed)}>
-              <ErrorBoundary
-                fallback={
-                  <Dialog
-                    className={styles.dialog}
-                    draggable={false}
-                    modal
-                    open
-                    type="error">
-                    <p>
-                      {getTitle(application)} has encountered an unknown error.
-                    </p>
-                    <footer>
-                      <Button
-                        autoFocus
-                        formMethod="dialog"
-                        onClick={onClose}
-                        type="reset">
-                        Close window
-                      </Button>
-                    </footer>
-                  </Dialog>
-                }>
-                <application.Component
-                  Content={Content}
-                  Menu={Menu}
-                  Menubar={Menubar}
-                  Menuitem={Menuitem}
-                  file={file}
-                  onAbout={onAbout}
-                  onClose={onClose}
-                  onNew={onNew}
-                  onOpen={onOpen}
-                  onQuit={onQuit}
-                  onResize={onResize}
-                  openableFiles={openableFiles}
-                  theme={theme}
-                />
-              </ErrorBoundary>
+              <application.Component
+                Content={Content}
+                Menu={Menu}
+                Menubar={Menubar}
+                Menuitem={Menuitem}
+                file={file}
+                onAbout={onAbout}
+                onClose={onClose}
+                onNew={onNew}
+                onOpen={onOpen}
+                onQuit={onQuit}
+                onResize={onResize}
+                openableFiles={openableFiles}
+                theme={theme}
+              />
             </div>
           </WindowContext.Provider>
         </section>
@@ -239,7 +230,7 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           </Button>
         </footer>
       </Dialog>
-    </>
+    </ErrorBoundary>
   );
 };
 
