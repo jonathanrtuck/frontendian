@@ -19,7 +19,7 @@ export const StyledEdit: ApplicationComponent = ({
   onQuit,
   openableFiles,
 }) => {
-  const [fileContent, setFileContent] = useState<string>("");
+  const [content, setContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,19 +34,25 @@ export const StyledEdit: ApplicationComponent = ({
   const inputLines = input.split("\n");
   const numInputCols = Math.max(...inputLines.map((line) => line.length));
   const numInputRows = inputLines.length;
+  const url =
+    file && file.type === "text/markdown"
+      ? typeof file.url === "function"
+        ? file.url()
+        : file.url
+      : null;
 
   useEffect(() => {
-    if (file?.type === "text/markdown" && Boolean(file?.url)) {
+    if (url) {
       const controller = new AbortController();
 
       setError(null);
       setIsLoading(true);
 
-      fetch(file.url, {
+      fetch(url, {
         signal: controller.signal,
       })
         .then((response) => response.text())
-        .then(setFileContent)
+        .then(setContent)
         .catch((error) => {
           if (error.name !== "AbortError") {
             setError(error.message);
@@ -62,13 +68,13 @@ export const StyledEdit: ApplicationComponent = ({
         setIsLoading(false);
       };
     }
-  }, [file]);
+  }, [url]);
 
   useEffect(() => {
-    if (!isLoading && !error && fileContent) {
-      setInput(fileContent);
+    if (!isLoading && !error && content) {
+      setInput(content);
     }
-  }, [error, fileContent, isLoading]);
+  }, [error, content, isLoading]);
 
   useEffect(() => {
     setView(

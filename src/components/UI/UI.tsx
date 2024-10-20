@@ -23,7 +23,11 @@ export const UI: FunctionComponent = () => {
         }))}>
         <html className={theme.id} />
         {files.map(({ id, url }) => (
-          <link href={url} key={id} rel="preconnect" />
+          <link
+            href={typeof url === "function" ? url() : url}
+            key={id}
+            rel="preconnect"
+          />
         ))}
         {fonts.map(({ id, url }) => (
           <link as="font" crossOrigin="" href={url} key={id} rel="preload" />

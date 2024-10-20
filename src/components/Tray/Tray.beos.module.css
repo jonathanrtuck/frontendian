@@ -1,17 +1,21 @@
 :root:global(.theme-beos) {
   .root {
-    box-shadow: var(--box-shadow--high);
-    padding: calc(var(--border-width) * 2);
-  }
-
-  .content {
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.175);
-    box-shadow: var(--box-shadow--low);
+    box-shadow: var(--box-shadow--high);
     display: flex;
     gap: 0.25rem;
     justify-content: space-between;
-    padding: 0.25rem 0.5rem;
+    padding: calc(var(--border-width) * 2 + 0.25rem)
+      calc(var(--border-width) * 2 + 0.5rem);
+    position: relative;
+
+    &::before {
+      background-color: rgba(0, 0, 0, 0.175);
+      box-shadow: var(--box-shadow--low);
+      content: "";
+      inset: calc(var(--border-width) * 2);
+      position: absolute;
+    }
   }
 
   .icons {

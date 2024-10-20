@@ -29,6 +29,12 @@ export const PdfViewer: ApplicationComponent = ({
 
   const [numPages, setNumPages] = useState<number>(0);
 
+  const url = file
+    ? typeof file.url === "function"
+      ? file.url()
+      : file.url
+    : null;
+
   return (
     <>
       <Menubar>
@@ -51,9 +57,9 @@ export const PdfViewer: ApplicationComponent = ({
             </Menuitem>
             <Menuitem separator />
             <Menuitem
-              disabled={!file?.url}
+              disabled={!url}
               onClick={
-                file?.url
+                url
                   ? () => {
                       iframeRef.current?.contentWindow?.print();
                     }
@@ -88,11 +94,11 @@ export const PdfViewer: ApplicationComponent = ({
         </Menuitem>
       </Menubar>
       <Content>
-        {file?.url ? (
+        {file && url ? (
           <>
             <Document
               className={styles.root}
-              file={file.url}
+              file={url}
               loading={<Fragment />} // eslint-disable-line react/jsx-no-useless-fragment
               onLoadSuccess={({ numPages }) => {
                 setNumPages(numPages);
@@ -106,7 +112,7 @@ export const PdfViewer: ApplicationComponent = ({
                 />
               ))}
             </Document>
-            <iframe hidden ref={iframeRef} src={file.url} title={file.title} />
+            <iframe hidden ref={iframeRef} src={url} title={file.title} />
           </>
         ) : null}
       </Content>

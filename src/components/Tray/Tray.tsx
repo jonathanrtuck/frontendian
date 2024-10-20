@@ -46,36 +46,34 @@ export const Tray: FunctionComponent = () => {
 
   return (
     <aside className={styles.root}>
-      <div className={styles.content}>
-        {theme.id === "theme-beos" && (
-          <ul className={styles.icons}>
-            <li className={styles.icon}>
-              <Network />
-            </li>
-          </ul>
-        )}
-        <Clock
-          {...clockProps}
-          onClick={() => {
-            setClockProps((prevState) =>
-              prevState.timeStyle ? dateProps : timeProps
-            );
-          }}
-        />
-        {theme.id === "theme-mac-os-classic" && (
-          <>
-            <button
-              className={styles.button}
-              onClick={() => {
-                //
-              }}
-              role="presentation"
-              type="button"
-            />
-            <Applications />
-          </>
-        )}
-      </div>
+      {theme.id === "theme-beos" && (
+        <ul className={styles.icons}>
+          <li className={styles.icon}>
+            <Network />
+          </li>
+        </ul>
+      )}
+      <Clock
+        {...clockProps}
+        onClick={() => {
+          setClockProps((prevState) =>
+            prevState.timeStyle ? dateProps : timeProps
+          );
+        }}
+      />
+      {theme.id === "theme-mac-os-classic" && (
+        <>
+          <button
+            className={styles.button}
+            onClick={() => {
+              //
+            }}
+            role="presentation"
+            type="button"
+          />
+          <Applications />
+        </>
+      )}
     </aside>
   );
 };

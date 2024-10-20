@@ -42,7 +42,7 @@ export type ApplicationConfiguration = {
 export type File = {
   id: ID;
   title: string;
-  url: URL;
+  url: URL | (() => URL);
 } & (
   | {
       type: MimeType.ApplicationPdf;
