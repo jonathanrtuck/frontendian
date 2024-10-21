@@ -3,11 +3,9 @@ import { ComponentProps, FunctionComponent, useEffect, useState } from "react";
 import { Applications, Clock } from "@/components";
 import { useStore, useStyles } from "@/hooks";
 import { Network } from "@/icons";
-import { ComponentName } from "@/types";
 
 type ClockProps = ComponentProps<typeof Clock>;
 
-const COMPONENT_NAME: ComponentName = "Tray";
 const DATE_STYLE_SHORT: ClockProps = {
   dateStyle: "short",
 };
@@ -20,7 +18,7 @@ const TIME_STYLE_SHORT: ClockProps = {
 
 export const Tray: FunctionComponent = () => {
   const theme = useStore((state) => state.theme);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("Tray");
 
   const dateProps = DATE_STYLE_SHORT;
   const timeProps =
@@ -74,4 +72,4 @@ export const Tray: FunctionComponent = () => {
   );
 };
 
-Tray.displayName = COMPONENT_NAME;
+Tray.displayName = "Tray";

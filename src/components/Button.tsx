@@ -7,9 +7,6 @@ import {
 } from "react";
 
 import { useStyles } from "@/hooks";
-import { ComponentName } from "@/types";
-
-const COMPONENT_NAME: ComponentName = "Button";
 
 export const Button: FunctionComponent<
   PropsWithChildren<
@@ -19,7 +16,7 @@ export const Button: FunctionComponent<
     >
   >
 > = ({ children, className, type = "button", ...props }) => {
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("Button");
 
   return (
     // eslint-disable-next-line react/button-has-type
@@ -29,4 +26,4 @@ export const Button: FunctionComponent<
   );
 };
 
-Button.displayName = COMPONENT_NAME;
+Button.displayName = "Button";

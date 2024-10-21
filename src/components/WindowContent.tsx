@@ -14,9 +14,7 @@ import { WindowContext } from "@/contexts";
 import { useComputedCustomProperty, useStore, useStyles } from "@/hooks";
 import { Resize } from "@/icons";
 import { resizeWindow } from "@/store";
-import { ComponentName } from "@/types";
 
-const COMPONENT_NAME: ComponentName = "WindowContent";
 const MIN_HEIGHT = 16 * 7; // 7rem
 const MIN_WIDTH = 16 * 10; // 10rem
 
@@ -31,7 +29,7 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
     "--scrollbar-size"
   );
   const theme = useStore((state) => state.theme);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("WindowContent");
 
   const { collapsed, height, id, menubarRef, resizable, scrollable, width } =
     useContext(WindowContext);
@@ -133,4 +131,4 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
   );
 };
 
-WindowContent.displayName = COMPONENT_NAME;
+WindowContent.displayName = "WindowContent";

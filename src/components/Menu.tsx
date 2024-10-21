@@ -16,9 +16,6 @@ import {
 
 import { MenuContext, MenuContextType, MenuitemContext } from "@/contexts";
 import { useStyles } from "@/hooks";
-import { ComponentName } from "@/types";
-
-const COMPONENT_NAME: ComponentName = "Menu";
 
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu = forwardRef<
@@ -49,7 +46,7 @@ export const Menu = forwardRef<
     },
     ref
   ) => {
-    const styles = useStyles(COMPONENT_NAME);
+    const styles = useStyles("Menu");
 
     const {
       inactivate: parentInactivate,
@@ -159,4 +156,4 @@ export const Menu = forwardRef<
   }
 );
 
-Menu.displayName = COMPONENT_NAME;
+Menu.displayName = "Menu";

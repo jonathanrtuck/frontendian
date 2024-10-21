@@ -11,10 +11,7 @@ import {
 import { FILE_README_MD } from "@/files";
 import { useStore } from "@/hooks";
 import { openFile } from "@/store";
-import { ComponentName } from "@/types";
 import { getUrl } from "@/utils";
-
-const COMPONENT_NAME: ComponentName = "UI";
 
 export const UI: FunctionComponent = () => {
   const files = useStore((state) => state.files);
@@ -63,4 +60,4 @@ export const UI: FunctionComponent = () => {
   );
 };
 
-UI.displayName = COMPONENT_NAME;
+UI.displayName = "UI";

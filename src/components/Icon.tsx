@@ -2,9 +2,7 @@ import { FunctionComponent } from "react";
 
 import { useStore, useStyles } from "@/hooks";
 import { File } from "@/icons";
-import { ComponentName, IconComponent } from "@/types";
-
-const COMPONENT_NAME: ComponentName = "Icon";
+import { IconComponent } from "@/types";
 
 export const Icon: FunctionComponent<{
   Component?: IconComponent;
@@ -12,7 +10,7 @@ export const Icon: FunctionComponent<{
   title: string;
 }> = ({ Component = File, onClick, title }) => {
   const theme = useStore((state) => state.theme);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("Icon");
 
   return (
     <button
@@ -28,4 +26,4 @@ export const Icon: FunctionComponent<{
   );
 };
 
-Icon.displayName = COMPONENT_NAME;
+Icon.displayName = "Icon";

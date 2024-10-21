@@ -10,9 +10,7 @@ import {
 
 import { useStore, useStyles } from "@/hooks";
 import { AlertError, AlertInfo } from "@/icons";
-import { ComponentName, IconComponent } from "@/types";
-
-const COMPONENT_NAME: ComponentName = "Dialog";
+import { IconComponent } from "@/types";
 
 type DialogType = "error" | "info";
 
@@ -33,7 +31,7 @@ export const Dialog: FunctionComponent<
   >
 > = ({ children, className, modal, open, type, ...props }) => {
   const theme = useStore((state) => state.theme);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("Dialog");
 
   const rootRef = useRef<HTMLDialogElement>(null);
 
@@ -61,4 +59,4 @@ export const Dialog: FunctionComponent<
   );
 };
 
-Dialog.displayName = COMPONENT_NAME;
+Dialog.displayName = "Dialog";

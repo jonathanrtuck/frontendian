@@ -6,15 +6,12 @@ import { FILE_README_MD } from "@/files";
 import { useStore, useStyles } from "@/hooks";
 import { changeTheme, openApplication, openFile } from "@/store";
 import * as themes from "@/themes";
-import { ComponentName } from "@/types";
 import { getTitle } from "@/utils";
-
-const COMPONENT_NAME: ComponentName = "MainMenu";
 
 export const MainMenu: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
   const theme = useStore((state) => state.theme);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("MainMenu");
 
   return (
     <Menu
@@ -74,4 +71,4 @@ export const MainMenu: FunctionComponent = () => {
   );
 };
 
-MainMenu.displayName = COMPONENT_NAME;
+MainMenu.displayName = "MainMenu";

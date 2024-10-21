@@ -2,9 +2,6 @@ import clsx from "clsx";
 import { HTMLAttributes, FunctionComponent } from "react";
 
 import { useClock, useStyles } from "@/hooks";
-import { ComponentName } from "@/types";
-
-const COMPONENT_NAME: ComponentName = "Clock";
 
 export const Clock: FunctionComponent<
   Intl.DateTimeFormatOptions & Omit<HTMLAttributes<HTMLButtonElement>, "type">
@@ -18,7 +15,7 @@ export const Clock: FunctionComponent<
   ...props
 }) => {
   const date = useClock();
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("Clock");
 
   return (
     <button
@@ -45,4 +42,4 @@ export const Clock: FunctionComponent<
   );
 };
 
-Clock.displayName = COMPONENT_NAME;
+Clock.displayName = "Clock";

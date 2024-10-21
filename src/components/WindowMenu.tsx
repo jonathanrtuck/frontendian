@@ -5,9 +5,6 @@ import { MainMenu, Menu } from "@/components";
 import { SYSTEM_BAR_ID } from "@/constants";
 import { WindowContext } from "@/contexts";
 import { useStore } from "@/hooks";
-import { ComponentName } from "@/types";
-
-const COMPONENT_NAME: ComponentName = "WindowMenu";
 
 export const WindowMenu: FunctionComponent<PropsWithChildren> = ({
   children,
@@ -36,4 +33,4 @@ export const WindowMenu: FunctionComponent<PropsWithChildren> = ({
   }
 };
 
-WindowMenu.displayName = COMPONENT_NAME;
+WindowMenu.displayName = "WindowMenu";

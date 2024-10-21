@@ -32,10 +32,8 @@ import {
   openWindow,
   resizeWindow,
 } from "@/store";
-import { ComponentName, File, ID, Pixels, Window as WindowType } from "@/types";
+import { File, ID, Pixels, Window as WindowType } from "@/types";
 import { getTitle } from "@/utils";
-
-const COMPONENT_NAME: ComponentName = "Window";
 
 export const Window: FunctionComponent<WindowType> = (props) => {
   const { collapsed, fileId, focused, hidden, id, left, top } = props;
@@ -53,7 +51,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
   const stackingOrder = useStore((state) => state.stackingOrder);
   const theme = useStore((state) => state.theme);
   const types = useStore((state) => state.types);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("Window");
 
   const [aboutDialogContent, setAboutDialogContent] = useState<ReactNode>(null);
 
@@ -222,4 +220,4 @@ export const Window: FunctionComponent<WindowType> = (props) => {
   );
 };
 
-Window.displayName = COMPONENT_NAME;
+Window.displayName = "Window";

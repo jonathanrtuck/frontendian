@@ -19,15 +19,13 @@ import {
   moveWindowTitlebar,
   zoomWindow,
 } from "@/store";
-import { ComponentName, MS, Pixels } from "@/types";
+import { MS, Pixels } from "@/types";
 import { getTargetElement } from "@/utils";
-
-const COMPONENT_NAME: ComponentName = "WindowTitlebar";
 
 export const WindowTitlebar: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
   const theme = useStore((state) => state.theme);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("WindowTitlebar");
 
   const { collapsed, id, resizable, scrollable, title, titlebarLeft, width } =
     useContext(WindowContext);
@@ -176,4 +174,4 @@ export const WindowTitlebar: FunctionComponent = () => {
   );
 };
 
-WindowTitlebar.displayName = COMPONENT_NAME;
+WindowTitlebar.displayName = "WindowTitlebar";

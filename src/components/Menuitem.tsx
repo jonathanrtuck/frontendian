@@ -14,10 +14,8 @@ import {
 
 import { MenuContext, MenuitemContext, MenuitemContextType } from "@/contexts";
 import { useStore, useStyles } from "@/hooks";
-import { ComponentName, IconComponent } from "@/types";
+import { IconComponent } from "@/types";
 import { removeProps } from "@/utils";
-
-const COMPONENT_NAME: ComponentName = "Menuitem";
 
 export const Menuitem: FunctionComponent<
   Omit<HTMLAttributes<HTMLLIElement>, "onClick" | "role"> & {
@@ -52,7 +50,7 @@ export const Menuitem: FunctionComponent<
     )
 > = ({ children, className, classes, ...props }) => {
   const theme = useStore((state) => state.theme);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("Menuitem");
 
   const {
     hasPopup,
@@ -382,4 +380,4 @@ export const Menuitem: FunctionComponent<
   );
 };
 
-Menuitem.displayName = COMPONENT_NAME;
+Menuitem.displayName = "Menuitem";

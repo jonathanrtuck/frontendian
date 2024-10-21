@@ -10,15 +10,13 @@ import {
 import { Icon } from "@/components";
 import { useStore, useStyles } from "@/hooks";
 import { openApplication, openFile } from "@/store";
-import { ComponentName, Pixels } from "@/types";
+import { Pixels } from "@/types";
 import { getTitle } from "@/utils";
 
 type Coordinates = {
   x: Pixels;
   y: Pixels;
 };
-
-const COMPONENT_NAME: ComponentName = "Desktop";
 
 const setUserCanSelectText = (userCanSelectText: boolean): void => {
   if (userCanSelectText) {
@@ -35,7 +33,7 @@ export const Desktop: FunctionComponent = () => {
   const desktop = useStore((state) => state.desktop);
   const files = useStore((state) => state.files);
   const types = useStore((state) => state.types);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("Desktop");
 
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -133,4 +131,4 @@ export const Desktop: FunctionComponent = () => {
   );
 };
 
-Desktop.displayName = COMPONENT_NAME;
+Desktop.displayName = "Desktop";

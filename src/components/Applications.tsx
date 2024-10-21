@@ -11,17 +11,14 @@ import {
   hideWindow,
   showWindow,
 } from "@/store";
-import { ComponentName } from "@/types";
 import { getTitle } from "@/utils";
-
-const COMPONENT_NAME: ComponentName = "Applications";
 
 export const Applications: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
   const openApplicationIds = useStore((state) => state.openApplicationIds);
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("Applications");
 
   switch (theme.id) {
     case "theme-beos":
@@ -158,4 +155,4 @@ export const Applications: FunctionComponent = () => {
   }
 };
 
-Applications.displayName = COMPONENT_NAME;
+Applications.displayName = "Applications";

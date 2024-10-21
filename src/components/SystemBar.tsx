@@ -4,15 +4,12 @@ import { Applications, MainMenu, Tray } from "@/components";
 import { SYSTEM_BAR_ID } from "@/constants";
 import { useStore, useStyles } from "@/hooks";
 import { blurWindow, focusSystemBar } from "@/store";
-import { ComponentName } from "@/types";
-
-const COMPONENT_NAME: ComponentName = "SystemBar";
 
 export const SystemBar: FunctionComponent = () => {
   const stackingOrder = useStore((state) => state.stackingOrder);
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
-  const styles = useStyles(COMPONENT_NAME);
+  const styles = useStyles("SystemBar");
 
   const rootRef = useRef<HTMLElement>(null);
 
@@ -76,4 +73,4 @@ export const SystemBar: FunctionComponent = () => {
   );
 };
 
-SystemBar.displayName = COMPONENT_NAME;
+SystemBar.displayName = "SystemBar";
