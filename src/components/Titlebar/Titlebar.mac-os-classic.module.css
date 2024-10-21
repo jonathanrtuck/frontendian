@@ -71,6 +71,7 @@
   }
 
   .button {
+    background-clip: content-box;
     background-image: var(--titlebar_button-background);
     border-color: var(--color--lowlight) var(--color--highlight)
       var(--color--highlight) var(--color--lowlight);
