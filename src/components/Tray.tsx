@@ -1,9 +1,11 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { ComponentProps, FunctionComponent, useEffect, useState } from "react";
 
-import { Applications, Clock, ClockProps } from "@/components";
+import { Applications, Clock } from "@/components";
 import { useStore, useStyles } from "@/hooks";
 import { Network } from "@/icons";
 import { ComponentName } from "@/types";
+
+type ClockProps = ComponentProps<typeof Clock>;
 
 const COMPONENT_NAME: ComponentName = "Tray";
 const DATE_STYLE_SHORT: ClockProps = {

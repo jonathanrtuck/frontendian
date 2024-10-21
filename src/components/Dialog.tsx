@@ -21,24 +21,17 @@ const ICONS_BY_TYPE: Record<DialogType, IconComponent> = {
   info: AlertInfo,
 };
 
-export type DialogProps = PropsWithChildren<
-  {
-    modal?: boolean;
-    type: DialogType;
-  } & DetailedHTMLProps<
-    DialogHTMLAttributes<HTMLDialogElement>,
-    HTMLDialogElement
+export const Dialog: FunctionComponent<
+  PropsWithChildren<
+    {
+      modal?: boolean;
+      type: DialogType;
+    } & DetailedHTMLProps<
+      DialogHTMLAttributes<HTMLDialogElement>,
+      HTMLDialogElement
+    >
   >
->;
-
-export const Dialog: FunctionComponent<DialogProps> = ({
-  children,
-  className,
-  modal,
-  open,
-  type,
-  ...props
-}) => {
+> = ({ children, className, modal, open, type, ...props }) => {
   const theme = useStore((state) => state.theme);
   const styles = useStyles(COMPONENT_NAME);
 

@@ -56,7 +56,7 @@ export const UI: FunctionComponent = () => {
         <Desktop />
         <SystemBar />
         {windows.map((window) => (
-          <Window key={window.id} {...window} />
+          <Window {...window} key={window.id} />
         ))}
       </ErrorBoundary>
     </>

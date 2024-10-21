@@ -1,14 +1,14 @@
 import {
+  ComponentProps,
   ComponentType,
   ForwardRefExoticComponent,
   PropsWithChildren,
   ReactNode,
   RefAttributes,
-  RefObject,
   SVGAttributes,
 } from "react";
 
-import { MenuProps, MenuitemProps } from "@/components";
+import { Menu, Menuitem } from "@/components";
 
 export type Application = ApplicationConfiguration & {
   windowIds: ID[];
@@ -18,9 +18,9 @@ export type ApplicationComponent = ComponentType<ApplicationComponentProps>;
 
 export type ApplicationComponentProps = {
   Content: ComponentType<PropsWithChildren>;
-  Menu: ComponentType<MenuProps>;
+  Menu: ComponentType<ComponentProps<typeof Menu>>;
   Menubar: ComponentType<PropsWithChildren>;
-  Menuitem: ComponentType<MenuitemProps>;
+  Menuitem: ComponentType<ComponentProps<typeof Menuitem>>;
   file?: File;
   onAbout(node: ReactNode): void;
   onClose(): void;
@@ -100,13 +100,6 @@ export type IconComponent = ForwardRefExoticComponent<
 >;
 
 export type ID = string;
-
-export type Menuitem = {
-  disabled: boolean;
-  expandable: boolean;
-  id: ID;
-  ref: RefObject<HTMLElement>;
-};
 
 // add others as needed
 export const enum MimeType {

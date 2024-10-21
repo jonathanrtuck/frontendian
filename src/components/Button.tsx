@@ -11,16 +11,14 @@ import { ComponentName } from "@/types";
 
 const COMPONENT_NAME: ComponentName = "Button";
 
-export type ButtonProps = PropsWithChildren<
-  DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
->;
-
-export const Button: FunctionComponent<ButtonProps> = ({
-  children,
-  className,
-  type = "button",
-  ...props
-}) => {
+export const Button: FunctionComponent<
+  PropsWithChildren<
+    DetailedHTMLProps<
+      ButtonHTMLAttributes<HTMLButtonElement>,
+      HTMLButtonElement
+    >
+  >
+> = ({ children, className, type = "button", ...props }) => {
   const styles = useStyles(COMPONENT_NAME);
 
   return (

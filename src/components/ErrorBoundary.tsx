@@ -2,18 +2,14 @@ import { Component, ErrorInfo, PropsWithChildren, ReactElement } from "react";
 
 import { IS_DEBUG_MODE } from "@/constants";
 
-export type ErrorBoundaryProps = PropsWithChildren<{
-  fallback?: ReactElement;
-  onError?(error: Error): void;
-}>;
-
-export type ErrorBoundaryState = {
-  hasError: boolean;
-};
-
 export class ErrorBoundary extends Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
+  PropsWithChildren<{
+    fallback?: ReactElement;
+    onError?(error: Error): void;
+  }>,
+  {
+    hasError: boolean;
+  }
 > {
   static displayName = "ErrorBoundary";
 

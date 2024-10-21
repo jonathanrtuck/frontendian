@@ -6,10 +6,9 @@ import { ComponentName } from "@/types";
 
 const COMPONENT_NAME: ComponentName = "Clock";
 
-export type ClockProps = Intl.DateTimeFormatOptions &
-  Omit<HTMLAttributes<HTMLButtonElement>, "type">;
-
-export const Clock: FunctionComponent<ClockProps> = ({
+export const Clock: FunctionComponent<
+  Intl.DateTimeFormatOptions & Omit<HTMLAttributes<HTMLButtonElement>, "type">
+> = ({
   className,
   dateStyle,
   dayPeriod,

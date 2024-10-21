@@ -13,12 +13,12 @@ import { openApplication, openFile } from "@/store";
 import { ComponentName, Pixels } from "@/types";
 import { getTitle } from "@/utils";
 
-const COMPONENT_NAME: ComponentName = "Desktop";
-
 type Coordinates = {
   x: Pixels;
   y: Pixels;
 };
+
+const COMPONENT_NAME: ComponentName = "Desktop";
 
 const setUserCanSelectText = (userCanSelectText: boolean): void => {
   if (userCanSelectText) {

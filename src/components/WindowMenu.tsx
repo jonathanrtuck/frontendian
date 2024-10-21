@@ -9,9 +9,7 @@ import { ComponentName } from "@/types";
 
 const COMPONENT_NAME: ComponentName = "WindowMenu";
 
-export type WindowMenuProps = PropsWithChildren;
-
-export const WindowMenu: FunctionComponent<WindowMenuProps> = ({
+export const WindowMenu: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
   const theme = useStore((state) => state.theme);

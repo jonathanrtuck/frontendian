@@ -19,46 +19,38 @@ import { removeProps } from "@/utils";
 
 const COMPONENT_NAME: ComponentName = "Menuitem";
 
-export type MenuitemProps = Omit<
-  HTMLAttributes<HTMLLIElement>,
-  "onClick" | "role"
-> & {
-  classes?: {
-    button?: string;
-    icon?: string;
-    separator?: string;
-    title?: string;
-  };
-} & (
-    | ({
-        title: string;
-      } & (
-        | {
-            children: ReactElement;
-          }
-        | ({
-            Icon?: IconComponent;
-            disabled?: boolean;
-            onClick?(): void;
-          } & (
-            | {
-                checked?: boolean;
-                type: "checkbox" | "radio";
-              }
-            | {}
-          ))
-      ))
-    | {
-        separator: true;
-      }
-  );
-
-export const Menuitem: FunctionComponent<MenuitemProps> = ({
-  children,
-  className,
-  classes,
-  ...props
-}) => {
+export const Menuitem: FunctionComponent<
+  Omit<HTMLAttributes<HTMLLIElement>, "onClick" | "role"> & {
+    classes?: {
+      button?: string;
+      icon?: string;
+      separator?: string;
+      title?: string;
+    };
+  } & (
+      | ({
+          title: string;
+        } & (
+          | {
+              children: ReactElement;
+            }
+          | ({
+              Icon?: IconComponent;
+              disabled?: boolean;
+              onClick?(): void;
+            } & (
+              | {
+                  checked?: boolean;
+                  type: "checkbox" | "radio";
+                }
+              | {}
+            ))
+        ))
+      | {
+          separator: true;
+        }
+    )
+> = ({ children, className, classes, ...props }) => {
   const theme = useStore((state) => state.theme);
   const styles = useStyles(COMPONENT_NAME);
 

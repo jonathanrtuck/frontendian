@@ -6,17 +6,11 @@ import { ComponentName, IconComponent } from "@/types";
 
 const COMPONENT_NAME: ComponentName = "Icon";
 
-export type IconProps = {
+export const Icon: FunctionComponent<{
   Component?: IconComponent;
   onClick(): void;
   title: string;
-};
-
-export const Icon: FunctionComponent<IconProps> = ({
-  Component = File,
-  onClick,
-  title,
-}) => {
+}> = ({ Component = File, onClick, title }) => {
   const theme = useStore((state) => state.theme);
   const styles = useStyles(COMPONENT_NAME);
 

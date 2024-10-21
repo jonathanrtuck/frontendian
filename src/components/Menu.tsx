@@ -20,19 +20,20 @@ import { ComponentName } from "@/types";
 
 const COMPONENT_NAME: ComponentName = "Menu";
 
-export type MenuProps = PropsWithChildren<
-  {
-    horizontal?: boolean;
-    vertical?: boolean;
-    bar?: boolean;
-  } & Omit<
-    HTMLAttributes<HTMLMenuElement>,
-    "aria-hidden" | "aria-orientation" | "role"
-  >
->;
-
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
-export const Menu = forwardRef<HTMLMenuElement, MenuProps>(
+export const Menu = forwardRef<
+  HTMLMenuElement,
+  PropsWithChildren<
+    {
+      horizontal?: boolean;
+      vertical?: boolean;
+      bar?: boolean;
+    } & Omit<
+      HTMLAttributes<HTMLMenuElement>,
+      "aria-hidden" | "aria-orientation" | "role"
+    >
+  >
+>(
   (
     {
       bar,

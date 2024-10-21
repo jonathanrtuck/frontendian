@@ -20,9 +20,7 @@ const COMPONENT_NAME: ComponentName = "WindowContent";
 const MIN_HEIGHT = 16 * 7; // 7rem
 const MIN_WIDTH = 16 * 10; // 10rem
 
-export type WindowContentProps = PropsWithChildren;
-
-export const WindowContent: FunctionComponent<WindowContentProps> = ({
+export const WindowContent: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);

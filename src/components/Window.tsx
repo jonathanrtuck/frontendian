@@ -37,9 +37,7 @@ import { getTitle } from "@/utils";
 
 const COMPONENT_NAME: ComponentName = "Window";
 
-export type WindowProps = WindowType;
-
-export const Window: FunctionComponent<WindowProps> = (props) => {
+export const Window: FunctionComponent<WindowType> = (props) => {
   const { collapsed, fileId, focused, hidden, id, left, top } = props;
 
   const menubarRef = useRef<HTMLMenuElement>(null);
