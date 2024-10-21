@@ -140,8 +140,6 @@ export type State = {
   windows: Window[];
 };
 
-export type Styles = Record<ComponentName, CssModule>;
-
 export type Theme = {
   id: "theme-beos" | "theme-mac-os-classic";
   menu: {

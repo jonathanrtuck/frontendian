@@ -132,7 +132,8 @@ export const closeWindow = setState<ActionIds>(
         );
         const isLastApplicationWindow =
           windowApplication?.windowIds.length === 1;
-        const isTracker = windowApplication?.id === APPLICATION_FILE_MANAGER.id;
+        const isFileManager =
+          windowApplication?.id === APPLICATION_FILE_MANAGER.id;
 
         return {
           ...prevState,
@@ -147,7 +148,7 @@ export const closeWindow = setState<ActionIds>(
               : application
           ),
           openApplicationIds:
-            isLastApplicationWindow && !isTracker
+            isLastApplicationWindow && !isFileManager
               ? prevState.openApplicationIds.filter(
                   (id) => id !== windowApplication?.id
                 )

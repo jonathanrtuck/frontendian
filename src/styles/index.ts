@@ -1,9 +1,12 @@
-import { Styles, Theme } from "@/types";
+import { ComponentName, CssModule, Theme } from "@/types";
 
-import { STYLES_BEOS } from "./beos";
-import { STYLES_MAC_OS_CLASSIC } from "./mac-os-classic";
+import * as BEOS from "./beos";
+import * as MAC_OS_CLASSIC from "./mac-os-classic";
 
-export const STYLES_BY_THEME: Record<Theme["id"], Styles> = {
-  "theme-beos": STYLES_BEOS,
-  "theme-mac-os-classic": STYLES_MAC_OS_CLASSIC,
+export const STYLES_BY_THEME: Record<
+  Theme["id"],
+  Record<ComponentName, CssModule>
+> = {
+  "theme-beos": BEOS,
+  "theme-mac-os-classic": MAC_OS_CLASSIC,
 };

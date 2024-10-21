@@ -1,39 +1,17 @@
-import { Styles } from "@/types";
-
-import Applications from "./Applications.module.css";
-import Button from "./Button.module.css";
-import Clock from "./Clock.module.css";
-import Content from "./Content.module.css";
-import Deskbar from "./Deskbar.module.css";
-import Desktop from "./Desktop.module.css";
-import Dialog from "./Dialog.module.css";
-import ErrorBoundary from "./ErrorBoundary.module.css";
-import Icon from "./Icon.module.css";
-import MainMenu from "./MainMenu.module.css";
-import Menu from "./Menu.module.css";
-import Menubar from "./Menubar.module.css";
-import Menuitem from "./Menuitem.module.css";
-import Titlebar from "./Titlebar.module.css";
-import Tray from "./Tray.module.css";
-import UI from "./UI.module.css";
-import Window from "./Window.module.css";
-
-export const STYLES_MAC_OS_CLASSIC: Styles = {
-  Applications,
-  Button,
-  Clock,
-  Content,
-  Deskbar,
-  Desktop,
-  Dialog,
-  ErrorBoundary,
-  Icon,
-  MainMenu,
-  Menu,
-  Menubar,
-  Menuitem,
-  Titlebar,
-  Tray,
-  UI,
-  Window,
-};
+export { default as Applications } from "./Applications.module.css";
+export { default as Button } from "./Button.module.css";
+export { default as Clock } from "./Clock.module.css";
+export { default as Content } from "./Content.module.css";
+export { default as Deskbar } from "./Deskbar.module.css";
+export { default as Desktop } from "./Desktop.module.css";
+export { default as Dialog } from "./Dialog.module.css";
+export { default as ErrorBoundary } from "./ErrorBoundary.module.css";
+export { default as Icon } from "./Icon.module.css";
+export { default as MainMenu } from "./MainMenu.module.css";
+export { default as Menu } from "./Menu.module.css";
+export { default as Menubar } from "./Menubar.module.css";
+export { default as Menuitem } from "./Menuitem.module.css";
+export { default as Titlebar } from "./Titlebar.module.css";
+export { default as Tray } from "./Tray.module.css";
+export { default as UI } from "./UI.module.css";
+export { default as Window } from "./Window.module.css";
