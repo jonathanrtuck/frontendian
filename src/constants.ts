@@ -48,7 +48,7 @@ export const INITIAL_STATE: State = {
   fonts: Object.values(fonts),
   openApplicationIds: [APPLICATION_FILE_MANAGER.id],
   stackingOrder: [SYSTEM_BAR_ID],
-  theme: themes.THEME_BEOS,
+  theme: themes.THEME_MAC_OS_CLASSIC,
   types: {
     [MimeType.ApplicationPdf]: {
       application: APPLICATION_PDF_VIEWER.id,

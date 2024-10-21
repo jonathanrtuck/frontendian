@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import {
   FunctionComponent,
   ReactNode,
@@ -143,9 +142,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
         <section
           aria-current={focused}
           aria-labelledby={`${id}-title`}
-          className={clsx(styles.root, {
-            [styles.collapsed]: collapsed,
-          })}
+          className={styles.root}
           hidden={hidden}
           id={id}
           onBlur={(e) => {

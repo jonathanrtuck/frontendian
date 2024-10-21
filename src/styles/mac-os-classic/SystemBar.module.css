@@ -1,6 +1,10 @@
 :root:global(.theme-mac-os-classic) {
   --system-bar-height: 1.5rem;
 
+  body {
+    margin-top: var(--system-bar-height);
+  }
+
   .root {
     background: rgb(221, 221, 221);
     border-radius: var(--border-radius, 0) var(--border-radius, 0) 0 0;

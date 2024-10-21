@@ -557,12 +557,7 @@ export const zoomWindow = setState<ActionIds>(
       const marginY = parseFloat(marginBottom) + parseFloat(marginTop);
       const frameHeight = offsetHeight + marginY - window.height;
       const frameWidth = offsetWidth + marginX - window.width;
-      const systemBarHeight =
-        prevState.theme.id === "theme-mac-os-classic"
-          ? document.getElementById(SYSTEM_BAR_ID)!.offsetHeight
-          : 0;
-      const maxHeight =
-        document.body.offsetHeight - frameHeight - systemBarHeight;
+      const maxHeight = document.body.offsetHeight - frameHeight;
       const maxWidth = document.body.offsetWidth - frameWidth;
       const isZoomed =
         window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
@@ -587,7 +582,7 @@ export const zoomWindow = setState<ActionIds>(
               top: window.top,
               width: window.width,
             },
-            top: systemBarHeight,
+            top: 0,
             width: maxWidth,
             zoomed: true,
           };

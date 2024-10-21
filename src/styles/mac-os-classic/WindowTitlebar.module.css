@@ -14,10 +14,22 @@
     );
 
     align-items: center;
+    background-color: var(--window-background-color);
     display: flex;
     gap: 0.25rem;
-    height: var(--window-titlebar-height);
-    margin: var(--window-padding);
+    height: calc(
+      var(--border-width) + var(--window-padding) +
+        var(--window-titlebar-height) + var(--window-padding) +
+        var(--border-width)
+    );
+    left: 0;
+    margin: var(--border-width) var(--border-width) 0;
+    max-width: 100%;
+    padding: var(--window-padding);
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
 
     &::before,
     &::after {
