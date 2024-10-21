@@ -4,6 +4,8 @@ Portfolio site for Jonathan Tucker
 
 ## Todo
 
+- rename some components
+  - e.g. `Deskbar` -> ???`Bar`
 - **themes**
   - `mac-os-classic` theme
   - test other browsers

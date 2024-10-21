@@ -1,7 +1,9 @@
 import { RefObject, useEffect, useMemo, useState } from "react";
+import { create } from "zustand";
 
-import { useStore } from "@/store";
-import { Pixels, Theme } from "@/types";
+import { INITIAL_STATE } from "@/constants";
+import { STYLES_BY_THEME } from "@/styles";
+import { Pixels, ComponentName, State } from "@/types";
 
 type CssModule = {
   readonly [key: string]: string;
@@ -95,8 +97,10 @@ export const useFocus = ({
   );
 };
 
-export const useStyles = (obj: Record<Theme["id"], CssModule>): CssModule => {
+export const useStore = create<State>()(() => INITIAL_STATE);
+
+export const useStyles = (componentName: ComponentName): CssModule => {
   const theme = useStore((state) => state.theme);
 
-  return obj[theme.id];
+  return STYLES_BY_THEME[theme.id][componentName];
 };

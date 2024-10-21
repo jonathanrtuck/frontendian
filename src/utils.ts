@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef, UIEvent } from "react";
 
-import { useStore } from "@/store";
+import { useStore } from "@/hooks";
 import { Theme } from "@/types";
 
 export const getTargetElement = (event: UIEvent): HTMLElement | null =>

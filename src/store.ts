@@ -1,5 +1,4 @@
 import { v4 as uuid } from "uuid";
-import { create } from "zustand";
 
 import { APPLICATION_FILE_MANAGER } from "@/applications";
 import {
@@ -7,17 +6,15 @@ import {
   DEFAULT_WINDOW_POSITION_INCREMENT,
   DEFAULT_WINDOW_POSITION_OFFSET,
   DESKBAR_ID,
-  INITIAL_STATE,
   IS_DEBUG_MODE,
   WINDOW_DIMENSION_BUFFER,
   UNTITLED_WINDOW_TITLE,
 } from "@/constants";
+import { useStore } from "@/hooks";
 import * as themes from "@/themes";
 import { ID, Pixels, State, Window } from "@/types";
 
 type ActionIds = { id: ID } | { ids: ID[] };
-
-export const useStore = create<State>()(() => INITIAL_STATE);
 
 const getFirstOpenWindowPosition = (windows: Window[]): Pixels => {
   for (let i = 0; i !== windows.length; i++) {

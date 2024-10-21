@@ -40,6 +40,29 @@ export type ApplicationConfiguration = {
   title: string | ((theme: Theme) => string);
 };
 
+export type ComponentName =
+  | "Applications"
+  | "Button"
+  | "Clock"
+  | "Content"
+  | "Deskbar"
+  | "Desktop"
+  | "Dialog"
+  | "ErrorBoundary"
+  | "Icon"
+  | "MainMenu"
+  | "Menu"
+  | "Menubar"
+  | "Menuitem"
+  | "Titlebar"
+  | "Tray"
+  | "UI"
+  | "Window";
+
+export type CssModule = {
+  readonly [key: string]: string;
+};
+
 export type File = {
   id: ID;
   title: string;
@@ -116,6 +139,8 @@ export type State = {
   >;
   windows: Window[];
 };
+
+export type Styles = Record<ComponentName, CssModule>;
 
 export type Theme = {
   id: "theme-beos" | "theme-mac-os-classic";
