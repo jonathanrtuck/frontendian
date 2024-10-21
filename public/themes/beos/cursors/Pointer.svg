@@ -5,7 +5,17 @@
 			<stop offset="0" stop-color="#ffffff" />
 			<stop offset="1" stop-color="#fbfbfb" />
 		</linearGradient>
+		<radialGradient cx="0" cy="0" gradientTransform="matrix(0.2031,0,0,0.2031,27,27)" gradientUnits="userSpaceOnUse" id="cursor-pointer-1" r="64">
+			<stop offset="0.2471" stop-color="#000000" stop-opacity="0.2078" />
+			<stop offset="1" stop-color="#000000" stop-opacity="0" />
+		</radialGradient>
+		<linearGradient id="cursor-pointer-2" x1="68" x2="68" y1="5" y2="33">
+			<stop offset="0" stop-color="#ffffff" />
+			<stop offset="1" stop-color="#fbfbfb" />
+		</linearGradient>
 	</defs>
-	<path d="M27 35C27 35 30 31 30 28V22C30 20 30 20 29 19C28.29 18.29 27.66 19 27 19C26 19 27 16 25 15C23.21 14.1 24 17 22 17C22 17 21.3 12 19 12C17 12 15 17 14 18C14 18 14 15 14 13V7C14 5 14 2 12 2C10 2 10 5 10 8V21C10 23.8 6 27 6 25C6 24 8 23 8 19C8 17.84 4 21 4 22C4 23.09 4 25 4 27C4 29 9.85 33.27 11 35" fill="none" stroke="#000000" stroke-linejoin="round" stroke-width="4" />
-	<path d="M6 25C6 24 8 23 8 19C8 17.84 4 21 4 22C4 23.09 4 25 4 27C4 29 9.85 33.27 11 35C11 35 15 36 19 36C23.53 36 27 35 27 35C27 35 30 31 30 28V22C30 20 30 20 29 19C28.29 18.29 27.66 19 27 19C26 19 27 16 25 15C23.21 14.1 24 17 22 17C22 17 21.3 12 19 12C17 12 15 17 14 18C14 18 14 15 14 13V7C14 5 14 2 12 2C10 2 10 5 10 8V21C10 23.8 6 27 6 25z" fill="url(#cursor-pointer-0)" />
+	<path d="M32 28C32 28 32 19.3 32 17C32 15.17 28.91 11.9 28 12C26.4 12.16 29.69 15.53 28.53 15.53C27.38 15.53 25.05 10 22.75 10C20.44 10 23.92 14.38 22.76 14.38C21.61 14.38 18.3 10 16 10C14 10 18.15 15 17 15C16.38 15 13.55 13.94 11.24 10.6C9.62 8.25 7.37 4 4.83 4C2.37 4 5.54 8.92 7.08 11.46C8.62 14 15 24 15 24C15 24 7.3 20 5 20C3.84 20 2 20.44 2 21.59C2 23 4 22.88 5.46 23.61C7.76 24.76 13 26 16 31" fill="none" stroke="#000000" stroke-linejoin="round" stroke-width="4" />
+	<path d="M7.08 11.46C8.62 14 15 24 15 24C15 24 7.3 20 5 20C3.84 20 2 20.44 2 21.59C2 23 4 22.88 5.46 23.61C7.76 24.76 13 26 16 31C16 31 22 32 25 31C29.3 29.56 32 28 32 28C32 28 32 19.3 32 17C32 15.17 28.91 11.9 28 12C26.4 12.16 29.69 15.53 28.53 15.53C27.38 15.53 25.05 10 22.75 10C20.44 10 23.92 14.38 22.76 14.38C21.61 14.38 18.3 10 16 10C14 10 18.15 15 17 15C16.38 15 13.55 13.94 11.24 10.6C9.62 8.25 7.37 4 4.83 4C2.37 4 5.54 8.92 7.08 11.46z" fill="url(#cursor-pointer-0)" />
+	<path d="M16 16V40H41V16H16z" fill="url(#cursor-pointer-1)" />
+	<path d="M21.5 29.5L26.5 34.5L30.5 30.5L34 34V22H22L25.5 25.5L21.5 29.5z" fill="url(#cursor-pointer-2)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
 </svg>

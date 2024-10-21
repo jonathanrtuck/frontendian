@@ -2,30 +2,18 @@
   --window-padding: 0.25rem;
 
   .root {
+    --window-background-color: var(--background-color--inactive);
+
     color: var(--text-color--dark);
-    cursor: var(--cursor--grab);
+    margin: calc(
+        var(--window-padding) + var(--titlebar-height) + var(--window-padding)
+      )
+      0 0;
     padding: 0;
     position: fixed;
 
-    [draggable="false"] {
-      cursor: var(--cursor--default);
-    }
-
-    :root:global(.theme-beos) & {
-      --window-background-color: var(--background-color--inactive);
-
-      margin: calc(
-          var(--window-padding) + var(--titlebar-height) + var(--window-padding)
-        )
-        0 0;
-
-      &[aria-current="true"] {
-        --window-background-color: var(--background-color--default);
-      }
-    }
-
-    &:where(.dragging) {
-      cursor: var(--cursor--grabbing);
+    &[aria-current="true"] {
+      --window-background-color: var(--background-color--default);
     }
 
     &:focus {

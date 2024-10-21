@@ -541,6 +541,7 @@ export const showWindow = setState<ActionIds>(
   })
 );
 
+// @see https://asleson.org/public/mirrors/www.be.com/documentation/be_book/The%20Interface%20Kit/Window.html#Zoom()
 export const zoomWindow = setState<ActionIds>(
   "zoomWindow",
   (payload) => (prevState) => ({

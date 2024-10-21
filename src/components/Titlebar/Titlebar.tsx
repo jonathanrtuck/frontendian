@@ -82,8 +82,6 @@ export const Titlebar: FunctionComponent = () => {
         if (!e.shiftKey) {
           return false;
         }
-
-        document.body.classList.add("grabbing");
       }}
       onStop={(_, { x }) => {
         const maxLeft = getMaxLeft();
@@ -92,8 +90,6 @@ export const Titlebar: FunctionComponent = () => {
         if (left !== titlebarLeft) {
           moveWindowTitlebar({ id, left });
         }
-
-        document.body.classList.remove("grabbing");
       }}
       position={
         isDraggable

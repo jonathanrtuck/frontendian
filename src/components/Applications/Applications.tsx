@@ -115,7 +115,7 @@ export const Applications: FunctionComponent = () => {
                 onClick={() => {
                   // hideWindow({ ids: activeApplication.windowIds });
                 }}
-                title={`Hide ${activeApplication.title}`}
+                title={`Hide ${getTitle(activeApplication)}`}
               />
               <Menuitem
                 disabled={false} // @todo

@@ -54,7 +54,6 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
   const rootRef = useRef<HTMLElement>(null);
 
   const [aboutDialogContent, setAboutDialogContent] = useState<ReactNode>(null);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   useFocus({
     deps: [focused],
@@ -141,12 +140,8 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           if (e.shiftKey) {
             return false;
           }
-
-          setIsDragging(true);
         }}
         onStop={(_, { x, y }) => {
-          setIsDragging(false);
-
           if (x !== left || y !== top) {
             moveWindow({ id, left: x, top: y });
           }
@@ -160,7 +155,6 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           aria-labelledby={`${id}-title`}
           className={clsx(styles.root, {
             [styles.collapsed]: collapsed,
-            [styles.dragging]: isDragging,
           })}
           hidden={hidden}
           id={id}

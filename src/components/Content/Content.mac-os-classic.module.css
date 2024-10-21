@@ -1,5 +1,184 @@
 :root:global(.theme-mac-os-classic) {
   .root {
+    background-color: rgb(255, 255, 255);
+    border-color: var(--color--lowlight) var(--color--highlight)
+      var(--color--highlight) var(--color--lowlight);
+    border-width: var(--border-width);
+    box-shadow: inset 0 0 0 var(--border-width) var(--border-color);
+    color: var(--text-color--dark);
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .scrollable {
+    overflow: scroll;
+
+    &::-webkit-scrollbar {
+      appearance: none;
+      height: var(--scrollbar-size);
+      width: var(--scrollbar-size);
+    }
+    [aria-current="true"]
+      &:where(.overflowHorizontal)::-webkit-scrollbar:horizontal {
+      background-color: rgb(170, 170, 170);
+    }
+    [aria-current="true"]
+      &:where(.overflowVertical)::-webkit-scrollbar:vertical {
+      background-color: rgb(170, 170, 170);
+    }
+
+    &::-webkit-scrollbar-button {
+      background-color: rgb(240, 240, 240);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 60% 60%;
+      border-color: var(--border-color--light);
+      border-style: solid;
+      box-shadow: var(--box-shadow--high);
+      height: var(--scrollbar-size);
+      width: var(--scrollbar-size);
+    }
+    &::-webkit-scrollbar-button:start {
+      display: none;
+    }
+    &::-webkit-scrollbar-button:end {
+      display: block;
+    }
+    &::-webkit-scrollbar-button:horizontal:end {
+      border-width: var(--border-width) var(--border-width) 0 0;
+    }
+    &::-webkit-scrollbar-button:horizontal:decrement {
+    }
+    [aria-current="true"]
+      &:where(
+        .overflowHorizontal
+      )::-webkit-scrollbar-button:horizontal:decrement {
+    }
+    &::-webkit-scrollbar-button:horizontal:increment {
+    }
+    [aria-current="true"]
+      &:where(
+        .overflowHorizontal
+      )::-webkit-scrollbar-button:horizontal:increment {
+    }
+    &::-webkit-scrollbar-button:vertical:start {
+      border-width: var(--border-width) 0 0 var(--border-width);
+    }
+    &::-webkit-scrollbar-button:vertical:end {
+      border-width: 0 0 var(--border-width) var(--border-width);
+    }
+    &::-webkit-scrollbar-button:vertical:decrement {
+    }
+    [aria-current="true"]
+      &:where(.overflowVertical)::-webkit-scrollbar-button:vertical:decrement {
+    }
+    &::-webkit-scrollbar-button:vertical:increment {
+    }
+    [aria-current="true"]
+      &:where(.overflowVertical)::-webkit-scrollbar-button:vertical:increment {
+    }
+    [aria-current="true"]
+      &:where(.overflowHorizontal)::-webkit-scrollbar-button:horizontal {
+      background-color: rgb(216, 216, 216);
+    }
+    [aria-current="true"]
+      &:where(.overflowVertical)::-webkit-scrollbar-button:vertical {
+      background-color: rgb(216, 216, 216);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-clip: content-box;
+      background-color: rgb(240, 240, 240);
+      background-position: center;
+      background-repeat: no-repeat;
+      border-color: var(--border-color--light);
+      border-style: solid;
+      box-shadow: var(--box-shadow--high),
+        inset 0 0 0 calc(var(--scrollbar-size) / 4) rgb(240, 240, 240);
+    }
+    &::-webkit-scrollbar-thumb:horizontal {
+      background-size: auto 50%;
+      border-width: var(--border-width) var(--border-width) 0
+        var(--border-width);
+    }
+    &::-webkit-scrollbar-thumb:vertical {
+      background-size: 50% auto;
+      border-width: var(--border-width) 0 var(--border-width)
+        var(--border-width);
+    }
+    [aria-current="true"] &::-webkit-scrollbar-thumb:horizontal {
+    }
+    [aria-current="true"] &::-webkit-scrollbar-thumb:vertical {
+    }
+    [aria-current="true"]
+      &:where(.overflowHorizontal)::-webkit-scrollbar-thumb:horizontal {
+      background-color: rgb(216, 216, 216);
+      box-shadow: var(--box-shadow--high),
+        inset 0 0 0 calc(var(--scrollbar-size) / 4) rgb(216, 216, 216);
+    }
+    [aria-current="true"]
+      &:where(.overflowVertical)::-webkit-scrollbar-thumb:vertical {
+      background-color: rgb(216, 216, 216);
+      box-shadow: var(--box-shadow--high),
+        inset 0 0 0 calc(var(--scrollbar-size) / 4) rgb(216, 216, 216);
+    }
+
+    &::-webkit-scrollbar-track {
+      border-color: var(--border-color--light);
+      border-style: solid;
+      border-width: var(--border-width) 0 0 var(--border-width);
+    }
+    [aria-current="true"]
+      &:where(.overflowHorizontal)::-webkit-scrollbar-track:horizontal {
+      box-shadow: inset calc(var(--border-width) * 2)
+          calc(var(--border-width) * 2) var(--color--lowlight),
+        inset 0 calc(var(--border-width) * -1) var(--color--highlight);
+    }
+    [aria-current="true"]
+      &:where(.overflowVertical)::-webkit-scrollbar-track:vertical {
+      box-shadow: inset calc(var(--border-width) * 2)
+          calc(var(--border-width) * 2) var(--color--lowlight),
+        inset calc(var(--border-width) * -1) 0 var(--color--highlight);
+    }
+
+    &::-webkit-scrollbar-track-piece {
+      border-color: var(--border-color--light);
+      border-style: solid;
+    }
+    &::-webkit-scrollbar-track-piece:horizontal:start {
+      border-width: 0 0 0 var(--border-width);
+    }
+    &::-webkit-scrollbar-track-piece:horizontal:end {
+      border-width: 0 var(--border-width) 0 0;
+    }
+    &::-webkit-scrollbar-track-piece:vertical:start {
+      border-width: var(--border-width) 0 0 0;
+    }
+    &::-webkit-scrollbar-track-piece:vertical:end {
+      border-width: 0 0 var(--border-width) 0;
+    }
+  }
+
+  .overflowHorizontal {
+  }
+
+  .overflowVertical {
+  }
+
+  .resize {
+    background-color: var(--window-background-color);
+    border-color: var(--color--highlight);
+    border-width: var(--border-width) 0 0 var(--border-width);
+    bottom: var(--window-padding);
+    box-shadow: calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--border-color);
+    color: rgba(0, 0, 0, 0.2);
+    height: calc(var(--scrollbar-size) + var(--border-width));
+    padding: var(--border-width);
+    position: absolute;
+    right: var(--window-padding);
+    width: calc(var(--scrollbar-size) + var(--border-width));
+    z-index: 3;
   }
 }
 
@@ -24,18 +203,11 @@
 
   .content {
     box-sizing: content-box;
-    cursor: var(--cursor--default);
   }
 
   .zoomed {
     box-sizing: border-box;
     height: 100%;
-  }
-
-  .resize {
-    &.resizing {
-      cursor: var(--cursor--grabbing);
-    }
   }
 }
 

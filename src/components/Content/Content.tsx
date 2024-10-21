@@ -101,12 +101,6 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
       onResize={(_, { size: { height, width } }) => {
         resizeWindow({ height, id, width });
       }}
-      onResizeStart={() => {
-        document.body.classList.add("grabbing");
-      }}
-      onResizeStop={() => {
-        document.body.classList.remove("grabbing");
-      }}
       width={width}>
       <div
         className={clsx(styles.root, {

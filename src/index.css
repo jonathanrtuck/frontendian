@@ -34,8 +34,6 @@
   --color--lowlight: rgba(0, 0, 0, 0.2);
   --color--selection: rgb(0, 0, 0);
   --cursor--default: url("/public/themes/beos/cursors/Default.svg"), default;
-  --cursor--grab: url("/public/themes/beos/cursors/Grab.svg"), grab;
-  --cursor--grabbing: url("/public/themes/beos/cursors/Grabbing.svg"), grabbing;
   --cursor--pointer: url("/public/themes/beos/cursors/Pointer.svg"), pointer;
   --cursor--text: url("/public/themes/beos/cursors/Text.svg") 2 8, text;
   --font-family--default: Helvetica;
@@ -48,6 +46,8 @@
 }
 
 :root.theme-mac-os-classic {
+  --background-color--default: rgb(204, 204, 204);
+  --background-color--inactive: rgb(220, 220, 220);
   --border-color: rgb(38, 38, 38);
   --border-radius: 0.75rem;
   --border-width: 0.0625rem;
@@ -62,6 +62,9 @@
   --color--highlight: rgba(255, 255, 255, 0.6);
   --color--lowlight: rgba(0, 0, 0, 0.4);
   --color--selection: rgb(204, 204, 253);
+  --cursor--default: default;
+  --cursor--pointer: pointer;
+  --cursor--text: text;
   --font-family--default: var(--font-family--charcoal);
   --scrollbar-size: 1rem;
   --text-color--dark: rgb(0, 0, 0);
@@ -77,10 +80,6 @@ body {
   inset: 0;
   margin: 0;
   position: fixed;
-
-  &:where(.grabbing) {
-    cursor: var(--cursor--grabbing, grabbing) !important;
-  }
 }
 
 *,

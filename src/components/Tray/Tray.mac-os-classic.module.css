@@ -1,5 +1,6 @@
 :root:global(.theme-mac-os-classic) {
   .root {
+    order: 2;
   }
 }
 

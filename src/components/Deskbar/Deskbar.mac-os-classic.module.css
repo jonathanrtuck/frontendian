@@ -10,6 +10,7 @@
       inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
         var(--color--lowlight);
     display: flex;
+    height: var(--deskbar-height);
     justify-content: space-between;
     left: 0;
     padding: var(--border-width) 1rem;
