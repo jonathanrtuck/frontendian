@@ -11,15 +11,15 @@ import Draggable from "react-draggable";
 
 import {
   Button,
-  Content,
   Dialog,
   ErrorBoundary,
   Menu,
-  Menubar,
   Menuitem,
-  Titlebar,
+  WindowContent,
+  WindowMenu,
+  WindowTitlebar,
 } from "@/components";
-import { DESKBAR_ID } from "@/constants";
+import { SYSTEM_BAR_ID } from "@/constants";
 import { WindowContext, WindowContextType } from "@/contexts";
 import { useFocus, useStore, useStyles } from "@/hooks";
 import {
@@ -157,7 +157,9 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
               document.hasFocus() &&
               !e.currentTarget?.contains(e.relatedTarget) &&
               (isMenubarWindowed ||
-                !document.getElementById(DESKBAR_ID)?.contains(e.relatedTarget))
+                !document
+                  .getElementById(SYSTEM_BAR_ID)
+                  ?.contains(e.relatedTarget))
             ) {
               blurWindow({ id });
             }
@@ -177,14 +179,14 @@ export const Window: FunctionComponent<WindowProps> = (props) => {
           }}
           tabIndex={-1}>
           <WindowContext.Provider value={contextValue}>
-            <Titlebar />
+            <WindowTitlebar />
             <div
               className={styles.frame}
               hidden={Boolean(isCollapsible && collapsed)}>
               <application.Component
-                Content={Content}
+                Content={WindowContent}
                 Menu={Menu}
-                Menubar={Menubar}
+                Menubar={WindowMenu}
                 Menuitem={Menuitem}
                 file={file}
                 onAbout={onAbout}

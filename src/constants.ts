@@ -15,6 +15,11 @@ export const DEFAULT_WINDOW_HEIGHT = 450;
 export const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
 export const DEFAULT_WINDOW_POSITION_OFFSET = 96;
 export const DEFAULT_WINDOW_WIDTH = 600;
+export const IS_DEBUG_MODE = process.env.NODE_ENV === "development";
+export const SYSTEM_BAR_ID: ID = "systembar";
+export const UNTITLED_WINDOW_TITLE = "Untitled";
+export const WINDOW_DIMENSION_BUFFER = 12;
+
 export const DEFAULT_WINDOW: Window = {
   collapsed: false,
   focused: true,
@@ -30,7 +35,7 @@ export const DEFAULT_WINDOW: Window = {
   width: DEFAULT_WINDOW_WIDTH,
   zoomed: false,
 };
-export const DESKBAR_ID: ID = "deskbar";
+
 export const INITIAL_STATE: State = {
   applications: Object.values(applicationConfigurations).map(
     (applicationConfiguration) => ({
@@ -42,7 +47,7 @@ export const INITIAL_STATE: State = {
   files: Object.values(files),
   fonts: Object.values(fonts),
   openApplicationIds: [APPLICATION_FILE_MANAGER.id],
-  stackingOrder: [DESKBAR_ID],
+  stackingOrder: [SYSTEM_BAR_ID],
   theme: themes.THEME_BEOS,
   types: {
     [MimeType.ApplicationPdf]: {
@@ -56,6 +61,3 @@ export const INITIAL_STATE: State = {
   },
   windows: [],
 };
-export const IS_DEBUG_MODE = process.env.NODE_ENV === "development";
-export const WINDOW_DIMENSION_BUFFER = 12;
-export const UNTITLED_WINDOW_TITLE = "Untitled";

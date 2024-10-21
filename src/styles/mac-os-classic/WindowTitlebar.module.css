@@ -1,13 +1,13 @@
 :root:global(.theme-mac-os-classic) {
-  --titlebar-height: 1rem;
+  --window-titlebar-height: 1rem;
 
   .root {
-    --titlebar_button-background: linear-gradient(
+    --window-titlebar-button-background: linear-gradient(
       to bottom right,
       rgb(154, 154, 154),
       rgb(248, 248, 248)
     );
-    --titlebar_button-background--active: linear-gradient(
+    --window-titlebar-button-background--active: linear-gradient(
       to bottom right,
       rgb(90, 90, 90),
       rgb(157, 157, 157)
@@ -16,7 +16,7 @@
     align-items: center;
     display: flex;
     gap: 0.25rem;
-    height: var(--titlebar-height);
+    height: var(--window-titlebar-height);
     margin: var(--window-padding);
 
     &::before,
@@ -32,7 +32,7 @@
       border-width: 0 var(--border-width);
       content: "";
       flex: 1 1 auto;
-      height: calc(var(--titlebar-height) - 0.25rem);
+      height: calc(var(--window-titlebar-height) - 0.25rem);
       min-width: 1rem;
     }
     &::before {
@@ -64,22 +64,22 @@
   }
 
   .icon {
-    flex: 0 0 var(--titlebar-height);
-    height: var(--titlebar-height);
+    flex: 0 0 var(--window-titlebar-height);
+    height: var(--window-titlebar-height);
     order: 3;
-    width: var(--titlebar-height);
+    width: var(--window-titlebar-height);
   }
 
   .button {
     background-clip: content-box;
-    background-image: var(--titlebar_button-background);
+    background-image: var(--window-titlebar-button-background);
     border-color: var(--color--lowlight) var(--color--highlight)
       var(--color--highlight) var(--color--lowlight);
     border-width: var(--border-width);
-    flex: 0 0 var(--titlebar-height);
-    height: var(--titlebar-height);
+    flex: 0 0 var(--window-titlebar-height);
+    height: var(--window-titlebar-height);
     position: relative;
-    width: var(--titlebar-height);
+    width: var(--window-titlebar-height);
 
     &:focus {
       outline: 0;
@@ -87,7 +87,7 @@
 
     &:active,
     &:focus-visible {
-      background-image: var(--titlebar_button-background--active);
+      background-image: var(--window-titlebar-button-background--active);
 
       &::before {
         border-color: var(--color--lowlight);
@@ -144,13 +144,13 @@
 
 /*
 :root:global(.theme-mac-os-classic) {
-  --titlebar-height: 1rem;
-  --titlebar_button-background: linear-gradient(
+  --window-titlebar-height: 1rem;
+  --window-titlebar_button-background: linear-gradient(
     to bottom right,
     rgb(154, 154, 154),
     rgb(248, 248, 248)
   );
-  --titlebar_button-background--active: linear-gradient(
+  --window-titlebar_button-background--active: linear-gradient(
     to bottom right,
     rgb(90, 90, 90),
     rgb(157, 157, 157)
@@ -159,7 +159,7 @@
   .root {
     align-items: center;
     box-sizing: content-box;
-    height: var(--titlebar-height);
+    height: var(--window-titlebar-height);
     display: flex;
     gap: 0.25rem;
     left: var(--window-padding);
@@ -180,7 +180,7 @@
       border-width: 0 var(--border-width);
       content: "";
       flex: 1 1 auto;
-      height: calc(var(--titlebar-height) - 0.25rem);
+      height: calc(var(--window-titlebar-height) - 0.25rem);
       min-width: 1rem;
     }
 
@@ -214,21 +214,21 @@
   }
 
   .icon {
-    flex: 0 0 var(--titlebar-height);
-    height: var(--titlebar-height);
+    flex: 0 0 var(--window-titlebar-height);
+    height: var(--window-titlebar-height);
     order: 3;
-    width: var(--titlebar-height);
+    width: var(--window-titlebar-height);
   }
 
   .button {
-    background-image: var(--titlebar_button-background);
+    background-image: var(--_button-background);
     border-color: var(--color--lowlight) var(--color--highlight)
       var(--color--highlight) var(--color--lowlight);
     border-width: var(--border-width);
-    flex: 0 0 var(--titlebar-height);
-    height: var(--titlebar-height);
+    flex: 0 0 var(--window-titlebar-height);
+    height: var(--window-titlebar-height);
     position: relative;
-    width: var(--titlebar-height);
+    width: var(--window-titlebar-height);
 
     &:focus {
       outline: 0;
@@ -236,7 +236,7 @@
 
     &:active,
     &:focus-visible {
-      background-image: var(--titlebar_button-background--active);
+      background-image: var(--window-titlebar_button-background--active);
 
       &::before {
         border-color: var(--color--lowlight);

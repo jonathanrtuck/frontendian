@@ -22,9 +22,9 @@ import {
 import { ComponentName, MS, Pixels } from "@/types";
 import { getTargetElement } from "@/utils";
 
-const COMPONENT_NAME: ComponentName = "Titlebar";
+const COMPONENT_NAME: ComponentName = "WindowTitlebar";
 
-export const Titlebar: FunctionComponent = () => {
+export const WindowTitlebar: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
   const theme = useStore((state) => state.theme);
   const styles = useStyles(COMPONENT_NAME);
@@ -176,4 +176,4 @@ export const Titlebar: FunctionComponent = () => {
   );
 };
 
-Titlebar.displayName = COMPONENT_NAME;
+WindowTitlebar.displayName = COMPONENT_NAME;

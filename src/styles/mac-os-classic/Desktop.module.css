@@ -10,7 +10,7 @@
     grid-template-columns: repeat(auto-fill, 6rem);
     inset: 0;
     justify-items: center;
-    padding: calc(var(--deskbar-height) + 1rem) 1rem 1rem;
+    padding: calc(var(--system-bar-height) + 1rem) 1rem 1rem;
     position: fixed;
 
     &::before,

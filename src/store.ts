@@ -5,7 +5,7 @@ import {
   DEFAULT_WINDOW,
   DEFAULT_WINDOW_POSITION_INCREMENT,
   DEFAULT_WINDOW_POSITION_OFFSET,
-  DESKBAR_ID,
+  SYSTEM_BAR_ID,
   IS_DEBUG_MODE,
   WINDOW_DIMENSION_BUFFER,
   UNTITLED_WINDOW_TITLE,
@@ -191,13 +191,13 @@ export const expandWindow = setState<ActionIds>(
   })
 );
 
-export const focusDeskbar = setState<void>(
-  "focusDeskbar",
+export const focusSystemBar = setState<void>(
+  "focusSystemBar",
   () => (prevState) => ({
     ...prevState,
     stackingOrder: [
-      ...prevState.stackingOrder.filter((id) => id !== DESKBAR_ID),
-      DESKBAR_ID,
+      ...prevState.stackingOrder.filter((id) => id !== SYSTEM_BAR_ID),
+      SYSTEM_BAR_ID,
     ],
     windows: prevState.windows.map((window) => ({
       ...window,
@@ -557,12 +557,12 @@ export const zoomWindow = setState<ActionIds>(
       const marginY = parseFloat(marginBottom) + parseFloat(marginTop);
       const frameHeight = offsetHeight + marginY - window.height;
       const frameWidth = offsetWidth + marginX - window.width;
-      const deskbarHeight =
+      const systemBarHeight =
         prevState.theme.id === "theme-mac-os-classic"
-          ? document.getElementById(DESKBAR_ID)!.offsetHeight
+          ? document.getElementById(SYSTEM_BAR_ID)!.offsetHeight
           : 0;
       const maxHeight =
-        document.body.offsetHeight - frameHeight - deskbarHeight;
+        document.body.offsetHeight - frameHeight - systemBarHeight;
       const maxWidth = document.body.offsetWidth - frameWidth;
       const isZoomed =
         window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
@@ -587,7 +587,7 @@ export const zoomWindow = setState<ActionIds>(
               top: window.top,
               width: window.width,
             },
-            top: deskbarHeight,
+            top: systemBarHeight,
             width: maxWidth,
             zoomed: true,
           };

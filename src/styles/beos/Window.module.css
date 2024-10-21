@@ -6,7 +6,8 @@
 
     color: var(--text-color--dark);
     margin: calc(
-        var(--window-padding) + var(--titlebar-height) + var(--window-padding)
+        var(--window-padding) + var(--window-titlebar-height) +
+          var(--window-padding)
       )
       0 0;
     padding: 0;

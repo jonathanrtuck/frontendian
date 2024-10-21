@@ -1,14 +1,14 @@
 import { FunctionComponent, useRef } from "react";
 
 import { Applications, MainMenu, Tray } from "@/components";
-import { DESKBAR_ID } from "@/constants";
+import { SYSTEM_BAR_ID } from "@/constants";
 import { useStore, useStyles } from "@/hooks";
-import { blurWindow, focusDeskbar } from "@/store";
+import { blurWindow, focusSystemBar } from "@/store";
 import { ComponentName } from "@/types";
 
-const COMPONENT_NAME: ComponentName = "Deskbar";
+const COMPONENT_NAME: ComponentName = "SystemBar";
 
-export const Deskbar: FunctionComponent = () => {
+export const SystemBar: FunctionComponent = () => {
   const stackingOrder = useStore((state) => state.stackingOrder);
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
@@ -17,15 +17,15 @@ export const Deskbar: FunctionComponent = () => {
   const rootRef = useRef<HTMLElement>(null);
 
   const focusedWindowId = windows.find(({ focused }) => focused)?.id;
-  const isFocused = stackingOrder.at(-1) === DESKBAR_ID;
+  const isFocused = stackingOrder.at(-1) === SYSTEM_BAR_ID;
   const isMenubarWindowed = theme.id === "theme-beos";
-  const zIndex = stackingOrder.indexOf(DESKBAR_ID);
+  const zIndex = stackingOrder.indexOf(SYSTEM_BAR_ID);
 
   return (
     <header
       aria-label={theme.id === "theme-beos" ? "Deskbar" : "Menubar"}
       className={styles.root}
-      id={DESKBAR_ID}
+      id={SYSTEM_BAR_ID}
       onBlur={
         isMenubarWindowed
           ? undefined
@@ -49,7 +49,7 @@ export const Deskbar: FunctionComponent = () => {
                 !isFocused &&
                 (!relatedTarget || !rootRef.current?.contains(relatedTarget))
               ) {
-                focusDeskbar();
+                focusSystemBar();
               }
             }
           : undefined
@@ -76,4 +76,4 @@ export const Deskbar: FunctionComponent = () => {
   );
 };
 
-Deskbar.displayName = COMPONENT_NAME;
+SystemBar.displayName = COMPONENT_NAME;

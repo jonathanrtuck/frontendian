@@ -1,7 +1,13 @@
 import { FunctionComponent, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
-import { Deskbar, Desktop, Dialog, ErrorBoundary, Window } from "@/components";
+import {
+  Desktop,
+  Dialog,
+  ErrorBoundary,
+  SystemBar,
+  Window,
+} from "@/components";
 import { FILE_README_MD } from "@/files";
 import { useStore } from "@/hooks";
 import { openFile } from "@/store";
@@ -48,7 +54,7 @@ export const UI: FunctionComponent = () => {
           </Dialog>
         }>
         <Desktop />
-        <Deskbar />
+        <SystemBar />
         {windows.map((window) => (
           <Window key={window.id} {...window} />
         ))}

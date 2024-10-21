@@ -1,5 +1,5 @@
 :root:global(.theme-beos) {
-  --deskbar-width: 11rem;
+  --system-bar-width: 11rem;
 
   .root {
     background-color: var(--background-color--default);
@@ -12,6 +12,6 @@
     position: fixed;
     right: 0;
     top: 0;
-    width: var(--deskbar-width);
+    width: var(--system-bar-width);
   }
 }

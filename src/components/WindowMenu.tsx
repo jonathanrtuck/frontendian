@@ -2,16 +2,18 @@ import { FunctionComponent, PropsWithChildren, useContext } from "react";
 import { createPortal } from "react-dom";
 
 import { MainMenu, Menu } from "@/components";
-import { DESKBAR_ID } from "@/constants";
+import { SYSTEM_BAR_ID } from "@/constants";
 import { WindowContext } from "@/contexts";
 import { useStore } from "@/hooks";
 import { ComponentName } from "@/types";
 
-const COMPONENT_NAME: ComponentName = "Menubar";
+const COMPONENT_NAME: ComponentName = "WindowMenu";
 
-export type MenubarProps = PropsWithChildren;
+export type WindowMenuProps = PropsWithChildren;
 
-export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
+export const WindowMenu: FunctionComponent<WindowMenuProps> = ({
+  children,
+}) => {
   const theme = useStore((state) => state.theme);
 
   const { focused, id, menubarRef } = useContext(WindowContext);
@@ -30,10 +32,10 @@ export const Menubar: FunctionComponent<MenubarProps> = ({ children }) => {
               <MainMenu />
               {children}
             </Menu>,
-            document.getElementById(DESKBAR_ID)!
+            document.getElementById(SYSTEM_BAR_ID)!
           )
         : null;
   }
 };
 
-Menubar.displayName = COMPONENT_NAME;
+WindowMenu.displayName = COMPONENT_NAME;

@@ -16,13 +16,15 @@ import { Resize } from "@/icons";
 import { resizeWindow } from "@/store";
 import { ComponentName } from "@/types";
 
-const COMPONENT_NAME: ComponentName = "Content";
+const COMPONENT_NAME: ComponentName = "WindowContent";
 const MIN_HEIGHT = 16 * 7; // 7rem
 const MIN_WIDTH = 16 * 10; // 10rem
 
-export type ContentProps = PropsWithChildren;
+export type WindowContentProps = PropsWithChildren;
 
-export const Content: FunctionComponent<ContentProps> = ({ children }) => {
+export const WindowContent: FunctionComponent<WindowContentProps> = ({
+  children,
+}) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -133,4 +135,4 @@ export const Content: FunctionComponent<ContentProps> = ({ children }) => {
   );
 };
 
-Content.displayName = COMPONENT_NAME;
+WindowContent.displayName = COMPONENT_NAME;

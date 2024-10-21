@@ -44,20 +44,20 @@ export type ComponentName =
   | "Applications"
   | "Button"
   | "Clock"
-  | "Content"
-  | "Deskbar"
   | "Desktop"
   | "Dialog"
   | "ErrorBoundary"
   | "Icon"
   | "MainMenu"
   | "Menu"
-  | "Menubar"
   | "Menuitem"
-  | "Titlebar"
+  | "SystemBar"
   | "Tray"
   | "UI"
-  | "Window";
+  | "Window"
+  | "WindowContent"
+  | "WindowMenu"
+  | "WindowTitlebar";
 
 export type CssModule = {
   readonly [key: string]: string;
@@ -121,11 +121,11 @@ export type Percentage = number;
 export type Pixels = number;
 
 export type State = {
-  applications: Application[]; // the order is used as the display order in the Deskbar MainMenu
+  applications: Application[]; // the order is used as the display order in the SystemBar MainMenu
   desktop: ID[]; // the order is used as the display order on the Desktop
   files: File[];
   fonts: Font[];
-  openApplicationIds: ID[]; // the order is used as the display order in the Deskbar Applications Menu
+  openApplicationIds: ID[]; // the order is used as the display order in the SystemBar Applications Menu
   stackingOrder: ID[];
   theme: Theme;
   types: Partial<

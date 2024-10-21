@@ -23,7 +23,7 @@
       content: "⁞";
       font-family: var(--font-family--monospace);
       font-size: 1.25rem;
-      line-height: var(--menubar-height);
+      line-height: var(--system-bar-height);
       text-shadow: calc(var(--border-width) * -0.5)
           calc(var(--border-width) * -0.5) 0 var(--color--lowlight),
         calc(var(--border-width) * 0.5) calc(var(--border-width) * 0.5) 0
