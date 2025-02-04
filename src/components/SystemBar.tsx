@@ -52,6 +52,7 @@ export const SystemBar: FunctionComponent = () => {
           : undefined
       }
       ref={rootRef}
+      role="banner"
       style={{
         zIndex,
       }}

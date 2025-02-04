@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import {
+  ContextType,
   FunctionComponent,
   HTMLAttributes,
-  ReactElement,
+  ReactNode,
   useCallback,
   useContext,
   useId,
@@ -12,7 +13,7 @@ import {
   useState,
 } from "react";
 
-import { MenuContext, MenuitemContext, MenuitemContextType } from "@/contexts";
+import { MenuContext, MenuitemContext } from "@/contexts";
 import { useStore, useStyles } from "@/hooks";
 import { IconComponent } from "@/types";
 import { removeProps } from "@/utils";
@@ -30,7 +31,7 @@ export const Menuitem: FunctionComponent<
           title: string;
         } & (
           | {
-              children: ReactElement;
+              children: ReactNode;
             }
           | ({
               Icon?: IconComponent;
@@ -79,7 +80,7 @@ export const Menuitem: FunctionComponent<
 
   const topButtonRef = isTop ? buttonRef : parentTopButtonRef;
 
-  const contextValue = useMemo<MenuitemContextType>(
+  const contextValue = useMemo<ContextType<typeof MenuitemContext>>(
     () => ({
       collapse,
       isExpanded,

@@ -1,6 +1,8 @@
 import {
+  ContextType,
   FunctionComponent,
   ReactNode,
+  RefObject,
   useCallback,
   useMemo,
   useRef,
@@ -19,7 +21,7 @@ import {
   WindowTitlebar,
 } from "@/components";
 import { SYSTEM_BAR_ID } from "@/constants";
-import { WindowContext, WindowContextType } from "@/contexts";
+import { WindowContext } from "@/contexts";
 import { useFocus, useStore, useStyles } from "@/hooks";
 import {
   blurWindow,
@@ -70,7 +72,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
       []
     );
 
-  const contextValue = useMemo<WindowContextType>(
+  const contextValue = useMemo<ContextType<typeof WindowContext>>(
     () => ({
       ...props,
       menubarRef,
@@ -124,7 +126,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
       }>
       <Draggable
         cancel="[draggable='false']"
-        nodeRef={rootRef}
+        nodeRef={rootRef as RefObject<HTMLElement>}
         onStart={(e) => {
           if (e.shiftKey) {
             return false;
@@ -175,7 +177,8 @@ export const Window: FunctionComponent<WindowType> = (props) => {
             <WindowTitlebar />
             <div
               className={styles.frame}
-              hidden={Boolean(isCollapsible && collapsed)}>
+              hidden={Boolean(isCollapsible && collapsed)}
+              role="article">
               <application.Component
                 Content={WindowContent}
                 Menu={Menu}

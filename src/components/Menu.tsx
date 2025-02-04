@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import {
   Children,
+  ContextType,
   FocusEvent,
   forwardRef,
   HTMLAttributes,
@@ -14,7 +15,7 @@ import {
   useState,
 } from "react";
 
-import { MenuContext, MenuContextType, MenuitemContext } from "@/contexts";
+import { MenuContext, MenuitemContext } from "@/contexts";
 import { useStyles } from "@/hooks";
 
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
@@ -77,7 +78,7 @@ export const Menu = forwardRef<
           ),
       [children]
     );
-    const contextValue = useMemo<MenuContextType>(
+    const contextValue = useMemo<ContextType<typeof MenuContext>>(
       () => ({
         hasPopup,
         inactivate: bar ? inactivate : parentInactivate,

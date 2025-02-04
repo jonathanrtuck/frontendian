@@ -1,10 +1,7 @@
-import { ComponentPropsWithoutRef, UIEvent } from "react";
+import { ComponentPropsWithoutRef } from "react";
 
 import { useStore } from "@/hooks";
 import { Theme } from "@/types";
-
-export const getTargetElement = (event: UIEvent): HTMLElement | null =>
-  event.target instanceof HTMLElement ? event.target : null;
 
 export const getTitle = (obj: {
   title: string | ((theme: Theme) => string);

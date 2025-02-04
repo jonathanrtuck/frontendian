@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect } from "react";
-import { Helmet } from "react-helmet";
+import { preload } from "react-dom";
 
 import {
   Desktop,
@@ -11,52 +11,44 @@ import {
 import { FILE_README_MD } from "@/files";
 import { useStore } from "@/hooks";
 import { openFile } from "@/store";
-import { getUrl } from "@/utils";
+import * as themes from "@/themes";
 
 export const UI: FunctionComponent = () => {
-  const files = useStore((state) => state.files);
   const fonts = useStore((state) => state.fonts);
   const theme = useStore((state) => state.theme);
   const windows = useStore((state) => state.windows);
+
+  fonts.forEach(({ url }) => preload(url, { as: "font", crossOrigin: "" }));
+
+  useEffect(() => {
+    Object.values(themes).forEach(({ id }) => {
+      document.documentElement.classList.toggle(id, id === theme.id);
+    });
+  }, [theme.id]);
 
   useEffect(() => {
     openFile({ id: FILE_README_MD.id });
   }, []);
 
   return (
-    <>
-      <Helmet
-        style={fonts.map((font) => ({
-          cssText: `@font-face { font-family: "${font.title}"; src: url("${font.url}") format("${font.format}") }`,
-        }))}>
-        <html className={theme.id} />
-        {files.map((file) => (
-          <link href={getUrl(file)} key={file.id} rel="preconnect" />
-        ))}
-        {fonts.map((font) => (
-          <link
-            as="font"
-            crossOrigin=""
-            href={font.url}
-            key={font.id}
-            rel="preload"
-          />
-        ))}
-      </Helmet>
-      <ErrorBoundary
-        fallback={
-          <Dialog modal open type="error">
-            <p>An unknown error has occured.</p>
-            <p>Please reload the page.</p>
-          </Dialog>
-        }>
-        <Desktop />
-        <SystemBar />
-        {windows.map((window) => (
-          <Window {...window} key={window.id} />
-        ))}
-      </ErrorBoundary>
-    </>
+    <ErrorBoundary
+      fallback={
+        <Dialog modal open type="error">
+          <p>An unknown error has occured.</p>
+          <p>Please reload the page.</p>
+        </Dialog>
+      }>
+      {fonts.map(({ format, title, url }) => (
+        <style href={url} key={url} precedence="">
+          {`@font-face { font-family: "${title}"; src: url("${url}") format("${format}") }`}
+        </style>
+      ))}
+      <Desktop />
+      <SystemBar />
+      {windows.map((window) => (
+        <Window {...window} key={window.id} />
+      ))}
+    </ErrorBoundary>
   );
 };
 

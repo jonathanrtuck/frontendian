@@ -2,6 +2,7 @@ import clsx from "clsx";
 import Draggable from "react-draggable";
 import {
   FunctionComponent,
+  RefObject,
   useCallback,
   useContext,
   useLayoutEffect,
@@ -20,7 +21,6 @@ import {
   zoomWindow,
 } from "@/store";
 import { MS, Pixels } from "@/types";
-import { getTargetElement } from "@/utils";
 
 export const WindowTitlebar: FunctionComponent = () => {
   const applications = useStore((state) => state.applications);
@@ -69,7 +69,7 @@ export const WindowTitlebar: FunctionComponent = () => {
       axis="x"
       bounds="parent"
       cancel={`.${styles.button}`}
-      nodeRef={rootRef}
+      nodeRef={rootRef as RefObject<HTMLElement>}
       onStart={(e) => {
         if (!e.shiftKey) {
           return false;
@@ -96,7 +96,8 @@ export const WindowTitlebar: FunctionComponent = () => {
         onDoubleClick={
           isDoubleClickable
             ? (e) => {
-                const targetElement = getTargetElement(e);
+                const targetElement =
+                  e.target instanceof HTMLElement ? e.target : null;
                 const isButton = targetElement?.classList.contains(
                   styles.button
                 );
@@ -111,7 +112,8 @@ export const WindowTitlebar: FunctionComponent = () => {
           isDoubleClickable
             ? (e) => {
                 const now = Date.now();
-                const targetElement = getTargetElement(e);
+                const targetElement =
+                  e.target instanceof HTMLElement ? e.target : null;
                 const isButton = targetElement?.classList.contains(
                   styles.button
                 );

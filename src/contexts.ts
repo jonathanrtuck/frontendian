@@ -3,7 +3,7 @@ import { createContext, createRef, RefObject } from "react";
 import { DEFAULT_WINDOW } from "@/constants";
 import { Window } from "@/types";
 
-export type MenuContextType = {
+export const MenuContext = createContext<{
   hasPopup: boolean;
   inactivate(): void;
   isActive: boolean;
@@ -11,9 +11,7 @@ export type MenuContextType = {
   isPointer: boolean;
   isTop: boolean;
   orientation: "horizontal" | "vertical";
-};
-
-export const MenuContext = createContext<MenuContextType>({
+}>({
   hasPopup: false,
   inactivate: () => {},
   isActive: false,
@@ -23,23 +21,21 @@ export const MenuContext = createContext<MenuContextType>({
   orientation: "horizontal",
 });
 
-export type MenuitemContextType = {
+export const MenuitemContext = createContext<{
   collapse(): void;
   isExpanded: boolean;
-  topButtonRef: RefObject<HTMLElement>;
-};
-
-export const MenuitemContext = createContext<MenuitemContextType>({
+  topButtonRef: RefObject<HTMLElement | null>;
+}>({
   collapse: () => {},
   isExpanded: false,
   topButtonRef: createRef(),
 });
 
-export type WindowContextType = Window & {
-  menubarRef: RefObject<HTMLMenuElement>;
-};
-
-export const WindowContext = createContext<WindowContextType>({
+export const WindowContext = createContext<
+  Window & {
+    menubarRef: RefObject<HTMLMenuElement | null>;
+  }
+>({
   ...DEFAULT_WINDOW,
   menubarRef: createRef(),
 });

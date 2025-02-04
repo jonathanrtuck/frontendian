@@ -77,7 +77,7 @@ export const useFocus = ({
   selector,
 }: {
   deps: boolean[];
-  ref: RefObject<HTMLElement>;
+  ref: RefObject<HTMLElement | null>;
   selector?: Parameters<ParentNode["querySelector"]>[0];
 }): void => {
   useEffect(

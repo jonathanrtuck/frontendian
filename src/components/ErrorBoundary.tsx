@@ -1,10 +1,10 @@
-import { Component, ErrorInfo, PropsWithChildren, ReactElement } from "react";
+import { Component, ErrorInfo, PropsWithChildren, ReactNode } from "react";
 
 import { IS_DEBUG_MODE } from "@/constants";
 
 export class ErrorBoundary extends Component<
   PropsWithChildren<{
-    fallback?: ReactElement;
+    fallback?: ReactNode;
     onError?(error: Error): void;
   }>,
   {
