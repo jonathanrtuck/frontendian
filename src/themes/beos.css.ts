@@ -1,3 +1,4 @@
+import { FONT_COURIER_10_PITCH } from "@/fonts";
 import vars from "@/vars.css";
 import { createGlobalTheme } from "@vanilla-extract/css";
 
@@ -6,7 +7,7 @@ const colorHighlight = "rgba(255, 255, 255, 0.6)";
 const colorLowlight = "rgba(0, 0, 0, 0.2)";
 const textColorLight = "rgb(255, 255, 255)";
 
-export default createGlobalTheme(`:root:where(.theme-beos)`, vars, {
+export default createGlobalTheme(".theme-beos", vars, {
   background: {
     color: {
       dark: "rgb(184, 184, 184)",
@@ -56,7 +57,7 @@ export default createGlobalTheme(`:root:where(.theme-beos)`, vars, {
   font: {
     family: {
       default: "Helvetica",
-      monospace: "font-family--monospace", // courier
+      monospace: FONT_COURIER_10_PITCH.title,
     },
   },
   scrollbar: {

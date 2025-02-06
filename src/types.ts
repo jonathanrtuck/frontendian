@@ -34,6 +34,21 @@ export type File = {
     }
 );
 
+export type Font = {
+  // @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src#font_formats
+  format:
+    | "collection"
+    | "embedded-opentype"
+    | "opentype"
+    | "svg"
+    | "truetype"
+    | "woff"
+    | "woff2";
+  id: ID;
+  title: string;
+  url: URL;
+};
+
 export type IconComponent = ComponentType<SVGAttributes<SVGSVGElement>>;
 
 export type ID = string;
@@ -52,6 +67,7 @@ export type State = {
   currentThemeId: Theme["id"];
   desktop: (Application["id"] | File["id"])[]; // the order is used as the display order on the Desktop
   files: File[];
+  fonts: Font[];
   openApplicationIds: Application["id"][]; // the order is used as the display order in the SystemBar Applications Menu
   stackingOrder: Application["id"][];
   themes: Theme[];

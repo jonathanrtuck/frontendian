@@ -1,6 +1,6 @@
-import { createThemeContract } from "@vanilla-extract/css";
+import { createGlobalThemeContract } from "@vanilla-extract/css";
 
-export default createThemeContract({
+export default createGlobalThemeContract({
   background: {
     color: {
       dark: "background-color--dark",

@@ -1,5 +1,6 @@
 import * as applicationConfigurations from "@/applications";
 import * as files from "@/files";
+import * as fonts from "@/fonts";
 import { Pdf, Text } from "@/icons";
 import * as themes from "@/themes";
 import type { ID, State, Window } from "@/types";
@@ -39,6 +40,7 @@ export const INITIAL_STATE: State = {
   currentThemeId: themes.THEME_BEOS.id,
   desktop: [files.FILE_RESUME_PDF.id],
   files: Object.values(files),
+  fonts: Object.values(fonts),
   openApplicationIds: [applicationConfigurations.APPLICATION_FILE_MANAGER.id],
   stackingOrder: [SYSTEM_BAR_ID],
   themes: Object.values(themes),

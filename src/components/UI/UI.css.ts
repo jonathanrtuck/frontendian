@@ -1,5 +1,12 @@
+import * as fonts from "@/fonts";
 import vars from "@/vars.css";
-import { globalStyle } from "@vanilla-extract/css";
+import { globalFontFace, globalStyle } from "@vanilla-extract/css";
+
+Object.values(fonts).forEach(({ format, title, url }) => {
+  globalFontFace(title, {
+    src: `url("${url}") format("${format}")`,
+  });
+});
 
 globalStyle(":root", {
   backgroundColor: "rgb(0, 0, 0)",

@@ -1,3 +1,4 @@
+import { FONT_CHARCOAL } from "@/fonts";
 import vars from "@/vars.css";
 import { createGlobalTheme } from "@vanilla-extract/css";
 
@@ -6,7 +7,7 @@ const colorHighlight = "rgba(255, 255, 255, 0.6)";
 const colorLowlight = "rgba(0, 0, 0, 0.4)";
 const textColorDark = "rgb(0, 0, 0)";
 
-export default createGlobalTheme(`:root:where(.theme-mac-os-classic)`, vars, {
+export default createGlobalTheme(".theme-mac-os-classic", vars, {
   background: {
     color: {
       dark: "transparent",
@@ -46,7 +47,7 @@ export default createGlobalTheme(`:root:where(.theme-mac-os-classic)`, vars, {
   },
   font: {
     family: {
-      default: "arial",
+      default: FONT_CHARCOAL.title,
       monospace: [
         "ui-monospace",
         "Menlo",
