@@ -1,3 +1,5 @@
+"use client";
+
 import type { IconComponent } from "@/types";
 import { useId } from "react";
 

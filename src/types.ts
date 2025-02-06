@@ -51,7 +51,11 @@ export type Font = Readonly<{
   url: URL;
 }>;
 
-export type IconComponent = ComponentType<SVGAttributes<SVGSVGElement>>;
+export type IconComponent = ComponentType<
+  SVGAttributes<SVGSVGElement> & {
+    theme?: Theme;
+  }
+>;
 
 export type ID = string;
 

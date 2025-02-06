@@ -1,3 +1,5 @@
+"use client";
+
 import { useStore } from "@/store";
 import { File } from "@/icons";
 import type { IconComponent } from "@/types";

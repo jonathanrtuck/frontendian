@@ -33,11 +33,13 @@ export const title = styleVariants<StylesByTheme>({
     fontWeight: 400,
     maxWidth: "100%",
     overflow: "hidden",
+    selectors: {
+      [`.${root["theme-beos"]}:focus &`]: {
+        backgroundColor: "rgba(0, 0, 0, 0.4)",
+      },
+    },
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    [`.${root["theme-beos"]}:focus &`]: {
-      backgroundColor: "rgba(0, 0, 0, 0.4)",
-    },
   },
   "theme-mac-os-classic": {},
 });

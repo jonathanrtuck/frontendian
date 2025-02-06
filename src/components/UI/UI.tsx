@@ -1,6 +1,6 @@
 "use client";
 
-import { Desktop, Dialog, ErrorBoundary } from "@/components";
+import { Desktop, Dialog, ErrorBoundary, SystemBar } from "@/components";
 import { useStore } from "@/store";
 import * as themes from "@/themes";
 import type { FunctionComponent } from "react";
@@ -26,6 +26,7 @@ export const UI: FunctionComponent = () => {
         </Dialog>
       }>
       <Desktop />
+      <SystemBar />
     </ErrorBoundary>
   );
 };

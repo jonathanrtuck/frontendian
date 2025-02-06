@@ -1,3 +1,5 @@
+"use client";
+
 import type { IconComponent } from "@/types";
 
 export const Apple: IconComponent = (props) => (

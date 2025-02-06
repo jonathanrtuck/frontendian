@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertError, AlertInfo } from "@/icons";
+import { useStore } from "@/store";
 import type { IconComponent } from "@/types";
 import clsx from "clsx";
 import type {
@@ -10,6 +11,7 @@ import type {
   PropsWithChildren,
 } from "react";
 import { useLayoutEffect, useRef } from "react";
+import * as styles from "./Dialog.css";
 
 type DialogType = "error" | "info";
 
@@ -29,8 +31,11 @@ export const Dialog: FunctionComponent<
     >
   >
 > = ({ children, className, modal, open, type, ...props }) => {
+  const currentThemeId = useStore((store) => store.currentThemeId);
+  const themes = useStore((store) => store.themes);
   const rootRef = useRef<HTMLDialogElement>(null);
   const Icon = ICONS_BY_TYPE[type];
+  const theme = themes.find(({ id }) => id === currentThemeId)!;
 
   useLayoutEffect(() => {
     if (open) {
@@ -45,9 +50,12 @@ export const Dialog: FunctionComponent<
   }, [modal, open]);
 
   return (
-    <dialog {...props} className={clsx(className, "")} ref={rootRef}>
-      <div className={""}>
-        <Icon className={""} />
+    <dialog
+      {...props}
+      className={clsx(className, styles.root[currentThemeId])}
+      ref={rootRef}>
+      <div className={styles.content[currentThemeId]}>
+        <Icon className={styles.icon[currentThemeId]} theme={theme} />
         {children}
       </div>
     </dialog>
