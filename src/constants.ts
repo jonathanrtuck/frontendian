@@ -30,6 +30,8 @@ export const DEFAULT_WINDOW: Window = {
   zoomed: false,
 };
 
+export const INITIAL_THEME_ID = themes.THEME_BEOS.id;
+
 export const INITIAL_STATE: State = {
   applications: Object.values(applicationConfigurations).map(
     (applicationConfiguration) => ({
@@ -37,7 +39,7 @@ export const INITIAL_STATE: State = {
       windowIds: [],
     })
   ),
-  currentThemeId: themes.THEME_BEOS.id,
+  currentThemeId: INITIAL_THEME_ID,
   desktop: [files.FILE_RESUME_PDF.id],
   files: Object.values(files),
   fonts: Object.values(fonts),

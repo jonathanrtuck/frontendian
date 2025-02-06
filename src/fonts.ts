@@ -1,4 +1,4 @@
-import { Font } from "@/types";
+import type { Font } from "@/types";
 
 export const FONT_CHARCOAL: Font = {
   format: "truetype",

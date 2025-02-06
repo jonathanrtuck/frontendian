@@ -8,7 +8,7 @@ type Actions = {
 
 type OneOrMoreID = { id: ID } | { ids: ID[] };
 
-type Store = State & Actions;
+type Store = State & Readonly<Actions>;
 
 const isPayloadId = (payload: OneOrMoreID, id: ID): boolean =>
   ("id" in payload && id === payload.id) ||
@@ -40,7 +40,7 @@ const setState =
     }
   };
 
-const ACTIONS: Actions = {
+const ACTIONS: Readonly<Actions> = {
   setTheme: setState<{
     id: Theme["id"];
   }>("setTheme", (payload) => (prevState) => ({

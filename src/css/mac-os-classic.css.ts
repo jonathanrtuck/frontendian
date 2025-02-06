@@ -1,13 +1,14 @@
 import { FONT_CHARCOAL } from "@/fonts";
-import vars from "@/vars.css";
+import { THEME_MAC_OS_CLASSIC } from "@/themes";
 import { createGlobalTheme } from "@vanilla-extract/css";
+import { vars } from "./vars.css";
 
 const borderWidth = "0.0625rem";
 const colorHighlight = "rgba(255, 255, 255, 0.6)";
 const colorLowlight = "rgba(0, 0, 0, 0.4)";
 const textColorDark = "rgb(0, 0, 0)";
 
-export default createGlobalTheme(".theme-mac-os-classic", vars, {
+export default createGlobalTheme(`.${THEME_MAC_OS_CLASSIC.id}`, vars, {
   background: {
     color: {
       dark: "transparent",

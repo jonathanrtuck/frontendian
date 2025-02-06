@@ -1,9 +1,10 @@
+import { vars } from "@/css";
 import * as fonts from "@/fonts";
-import vars from "@/vars.css";
 import { globalFontFace, globalStyle } from "@vanilla-extract/css";
 
 Object.values(fonts).forEach(({ format, title, url }) => {
   globalFontFace(title, {
+    fontDisplay: "swap",
     src: `url("${url}") format("${format}")`,
   });
 });

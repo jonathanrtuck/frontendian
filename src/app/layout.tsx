@@ -1,3 +1,4 @@
+import { INITIAL_THEME_ID } from "@/constants";
 import type { Metadata, Viewport } from "next";
 import type { FunctionComponent, PropsWithChildren } from "react";
 
@@ -11,7 +12,7 @@ export const viewport: Viewport = {
 };
 
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => (
-  <html lang="en">
+  <html className={INITIAL_THEME_ID} lang="en">
     <body>{children}</body>
   </html>
 );

@@ -12,29 +12,31 @@ export type ApplicationComponentProps = {
   file?: File;
 };
 
-export type ApplicationConfiguration = {
+export type ApplicationConfiguration = Readonly<{
   Component: ApplicationComponent;
   getTitle(theme: Theme): string;
   getWindow?(file?: File): Partial<Window>;
   Icon?: IconComponent;
   id: ID;
-};
+}>;
 
-export type File = {
-  id: ID;
-  title: string;
-  url: URL | ((theme: Theme) => URL);
-} & (
-  | {
-      type: "application/pdf";
-      width: Pixels; // page width
-    }
-  | {
-      type: "text/markdown";
-    }
-);
+export type File = Readonly<
+  {
+    id: ID;
+    title: string;
+    url: URL;
+  } & (
+    | {
+        type: "application/pdf";
+        width: Pixels; // page width
+      }
+    | {
+        type: "text/markdown";
+      }
+  )
+>;
 
-export type Font = {
+export type Font = Readonly<{
   // @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src#font_formats
   format:
     | "collection"
@@ -47,7 +49,7 @@ export type Font = {
   id: ID;
   title: string;
   url: URL;
-};
+}>;
 
 export type IconComponent = ComponentType<SVGAttributes<SVGSVGElement>>;
 
@@ -86,11 +88,11 @@ export type State = {
 export type StylesByTheme = {
   [id in Theme["id"]]: ComplexStyleRule;
 };
-export type Theme = {
+export type Theme = Readonly<{
   Icon: IconComponent;
   id: "theme-beos" | "theme-mac-os-classic";
   title: string;
-};
+}>;
 
 export type URL = string;
 

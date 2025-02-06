@@ -4,7 +4,7 @@ export const FILE_README_MD: File = {
   id: "file-README.md",
   title: "About this site",
   type: "text/markdown",
-  url: (theme) => `/themes/${theme.id.replace(/^theme-/, "")}/README.md`,
+  url: "/files/README.md", // @todo
 };
 
 export const FILE_RESUME_PDF: File = {

@@ -1,13 +1,14 @@
 import { FONT_COURIER_10_PITCH } from "@/fonts";
-import vars from "@/vars.css";
+import { THEME_BEOS } from "@/themes";
 import { createGlobalTheme } from "@vanilla-extract/css";
+import { vars } from "./vars.css";
 
 const borderWidth = "0.0625rem";
 const colorHighlight = "rgba(255, 255, 255, 0.6)";
 const colorLowlight = "rgba(0, 0, 0, 0.2)";
 const textColorLight = "rgb(255, 255, 255)";
 
-export default createGlobalTheme(".theme-beos", vars, {
+export default createGlobalTheme(`.${THEME_BEOS.id}`, vars, {
   background: {
     color: {
       dark: "rgb(184, 184, 184)",
