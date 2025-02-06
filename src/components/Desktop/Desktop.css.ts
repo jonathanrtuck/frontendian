@@ -1,18 +1,11 @@
-import { recipe } from "@vanilla-extract/recipes";
 import type { StylesByTheme } from "@/types";
+import { styleVariants } from "@vanilla-extract/css";
 
-export const root = recipe<StylesByTheme>({
-  base: {
-    backgroundColor: "red",
+export const root = styleVariants<StylesByTheme>({
+  "theme-beos": {
+    backgroundColor: "blue",
   },
-  variants: {
-    theme: {
-      "theme-beos": {
-        backgroundColor: "blue",
-      },
-      "theme-mac-os-classic": {
-        backgroundColor: "green",
-      },
-    },
+  "theme-mac-os-classic": {
+    backgroundColor: "green",
   },
 });

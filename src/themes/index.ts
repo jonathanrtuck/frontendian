@@ -1,5 +1,7 @@
 import { Apple, BeOS } from "@/icons";
 import type { Theme } from "@/types";
+import "./beos.css";
+import "./mac-os-classic.css";
 
 export const THEME_BEOS: Theme = {
   Icon: BeOS,

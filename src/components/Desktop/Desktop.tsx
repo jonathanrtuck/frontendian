@@ -3,18 +3,14 @@
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { FunctionComponent } from "react";
-import { root } from "./Desktop.css";
+import * as styles from "./Desktop.css";
 
 export const Desktop: FunctionComponent = () => {
   const currentThemeId = useStore((store) => store.currentThemeId);
   const setTheme = useStore((store) => store.setTheme);
 
   return (
-    <div
-      aria-label="Desktop"
-      className={root({
-        theme: currentThemeId,
-      })}>
+    <div aria-label="Desktop" className={styles.root[currentThemeId]}>
       desktop…
       <button
         onClick={() => {

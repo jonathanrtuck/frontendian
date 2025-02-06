@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import "./globals.css";
 
 export const metadata: Metadata = {
   description: "Portfolio site for Jonathan Tucker",

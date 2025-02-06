@@ -1,4 +1,4 @@
-import { ComplexStyleRule } from "@vanilla-extract/css";
+import type { ComplexStyleRule } from "@vanilla-extract/css";
 import type { ComponentType, SVGAttributes } from "react";
 
 export type Application = ApplicationConfiguration & {
@@ -67,16 +67,13 @@ export type State = {
   windows: Window[];
 };
 
+export type StylesByTheme = {
+  [id in Theme["id"]]: ComplexStyleRule;
+};
 export type Theme = {
   Icon: IconComponent;
   id: "theme-beos" | "theme-mac-os-classic";
   title: string;
-};
-
-export type StylesByTheme = {
-  theme: {
-    [id in Theme["id"]]: ComplexStyleRule;
-  };
 };
 
 export type URL = string;
