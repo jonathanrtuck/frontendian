@@ -18,6 +18,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-resizable": "^3",
+    "@vanilla-extract/next-plugin": "^2",
+    "@vanilla-extract/recipes": "^0",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "typescript": "^5"
@@ -25,7 +27,7 @@
   "name": "frontendian",
   "scripts": {
     "build": "next build",
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
   },
