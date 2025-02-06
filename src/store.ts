@@ -1,14 +1,8 @@
 import { INITIAL_STATE, IS_DEBUG_MODE } from "@/constants";
-import type { ID, State, Theme } from "@/types";
+import type { ID, Pixels, State, Theme } from "@/types";
 import { create } from "zustand";
 
-type Actions = {
-  setTheme(payload: { id: Theme["id"] }): void;
-};
-
 type OneOrMoreID = { id: ID } | { ids: ID[] };
-
-type Store = State & Readonly<Actions>;
 
 const isPayloadId = (payload: OneOrMoreID, id: ID): boolean =>
   ("id" in payload && id === payload.id) ||
@@ -17,7 +11,7 @@ const isPayloadId = (payload: OneOrMoreID, id: ID): boolean =>
 const setState =
   <T>(
     actionType: string,
-    updater: (payload: T) => (prevState: Store) => Store
+    updater: (payload: T) => (prevState: State) => State
   ) =>
   (payload: T): void => {
     if (IS_DEBUG_MODE) {
@@ -40,16 +34,97 @@ const setState =
     }
   };
 
-const ACTIONS: Readonly<Actions> = {
+const ACTIONS = {
+  blurWindow: setState<OneOrMoreID>("blurWindow", (payload) => (prevState) => ({
+    ...prevState,
+  })),
+  closeApplication: setState<OneOrMoreID>(
+    "closeApplication",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  closeWindow: setState<OneOrMoreID>(
+    "closeWindow",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  collapseWindow: setState<OneOrMoreID>(
+    "collapseWindow",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  expandWindow: setState<OneOrMoreID>(
+    "expandWindow",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  focusSystemBar: setState<void>(
+    "focusSystemBar",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  focusWindow: setState<OneOrMoreID>(
+    "focusWindow",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  hideWindow: setState<OneOrMoreID>("hideWindow", (payload) => (prevState) => ({
+    ...prevState,
+  })),
+  moveWindow: setState<OneOrMoreID & { left: Pixels; top: Pixels }>(
+    "moveWindow",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  moveWindowTitlebar: setState<OneOrMoreID & { left: Pixels }>(
+    "moveWindowTitlebar",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  openApplication: setState<OneOrMoreID>(
+    "openApplication",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  openFile: setState<OneOrMoreID & { windowId?: ID }>(
+    "openFile",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
+  openWindow: setState<OneOrMoreID>("openWindow", (payload) => (prevState) => ({
+    ...prevState,
+  })),
+  resizeWindow: setState<OneOrMoreID & { height: Pixels; width: Pixels }>(
+    "resizeWindow",
+    (payload) => (prevState) => ({
+      ...prevState,
+    })
+  ),
   setTheme: setState<{
     id: Theme["id"];
   }>("setTheme", (payload) => (prevState) => ({
     ...prevState,
     currentThemeId: payload.id,
   })),
+  showWindow: setState<OneOrMoreID>("showWindow", (payload) => (prevState) => ({
+    ...prevState,
+  })),
+  zoomWindow: setState<OneOrMoreID>("zoomWindow", (payload) => (prevState) => ({
+    ...prevState,
+  })),
 };
 
-export const useStore = create<Store>()(() => ({
+export const useStore = create<State & Readonly<typeof ACTIONS>>()(() => ({
   ...INITIAL_STATE,
   ...ACTIONS,
 }));

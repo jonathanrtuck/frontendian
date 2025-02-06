@@ -10,8 +10,13 @@ import * as styles from "./Applications.css";
 
 export const Applications: FunctionComponent = () => {
   const applications = useStore((store) => store.applications);
+  const blurWindow = useStore((store) => store.blurWindow);
+  const closeApplication = useStore((store) => store.closeApplication);
   const currentThemeId = useStore((store) => store.currentThemeId);
+  const focusWindow = useStore((store) => store.focusWindow);
+  const hideWindow = useStore((store) => store.hideWindow);
   const openApplicationIds = useStore((store) => store.openApplicationIds);
+  const showWindow = useStore((store) => store.showWindow);
   const themes = useStore((store) => store.themes);
   const windows = useStore((store) => store.windows);
   const theme = themes.find(({ id }) => id === currentThemeId)!;
@@ -40,7 +45,7 @@ export const Applications: FunctionComponent = () => {
                           Icon={hidden ? WindowHidden : WindowVisible}
                           key={id}
                           onClick={() => {
-                            // focusWindow({ id });
+                            focusWindow({ id });
                           }}
                           title={title}
                         />
@@ -51,7 +56,7 @@ export const Applications: FunctionComponent = () => {
                           ({ hidden }) => hidden
                         )}
                         onClick={() => {
-                          // hideWindow({ ids: application.windowIds });
+                          hideWindow({ ids: windowIds });
                         }}
                         title="Hide all"
                       />
@@ -60,13 +65,13 @@ export const Applications: FunctionComponent = () => {
                           ({ hidden }) => !hidden
                         )}
                         onClick={() => {
-                          // showWindow({ ids: application.windowIds });
+                          showWindow({ ids: windowIds });
                         }}
                         title="Show all"
                       />
                       <Menuitem
                         onClick={() => {
-                          // closeApplication({ id: applicationId });
+                          closeApplication({ id: applicationId });
                         }}
                         title="Close all"
                       />
@@ -105,14 +110,14 @@ export const Applications: FunctionComponent = () => {
               <Menuitem
                 disabled={false} // @todo
                 onClick={() => {
-                  // hideWindow({ ids: application.windowIds });
+                  // hideWindow({ ids: windowIds });
                 }}
                 title="Hide Others"
               />
               <Menuitem
                 disabled={false} // @todo
                 onClick={() => {
-                  // showWindow({ ids: application.windowIds });
+                  // showWindow({ ids: windowIds });
                 }}
                 title="Show all"
               />
@@ -129,9 +134,9 @@ export const Applications: FunctionComponent = () => {
                     key={applicationId}
                     onClick={() => {
                       if (windowIds.length !== 0) {
-                        // focusWindow({ id: windowIds.at(0) });
+                        focusWindow({ id: windowIds.at(0)! });
                       } else if (focusedWindow) {
-                        // blurWindow({ id: focusedWindow.id });
+                        blurWindow({ id: focusedWindow.id });
                       }
                     }}
                     title={getTitle(theme)}

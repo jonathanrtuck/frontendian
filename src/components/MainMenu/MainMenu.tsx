@@ -11,6 +11,8 @@ import * as styles from "./MainMenu.css";
 export const MainMenu: FunctionComponent = () => {
   const applications = useStore((store) => store.applications);
   const currentThemeId = useStore((store) => store.currentThemeId);
+  const openApplication = useStore((store) => store.openApplication);
+  const openFile = useStore((store) => store.openFile);
   const themes = useStore((store) => store.themes);
   const setTheme = useStore((store) => store.setTheme);
   const theme = themes.find(({ id }) => id === currentThemeId)!;
@@ -34,7 +36,7 @@ export const MainMenu: FunctionComponent = () => {
         <Menu>
           <Menuitem
             onClick={() => {
-              // openFile({ id: FILE_README_MD.id });
+              openFile({ id: FILE_README_MD.id });
             }}
             title={FILE_README_MD.getTitle(theme)}
           />
@@ -62,7 +64,7 @@ export const MainMenu: FunctionComponent = () => {
                 Icon={application.Icon}
                 key={application.id}
                 onClick={() => {
-                  // openApplication({ id: application.id });
+                  openApplication({ id: application.id });
                 }}
                 title={application.getTitle(theme)}
               />

@@ -9,7 +9,9 @@ import { useRef } from "react";
 import * as styles from "./SystemBar.css";
 
 export const SystemBar: FunctionComponent = () => {
+  const blurWindow = useStore((store) => store.blurWindow);
   const currentThemeId = useStore((store) => store.currentThemeId);
+  const focusSystemBar = useStore((store) => store.focusSystemBar);
   const stackingOrder = useStore((store) => store.stackingOrder);
   const windows = useStore((store) => store.windows);
   const rootRef = useRef<HTMLElement>(null);
@@ -35,7 +37,7 @@ export const SystemBar: FunctionComponent = () => {
                   .getElementById(focusedWindowId)
                   ?.contains(e.relatedTarget)
               ) {
-                // blurWindow({ id: focusedWindowId });
+                blurWindow({ id: focusedWindowId });
               }
             }
       }
@@ -46,7 +48,7 @@ export const SystemBar: FunctionComponent = () => {
                 !isFocused &&
                 (!relatedTarget || !rootRef.current?.contains(relatedTarget))
               ) {
-                // focusSystemBar();
+                focusSystemBar();
               }
             }
           : undefined

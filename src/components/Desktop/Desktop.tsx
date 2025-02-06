@@ -27,6 +27,8 @@ export const Desktop: FunctionComponent = () => {
   const currentThemeId = useStore((store) => store.currentThemeId);
   const desktop = useStore((store) => store.desktop);
   const files = useStore((store) => store.files);
+  const openApplication = useStore((store) => store.openApplication);
+  const openFile = useStore((store) => store.openFile);
   const themes = useStore((store) => store.themes);
   const types = useStore((store) => store.types);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -87,13 +89,11 @@ export const Desktop: FunctionComponent = () => {
           <Icon
             Component={"windowIds" in obj ? obj.Icon : types[obj.type]?.Icon}
             key={obj.id}
-            onClick={() => {
-              /*
+            onClick={() =>
               "windowIds" in obj
                 ? openApplication({ id: obj.id })
-                : openFile({ id: obj.id });
-              */
-            }}
+                : openFile({ id: obj.id })
+            }
             title={obj.getTitle(theme)}
           />
         ) : null
