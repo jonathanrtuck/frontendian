@@ -41,6 +41,12 @@ export default createGlobalTheme(`.${THEME_MAC_OS_CLASSIC.id}`, vars, {
     highlight: colorHighlight,
     lowlight: colorLowlight,
   },
+  components: {
+    systemBar: {
+      height: "1.5rem",
+      width: "auto",
+    },
+  },
   cursor: {
     default: "default",
     pointer: "pointer",

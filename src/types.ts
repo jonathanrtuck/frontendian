@@ -22,9 +22,9 @@ export type ApplicationConfiguration = Readonly<{
 
 export type File = Readonly<
   {
+    getTitle(theme: Theme): string;
+    getUrl(theme: Theme): URL;
     id: ID;
-    title: string;
-    url: URL;
   } & (
     | {
         type: "application/pdf";

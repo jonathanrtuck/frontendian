@@ -27,6 +27,12 @@ export const vars = createGlobalThemeContract({
     highlight: "color--highlight",
     lowlight: "color--lowlight",
   },
+  components: {
+    systemBar: {
+      height: "components-system-bar-height",
+      width: "components-system-bar-width",
+    },
+  },
   cursor: {
     default: "cursor--default",
     pointer: "cursor--pointer",

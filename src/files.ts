@@ -1,16 +1,16 @@
 import type { File } from "@/types";
 
 export const FILE_README_MD: File = {
+  getTitle: () => "About this site",
+  getUrl: (theme) => `/files/README.${theme.id}.md`,
   id: "file-README.md",
-  title: "About this site",
   type: "text/markdown",
-  url: "/files/README.md", // @todo
 };
 
 export const FILE_RESUME_PDF: File = {
+  getTitle: () => "Résumé",
+  getUrl: () => "/files/resume.pdf",
   id: "file-resume.pdf",
-  title: "Résumé",
   type: "application/pdf",
-  url: "/files/resume.pdf",
   width: 765,
 };
