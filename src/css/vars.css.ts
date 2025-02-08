@@ -51,7 +51,7 @@ export const vars = createGlobalThemeContract({
     },
   },
   scrollbar: {
-    size: "scrollbar-size",
+    width: "scrollbar-width",
   },
   text: {
     color: {

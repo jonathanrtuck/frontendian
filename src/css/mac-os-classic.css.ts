@@ -29,11 +29,11 @@ export default createGlobalTheme(`.${THEME_MAC_OS_CLASSIC.id}`, vars, {
     shadow: {
       high: [
         `inset ${borderWidth} ${borderWidth} ${colorHighlight}`,
-        `inset -${borderWidth} -${borderWidth} ${colorLowlight}`,
+        `inset calc(${borderWidth} * -1) calc(${borderWidth} * -1) ${colorLowlight}`,
       ].join(),
       low: [
         `inset ${borderWidth} ${borderWidth} ${colorLowlight}`,
-        `inset -${borderWidth} -${borderWidth} ${colorHighlight}`,
+        `inset calc(${borderWidth} * -1) calc(${borderWidth} * -1) ${colorHighlight}`,
       ].join(),
     },
   },
@@ -79,7 +79,7 @@ export default createGlobalTheme(`.${THEME_MAC_OS_CLASSIC.id}`, vars, {
     },
   },
   scrollbar: {
-    size: "1rem",
+    width: "1rem",
   },
   text: {
     color: {

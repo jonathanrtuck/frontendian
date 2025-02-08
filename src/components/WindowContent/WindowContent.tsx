@@ -1,6 +1,7 @@
 "use client";
 
 import { WindowContext } from "@/contexts";
+import { vars } from "@/css";
 import { useComputedCustomProperty } from "@/hooks";
 import { Resize } from "@/icons";
 import { useStore } from "@/store";
@@ -26,9 +27,9 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
     useState<boolean>(false);
   const [hasVerticalOverflow, setHasVerticalOverflow] =
     useState<boolean>(false);
-  const scrollbarSize = useComputedCustomProperty(
+  const scrollbarWidth = useComputedCustomProperty(
     rootRef.current,
-    "--scrollbar-size"
+    vars.scrollbar.width
   );
   const minWidth = menubarRef.current
     ? Array.from(menubarRef.current.children)
@@ -70,8 +71,8 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
       style={
         scrollable
           ? {
-              height: height + scrollbarSize,
-              width: width + scrollbarSize,
+              height: height + scrollbarWidth,
+              width: width + scrollbarWidth,
             }
           : {
               height,

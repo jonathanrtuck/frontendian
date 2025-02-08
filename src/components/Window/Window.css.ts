@@ -18,7 +18,7 @@ export const root = styleVariants<StylesByTheme>({
 export const frame = styleVariants<StylesByTheme>({
   "theme-beos": {
     "::before": {
-      backgroundColor: vars.background.color.inactive, // @todo [aria-current="true"]
+      backgroundColor: vars.background.color.inactive,
       borderColor: `${vars.border.color.light} ${vars.border.color.dark} ${vars.border.color.dark} ${vars.border.color.light}`,
       borderWidth: vars.border.width,
       boxShadow: vars.box.shadow.high,
@@ -33,6 +33,11 @@ export const frame = styleVariants<StylesByTheme>({
     margin: vars.components.window.padding,
     padding: vars.border.width,
     position: "relative",
+    selectors: {
+      '[aria-current="true"] &::before': {
+        backgroundColor: vars.background.color.default,
+      },
+    },
   },
   "theme-mac-os-classic": {},
 });
