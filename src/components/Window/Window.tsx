@@ -1,5 +1,6 @@
 "use client";
 
+import "./Window.theme-beos.css";
 import {
   Button,
   Dialog,
@@ -15,8 +16,14 @@ import { useFocus } from "@/hooks";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import { File, Pixels, Window as WindowType } from "@/types";
-import type { ContextType, FunctionComponent, ReactNode } from "react";
+import type {
+  ContextType,
+  FunctionComponent,
+  ReactNode,
+  RefObject,
+} from "react";
 import { useCallback, useMemo, useRef, useState } from "react";
+import Draggable from "react-draggable";
 
 export const Window: FunctionComponent<WindowType> = (props) => {
   const { collapsed, fileId, focused, hidden, id, left, top } = props;
@@ -27,6 +34,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
   const currentThemeId = useStore((store) => store.currentThemeId);
   const files = useStore((store) => store.files);
   const focusWindow = useStore((store) => store.focusWindow);
+  const moveWindow = useStore((store) => store.moveWindow);
   const openFile = useStore((store) => store.openFile);
   const openWindow = useStore((store) => store.openWindow);
   const resizeWindow = useStore((store) => store.resizeWindow);
@@ -107,56 +115,75 @@ export const Window: FunctionComponent<WindowType> = (props) => {
           </footer>
         </Dialog>
       }>
-      <section
-        aria-current={focused}
-        aria-labelledby={`${id}-title`}
-        hidden={hidden}
-        id={id}
-        onBlur={(e) => {
-          if (
-            document.hasFocus() &&
-            !e.currentTarget?.contains(e.relatedTarget) &&
-            (isMenubarWindowed ||
-              !document.getElementById(systemBarId)?.contains(e.relatedTarget))
-          ) {
-            blurWindow({ id });
+      <Draggable
+        cancel="[draggable='false']"
+        nodeRef={rootRef as RefObject<HTMLElement>}
+        onStart={(e) => {
+          if (e.shiftKey) {
+            return false;
           }
         }}
-        onFocus={(e) => {
-          if (
-            !focused &&
-            (!e.relatedTarget || !e.currentTarget?.contains(e.relatedTarget))
-          ) {
-            focusWindow({ id });
+        onStop={(_, { x, y }) => {
+          if (x !== left || y !== top) {
+            moveWindow({ id, left: x, top: y });
           }
         }}
-        ref={rootRef}
-        role="dialog"
-        style={{
-          zIndex: stackingOrder.indexOf(id),
-        }}
-        tabIndex={-1}>
-        <WindowContext.Provider value={contextValue}>
-          <WindowHeader />
-          <div hidden={Boolean(isCollapsible && collapsed)} role="article">
-            <application.Component
-              Content={WindowContent}
-              Menu={Menu}
-              Menubar={WindowMenu}
-              Menuitem={Menuitem}
-              file={file}
-              onAbout={onAbout}
-              onClose={onClose}
-              onNew={onNew}
-              onOpen={onOpen}
-              onQuit={onQuit}
-              onResize={onResize}
-              openableFiles={openableFiles}
-              theme={theme}
-            />
-          </div>
-        </WindowContext.Provider>
-      </section>
+        position={{
+          x: left,
+          y: top,
+        }}>
+        <section
+          aria-current={focused}
+          aria-labelledby={`${id}-title`}
+          className="component-window"
+          hidden={hidden}
+          id={id}
+          onBlur={(e) => {
+            if (
+              document.hasFocus() &&
+              !e.currentTarget?.contains(e.relatedTarget) &&
+              (isMenubarWindowed ||
+                !document
+                  .getElementById(systemBarId)
+                  ?.contains(e.relatedTarget))
+            ) {
+              blurWindow({ id });
+            }
+          }}
+          onFocus={(e) => {
+            if (
+              !focused &&
+              (!e.relatedTarget || !e.currentTarget?.contains(e.relatedTarget))
+            ) {
+              focusWindow({ id });
+            }
+          }}
+          ref={rootRef}
+          role="dialog"
+          style={{ zIndex: stackingOrder.indexOf(id) }}
+          tabIndex={-1}>
+          <WindowContext.Provider value={contextValue}>
+            <WindowHeader />
+            <div hidden={Boolean(isCollapsible && collapsed)} role="article">
+              <application.Component
+                Content={WindowContent}
+                Menu={Menu}
+                Menubar={WindowMenu}
+                Menuitem={Menuitem}
+                file={file}
+                onAbout={onAbout}
+                onClose={onClose}
+                onNew={onNew}
+                onOpen={onOpen}
+                onQuit={onQuit}
+                onResize={onResize}
+                openableFiles={openableFiles}
+                theme={theme}
+              />
+            </div>
+          </WindowContext.Provider>
+        </section>
+      </Draggable>
       <Dialog modal open={Boolean(aboutDialogContent)} type="info">
         {aboutDialogContent}
         <footer>

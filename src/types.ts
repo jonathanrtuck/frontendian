@@ -4,6 +4,7 @@ import type {
   ComponentType,
   PropsWithChildren,
   ReactNode,
+  RefAttributes,
   SVGAttributes,
 } from "react";
 import { EmptyObject } from "type-fest";
@@ -75,7 +76,7 @@ export type File = Readonly<
 >;
 
 export type IconComponent = ComponentType<
-  SVGAttributes<SVGSVGElement> & {
+  RefAttributes<SVGAttributes<SVGSVGElement>> & {
     theme?: Theme;
   }
 >;

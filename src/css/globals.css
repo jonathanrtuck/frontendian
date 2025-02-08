@@ -23,14 +23,12 @@ body {
 }
 
 *::selection {
-  background-color: var(--color--selection);
+  background-color: var(--background-color--selection);
   color: var(--text-color--default);
 }
 
 :any-link {
-  color: inherit;
   cursor: var(--cursor--pointer);
-  text-decoration: none;
 }
 
 button {
