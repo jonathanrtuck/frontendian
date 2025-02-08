@@ -2,7 +2,6 @@
 
 import "./WindowContent.theme-beos.css";
 import { WindowContext } from "@/contexts";
-import { useComputedCustomProperty } from "@/hooks";
 import { Resize } from "@/icons";
 import { useStore } from "@/store";
 import clsx from "clsx";
@@ -28,10 +27,7 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
     useState<boolean>(false);
   const [hasVerticalOverflow, setHasVerticalOverflow] =
     useState<boolean>(false);
-  const scrollbarWidth = useComputedCustomProperty(
-    rootRef.current,
-    "--scrollbar-width"
-  );
+  const [scrollbarWidth, setScrollbarWidth] = useState<number>(0);
   const minWidth = menubarRef.current
     ? Array.from(menubarRef.current.children)
         .map((element) => (element as HTMLElement).offsetWidth)
@@ -56,10 +52,31 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
 
       resizeObserver.observe(contentElement);
       setOverflow();
+      setScrollbarWidth((prevState) => {
+        const value =
+          getComputedStyle(rootElement).getPropertyValue("--scrollbar-width");
+
+        if (!value) {
+          return prevState;
+        }
+
+        const fontSize = parseInt(
+          getComputedStyle(document.documentElement).fontSize,
+          10
+        );
+
+        // handle other css units as needed (e.g. `%`, `em`, `vw`, etc…)
+        if (value.endsWith("rem")) {
+          return parseFloat(value) * fontSize;
+        }
+
+        // px values
+        return parseFloat(value);
+      });
 
       return () => resizeObserver.unobserve(contentElement);
     }
-  }, [children, height, width]);
+  }, [children, currentThemeId, height, width]);
 
   return (
     <Resizable

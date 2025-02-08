@@ -157,6 +157,10 @@
       }
     }
 
+    > div {
+      height: 100%;
+    }
+
     > svg {
       background-color: var(--background-color--inactive);
       border-color: var(--color--highlight);
