@@ -1,0 +1,37 @@
+:root.theme-mac-os-classic {
+  --background-color-dark: transparent;
+  --background-color--default: rgb(204, 204, 204);
+  --background-color--inactive: rgb(220, 220, 220);
+  --background-color--selection: rgb(204, 204, 253);
+  --border-color-dark: rgb(38, 38, 38);
+  --border-color-light: transparent;
+  --border-radius: 0.75rem;
+  --border-width: 0.0625rem;
+  --box-shadow--high: inset var(--border-width) var(--border-width)
+      var(--color--highlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--lowlight);
+  --box-shadow--low: inset var(--border-width) var(--border-width)
+      var(--color--lowlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--highlight);
+  --color--highlight: rgba(255, 255, 255, 0.6);
+  --color--lowlight: rgba(0, 0, 0, 0.4);
+  --component-desktop-background: url(/images/mac-os-classic.png);
+  --component-system-bar-height: 1.5rem;
+  --component-system-bar-width: auto;
+  --component-window-header-height: 1rem;
+  --component-window-padding: 0.25rem;
+  --cursor--default: default;
+  --cursor--pointer: pointer;
+  --cursor--text: text;
+  --font-family--default: var(--font-family--charcoal);
+  --font-family--monospace: ui-monospace, Menlo, Monaco, "Cascadia Mono",
+    "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
+    "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  --scrollbar-width: 1rem;
+  --text-color--dark: rgb(0, 0, 0);
+  --text-color--default: var(--text-color--dark);
+  --text-color--disabled: rgb(160, 160, 160);
+  --text-color--light: rgb(255, 255, 255);
+}

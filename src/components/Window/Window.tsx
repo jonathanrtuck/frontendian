@@ -17,7 +17,6 @@ import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import { File, Pixels, Window as WindowType } from "@/types";
 import type { ContextType, FunctionComponent, ReactNode } from "react";
 import { useCallback, useMemo, useRef, useState } from "react";
-import * as styles from "./Window.css";
 
 export const Window: FunctionComponent<WindowType> = (props) => {
   const { collapsed, fileId, focused, hidden, id, left, top } = props;
@@ -111,7 +110,6 @@ export const Window: FunctionComponent<WindowType> = (props) => {
       <section
         aria-current={focused}
         aria-labelledby={`${id}-title`}
-        className={styles.root[currentThemeId]}
         hidden={hidden}
         id={id}
         onBlur={(e) => {
@@ -140,10 +138,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
         tabIndex={-1}>
         <WindowContext.Provider value={contextValue}>
           <WindowHeader />
-          <div
-            className={styles.frame[currentThemeId]}
-            hidden={Boolean(isCollapsible && collapsed)}
-            role="article">
+          <div hidden={Boolean(isCollapsible && collapsed)} role="article">
             <application.Component
               Content={WindowContent}
               Menu={Menu}

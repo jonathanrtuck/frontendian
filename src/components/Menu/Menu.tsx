@@ -1,7 +1,6 @@
 "use client";
 
 import { MenuContext, MenuitemContext } from "@/contexts";
-import { useStore } from "@/store";
 import clsx from "clsx";
 import type {
   ContextType,
@@ -21,7 +20,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import * as styles from "./Menu.css";
 
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu: FunctionComponent<
@@ -48,7 +46,6 @@ export const Menu: FunctionComponent<
   vertical,
   ...props
 }) => {
-  const currentThemeId = useStore((store) => store.currentThemeId);
   const {
     inactivate: parentInactivate,
     isActive: isParentActive,
@@ -102,11 +99,11 @@ export const Menu: FunctionComponent<
       aria-orientation={
         bar ? (horizontal ? "horizontal" : "vertical") : undefined
       }
-      className={clsx(className, styles.root[currentThemeId], {
+      className={clsx(className, {
         "visually-hidden": !bar && !isExpanded,
-        [styles.bar[currentThemeId]]: bar,
-        [styles.horizontal[currentThemeId]]: horizontal,
-        [styles.vertical[currentThemeId]]: !horizontal,
+        // [styles.bar[currentThemeId]]: bar,
+        // [styles.horizontal[currentThemeId]]: horizontal,
+        // [styles.vertical[currentThemeId]]: !horizontal,
       })}
       onBlur={(e: FocusEvent<HTMLMenuElement>) => {
         onBlur?.(e);

@@ -5,7 +5,6 @@ import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { FunctionComponent } from "react";
 import { useRef } from "react";
-import * as styles from "./SystemBar.css";
 
 export const SystemBar: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
@@ -23,7 +22,6 @@ export const SystemBar: FunctionComponent = () => {
   return (
     <header
       aria-label={currentThemeId === THEME_BEOS.id ? "Deskbar" : "Menubar"}
-      className={styles.root[currentThemeId]}
       id={systemBarId}
       onBlur={
         isMenubarWindowed

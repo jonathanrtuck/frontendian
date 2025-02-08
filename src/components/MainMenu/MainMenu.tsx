@@ -6,7 +6,6 @@ import { FILE_README_MD } from "@/files";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { FunctionComponent } from "react";
-import * as styles from "./MainMenu.css";
 
 export const MainMenu: FunctionComponent = () => {
   const applications = useStore((store) => store.applications);
@@ -20,16 +19,14 @@ export const MainMenu: FunctionComponent = () => {
   return (
     <Menu
       bar
-      className={styles.root[currentThemeId]}
       draggable={false}
       horizontal={currentThemeId === THEME_MAC_OS_CLASSIC.id}
       vertical={currentThemeId === THEME_BEOS.id}>
       <Menuitem
         Icon={theme.Icon}
-        className={styles.menuitem[currentThemeId]}
         classes={{
-          button: styles.button[currentThemeId],
-          icon: styles.icon[currentThemeId],
+          button: "",
+          icon: "",
           title: "visually-hidden",
         }}
         title={`${theme.title} Menu`}>

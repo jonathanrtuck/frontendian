@@ -6,7 +6,6 @@ import { WindowHidden, WindowVisible } from "@/icons";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { FunctionComponent } from "react";
-import * as styles from "./Applications.css";
 
 export const Applications: FunctionComponent = () => {
   const applications = useStore((store) => store.applications);
@@ -53,14 +52,18 @@ export const Applications: FunctionComponent = () => {
                         disabled={applicationWindows.every(
                           ({ hidden }) => hidden
                         )}
-                        onClick={() => hideWindow({ ids: windowIds })}
+                        onClick={() =>
+                          windowIds.map((id) => ({ id })).forEach(hideWindow)
+                        }
                         title="Hide all"
                       />
                       <Menuitem
                         disabled={applicationWindows.every(
                           ({ hidden }) => !hidden
                         )}
-                        onClick={() => showWindow({ ids: windowIds })}
+                        onClick={() =>
+                          windowIds.map((id) => ({ id })).forEach(showWindow)
+                        }
                         title="Show all"
                       />
                       <Menuitem
@@ -86,12 +89,11 @@ export const Applications: FunctionComponent = () => {
       )!;
 
       return (
-        <Menu bar className={styles.root[currentThemeId]} horizontal>
+        <Menu bar horizontal>
           <Menuitem
             Icon={activeApplication.Icon}
-            className={styles.menuitem[currentThemeId]}
             title={activeApplication.getTitle(theme)}>
-            <Menu className={styles.menu[currentThemeId]}>
+            <Menu>
               <Menuitem
                 disabled={false} // @todo
                 onClick={() => {}}

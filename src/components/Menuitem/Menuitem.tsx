@@ -21,7 +21,6 @@ import {
   useState,
 } from "react";
 import type { RequireAllOrNone } from "type-fest";
-import * as styles from "./Menuitem.css";
 
 type HTMLElementAttributes = DetailedHTMLProps<
   HTMLAttributes<HTMLLIElement>,
@@ -137,9 +136,9 @@ export const Menuitem: FunctionComponent<
         {...removeProps(props, ["separator"])}
         className={clsx(
           className,
-          classes?.separator,
-          styles.root[currentThemeId],
-          styles.separator[currentThemeId]
+          classes?.separator
+          // styles.root[currentThemeId],
+          // styles.separator[currentThemeId]
         )}
         onClick={() => {
           topButtonRef.current?.focus();
@@ -169,7 +168,7 @@ export const Menuitem: FunctionComponent<
   const getChildMenuitemButtons = (): HTMLElement[] =>
     Array.from(
       rootRef.current?.querySelectorAll(
-        `:scope > [role="menu"] > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
+        "" // `:scope > [role="menu"] > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
       ) ?? []
     );
   const onActivate = (): void => {
@@ -201,10 +200,10 @@ export const Menuitem: FunctionComponent<
       ])}
       className={clsx(
         className,
-        styles.root[currentThemeId],
-        styles[orientation][currentThemeId],
+        // styles.root[currentThemeId],
+        // styles[orientation][currentThemeId],
         {
-          [styles.top[currentThemeId]]: isTop,
+          // [styles.top[currentThemeId]]: isTop,
         }
       )}
       onBlur={(e) => {
@@ -230,24 +229,24 @@ export const Menuitem: FunctionComponent<
         aria-expanded={haspopup ? isExpanded : undefined}
         aria-haspopup={haspopup ? "menu" : undefined}
         aria-labelledby={`${id}-title`}
-        className={clsx(classes?.button, styles.button[currentThemeId], {
-          [styles.hasPopup[currentThemeId]]: hasPopup,
-          [styles.pointer[currentThemeId]]: isPointer,
+        className={clsx(classes?.button, {
+          // [styles.hasPopup[currentThemeId]]: hasPopup,
+          // [styles.pointer[currentThemeId]]: isPointer,
         })}
         onClick={onActivate}
         onKeyDown={(e) => {
           const parentMenuitem =
             rootRef.current?.parentElement?.closest<HTMLElement>(
-              `.${styles.root[currentThemeId]}`
+              "" // `.${styles.root[currentThemeId]}`
             );
           const parentMenuitemButton =
             parentMenuitem?.querySelector<HTMLElement>(
-              `.${styles.button[currentThemeId]}`
+              "" // `.${styles.button[currentThemeId]}`
             );
           const childMenuitemButtons = getChildMenuitemButtons();
           const siblingMenuitemButtons = Array.from<HTMLElement>(
             rootRef.current?.parentElement?.querySelectorAll(
-              `:scope > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
+              "" // `:scope > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
             ) ?? []
           );
           const index = siblingMenuitemButtons.indexOf(e.currentTarget);
@@ -276,12 +275,12 @@ export const Menuitem: FunctionComponent<
                 if (
                   parentMenuitemButton &&
                   parentMenuitem?.matches(
-                    `.${styles.horizontal[currentThemeId]}`
+                    "" // `.${styles.horizontal[currentThemeId]}`
                   )
                 ) {
                   const parentMenuitemButtons = Array.from<HTMLElement>(
                     parentMenuitem?.parentElement?.querySelectorAll(
-                      `:scope > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
+                      "" // `:scope > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
                     ) ?? []
                   );
                   const parentIndex =
@@ -313,18 +312,18 @@ export const Menuitem: FunctionComponent<
                 } else {
                   const topMenuitemButton = topButtonRef.current;
                   const topMenuitem = topMenuitemButton?.closest(
-                    `.${styles.root[currentThemeId]}`
+                    "" // `.${styles.root[currentThemeId]}`
                   );
 
                   if (
                     topMenuitemButton &&
                     topMenuitem?.matches(
-                      `.${styles.horizontal[currentThemeId]}`
+                      "" // `.${styles.horizontal[currentThemeId]}`
                     )
                   ) {
                     const topMenuitemButtons = Array.from<HTMLElement>(
                       topMenuitem?.parentElement?.querySelectorAll(
-                        `:scope > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
+                        "" // `:scope > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
                       ) ?? []
                     );
                     const topIndex =
@@ -390,15 +389,9 @@ export const Menuitem: FunctionComponent<
         tabIndex={tabIndex}
         type="button">
         {!!Icon && (
-          <Icon
-            aria-hidden
-            className={clsx(classes?.icon, styles.icon[currentThemeId])}
-            theme={theme}
-          />
+          <Icon aria-hidden className={clsx(classes?.icon)} theme={theme} />
         )}
-        <span
-          className={clsx(classes?.title, styles.title[currentThemeId])}
-          id={`${id}-title`}>
+        <span className={clsx(classes?.title)} id={`${id}-title`}>
           {title}
         </span>
       </button>

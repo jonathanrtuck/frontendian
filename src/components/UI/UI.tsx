@@ -12,7 +12,6 @@ import { useStore } from "@/store";
 import * as themes from "@/themes";
 import type { FunctionComponent } from "react";
 import { useEffect, useLayoutEffect } from "react";
-import "./UI.css";
 
 export const UI: FunctionComponent = () => {
   const currentThemeId = useStore((store) => store.currentThemeId);

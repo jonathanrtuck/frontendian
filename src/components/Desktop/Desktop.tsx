@@ -1,11 +1,12 @@
 "use client";
 
+import "./Desktop.theme-beos.css";
+import "./Desktop.theme-mac-os-classic.css";
 import { Icon } from "@/components";
 import { useStore } from "@/store";
 import type { Pixels } from "@/types";
 import type { FunctionComponent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import * as styles from "./Desktop.css";
 
 type Coordinates = {
   x: Pixels;
@@ -71,7 +72,7 @@ export const Desktop: FunctionComponent = () => {
   return (
     <div
       aria-label="Desktop"
-      className={styles.root[currentThemeId]}
+      className="component-desktop"
       onMouseDown={({ button, buttons, clientX, clientY, target }) => {
         if ((button === 0 || buttons === 1) && target === rootRef.current) {
           document.addEventListener("mousemove", onMouseMove);
@@ -100,9 +101,8 @@ export const Desktop: FunctionComponent = () => {
           />
         ) : null
       )}
-      <span
+      <mark
         aria-hidden
-        className={styles.selection[currentThemeId]}
         role="presentation"
         style={
           selection.from && selection.to

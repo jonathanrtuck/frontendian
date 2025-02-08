@@ -36,19 +36,16 @@ export const useClock = (): Date => {
 // get the current value of a css variable in px
 export const useComputedCustomProperty = (
   element: HTMLElement | null,
-  property?: string
+  property: string
 ): Pixels => {
   const currentThemeId = useStore((state) => state.currentThemeId);
 
   return useMemo<Pixels>(() => {
-    if (!element || !property) {
+    if (!element) {
       return 0;
     }
 
-    // extract property name from 'var(…)' string (vanilla-extract's non-exported `CSSVarFunction` type), if needed
-    const propertyName =
-      property.match(/^var\((--.+?)\s?,?\s?\)$/)?.at(1) ?? property;
-    const value = getComputedStyle(element).getPropertyValue(propertyName);
+    const value = getComputedStyle(element).getPropertyValue(property);
 
     if (!value) {
       return 0;

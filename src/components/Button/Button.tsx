@@ -1,6 +1,5 @@
 "use client";
 
-import { useStore } from "@/store";
 import clsx from "clsx";
 import type {
   ButtonHTMLAttributes,
@@ -8,7 +7,6 @@ import type {
   FunctionComponent,
   PropsWithChildren,
 } from "react";
-import * as styles from "./Button.css";
 
 export const Button: FunctionComponent<
   PropsWithChildren<
@@ -17,18 +15,14 @@ export const Button: FunctionComponent<
       HTMLButtonElement
     >
   >
-> = ({ children, className, type = "button", ...props }) => {
-  const currentThemeId = useStore((store) => store.currentThemeId);
-
-  return (
-    <button
-      {...props}
-      className={clsx(className, styles.root[currentThemeId])}
-      type={type} // eslint-disable-line react/button-has-type
-    >
-      <span className={styles.content[currentThemeId]}>{children}</span>
-    </button>
-  );
-};
+> = ({ children, className, type = "button", ...props }) => (
+  <button
+    {...props}
+    className={clsx(className)}
+    type={type} // eslint-disable-line react/button-has-type
+  >
+    <span>{children}</span>
+  </button>
+);
 
 Button.displayName = "Button";

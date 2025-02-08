@@ -13,7 +13,6 @@ import {
   useRef,
   useState,
 } from "react";
-import * as styles from "./WindowHeader.css";
 
 export const WindowHeader: FunctionComponent = () => {
   const applications = useStore((store) => store.applications);
@@ -61,14 +60,13 @@ export const WindowHeader: FunctionComponent = () => {
 
   return (
     <header
-      className={styles.root[currentThemeId]}
       onDoubleClick={
         isDoubleClickable
           ? (e) => {
               const targetElement =
                 e.target instanceof HTMLElement ? e.target : null;
               const isButton = targetElement?.classList.contains(
-                styles.button[currentThemeId]
+                "" // styles.button[currentThemeId]
               );
 
               if (!isButton) {
@@ -84,7 +82,7 @@ export const WindowHeader: FunctionComponent = () => {
               const targetElement =
                 e.target instanceof HTMLElement ? e.target : null;
               const isButton = targetElement?.classList.contains(
-                styles.button[currentThemeId]
+                "" // styles.button[currentThemeId]
               );
 
               if (!isButton) {
@@ -101,20 +99,13 @@ export const WindowHeader: FunctionComponent = () => {
       }
       ref={rootRef}>
       {hasIcon && application.Icon !== undefined ? (
-        <application.Icon aria-hidden className={styles.icon[currentThemeId]} />
+        <application.Icon aria-hidden />
       ) : null}
-      <h1
-        className={styles.title[currentThemeId]}
-        id={`${id}-title`}
-        title={title}>
+      <h1 id={`${id}-title`} title={title}>
         {title}
       </h1>
       <button
         aria-label="Close"
-        className={clsx(
-          styles.button[currentThemeId],
-          styles.close[currentThemeId]
-        )}
         draggable={false}
         onClick={() => closeWindow({ id })}
         title="Close"
@@ -123,10 +114,6 @@ export const WindowHeader: FunctionComponent = () => {
       {Boolean(resizable) && (
         <button
           aria-label="Zoom"
-          className={clsx(
-            styles.button[currentThemeId],
-            styles.zoom[currentThemeId]
-          )}
           draggable={false}
           onClick={() => zoomWindow({ id })}
           title="Zoom"
@@ -136,10 +123,6 @@ export const WindowHeader: FunctionComponent = () => {
       {isCollapsible ? (
         <button
           aria-label="Collapse"
-          className={clsx(
-            styles.button[currentThemeId],
-            styles.collapse[currentThemeId]
-          )}
           draggable={false}
           onClick={() =>
             collapsed ? expandWindow({ id }) : collapseWindow({ id })

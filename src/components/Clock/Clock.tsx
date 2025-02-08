@@ -1,39 +1,24 @@
 "use client";
 
 import { useClock } from "@/hooks";
-import { useStore } from "@/store";
 import clsx from "clsx";
 import type {
   DetailedHTMLProps,
   FunctionComponent,
   HTMLAttributes,
 } from "react";
-import * as styles from "./Clock.css";
 
 export const Clock: FunctionComponent<
   Omit<
     DetailedHTMLProps<HTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
     "type"
   > &
-    Intl.DateTimeFormatOptions
-> = ({
-  className,
-  dateStyle,
-  dayPeriod,
-  formatMatcher,
-  fractionalSecondDigits,
-  timeStyle,
-  ...props
-}) => {
-  const currentThemeId = useStore((store) => store.currentThemeId);
+    Pick<Intl.DateTimeFormatOptions, "dateStyle" | "timeStyle">
+> = ({ className, dateStyle, timeStyle, ...props }) => {
   const date = useClock();
 
   return (
-    <button
-      {...props}
-      className={clsx(className, styles.root[currentThemeId])}
-      tabIndex={0}
-      type="button">
+    <button {...props} className={clsx(className)} tabIndex={0} type="button">
       <time
         dateTime={date.toISOString().replace(/\.\d+/, "")} // remove milliseconds to prevent (more) frequent dom updates
         suppressHydrationWarning

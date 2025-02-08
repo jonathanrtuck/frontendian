@@ -1,5 +1,4 @@
 import { Menu, Menuitem } from "@/components";
-import type { ComplexStyleRule } from "@vanilla-extract/css";
 import type {
   ComponentProps,
   ComponentType,
@@ -136,9 +135,6 @@ export type State = {
   windows: Window[];
 };
 
-export type StylesByTheme = {
-  [id in Theme["id"]]: ComplexStyleRule;
-};
 export type Theme = Readonly<{
   Icon: IconComponent;
   id: "theme-beos" | "theme-mac-os-classic";

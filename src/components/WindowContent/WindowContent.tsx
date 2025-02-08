@@ -1,14 +1,12 @@
 "use client";
 
 import { WindowContext } from "@/contexts";
-import { vars } from "@/css";
 import { useComputedCustomProperty } from "@/hooks";
 import { Resize } from "@/icons";
 import { useStore } from "@/store";
 import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren } from "react";
 import { useContext, useLayoutEffect, useRef, useState } from "react";
-import * as styles from "./WindowContent.css";
 
 const MIN_HEIGHT = 16 * 7; // 7rem
 const MIN_WIDTH = 16 * 10; // 10rem
@@ -16,9 +14,7 @@ const MIN_WIDTH = 16 * 10; // 10rem
 export const WindowContent: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
-  const currentThemeId = useStore((store) => store.currentThemeId);
   const resizeWindow = useStore((store) => store.resizeWindow);
-  const themes = useStore((store) => store.themes);
   const { collapsed, height, id, menubarRef, resizable, scrollable, width } =
     useContext(WindowContext);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -29,7 +25,7 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
     useState<boolean>(false);
   const scrollbarWidth = useComputedCustomProperty(
     rootRef.current,
-    vars.scrollbar.width
+    "--scrollbar-width"
   );
   const minWidth = menubarRef.current
     ? Array.from(menubarRef.current.children)
@@ -61,10 +57,10 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
 
   return (
     <div
-      className={clsx(styles.root[currentThemeId], {
-        [styles.overflowHorizontal[currentThemeId]]: hasHorizontalOverflow,
-        [styles.overflowVertical[currentThemeId]]: hasVerticalOverflow,
-        [styles.scrollable[currentThemeId]]: scrollable,
+      className={clsx({
+        // [styles.overflowHorizontal[currentThemeId]]: hasHorizontalOverflow,
+        // [styles.overflowVertical[currentThemeId]]: hasVerticalOverflow,
+        // [styles.scrollable[currentThemeId]]: scrollable,
       })}
       draggable={false}
       ref={rootRef}

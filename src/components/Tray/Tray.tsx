@@ -6,7 +6,6 @@ import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { ComponentProps, FunctionComponent } from "react";
 import { useEffect, useState } from "react";
-import * as styles from "./Tray.css";
 
 type ClockProps = ComponentProps<typeof Clock>;
 
@@ -36,10 +35,10 @@ export const Tray: FunctionComponent = () => {
   }, [clockProps, timeProps]);
 
   return (
-    <aside className={styles.root[currentThemeId]}>
+    <aside>
       {currentThemeId === THEME_BEOS.id && (
-        <ul className={styles.icons[currentThemeId]}>
-          <li className={styles.icon[currentThemeId]}>
+        <ul>
+          <li>
             <Network />
           </li>
         </ul>
@@ -54,12 +53,7 @@ export const Tray: FunctionComponent = () => {
       />
       {currentThemeId === THEME_MAC_OS_CLASSIC.id && (
         <>
-          <button
-            className={styles.button[currentThemeId]}
-            onClick={() => {}}
-            role="presentation"
-            type="button"
-          />
+          <button onClick={() => {}} role="presentation" type="button" />
           <Applications />
         </>
       )}

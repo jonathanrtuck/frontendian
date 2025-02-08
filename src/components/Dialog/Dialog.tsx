@@ -11,7 +11,6 @@ import type {
   PropsWithChildren,
 } from "react";
 import { useLayoutEffect, useRef } from "react";
-import * as styles from "./Dialog.css";
 
 type DialogType = "error" | "info";
 
@@ -50,12 +49,9 @@ export const Dialog: FunctionComponent<
   }, [modal, open]);
 
   return (
-    <dialog
-      {...props}
-      className={clsx(className, styles.root[currentThemeId])}
-      ref={rootRef}>
-      <div className={styles.content[currentThemeId]}>
-        <Icon className={styles.icon[currentThemeId]} theme={theme} />
+    <dialog {...props} className={clsx(className)} ref={rootRef}>
+      <div>
+        <Icon theme={theme} />
         {children}
       </div>
     </dialog>
