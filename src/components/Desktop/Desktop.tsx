@@ -1,7 +1,6 @@
 "use client";
 
 import "./Desktop.theme-beos.css";
-import "./Desktop.theme-mac-os-classic.css";
 import { Icon } from "@/components";
 import { useStore } from "@/store";
 import type { Pixels } from "@/types";

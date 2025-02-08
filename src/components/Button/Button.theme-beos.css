@@ -1,0 +1,35 @@
+:root.theme-beos {
+  .component-button {
+    background-color: var(--background-color--inactive);
+    background-clip: padding-box;
+    border-color: var(--border-color--dark);
+    border-radius: 0.125rem;
+    border-style: double;
+    border-width: calc(var(--border-width) * 2);
+    box-shadow: var(--box-shadow--high);
+    font-size: 0.75rem;
+    min-width: 4rem;
+    padding: calc(0.125rem + var(--border-width))
+      calc(1rem + var(--border-width));
+    position: relative;
+
+    &:focus {
+      outline: 0;
+    }
+
+    &::before {
+      background-color: var(--background-color--dark);
+      border-radius: inherit;
+      content: "";
+      inset: calc(var(--border-width) * -2);
+      position: absolute;
+      z-index: -1;
+    }
+
+    &:active {
+      background-color: var(--border-color--dark);
+      box-shadow: var(--box-shadow--low);
+      color: var(--text-color--light);
+    }
+  }
+}

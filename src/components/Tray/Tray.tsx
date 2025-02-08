@@ -1,5 +1,6 @@
 "use client";
 
+import "./Tray.theme-beos.css";
 import { Applications, Clock } from "@/components";
 import { Network } from "@/icons";
 import { useStore } from "@/store";
@@ -35,13 +36,13 @@ export const Tray: FunctionComponent = () => {
   }, [clockProps, timeProps]);
 
   return (
-    <aside>
+    <aside className="component-tray">
       {currentThemeId === THEME_BEOS.id && (
-        <ul>
+        <menu>
           <li>
             <Network />
           </li>
-        </ul>
+        </menu>
       )}
       <Clock
         {...clockProps}

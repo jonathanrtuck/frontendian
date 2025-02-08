@@ -1,5 +1,6 @@
 "use client";
 
+import "./Menuitem.theme-beos.css";
 import { MenuContext, MenuitemContext } from "@/contexts";
 import { useStore } from "@/store";
 import { IconComponent } from "@/types";
@@ -43,14 +44,8 @@ export const Menuitem: FunctionComponent<
   Omit<
     HTMLElementAttributes,
     "checked" | "disabled" | "onClick" | "role" | "title" | "type"
-  > & {
-    classes?: {
-      button?: string;
-      icon?: string;
-      separator?: string;
-      title?: string;
-    };
-  } & (
+  > &
+    (
       | ({
           title: string;
         } & (
@@ -72,7 +67,7 @@ export const Menuitem: FunctionComponent<
           separator: true;
         }
     )
-> = ({ children, className, classes, ...props }) => {
+> = ({ children, className, ...props }) => {
   const currentThemeId = useStore((store) => store.currentThemeId);
   const themes = useStore((store) => store.themes);
   const {
@@ -134,12 +129,7 @@ export const Menuitem: FunctionComponent<
     return (
       <li
         {...removeProps(props, ["separator"])}
-        className={clsx(
-          className,
-          classes?.separator
-          // styles.root[currentThemeId],
-          // styles.separator[currentThemeId]
-        )}
+        className={clsx("component-menuitem", className)}
         onClick={() => {
           topButtonRef.current?.focus();
 
@@ -198,14 +188,7 @@ export const Menuitem: FunctionComponent<
         "role",
         "title",
       ])}
-      className={clsx(
-        className,
-        // styles.root[currentThemeId],
-        // styles[orientation][currentThemeId],
-        {
-          // [styles.top[currentThemeId]]: isTop,
-        }
-      )}
+      className={clsx("component-menuitem", className)}
       onBlur={(e) => {
         props.onBlur?.(e);
 
@@ -229,10 +212,6 @@ export const Menuitem: FunctionComponent<
         aria-expanded={haspopup ? isExpanded : undefined}
         aria-haspopup={haspopup ? "menu" : undefined}
         aria-labelledby={`${id}-title`}
-        className={clsx(classes?.button, {
-          // [styles.hasPopup[currentThemeId]]: hasPopup,
-          // [styles.pointer[currentThemeId]]: isPointer,
-        })}
         onClick={onActivate}
         onKeyDown={(e) => {
           const parentMenuitem =
@@ -388,12 +367,8 @@ export const Menuitem: FunctionComponent<
         }
         tabIndex={tabIndex}
         type="button">
-        {!!Icon && (
-          <Icon aria-hidden className={clsx(classes?.icon)} theme={theme} />
-        )}
-        <span className={clsx(classes?.title)} id={`${id}-title`}>
-          {title}
-        </span>
+        {!!Icon && <Icon aria-hidden theme={theme} />}
+        <label id={`${id}-title`}>{title}</label>
       </button>
       <MenuitemContext.Provider value={contextValue}>
         {children}

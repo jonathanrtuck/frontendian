@@ -10,6 +10,6 @@
     position: fixed;
     right: 0;
     top: 0;
-    width: var(--system-bar-width);
+    width: var(--component-system-bar-width);
   }
 }

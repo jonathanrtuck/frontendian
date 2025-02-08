@@ -1,5 +1,6 @@
 "use client";
 
+import "./Menu.theme-beos.css";
 import { MenuContext, MenuitemContext } from "@/contexts";
 import clsx from "clsx";
 import type {
@@ -28,9 +29,8 @@ export const Menu: FunctionComponent<
       DetailedHTMLProps<HTMLAttributes<HTMLMenuElement>, HTMLMenuElement>,
       "aria-hidden" | "aria-orientation" | "role"
     > & {
-      horizontal?: boolean;
-      vertical?: boolean;
       bar?: boolean;
+      horizontal?: boolean;
     }
   >
 > = ({
@@ -42,8 +42,6 @@ export const Menu: FunctionComponent<
   onFocus,
   onKeyDown,
   onPointerDown,
-  ref,
-  vertical,
   ...props
 }) => {
   const {
@@ -68,6 +66,7 @@ export const Menu: FunctionComponent<
         ),
     [children]
   );
+  const orientation = bar && horizontal ? "horizontal" : "vertical";
   const contextValue = useMemo<ContextType<typeof MenuContext>>(
     () => ({
       hasPopup,
@@ -76,18 +75,18 @@ export const Menu: FunctionComponent<
       isFocusWithin,
       isPointer: bar ? isPointer : isParentPointer,
       isTop: Boolean(bar),
-      orientation: bar && horizontal ? "horizontal" : "vertical",
+      orientation,
     }),
     [
       bar,
       hasPopup,
-      horizontal,
       inactivate,
       isActive,
       isFocusWithin,
       isParentActive,
       isParentPointer,
       isPointer,
+      orientation,
       parentInactivate,
     ]
   );
@@ -96,14 +95,9 @@ export const Menu: FunctionComponent<
     <menu
       {...props}
       aria-hidden={bar ? undefined : !isExpanded}
-      aria-orientation={
-        bar ? (horizontal ? "horizontal" : "vertical") : undefined
-      }
-      className={clsx(className, {
+      aria-orientation={orientation}
+      className={clsx("component-menu", className, {
         "visually-hidden": !bar && !isExpanded,
-        // [styles.bar[currentThemeId]]: bar,
-        // [styles.horizontal[currentThemeId]]: horizontal,
-        // [styles.vertical[currentThemeId]]: !horizontal,
       })}
       onBlur={(e: FocusEvent<HTMLMenuElement>) => {
         onBlur?.(e);

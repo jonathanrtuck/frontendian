@@ -1,5 +1,6 @@
 "use client";
 
+import "./Button.theme-beos.css";
 import clsx from "clsx";
 import type {
   ButtonHTMLAttributes,
@@ -15,14 +16,12 @@ export const Button: FunctionComponent<
       HTMLButtonElement
     >
   >
-> = ({ children, className, type = "button", ...props }) => (
+> = ({ className, type = "button", ...props }) => (
   <button
     {...props}
-    className={clsx(className)}
+    className={clsx(className, "component-button")}
     type={type} // eslint-disable-line react/button-has-type
-  >
-    <span>{children}</span>
-  </button>
+  />
 );
 
 Button.displayName = "Button";

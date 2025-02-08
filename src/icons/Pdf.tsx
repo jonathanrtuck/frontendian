@@ -3,7 +3,7 @@
 import type { IconComponent } from "@/types";
 import { useId } from "react";
 
-export const Pdf: IconComponent = (props) => {
+export const Pdf: IconComponent = ({ theme, ...props }) => {
   const id = useId();
 
   return (

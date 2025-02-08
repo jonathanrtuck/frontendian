@@ -23,7 +23,7 @@ export const Applications: FunctionComponent = () => {
   switch (currentThemeId) {
     case THEME_BEOS.id:
       return (
-        <Menu bar vertical>
+        <Menu bar className="component-applications">
           {openApplicationIds.map((applicationId) => {
             const { getTitle, Icon, windowIds } = applications.find(
               (application) => application.id === applicationId
@@ -89,7 +89,7 @@ export const Applications: FunctionComponent = () => {
       )!;
 
       return (
-        <Menu bar horizontal>
+        <Menu bar className="component-applications" horizontal>
           <Menuitem
             Icon={activeApplication.Icon}
             title={activeApplication.getTitle(theme)}>

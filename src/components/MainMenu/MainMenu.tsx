@@ -1,10 +1,11 @@
 "use client";
 
+import "./MainMenu.theme-beos.css";
 import { APPLICATION_FILE_MANAGER } from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { FILE_README_MD } from "@/files";
 import { useStore } from "@/store";
-import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
+import { THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { FunctionComponent } from "react";
 
 export const MainMenu: FunctionComponent = () => {
@@ -19,17 +20,10 @@ export const MainMenu: FunctionComponent = () => {
   return (
     <Menu
       bar
+      className="component-main-menu"
       draggable={false}
-      horizontal={currentThemeId === THEME_MAC_OS_CLASSIC.id}
-      vertical={currentThemeId === THEME_BEOS.id}>
-      <Menuitem
-        Icon={theme.Icon}
-        classes={{
-          button: "",
-          icon: "",
-          title: "visually-hidden",
-        }}
-        title={`${theme.title} Menu`}>
+      horizontal={currentThemeId === THEME_MAC_OS_CLASSIC.id}>
+      <Menuitem Icon={theme.Icon} title={`${theme.title} Menu`}>
         <Menu>
           <Menuitem
             onClick={() => openFile({ id: FILE_README_MD.id })}

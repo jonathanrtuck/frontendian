@@ -1,5 +1,6 @@
 "use client";
 
+import "./Clock.theme-beos.css";
 import { useClock } from "@/hooks";
 import clsx from "clsx";
 import type {
@@ -18,7 +19,11 @@ export const Clock: FunctionComponent<
   const date = useClock();
 
   return (
-    <button {...props} className={clsx(className)} tabIndex={0} type="button">
+    <button
+      {...props}
+      className={clsx("component-clock", className)}
+      tabIndex={0}
+      type="button">
       <time
         dateTime={date.toISOString().replace(/\.\d+/, "")} // remove milliseconds to prevent (more) frequent dom updates
         suppressHydrationWarning

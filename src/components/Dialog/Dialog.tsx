@@ -1,5 +1,6 @@
 "use client";
 
+import "./Dialog.theme-beos.css";
 import { AlertError, AlertInfo } from "@/icons";
 import { useStore } from "@/store";
 import type { IconComponent } from "@/types";
@@ -49,11 +50,12 @@ export const Dialog: FunctionComponent<
   }, [modal, open]);
 
   return (
-    <dialog {...props} className={clsx(className)} ref={rootRef}>
-      <div>
-        <Icon theme={theme} />
-        {children}
-      </div>
+    <dialog
+      {...props}
+      className={clsx("component-dialog", className)}
+      ref={rootRef}>
+      <Icon theme={theme} />
+      {children}
     </dialog>
   );
 };
