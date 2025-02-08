@@ -36,15 +36,17 @@ export const Desktop: FunctionComponent = () => {
     from?: Coordinates;
     to?: Coordinates;
   }>({});
-  const onMouseMove = useCallback(({ clientX, clientY }: MouseEvent) => {
-    setSelection((prevState) => ({
-      ...prevState,
-      to: {
-        x: clientX,
-        y: clientY,
-      },
-    }));
-  }, []);
+  const onMouseMove = useCallback(
+    ({ clientX, clientY }: MouseEvent) =>
+      setSelection((prevState) => ({
+        ...prevState,
+        to: {
+          x: clientX,
+          y: clientY,
+        },
+      })),
+    []
+  );
   const onMouseUp = useCallback(() => {
     document.removeEventListener("mousemove", onMouseMove);
     document.removeEventListener("mouseup", onMouseUp);

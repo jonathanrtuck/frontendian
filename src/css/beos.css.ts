@@ -46,6 +46,12 @@ export default createGlobalTheme(`.${THEME_BEOS.id}`, vars, {
       height: "auto",
       width: "11rem",
     },
+    window: {
+      header: {
+        height: "1.125rem",
+      },
+      padding: "0.25rem",
+    },
   },
   cursor: {
     default: [

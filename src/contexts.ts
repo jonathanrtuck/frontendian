@@ -1,4 +1,3 @@
-import { DEFAULT_WINDOW } from "@/constants";
 import { Window } from "@/types";
 import type { RefObject } from "react";
 import { createContext, createRef } from "react";
@@ -36,6 +35,18 @@ export const WindowContext = createContext<
     menubarRef: RefObject<HTMLMenuElement | null>;
   }
 >({
-  ...DEFAULT_WINDOW,
+  collapsed: false,
+  focused: false,
+  height: 0,
+  hidden: true,
+  id: "",
+  left: 0,
   menubarRef: createRef(),
+  resizable: false,
+  scrollable: false,
+  title: "",
+  titlebarLeft: 0,
+  top: 0,
+  width: 0,
+  zoomed: false,
 });

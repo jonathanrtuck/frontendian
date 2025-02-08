@@ -32,6 +32,12 @@ export const vars = createGlobalThemeContract({
       height: "components-system-bar-height",
       width: "components-system-bar-width",
     },
+    window: {
+      header: {
+        height: "components-window-header-height",
+      },
+      padding: "components-window-padding",
+    },
   },
   cursor: {
     default: "cursor--default",

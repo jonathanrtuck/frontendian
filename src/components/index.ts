@@ -1,4 +1,5 @@
 export * from "./Applications";
+export * from "./Button";
 export * from "./Clock";
 export * from "./Desktop";
 export * from "./Dialog";
@@ -10,3 +11,7 @@ export * from "./Menuitem";
 export * from "./SystemBar";
 export * from "./Tray";
 export * from "./UI";
+export * from "./Window";
+export * from "./WindowContent";
+export * from "./WindowHeader";
+export * from "./WindowMenu";

@@ -5,6 +5,7 @@ import { useStore } from "@/store";
 import clsx from "clsx";
 import type {
   ContextType,
+  DetailedHTMLProps,
   FocusEvent,
   FunctionComponent,
   HTMLAttributes,
@@ -25,14 +26,14 @@ import * as styles from "./Menu.css";
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu: FunctionComponent<
   PropsWithChildren<
-    {
+    Omit<
+      DetailedHTMLProps<HTMLAttributes<HTMLMenuElement>, HTMLMenuElement>,
+      "aria-hidden" | "aria-orientation" | "role"
+    > & {
       horizontal?: boolean;
       vertical?: boolean;
       bar?: boolean;
-    } & Omit<
-      HTMLAttributes<HTMLMenuElement>,
-      "aria-hidden" | "aria-orientation" | "role"
-    >
+    }
   >
 > = ({
   bar,
@@ -43,6 +44,7 @@ export const Menu: FunctionComponent<
   onFocus,
   onKeyDown,
   onPointerDown,
+  ref,
   vertical,
   ...props
 }) => {
@@ -56,9 +58,7 @@ export const Menu: FunctionComponent<
   const [isActive, setIsActive] = useState<boolean>(false);
   const [isFocusWithin, setIsFocusWithin] = useState<boolean>(false);
   const [isPointer, setIsPointer] = useState<boolean>(false);
-  const inactivate = useCallback(() => {
-    setIsActive(false);
-  }, []);
+  const inactivate = useCallback(() => setIsActive(false), []);
   // if has grandchildren (Menu -> Menuitem -> Menu)
   const hasPopup = useMemo<boolean>(
     () =>

@@ -4,6 +4,7 @@ import type { Theme } from "@/types";
 export const THEME_BEOS: Theme = {
   Icon: BeOS,
   id: "theme-beos",
+  isDefault: true,
   title: "BeOS",
 };
 

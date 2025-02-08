@@ -1,6 +1,5 @@
 "use client";
 
-import { IS_DEBUG_MODE } from "@/constants";
 import type { ErrorInfo, PropsWithChildren, ReactNode } from "react";
 import { Component } from "react";
 
@@ -26,7 +25,7 @@ export class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, { componentStack }: ErrorInfo) {
-    if (IS_DEBUG_MODE) {
+    if (process.env.NODE_ENV === "development") {
       // eslint-disable-next-line no-console
       console.error(error, componentStack);
     }

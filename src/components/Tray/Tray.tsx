@@ -29,13 +29,9 @@ export const Tray: FunctionComponent = () => {
 
   useEffect(() => {
     if (clockProps.dateStyle) {
-      const timeout = setTimeout(() => {
-        setClockProps(timeProps);
-      }, 5000);
+      const timeout = setTimeout(() => setClockProps(timeProps), 5000);
 
-      return () => {
-        clearTimeout(timeout);
-      };
+      return () => clearTimeout(timeout);
     }
   }, [clockProps, timeProps]);
 
@@ -50,19 +46,17 @@ export const Tray: FunctionComponent = () => {
       )}
       <Clock
         {...clockProps}
-        onClick={() => {
+        onClick={() =>
           setClockProps((prevState) =>
             prevState.timeStyle ? dateProps : timeProps
-          );
-        }}
+          )
+        }
       />
       {currentThemeId === THEME_MAC_OS_CLASSIC.id && (
         <>
           <button
             className={styles.button[currentThemeId]}
-            onClick={() => {
-              //
-            }}
+            onClick={() => {}}
             role="presentation"
             type="button"
           />

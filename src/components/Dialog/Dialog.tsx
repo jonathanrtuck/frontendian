@@ -22,13 +22,13 @@ const ICONS_BY_TYPE: Record<DialogType, IconComponent> = {
 
 export const Dialog: FunctionComponent<
   PropsWithChildren<
-    {
-      modal?: boolean;
-      type: DialogType;
-    } & DetailedHTMLProps<
+    DetailedHTMLProps<
       DialogHTMLAttributes<HTMLDialogElement>,
       HTMLDialogElement
-    >
+    > & {
+      modal?: boolean;
+      type: DialogType;
+    }
   >
 > = ({ children, className, modal, open, type, ...props }) => {
   const currentThemeId = useStore((store) => store.currentThemeId);

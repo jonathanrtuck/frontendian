@@ -44,9 +44,7 @@ export const Applications: FunctionComponent = () => {
                         <Menuitem
                           Icon={hidden ? WindowHidden : WindowVisible}
                           key={id}
-                          onClick={() => {
-                            focusWindow({ id });
-                          }}
+                          onClick={() => focusWindow({ id })}
                           title={title}
                         />
                       ))}
@@ -55,24 +53,18 @@ export const Applications: FunctionComponent = () => {
                         disabled={applicationWindows.every(
                           ({ hidden }) => hidden
                         )}
-                        onClick={() => {
-                          hideWindow({ ids: windowIds });
-                        }}
+                        onClick={() => hideWindow({ ids: windowIds })}
                         title="Hide all"
                       />
                       <Menuitem
                         disabled={applicationWindows.every(
                           ({ hidden }) => !hidden
                         )}
-                        onClick={() => {
-                          showWindow({ ids: windowIds });
-                        }}
+                        onClick={() => showWindow({ ids: windowIds })}
                         title="Show all"
                       />
                       <Menuitem
-                        onClick={() => {
-                          closeApplication({ id: applicationId });
-                        }}
+                        onClick={() => closeApplication({ id: applicationId })}
                         title="Close all"
                       />
                     </>
@@ -102,23 +94,17 @@ export const Applications: FunctionComponent = () => {
             <Menu className={styles.menu[currentThemeId]}>
               <Menuitem
                 disabled={false} // @todo
-                onClick={() => {
-                  // hideWindow({ ids: activeApplication.windowIds });
-                }}
+                onClick={() => {}}
                 title={`Hide ${activeApplication.getTitle(theme)}`}
               />
               <Menuitem
                 disabled={false} // @todo
-                onClick={() => {
-                  // hideWindow({ ids: windowIds });
-                }}
+                onClick={() => {}}
                 title="Hide Others"
               />
               <Menuitem
                 disabled={false} // @todo
-                onClick={() => {
-                  // showWindow({ ids: windowIds });
-                }}
+                onClick={() => {}}
                 title="Show all"
               />
               <Menuitem separator />

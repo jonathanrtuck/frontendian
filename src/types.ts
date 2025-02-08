@@ -1,5 +1,33 @@
+import { Menu, Menuitem } from "@/components";
 import type { ComplexStyleRule } from "@vanilla-extract/css";
-import type { ComponentType, SVGAttributes } from "react";
+import type {
+  ComponentProps,
+  ComponentType,
+  PropsWithChildren,
+  ReactNode,
+  SVGAttributes,
+} from "react";
+import { EmptyObject } from "type-fest";
+
+export type Actions = Readonly<{
+  blurWindow(payload: PayloadWithID): void;
+  closeApplication(payload: PayloadWithID): void;
+  closeWindow(payload: PayloadWithID): void;
+  collapseWindow(payload: PayloadWithID): void;
+  expandWindow(payload: PayloadWithID): void;
+  focusSystemBar(): void;
+  focusWindow(payload: PayloadWithID): void;
+  hideWindow(payload: PayloadWithID): void;
+  moveWindow(payload: PayloadWithID<{ left: Pixels; top: Pixels }>): void;
+  moveWindowTitlebar(payload: PayloadWithID<{ left: Pixels }>): void;
+  openApplication(payload: PayloadWithID): void;
+  openFile(payload: PayloadWithID<{ windowId?: ID }>): void;
+  openWindow(payload: PayloadWithID): void;
+  resizeWindow(payload: PayloadWithID<{ height: Pixels; width: Pixels }>): void;
+  setTheme(payload: PayloadWithID<{ id: Theme["id"] }>): void;
+  showWindow(payload: PayloadWithID): void;
+  zoomWindow(payload: PayloadWithID): void;
+}>;
 
 export type Application = ApplicationConfiguration & {
   windowIds: Window["id"][];
@@ -8,8 +36,19 @@ export type Application = ApplicationConfiguration & {
 export type ApplicationComponent = ComponentType<ApplicationComponentProps>;
 
 export type ApplicationComponentProps = {
-  // @todo
+  Content: ComponentType<PropsWithChildren>;
+  Menu: ComponentType<ComponentProps<typeof Menu>>;
+  Menubar: ComponentType<PropsWithChildren>;
+  Menuitem: ComponentType<ComponentProps<typeof Menuitem>>;
   file?: File;
+  onAbout(node: ReactNode): void;
+  onClose(): void;
+  onNew(): void;
+  onOpen(fileId: ID): void;
+  onQuit(): void;
+  onResize(height: Pixels, width: Pixels): void;
+  openableFiles: File[];
+  theme: Theme;
 };
 
 export type ApplicationConfiguration = Readonly<{
@@ -64,6 +103,13 @@ export type MimeType = "application/pdf" | "text/markdown";
 
 export type MS = number;
 
+export type PayloadWithID<
+  T extends {
+    [x: string]: unknown;
+    id?: ID;
+  } = EmptyObject
+> = { id: ID } & T;
+
 export type Percentage = number;
 
 export type Pixels = number;
@@ -76,6 +122,7 @@ export type State = {
   fonts: Font[];
   openApplicationIds: Application["id"][]; // the order is used as the display order in the SystemBar Applications Menu
   stackingOrder: Application["id"][];
+  systemBarId: ID;
   themes: Theme[];
   types: Partial<
     Record<
@@ -95,6 +142,7 @@ export type StylesByTheme = {
 export type Theme = Readonly<{
   Icon: IconComponent;
   id: "theme-beos" | "theme-mac-os-classic";
+  isDefault?: boolean;
   title: string;
 }>;
 

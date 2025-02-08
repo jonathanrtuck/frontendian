@@ -35,9 +35,7 @@ export const MainMenu: FunctionComponent = () => {
         title={`${theme.title} Menu`}>
         <Menu>
           <Menuitem
-            onClick={() => {
-              openFile({ id: FILE_README_MD.id });
-            }}
+            onClick={() => openFile({ id: FILE_README_MD.id })}
             title={FILE_README_MD.getTitle(theme)}
           />
           <Menuitem separator />
@@ -47,9 +45,7 @@ export const MainMenu: FunctionComponent = () => {
                 <Menuitem
                   checked={id === currentThemeId}
                   key={id}
-                  onClick={() => {
-                    setTheme({ id });
-                  }}
+                  onClick={() => setTheme({ id })}
                   title={title}
                   type="radio"
                 />
@@ -63,9 +59,7 @@ export const MainMenu: FunctionComponent = () => {
               <Menuitem
                 Icon={application.Icon}
                 key={application.id}
-                onClick={() => {
-                  openApplication({ id: application.id });
-                }}
+                onClick={() => openApplication({ id: application.id })}
                 title={application.getTitle(theme)}
               />
             ))}

@@ -58,29 +58,20 @@ export const button = styleVariants<StylesByTheme>({
     lineHeight: 1.2,
     position: "relative",
     selectors: {
-      '&[aria-checked="true"]::before': {
-        content: "'✔︎'",
-      },
-      '&[aria-disabled="true"]': {
-        color: vars.text.color.disabled,
-      },
-      '&[aria-expanded="true"]': {
-        backgroundColor: "rgb(160, 160, 160)",
-      },
-      '&[aria-expanded="true"]::after': {
-        color: "rgb(200, 200, 200)",
-      },
       "&[role='menuitemradio']::before": {
         content: "''",
         fontFamily: vars.font.family.default,
         fontSize: "0.625rem",
         width: "0.5rem",
       },
-      [`.${horizontal["theme-beos"]} &`]: {
+      '&[aria-checked="true"]::before': {
+        content: "'✔︎'",
+      },
+      [`.${horizontal["theme-beos"]} > &`]: {
         height: "100%",
         padding: "0 0.5rem",
       },
-      [`.${vertical["theme-beos"]} &`]: {
+      [`.${vertical["theme-beos"]} > &`]: {
         padding: "0.25rem 0.5rem",
         width: "100%",
       },
@@ -91,6 +82,15 @@ export const button = styleVariants<StylesByTheme>({
         {
           boxShadow: `inset 0 ${vars.border.width} ${vars.border.color.dark}`,
         },
+      '&[aria-disabled="true"]': {
+        color: vars.text.color.disabled,
+      },
+      '&[aria-expanded="true"]': {
+        backgroundColor: "rgb(160, 160, 160)",
+      },
+      '&[aria-expanded="true"]::after': {
+        color: "rgb(200, 200, 200)",
+      },
       [`.${root["theme-beos"]}:not(.${top["theme-beos"]}) > &:not([aria-checked="true"], [aria-disabled="true"]):hover`]:
         {
           backgroundColor: "rgb(160, 160, 160)",

@@ -6,6 +6,7 @@ import { IconComponent } from "@/types";
 import clsx from "clsx";
 import type {
   ContextType,
+  DetailedHTMLProps,
   FunctionComponent,
   HTMLAttributes,
   ReactNode,
@@ -22,7 +23,10 @@ import {
 import type { RequireAllOrNone } from "type-fest";
 import * as styles from "./Menuitem.css";
 
-type HTMLElementAttributes = HTMLAttributes<HTMLLIElement>;
+type HTMLElementAttributes = DetailedHTMLProps<
+  HTMLAttributes<HTMLLIElement>,
+  HTMLLIElement
+>;
 
 const removeProps = (
   props: HTMLElementAttributes,
@@ -108,7 +112,6 @@ export const Menuitem: FunctionComponent<
       setIsExpanded(false);
     }
   }, [isActive]);
-
   useLayoutEffect(() => {
     if (isTop) {
       setTabIndex((prevState) => {

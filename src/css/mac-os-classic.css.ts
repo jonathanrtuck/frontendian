@@ -46,6 +46,12 @@ export default createGlobalTheme(`.${THEME_MAC_OS_CLASSIC.id}`, vars, {
       height: "1.5rem",
       width: "auto",
     },
+    window: {
+      header: {
+        height: "1rem",
+      },
+      padding: "0.25rem",
+    },
   },
   cursor: {
     default: "default",

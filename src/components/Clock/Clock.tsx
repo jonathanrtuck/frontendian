@@ -3,11 +3,19 @@
 import { useClock } from "@/hooks";
 import { useStore } from "@/store";
 import clsx from "clsx";
-import type { FunctionComponent, HTMLAttributes } from "react";
+import type {
+  DetailedHTMLProps,
+  FunctionComponent,
+  HTMLAttributes,
+} from "react";
 import * as styles from "./Clock.css";
 
 export const Clock: FunctionComponent<
-  Intl.DateTimeFormatOptions & Omit<HTMLAttributes<HTMLButtonElement>, "type">
+  Omit<
+    DetailedHTMLProps<HTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
+    "type"
+  > &
+    Intl.DateTimeFormatOptions
 > = ({
   className,
   dateStyle,
@@ -27,8 +35,8 @@ export const Clock: FunctionComponent<
       tabIndex={0}
       type="button">
       <time
-        // remove milliseconds to prevent (more) frequent dom updates
-        dateTime={date.toISOString().replace(/\.\d+/, "")}
+        dateTime={date.toISOString().replace(/\.\d+/, "")} // remove milliseconds to prevent (more) frequent dom updates
+        suppressHydrationWarning
         title={date.toLocaleDateString(navigator.language, {
           dateStyle: "full",
         })}>
