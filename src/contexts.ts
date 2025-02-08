@@ -3,19 +3,15 @@ import type { RefObject } from "react";
 import { createContext, createRef } from "react";
 
 export const MenuContext = createContext<{
-  hasPopup: boolean;
   inactivate(): void;
   isActive: boolean;
   isFocusWithin: boolean;
-  isPointer: boolean;
   isTop: boolean;
   orientation: "horizontal" | "vertical";
 }>({
-  hasPopup: false,
   inactivate: () => {},
   isActive: false,
   isFocusWithin: false,
-  isPointer: false,
   isTop: true,
   orientation: "horizontal",
 });

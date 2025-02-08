@@ -4,8 +4,9 @@ Portfolio site for Jonathan Tucker
 
 ## Todo
 
+- `Menu` keyboard navigation
+
 - **themes**
-  - rename `WindowTitlebar` to `WindowHeader`
   - `mac-os-classic` theme
     - scrollbar button arrow background images
   - test other browsers

@@ -70,15 +70,8 @@ export const Menuitem: FunctionComponent<
 > = ({ children, className, ...props }) => {
   const currentThemeId = useStore((store) => store.currentThemeId);
   const themes = useStore((store) => store.themes);
-  const {
-    hasPopup,
-    inactivate,
-    isActive,
-    isFocusWithin,
-    isPointer,
-    isTop,
-    orientation,
-  } = useContext(MenuContext);
+  const { inactivate, isActive, isFocusWithin, isTop, orientation } =
+    useContext(MenuContext);
   const { collapse: parentCollapse, topButtonRef: parentTopButtonRef } =
     useContext(MenuitemContext);
   const id = useId();
@@ -132,7 +125,6 @@ export const Menuitem: FunctionComponent<
         className={clsx("component-menuitem", className)}
         onClick={() => {
           topButtonRef.current?.focus();
-
           inactivate();
         }}
         onMouseEnter={(e) => {
@@ -158,7 +150,7 @@ export const Menuitem: FunctionComponent<
   const getChildMenuitemButtons = (): HTMLElement[] =>
     Array.from(
       rootRef.current?.querySelectorAll(
-        "" // `:scope > [role="menu"] > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
+        ':scope > [role="menu"] > .component-menuitem > button'
       ) ?? []
     );
   const onActivate = (): void => {
@@ -216,16 +208,14 @@ export const Menuitem: FunctionComponent<
         onKeyDown={(e) => {
           const parentMenuitem =
             rootRef.current?.parentElement?.closest<HTMLElement>(
-              "" // `.${styles.root[currentThemeId]}`
+              ".component-menuitem"
             );
           const parentMenuitemButton =
-            parentMenuitem?.querySelector<HTMLElement>(
-              "" // `.${styles.button[currentThemeId]}`
-            );
+            parentMenuitem?.querySelector<HTMLElement>(":scope > button");
           const childMenuitemButtons = getChildMenuitemButtons();
           const siblingMenuitemButtons = Array.from<HTMLElement>(
             rootRef.current?.parentElement?.querySelectorAll(
-              "" // `:scope > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
+              ":scope > .component-menuitem > button"
             ) ?? []
           );
           const index = siblingMenuitemButtons.indexOf(e.currentTarget);
@@ -254,12 +244,12 @@ export const Menuitem: FunctionComponent<
                 if (
                   parentMenuitemButton &&
                   parentMenuitem?.matches(
-                    "" // `.${styles.horizontal[currentThemeId]}`
+                    "" // @todo `.${styles.horizontal[currentThemeId]}`
                   )
                 ) {
                   const parentMenuitemButtons = Array.from<HTMLElement>(
                     parentMenuitem?.parentElement?.querySelectorAll(
-                      "" // `:scope > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
+                      ":scope > .component-menuitem > button"
                     ) ?? []
                   );
                   const parentIndex =
@@ -291,18 +281,18 @@ export const Menuitem: FunctionComponent<
                 } else {
                   const topMenuitemButton = topButtonRef.current;
                   const topMenuitem = topMenuitemButton?.closest(
-                    "" // `.${styles.root[currentThemeId]}`
+                    ".component-menuitem"
                   );
 
                   if (
                     topMenuitemButton &&
                     topMenuitem?.matches(
-                      "" // `.${styles.horizontal[currentThemeId]}`
+                      "" // @todo `.${styles.horizontal[currentThemeId]}`
                     )
                   ) {
                     const topMenuitemButtons = Array.from<HTMLElement>(
                       topMenuitem?.parentElement?.querySelectorAll(
-                        "" // `:scope > .${styles.root[currentThemeId]} > .${styles.button[currentThemeId]}`
+                        ":scope > .component-menuitem > button"
                       ) ?? []
                     );
                     const topIndex =
