@@ -1,9 +1,8 @@
 import * as applicationConfigurations from "@/applications";
 import * as files from "@/files";
-import * as fonts from "@/fonts";
 import { Pdf, Text } from "@/icons";
 import * as themes from "@/themes";
-import type { Actions, ID, Pixels, State, Theme, Window } from "@/types";
+import type { Actions, ID, Pixels, State, Window } from "@/types";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -60,7 +59,6 @@ export const useStore = create(
       currentThemeId: DEFAULT_THEME.id,
       desktop: [files.FILE_RESUME_PDF.id],
       files: Object.values(files),
-      fonts: Object.values(fonts),
       openApplicationIds: [
         applicationConfigurations.APPLICATION_FILE_MANAGER.id,
       ],

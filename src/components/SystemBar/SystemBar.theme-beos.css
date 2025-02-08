@@ -1,0 +1,15 @@
+:root.theme-beos {
+  .component-system-bar {
+    background-color: var(--background-color--default);
+    border-width: var(--border-width);
+    box-shadow: var(--box-shadow--high);
+    color: var(--text-color--dark);
+    display: flex;
+    flex-direction: column;
+    max-height: 100dvh;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: var(--system-bar-width);
+  }
+}

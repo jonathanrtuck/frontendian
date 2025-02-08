@@ -1,10 +1,10 @@
 :root.theme-mac-os-classic {
-  --background-color-dark: transparent;
+  --background-color--dark: transparent;
   --background-color--default: rgb(204, 204, 204);
   --background-color--inactive: rgb(220, 220, 220);
   --background-color--selection: rgb(204, 204, 253);
-  --border-color-dark: rgb(38, 38, 38);
-  --border-color-light: transparent;
+  --border-color--dark: rgb(38, 38, 38);
+  --border-color--light: transparent;
   --border-radius: 0.75rem;
   --border-width: 0.0625rem;
   --box-shadow--high: inset var(--border-width) var(--border-width)

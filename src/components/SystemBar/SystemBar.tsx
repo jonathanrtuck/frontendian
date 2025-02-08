@@ -1,5 +1,6 @@
 "use client";
 
+import "./SystemBar.theme-beos.css";
 import { Applications, MainMenu, Tray } from "@/components";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
@@ -22,6 +23,7 @@ export const SystemBar: FunctionComponent = () => {
   return (
     <header
       aria-label={currentThemeId === THEME_BEOS.id ? "Deskbar" : "Menubar"}
+      className="component-system-bar"
       id={systemBarId}
       onBlur={
         isMenubarWindowed

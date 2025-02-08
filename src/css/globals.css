@@ -1,10 +1,10 @@
 :root {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   background-color: rgb(0, 0, 0);
 }
 
 body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   color: var(--text-color--default);
   cursor: var(--cursor--default);
   font-family: var(--font-family--default);
