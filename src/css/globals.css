@@ -10,6 +10,7 @@ body {
   font-family: var(--font-family--default);
   inset: 0;
   margin: 0;
+  overflow: hidden;
   position: fixed;
 }
 
