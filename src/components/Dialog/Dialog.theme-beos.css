@@ -11,7 +11,7 @@
     max-height: calc(100dvh - 2rem);
     max-width: calc(100dvw - 2rem);
     overflow: auto;
-    padding: calc(1rem + var(--border-width) * 2)
+    padding: calc(1.5rem + var(--border-width) * 2)
       calc(1rem + var(--border-width) * 2) calc(1rem + var(--border-width) * 2)
       calc(6rem + var(--border-width) * 2);
     position: fixed;

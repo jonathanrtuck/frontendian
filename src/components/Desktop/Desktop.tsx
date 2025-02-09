@@ -31,7 +31,7 @@ export const Desktop: FunctionComponent = () => {
   const openFile = useStore((store) => store.openFile);
   const themes = useStore((store) => store.themes);
   const types = useStore((store) => store.types);
-  const rootRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLMapElement>(null);
   const [selection, setSelection] = useState<{
     from?: Coordinates;
     to?: Coordinates;
@@ -69,7 +69,7 @@ export const Desktop: FunctionComponent = () => {
   );
 
   return (
-    <div
+    <map
       aria-label="Desktop"
       className="component-desktop"
       onMouseDown={({ button, buttons, clientX, clientY, target }) => {
@@ -117,7 +117,7 @@ export const Desktop: FunctionComponent = () => {
               }
         }
       />
-    </div>
+    </map>
   );
 };
 

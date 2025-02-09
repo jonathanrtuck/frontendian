@@ -1,8 +1,8 @@
 .root {
   cursor: var(--cursor--text);
   display: block;
+  flex: 1 0 auto;
   font-family: var(--font-family--monospace);
-  min-height: 100%;
   min-width: 100%;
   overflow: hidden;
   padding: 0.5rem;
