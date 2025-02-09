@@ -1,9 +1,7 @@
 "use client";
 
-import { useStore } from "@/store";
-import type { Pixels } from "@/types";
 import type { RefObject } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useClock = (): Date => {
   const [date, setDate] = useState<Date>(new Date());

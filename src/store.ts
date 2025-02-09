@@ -684,10 +684,6 @@ export const useStore = create(
                 window.width >= maxWidth - WINDOW_DIMENSION_BUFFER &&
                 window.width <= maxWidth + WINDOW_DIMENSION_BUFFER;
 
-              // 503 53 450 - normal
-              //  29 29 450 - collapsed
-              console.debug(offsetHeight, frameHeight, window.height);
-
               return isZoomed
                 ? {
                     ...window,
