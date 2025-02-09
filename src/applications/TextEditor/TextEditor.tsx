@@ -1,11 +1,11 @@
 "use client";
 
+import styles from "./TextEditor.module.css";
 import { ApplicationComponent } from "@/types";
 import clsx from "clsx";
 import { useDeferredValue, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { getTitle } from "./utils";
-import styles from "./TextEditor.module.css";
 
 export const TextEditor: ApplicationComponent = ({
   Content,
