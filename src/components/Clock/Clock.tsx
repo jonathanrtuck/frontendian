@@ -26,7 +26,6 @@ export const Clock: FunctionComponent<
       type="button">
       <time
         dateTime={date.toISOString().replace(/\.\d+/, "")} // remove milliseconds to prevent (more) frequent dom updates
-        suppressHydrationWarning
         title={date.toLocaleDateString(navigator.language, {
           dateStyle: "full",
         })}>

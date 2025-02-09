@@ -1,6 +1,5 @@
 export * from "./Applications";
 export * from "./Button";
-export * from "./Clock";
 export * from "./Desktop";
 export * from "./Dialog";
 export * from "./ErrorBoundary";

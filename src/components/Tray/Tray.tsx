@@ -1,12 +1,18 @@
 "use client";
 
 import "./Tray.theme-beos.css";
-import { Applications, Clock } from "@/components";
+import { Applications } from "@/components";
 import { Network } from "@/icons";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
+import dynamic from "next/dynamic";
 import type { ComponentProps, FunctionComponent } from "react";
 import { useEffect, useState } from "react";
+
+// @see https://nextjs.org/docs/messages/react-hydration-error
+const Clock = dynamic(() => import("../Clock").then(({ Clock }) => Clock), {
+  ssr: false,
+});
 
 type ClockProps = ComponentProps<typeof Clock>;
 
