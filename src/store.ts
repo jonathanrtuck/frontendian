@@ -67,7 +67,7 @@ export const useStore = create(
       themes: Object.values(themes),
       types: {
         "application/pdf": {
-          // application: applicationConfigurations.APPLICATION_PDF_VIEWER.id,
+          application: applicationConfigurations.APPLICATION_PDF_VIEWER.id,
           Icon: Pdf,
         },
         "text/markdown": {
@@ -361,6 +361,9 @@ export const useStore = create(
               return prevState;
             }
 
+            const theme = prevState.themes.find(
+              ({ id }) => id === prevState.currentThemeId
+            )!;
             const windowId = uuid();
             const windowPosition = getFirstOpenWindowPosition(
               prevState.windows
@@ -368,7 +371,7 @@ export const useStore = create(
             const window: Window = {
               ...DEFAULT_WINDOW,
               title: DEFAULT_WINDOW.title,
-              ...(application.getWindow?.() ?? {}),
+              ...(application.getWindow?.(theme) ?? {}),
               id: windowId,
               left: windowPosition,
               top: windowPosition,
@@ -482,7 +485,7 @@ export const useStore = create(
                     ? {
                         ...window,
                         title: file.getTitle(theme),
-                        ...(application?.getWindow?.(file) ?? {}),
+                        ...(application?.getWindow?.(theme, file) ?? {}),
                         fileId: file.id,
                         focused: true,
                       }
@@ -503,7 +506,7 @@ export const useStore = create(
             const window: Window = {
               ...DEFAULT_WINDOW,
               title: file.getTitle(theme),
-              ...(application?.getWindow?.(file) ?? {}),
+              ...(application?.getWindow?.(theme, file) ?? {}),
               fileId: file.id,
               id: windowId,
               left: windowPosition,
@@ -551,6 +554,9 @@ export const useStore = create(
               return prevState;
             }
 
+            const theme = prevState.themes.find(
+              ({ id }) => id === prevState.currentThemeId
+            )!;
             const isApplicationOpen = prevState.openApplicationIds.includes(
               payload.id
             );
@@ -561,7 +567,7 @@ export const useStore = create(
             const window: Window = {
               ...DEFAULT_WINDOW,
               title: DEFAULT_WINDOW.title,
-              ...(application.getWindow?.() ?? {}),
+              ...(application.getWindow?.(theme) ?? {}),
               id: windowId,
               left: windowPosition,
               top: windowPosition,

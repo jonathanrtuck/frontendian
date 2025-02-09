@@ -11,9 +11,9 @@
       rgb(216, 216, 216)
     );
 
-    background-color: var(--background-color--inactive);
+    background-color: var(--component-window-background-image);
     border-color: var(--border-color--light) var(--border-color--dark)
-      var(--background-color--inactive) var(--border-color--light);
+      var(--component-window-background-image) var(--border-color--light);
     border-width: var(--border-width);
     box-shadow: inset var(--border-width) var(--border-width)
         var(--color--highlight),
@@ -39,7 +39,7 @@
     z-index: 1;
 
     &::after {
-      background-color: var(--background-color--inactive);
+      background-color: var(--component-window-background-image);
       bottom: calc(var(--border-width) * -2);
       content: "";
       height: var(--border-width);
@@ -61,11 +61,6 @@
       );
 
       background-color: rgb(240, 202, 68);
-      border-bottom-color: var(--background-color--default);
-
-      &::after {
-        background-color: var(--background-color--default);
-      }
     }
 
     h1 {

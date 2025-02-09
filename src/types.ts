@@ -4,7 +4,7 @@ import type {
   ComponentType,
   PropsWithChildren,
   ReactNode,
-  RefAttributes,
+  RefObject,
   SVGAttributes,
 } from "react";
 import { EmptyObject } from "type-fest";
@@ -54,7 +54,7 @@ export type ApplicationComponentProps = {
 export type ApplicationConfiguration = Readonly<{
   Component: ApplicationComponent;
   getTitle(theme: Theme): string;
-  getWindow?(file?: File): Partial<Window>;
+  getWindow?(theme: Theme, file?: File): Partial<Window>;
   Icon?: IconComponent;
   id: ID;
 }>;
@@ -76,7 +76,8 @@ export type File = Readonly<
 >;
 
 export type IconComponent = ComponentType<
-  RefAttributes<SVGAttributes<SVGSVGElement>> & {
+  SVGAttributes<SVGSVGElement> & {
+    ref?: RefObject<SVGSVGElement>;
     theme?: Theme;
   }
 >;

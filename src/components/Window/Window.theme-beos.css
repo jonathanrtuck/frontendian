@@ -1,6 +1,8 @@
 :root.theme-beos {
   .component-window {
-    background-color: var(--background-color--inactive);
+    --component-window-background-image: var(--background-color--inactive);
+
+    background-color: var(--component-window-background-image);
     color: var(--text-color--dark);
     margin: calc(
         var(--component-window-padding) + var(--component-window-header-height) +
@@ -15,7 +17,7 @@
     }
 
     &[aria-current="true"] {
-      background-color: var(--background-color--default);
+      --component-window-background-image: var(--background-color--default);
     }
 
     [role="article"] {
