@@ -28,11 +28,13 @@
 
   & h1 {
     border-width: 0 0 var(--border-width);
+    font-size: 1.5em;
     margin: 0 0 2.5rem;
     padding: 0.75rem 0;
   }
 
   & h2 {
+    font-size: 1.33em;
     margin: 2.5rem 0 0;
   }
 }
