@@ -1,14 +1,14 @@
-import { forwardRef, useId } from "react";
+"use client";
 
-import { IconComponent } from "@/types";
+import type { IconComponent } from "@/types";
+import { useId } from "react";
 
-export const WindowVisible: IconComponent = forwardRef((props, ref) => {
+export const WindowVisible: IconComponent = ({ theme, ...props }) => {
   const id = useId();
 
   return (
     <svg
       {...props}
-      ref={ref}
       version="1.1"
       viewBox="-4 -4 64 64"
       xmlns="http://www.w3.org/2000/svg">
@@ -36,6 +36,6 @@ export const WindowVisible: IconComponent = forwardRef((props, ref) => {
       <path d="M32 4V8H36V4H32z" fill="#000000" />
     </svg>
   );
-});
+};
 
 WindowVisible.displayName = "WindowVisible";

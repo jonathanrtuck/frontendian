@@ -1,24 +1,26 @@
 .root {
-  --minesweeper-background-color: rgb(192, 192, 192);
-  --minesweeper-border-color: rgb(238, 238, 238);
+  --application-minesweeper-background-color: rgb(192, 192, 192);
+  --application-minesweeper-border-color: rgb(238, 238, 238);
 
-  background-color: var(--minesweeper-background-color);
-  border: var(--minesweeper-border-size) outset var(--minesweeper-border-color);
+  background-color: var(--application-minesweeper-background-color);
+  border: var(--application-minesweeper-border-size) outset
+    var(--application-minesweeper-border-color);
   display: flex;
   flex-direction: column;
-  gap: var(--minesweeper-padding-size);
-  padding: var(--minesweeper-padding-size);
+  gap: var(--application-minesweeper-padding-size);
+  padding: var(--application-minesweeper-padding-size);
   user-select: none;
 }
 
 .header {
   align-items: center;
-  border: var(--minesweeper-border-size) inset var(--minesweeper-border-color);
+  border: var(--application-minesweeper-border-size) inset
+    var(--application-minesweeper-border-color);
   display: flex;
-  gap: var(--minesweeper-padding-size);
-  height: var(--minesweeper-header-height);
+  gap: var(--application-minesweeper-padding-size);
+  height: var(--application-minesweeper-header-height);
   justify-content: space-between;
-  padding: var(--minesweeper-padding-size);
+  padding: var(--application-minesweeper-padding-size);
 }
 
 .ticker {
@@ -34,11 +36,14 @@
 }
 
 .reset {
-  background-color: var(--minesweeper-background-color);
-  border: var(--minesweeper-border-size) outset var(--minesweeper-border-color);
+  align-items: center;
+  background-color: var(--application-minesweeper-background-color);
+  border: var(--application-minesweeper-border-size) outset
+    var(--application-minesweeper-border-color);
+  display: flex;
   font-size: 1.75rem;
-  line-height: 1;
-  padding: 0;
+  height: 2.25rem;
+  padding: 0.125rem 0 0;
   text-align: center;
 }
 
@@ -64,7 +69,8 @@
 }
 
 .grid {
-  border: var(--minesweeper-border-size) inset var(--minesweeper-border-color);
+  border: var(--application-minesweeper-border-size) inset
+    var(--application-minesweeper-border-color);
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -77,18 +83,18 @@
 
 .square {
   appearance: none;
-  border: var(--minesweeper-border-size) solid transparent;
+  border: var(--application-minesweeper-border-size) solid transparent;
   box-sizing: border-box;
-  height: var(--minesweeper-square-size);
+  height: var(--application-minesweeper-square-size);
   padding: 0;
   position: relative;
   text-align: center;
-  width: var(--minesweeper-square-size);
+  width: var(--application-minesweeper-square-size);
 }
 
 .button {
-  background-color: var(--minesweeper-background-color);
-  border-color: var(--minesweeper-border-color);
+  background-color: var(--application-minesweeper-background-color);
+  border-color: var(--application-minesweeper-border-color);
   border-style: outset;
 }
 
@@ -98,12 +104,9 @@
 }
 
 .button.flag.gameOver:not(.mine)::after {
-  bottom: 0;
   content: "❌";
-  left: 0;
+  inset: 0;
   position: absolute;
-  right: 0;
-  top: 0;
 }
 
 .mine.revealed {

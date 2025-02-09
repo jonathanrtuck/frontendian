@@ -1,12 +1,11 @@
-import { Fragment, useRef, useState } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
-
-import { ApplicationComponent } from "@/types";
+"use client";
 
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
-
 import styles from "./PdfViewer.module.css";
+import { ApplicationComponent } from "@/types";
+import { Fragment, useRef, useState } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
 
 // @see https://github.com/wojtekmaj/react-pdf/tree/main#use-external-cdn
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -24,10 +23,11 @@ export const PdfViewer: ApplicationComponent = ({
   onOpen,
   onQuit,
   openableFiles,
+  theme,
 }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-
   const [numPages, setNumPages] = useState<number>(0);
+  const url = file?.getUrl(theme) ?? null;
 
   return (
     <>
@@ -37,23 +37,23 @@ export const PdfViewer: ApplicationComponent = ({
             <Menuitem onClick={onNew} title="New" />
             <Menuitem title="Open">
               <Menu>
-                {openableFiles.map(({ id, title }) => (
+                {openableFiles.map(({ id, getTitle }) => (
                   <Menuitem
                     disabled={id === file?.id}
                     key={id}
                     onClick={() => {
                       onOpen(id);
                     }}
-                    title={title}
+                    title={getTitle(theme)}
                   />
                 ))}
               </Menu>
             </Menuitem>
             <Menuitem separator />
             <Menuitem
-              disabled={!file?.url}
+              disabled={!url}
               onClick={
-                file?.url
+                url
                   ? () => {
                       iframeRef.current?.contentWindow?.print();
                     }
@@ -88,11 +88,10 @@ export const PdfViewer: ApplicationComponent = ({
         </Menuitem>
       </Menubar>
       <Content>
-        {file?.url ? (
+        {file && url ? (
           <>
             <Document
-              className={styles.root}
-              file={file.url}
+              file={url}
               loading={<Fragment />} // eslint-disable-line react/jsx-no-useless-fragment
               onLoadSuccess={({ numPages }) => {
                 setNumPages(numPages);
@@ -106,7 +105,12 @@ export const PdfViewer: ApplicationComponent = ({
                 />
               ))}
             </Document>
-            <iframe hidden ref={iframeRef} src={file.url} title={file.title} />
+            <iframe
+              hidden
+              ref={iframeRef}
+              src={url}
+              title={file.getTitle(theme)}
+            />
           </>
         ) : null}
       </Content>

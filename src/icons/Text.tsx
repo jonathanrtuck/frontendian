@@ -1,14 +1,14 @@
-import { forwardRef, useId } from "react";
+"use client";
 
-import { IconComponent } from "@/types";
+import type { IconComponent } from "@/types";
+import { useId } from "react";
 
-export const Text: IconComponent = forwardRef((props, ref) => {
+export const Text: IconComponent = ({ theme, ...props }) => {
   const id = useId();
 
   return (
     <svg
       {...props}
-      ref={ref}
       version="1.1"
       viewBox="0 0 64 64"
       xmlns="http://www.w3.org/2000/svg">
@@ -94,6 +94,6 @@ export const Text: IconComponent = forwardRef((props, ref) => {
       />
     </svg>
   );
-});
+};
 
 Text.displayName = "Text";

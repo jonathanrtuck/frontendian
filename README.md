@@ -1,17 +1,13 @@
-# frontendian ([GitHub repo](https://github.com/jonathanrtuck/frontendian))
+# frontendian
 
----
+Portfolio site for Jonathan Tucker
 
-This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
+## Todo
 
-## Tips
-
-- Applications can be launched from the *frontendian* menu in the *Deskbar* (top right)
-- Double-click *Desktop* icons to open certain files/applications
-- Grab and drag the yellow window titlebar to move windows
-  - Drag while holding `Shift` to move the titlebar along the window
-    - This is useful for positioning "tabs" when multiple windows are zoomed (maximized)
-- Grab and drag the bottom right corner of a window to resize
-- Double-click a windowʼs titlebar to hide the window
-  - Hidden windows can be shown again using the appliationʼs menu in the *Deskbar*
-- Click the *Deskbar*ʼs clock to open a calendar
+- add `mac-os-classic` theme styles
+  - scrollbar button arrow background images
+- create `FileManager` window
+  - add `Icon` for _BankX_ `File` (md?)
+- special resize handle for non-scrollable `Window`s in `beos` theme
+- support the other `SystemBar` layouts for `beos` theme
+- only drag/resize `Window` outline in `mac-os-classic` theme

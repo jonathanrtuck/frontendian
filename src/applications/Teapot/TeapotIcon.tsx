@@ -1,14 +1,12 @@
-import { forwardRef, useId } from "react";
-
 import { IconComponent } from "@/types";
+import { useId } from "react";
 
-export const TeapotIcon: IconComponent = forwardRef((props, ref) => {
+export const TeapotIcon: IconComponent = ({ theme, ...props }) => {
   const id = useId();
 
   return (
     <svg
       {...props}
-      ref={ref}
       version="1.1"
       viewBox="0 0 64 64"
       xmlns="http://www.w3.org/2000/svg">
@@ -177,6 +175,6 @@ export const TeapotIcon: IconComponent = forwardRef((props, ref) => {
       <path d="M3 43C3 40 4 39 7 39C7 42 6 43 3 43z" fill="#010000" />
     </svg>
   );
-});
+};
 
 TeapotIcon.displayName = "TeapotIcon";

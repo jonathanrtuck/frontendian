@@ -1,10 +1,9 @@
-import { useEffect, useRef } from "react";
-
-import { ApplicationComponent } from "@/types";
-
-import { main } from "./webgl";
+"use client";
 
 import styles from "./Teapot.module.css";
+import { ApplicationComponent } from "@/types";
+import { useEffect, useRef } from "react";
+import { main } from "./webgl";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
 export const Teapot: ApplicationComponent = ({

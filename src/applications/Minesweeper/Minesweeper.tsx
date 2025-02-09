@@ -1,8 +1,10 @@
-import clsx from "clsx";
-import { CSSProperties, useEffect, useRef, useState } from "react";
+"use client";
 
+import styles from "./Minesweeper.module.css";
 import { ApplicationComponent } from "@/types";
-
+import clsx from "clsx";
+import type { CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   BORDER_SIZE,
   DEFAULT_LEVEL,
@@ -12,15 +14,13 @@ import {
   PADDING_SIZE,
   SQUARE_SIZE,
 } from "./constants";
-import { Coordinates, Level, Square } from "./types";
+import type { Coordinates, Level, Square } from "./types";
 import {
   getAdjacentSquareCoordinates,
   getMineCoordinates,
   isEqualCoordinates,
   revealSquare,
 } from "./utils";
-
-import styles from "./Minesweeper.module.css";
 
 // @see https://github.com/jonathanrtuck/minesweeper
 export const Minesweeper: ApplicationComponent = ({
@@ -33,14 +33,12 @@ export const Minesweeper: ApplicationComponent = ({
   onResize,
 }) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [flagsRemaining, setFlagsRemaining] = useState<number>(10);
   const [level, setLevel] = useState<Level>(DEFAULT_LEVEL);
   const [squares, setSquares] = useState<Square[][]>(
     DEFAULT_STATE[DEFAULT_LEVEL].squares
   );
-
   const isLost = squares
     .flat()
     .some(({ hasMine, isRevealed }) => hasMine && isRevealed);
@@ -59,13 +57,11 @@ export const Minesweeper: ApplicationComponent = ({
       clearInterval(intervalRef.current);
     }
   }, [elapsedTime]);
-
   useEffect(() => {
     if (intervalRef.current && (isLost || isWon)) {
       clearInterval(intervalRef.current);
     }
   }, [isLost, isWon]);
-
   useEffect(
     () => () => {
       if (intervalRef.current) {
@@ -90,7 +86,6 @@ export const Minesweeper: ApplicationComponent = ({
                 setElapsedTime(0);
                 setFlagsRemaining(DEFAULT_STATE[level].flagsRemaining);
                 setSquares(DEFAULT_STATE[level].squares);
-
                 // reset window dimensions
                 onResize(
                   DEFAULT_STATE[level].height,
@@ -112,7 +107,6 @@ export const Minesweeper: ApplicationComponent = ({
                   setFlagsRemaining(flagsRemaining);
                   setLevel(lvl);
                   setSquares(squares);
-
                   // update window dimensions
                   onResize(height, width);
                 }}
@@ -151,15 +145,13 @@ export const Minesweeper: ApplicationComponent = ({
       <Content>
         <div
           className={styles.root}
-          onContextMenu={(e) => {
-            e.preventDefault();
-          }}
+          onContextMenu={(e) => e.preventDefault()}
           style={
             {
-              "--minesweeper-border-size": `${BORDER_SIZE}px`,
-              "--minesweeper-header-height": `${HEADER_HEIGHT}px`,
-              "--minesweeper-padding-size": `${PADDING_SIZE}px`,
-              "--minesweeper-square-size": `${SQUARE_SIZE}px`,
+              "--application-minesweeper-border-size": `${BORDER_SIZE}px`,
+              "--application-minesweeper-header-height": `${HEADER_HEIGHT}px`,
+              "--application-minesweeper-padding-size": `${PADDING_SIZE}px`,
+              "--application-minesweeper-square-size": `${SQUARE_SIZE}px`,
             } as CSSProperties
           }>
           <header className={styles.header}>

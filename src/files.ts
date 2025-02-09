@@ -1,16 +1,16 @@
-import { File, MimeType } from "@/types";
+import type { File } from "@/types";
 
 export const FILE_README_MD: File = {
+  getTitle: () => "About this site",
+  getUrl: (theme) => `/files/README.${theme.id}.md`,
   id: "file-README.md",
-  title: "About frontendian",
-  type: MimeType.TextMarkdown,
-  url: "https://raw.githubusercontent.com/jonathanrtuck/frontendian/main/README.md",
+  type: "text/markdown",
 };
 
 export const FILE_RESUME_PDF: File = {
+  getTitle: () => "Résumé",
+  getUrl: () => "/files/resume.pdf",
   id: "file-resume.pdf",
-  title: "Résumé",
-  type: MimeType.ApplicationPdf,
-  url: `${process.env.PUBLIC_URL}/files/resume.pdf`,
+  type: "application/pdf",
   width: 765,
 };

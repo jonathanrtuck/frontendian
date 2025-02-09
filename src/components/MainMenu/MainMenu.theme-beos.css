@@ -1,0 +1,25 @@
+:root.theme-beos {
+  .component-main-menu {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    &.component-menu {
+      > .component-menuitem {
+        > button {
+          padding: 0.125rem;
+
+          svg {
+            flex: 1 1 8rem;
+            height: 1.75rem;
+            width: unset;
+          }
+
+          label {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

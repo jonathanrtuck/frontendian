@@ -1,23 +1,34 @@
+import * as applicationConfigurations from "@/applications";
+import * as files from "@/files";
+import { Pdf, Text } from "@/icons";
+import * as themes from "@/themes";
+import type { Actions, ID, Pixels, State, Window } from "@/types";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 
-import { APPLICATION_TRACKER } from "@/applications";
-import {
-  DEFAULT_WINDOW,
-  DEFAULT_WINDOW_POSITION_INCREMENT,
-  DEFAULT_WINDOW_POSITION_OFFSET,
-  DESKBAR_ID,
-  INITIAL_STATE,
-  IS_DEBUG_MODE,
-  UNTITLED_WINDOW_TITLE,
-} from "@/constants";
-import { ID, State, Window } from "@/types";
+const DEFAULT_THEME = Object.values(themes).find(({ isDefault }) => isDefault)!;
+const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
+const DEFAULT_WINDOW_POSITION_OFFSET = 96;
+const DEFAULT_WINDOW: Window = {
+  collapsed: false,
+  focused: true,
+  height: 450,
+  hidden: false,
+  id: "",
+  left: DEFAULT_WINDOW_POSITION_OFFSET,
+  resizable: true,
+  scrollable: true,
+  title: "Untitled",
+  titlebarLeft: 0,
+  top: DEFAULT_WINDOW_POSITION_OFFSET,
+  width: 600,
+  zoomed: false,
+};
+const SYSTEM_BAR_ID: ID = "system-bar";
+const WINDOW_DIMENSION_BUFFER = 12;
 
-type ActionIds = { id: ID } | { ids: ID[] };
-
-export const useStore = create<State>()(() => INITIAL_STATE);
-
-const getFirstOpenWindowPosition = (windows: Window[]): number => {
+const getFirstOpenWindowPosition = (windows: Window[]): Pixels => {
   for (let i = 0; i !== windows.length; i++) {
     const position =
       DEFAULT_WINDOW_POSITION_OFFSET + i * DEFAULT_WINDOW_POSITION_INCREMENT;
@@ -36,509 +47,653 @@ const getFirstOpenWindowPosition = (windows: Window[]): number => {
   );
 };
 
-const isPayloadId = (payload: ActionIds, id: ID): boolean =>
-  ("id" in payload && id === payload.id) ||
-  ("ids" in payload && payload.ids.includes(id));
-
-const setState =
-  <T>(
-    actionType: string,
-    updater: (payload: T) => (prevState: State) => State
-  ) =>
-  (payload: T): void => {
-    if (IS_DEBUG_MODE) {
-      /* eslint-disable no-console */
-      console.groupCollapsed(actionType);
-
-      if (payload) {
-        console.debug(payload);
-      }
-      /* eslint-enable no-console */
-    }
-
-    useStore.setState(updater(payload));
-
-    if (IS_DEBUG_MODE) {
-      /* eslint-disable no-console */
-      console.debug(useStore.getState());
-      console.groupEnd();
-      /* eslint-enable no-console */
-    }
-  };
-
-export const activateWindow = setState<ActionIds>(
-  "activateWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            active: true,
-          }
-        : window
-    ),
-  })
-);
-
-export const blurWindow = setState<ActionIds>(
-  "blurWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            focused: false,
-          }
-        : window
-    ),
-  })
-);
-
-export const closeApplication = setState<ActionIds>(
-  "closeApplication",
-  (payload) => (prevState) =>
-    prevState.applications
-      .filter(({ id }) => isPayloadId(payload, id))
-      .reduce(
-        (prevState, { id, windowIds }) => ({
-          ...prevState,
-          applications: prevState.applications.map((application) =>
-            application.id === id
-              ? {
-                  ...application,
-                  windowIds: [],
-                }
-              : application
-          ),
-          openApplicationIds: prevState.openApplicationIds.filter(
-            (id) => id === APPLICATION_TRACKER.id || !isPayloadId(payload, id)
-          ),
-          stackingOrder: prevState.stackingOrder.filter(
-            (id) => !windowIds.includes(id)
-          ),
-          windows: prevState.windows.filter(
-            ({ id }) => !windowIds.includes(id)
-          ),
-        }),
-        prevState
-      )
-);
-
-export const closeWindow = setState<ActionIds>(
-  "closeWindow",
-  (payload) => (prevState) =>
-    prevState.windows
-      .filter(({ id }) => isPayloadId(payload, id))
-      .reduce((prevState, { id }) => {
-        const windowApplication = prevState.applications.find(({ windowIds }) =>
-          windowIds.includes(id)
-        );
-        const isLastApplicationWindow =
-          windowApplication?.windowIds.length === 1;
-        const isTracker = windowApplication?.id === APPLICATION_TRACKER.id;
-
-        return {
-          ...prevState,
-          applications: prevState.applications.map((application) =>
-            application === windowApplication
-              ? {
-                  ...application,
-                  windowIds: application.windowIds.filter(
-                    (windowId) => windowId !== id
-                  ),
-                }
-              : application
-          ),
-          openApplicationIds:
-            isLastApplicationWindow && !isTracker
-              ? prevState.openApplicationIds.filter(
-                  (id) => id !== windowApplication?.id
-                )
-              : prevState.openApplicationIds,
-          stackingOrder: prevState.stackingOrder.filter(
-            (windowId) => windowId !== id
-          ),
-          windows: prevState.windows.filter((window) => window.id !== id),
-        };
-      }, prevState)
-);
-
-export const focusDeskbar = setState<void>(
-  "focusDeskbar",
-  () => (prevState) => ({
-    ...prevState,
-    stackingOrder: [
-      ...prevState.stackingOrder.filter((id) => id !== DESKBAR_ID),
-      DESKBAR_ID,
-    ],
-    windows: prevState.windows.map((window) => ({
-      ...window,
-      focused: false,
-    })),
-  })
-);
-
-export const focusWindow = setState<ActionIds>(
-  "focusWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    stackingOrder: [
-      ...prevState.stackingOrder.filter((id) => !isPayloadId(payload, id)),
-      ...("id" in payload ? [payload.id] : payload.ids),
-    ],
-    windows: prevState.windows.map((window) => ({
-      ...window,
-      focused: isPayloadId(payload, window.id),
-      hidden: isPayloadId(payload, window.id) ? false : window.hidden,
-    })),
-  })
-);
-
-export const hideWindow = setState<ActionIds>(
-  "hideWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    stackingOrder: [
-      ...("id" in payload ? [payload.id] : payload.ids),
-      ...prevState.stackingOrder.filter((id) => !isPayloadId(payload, id)),
-    ],
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            focused: false,
-            hidden: true,
-          }
-        : window
-    ),
-  })
-);
-
-export const inactivateWindow = setState<ActionIds>(
-  "inactivateWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            active: false,
-          }
-        : window
-    ),
-  })
-);
-
-export const moveWindow = setState<ActionIds & { left: number; top: number }>(
-  "moveWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            left: payload.left,
-            top: payload.top,
-          }
-        : window
-    ),
-  })
-);
-
-export const moveWindowTitlebar = setState<ActionIds & { left: number }>(
-  "moveWindowTitlebar",
-  (payload) => (prevState) => ({
-    ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            titlebarLeft: payload.left,
-          }
-        : window
-    ),
-  })
-);
-
-export const openApplication = setState<ActionIds>(
-  "openApplication",
-  (payload) => (prevState) =>
-    prevState.applications
-      .filter(({ id }) => isPayloadId(payload, id))
-      .reduce((state, { id, getWindow, windowIds }) => {
-        const isApplicationOpen = state.openApplicationIds.includes(id);
-
-        // if the application is already open, raise and focus its first visible window
-        if (isApplicationOpen) {
-          const firstVisibleWindow = windowIds
-            .map((id) => state.windows.find((window) => window.id === id))
-            .find((window) => window && !window.hidden);
-
-          if (firstVisibleWindow) {
-            return {
-              ...state,
-              stackingOrder: [
-                ...state.stackingOrder.filter(
-                  (id) => id !== firstVisibleWindow.id
-                ),
-                firstVisibleWindow.id,
-              ],
-              windows: state.windows.map((window) => ({
-                ...window,
-                focused: window.id === firstVisibleWindow.id,
-              })),
-            };
-          }
-
-          return state;
-        }
-
-        const windowId = uuid();
-        const windowPosition = getFirstOpenWindowPosition(state.windows);
-        const window: Window = {
-          ...DEFAULT_WINDOW,
-          title: UNTITLED_WINDOW_TITLE,
-          ...(getWindow?.() ?? {}),
-          id: windowId,
-          left: windowPosition,
-          top: windowPosition,
-        };
-
-        // open application and its initial window
-        return {
-          ...state,
-          applications: state.applications.map((application) =>
-            application.id === id
-              ? {
-                  ...application,
-                  windowIds: [...application.windowIds, windowId],
-                }
-              : application
-          ),
-          openApplicationIds: isApplicationOpen
-            ? state.openApplicationIds
-            : [...state.openApplicationIds, id],
-          stackingOrder: [...state.stackingOrder, window.id],
-          windows: [
-            ...state.windows.map((window) => ({
-              ...window,
-              focused: false,
-            })),
-            window,
-          ],
-        };
-      }, prevState)
-);
-
-export const openFile = setState<ActionIds & { windowId?: ID }>(
-  "openFile",
-  (payload) => (prevState) =>
-    prevState.files
-      .filter(({ id }) => isPayloadId(payload, id))
-      .reduce((state, file) => {
-        const fileWindow = state.windows.find(
-          ({ fileId }) => fileId === file.id
-        );
-
-        // if the file is already open, unhide and/or focus its window
-        if (fileWindow) {
-          if (fileWindow.hidden) {
-            return {
-              ...state,
-              stackingOrder: [
-                ...state.stackingOrder.filter((id) => id !== fileWindow.id),
-                fileWindow.id,
-              ],
-              windows: state.windows.map((window) => ({
-                ...window,
-                focused: window.id === fileWindow.id,
-                hidden: window.hidden && window.id !== fileWindow.id,
-              })),
-            };
-          }
-
-          return {
-            ...state,
-            stackingOrder: [
-              ...state.stackingOrder.filter((id) => id !== fileWindow.id),
-              fileWindow.id,
-            ],
-            windows: state.windows.map((window) => ({
-              ...window,
-              focused: window.id === fileWindow.id,
-            })),
-          };
-        }
-
-        const applicationId = state.types[file.type]?.application;
-
-        if (!applicationId) {
-          return state;
-        }
-
-        const application = state.applications.find(
-          ({ id }) => id === applicationId
-        );
-        const existingWindow = state.windows.find(
-          ({ id }) => id === payload.windowId
-        );
-
-        // if opening file in an existing window
-        if (existingWindow) {
-          return {
-            ...state,
-            stackingOrder: [
-              ...state.stackingOrder.filter((id) => id !== existingWindow.id),
-              existingWindow.id,
-            ],
-            windows: state.windows.map((window) =>
-              window.id === existingWindow.id
+export const useStore = create(
+  devtools<State & Actions>(
+    (set) => ({
+      applications: Object.values(applicationConfigurations).map(
+        (applicationConfiguration) => ({
+          ...applicationConfiguration,
+          windowIds: [],
+        })
+      ),
+      currentThemeId: DEFAULT_THEME.id,
+      desktop: [files.FILE_RESUME_PDF.id],
+      files: Object.values(files),
+      openApplicationIds: [
+        applicationConfigurations.APPLICATION_FILE_MANAGER.id,
+      ],
+      stackingOrder: [SYSTEM_BAR_ID],
+      systemBarId: SYSTEM_BAR_ID,
+      themes: Object.values(themes),
+      types: {
+        "application/pdf": {
+          application: applicationConfigurations.APPLICATION_PDF_VIEWER.id,
+          Icon: Pdf,
+        },
+        "text/markdown": {
+          application: applicationConfigurations.APPLICATION_TEXT_EDITOR.id,
+          Icon: Text,
+        },
+      },
+      windows: [],
+      // eslint-disable-next-line sort-keys
+      blurWindow: (payload) =>
+        set(
+          (prevState) => ({
+            windows: prevState.windows.map((window) =>
+              window.id === payload.id
                 ? {
-                    ...window,
-                    title: file.title,
-                    ...(application?.getWindow?.(file) ?? {}),
-                    fileId: file.id,
-                    focused: true,
-                  }
-                : {
                     ...window,
                     focused: false,
                   }
+                : window
             ),
-          };
-        }
+          }),
+          undefined,
+          {
+            payload,
+            type: "blurWindow",
+          }
+        ),
+      closeApplication: (payload) =>
+        set(
+          (prevState) => {
+            const application = prevState.applications.find(
+              ({ id }) => id === payload.id
+            );
 
-        const isApplicationOpen =
-          state.openApplicationIds.includes(applicationId);
-        const windowId = uuid();
-        const windowPosition = getFirstOpenWindowPosition(state.windows);
-        const window: Window = {
-          ...DEFAULT_WINDOW,
-          title: file.title,
-          ...(application?.getWindow?.(file) ?? {}),
-          fileId: file.id,
-          id: windowId,
-          left: windowPosition,
-          top: windowPosition,
-        };
+            if (!application) {
+              return prevState;
+            }
 
-        // open application and file window
-        return {
-          ...state,
-          applications: state.applications.map((application) =>
-            application.id === applicationId
-              ? {
-                  ...application,
-                  windowIds: [...application.windowIds, windowId],
-                }
-              : application
-          ),
-          openApplicationIds: isApplicationOpen
-            ? state.openApplicationIds
-            : [...state.openApplicationIds, applicationId],
-          stackingOrder: [...state.stackingOrder, window.id],
-          windows: [
-            ...state.windows.map((window) => ({
+            return {
+              applications: prevState.applications.map((application) =>
+                application.id === payload.id
+                  ? {
+                      ...application,
+                      windowIds: [],
+                    }
+                  : application
+              ),
+              openApplicationIds: prevState.openApplicationIds.filter(
+                (id) =>
+                  id ===
+                    applicationConfigurations.APPLICATION_FILE_MANAGER.id ||
+                  id !== payload.id
+              ),
+              stackingOrder: prevState.stackingOrder.filter(
+                (id) => !application.windowIds.includes(id)
+              ),
+              windows: prevState.windows.filter(
+                ({ id }) => !application.windowIds.includes(id)
+              ),
+            };
+          },
+          undefined,
+          {
+            payload,
+            type: "closeApplication",
+          }
+        ),
+      closeWindow: (payload) =>
+        set(
+          (prevState) => {
+            const windowApplication = prevState.applications.find(
+              ({ windowIds }) => windowIds.includes(payload.id)
+            );
+            const isLastApplicationWindow =
+              windowApplication?.windowIds.length === 1;
+            const isFileManager =
+              windowApplication?.id ===
+              applicationConfigurations.APPLICATION_FILE_MANAGER.id;
+
+            return {
+              applications: prevState.applications.map((application) =>
+                application === windowApplication
+                  ? {
+                      ...application,
+                      windowIds: application.windowIds.filter(
+                        (id) => id !== payload.id
+                      ),
+                    }
+                  : application
+              ),
+              openApplicationIds:
+                isLastApplicationWindow && !isFileManager
+                  ? prevState.openApplicationIds.filter(
+                      (id) => id !== windowApplication?.id
+                    )
+                  : prevState.openApplicationIds,
+              stackingOrder: prevState.stackingOrder.filter(
+                (id) => id !== payload.id
+              ),
+              windows: prevState.windows.filter(({ id }) => id !== payload.id),
+            };
+          },
+          undefined,
+          {
+            payload,
+            type: "closeWindow",
+          }
+        ),
+      collapseWindow: (payload) =>
+        set(
+          (prevState) => ({
+            windows: prevState.windows.map((window) =>
+              window.id === payload.id
+                ? {
+                    ...window,
+                    collapsed: true,
+                  }
+                : window
+            ),
+          }),
+          undefined,
+          {
+            payload,
+            type: "collapseWindow",
+          }
+        ),
+      expandWindow: (payload) =>
+        set(
+          (prevState) => ({
+            windows: prevState.windows.map((window) =>
+              window.id === payload.id
+                ? {
+                    ...window,
+                    collapsed: false,
+                  }
+                : window
+            ),
+          }),
+          undefined,
+          {
+            payload,
+            type: "expandWindow",
+          }
+        ),
+      focusSystemBar: () =>
+        set(
+          (prevState) => ({
+            stackingOrder: [
+              ...prevState.stackingOrder.filter((id) => id !== SYSTEM_BAR_ID),
+              SYSTEM_BAR_ID,
+            ],
+            windows: prevState.windows.map((window) => ({
               ...window,
               focused: false,
             })),
-            window,
-          ],
-        };
-      }, prevState)
-);
-
-export const openWindow = setState<ActionIds>(
-  "openWindow",
-  (payload) => (prevState) =>
-    prevState.applications
-      .filter(({ id }) => isPayloadId(payload, id))
-      .reduce((state, { getWindow, id }) => {
-        const isApplicationOpen = state.openApplicationIds.includes(id);
-        const windowId = uuid();
-        const windowPosition = getFirstOpenWindowPosition(state.windows);
-        const window: Window = {
-          ...DEFAULT_WINDOW,
-          title: UNTITLED_WINDOW_TITLE,
-          ...(getWindow?.() ?? {}),
-          id: windowId,
-          left: windowPosition,
-          top: windowPosition,
-        };
-
-        return {
-          ...state,
-          applications: state.applications.map((application) =>
-            application.id === id
-              ? {
-                  ...application,
-                  windowIds: [...application.windowIds, windowId],
-                }
-              : application
-          ),
-          openApplicationIds: isApplicationOpen
-            ? state.openApplicationIds
-            : [...state.openApplicationIds, id],
-          stackingOrder: [...state.stackingOrder, window.id],
-          windows: [
-            ...state.windows.map((window) => ({
+          }),
+          undefined,
+          {
+            payload: undefined,
+            type: "focusSystemBar",
+          }
+        ),
+      focusWindow: (payload) =>
+        set(
+          (prevState) => ({
+            stackingOrder: [
+              ...prevState.stackingOrder.filter((id) => id !== payload.id),
+              payload.id,
+            ],
+            windows: prevState.windows.map((window) => ({
               ...window,
-              focused: false,
+              focused: window.id === payload.id,
+              hidden: window.hidden && window.id !== payload.id,
             })),
-            window,
-          ],
-        };
-      }, prevState)
-);
-
-export const resizeWindow = setState<
-  ActionIds & { height: number; width: number }
->("resizeWindow", (payload) => (prevState) => ({
-  ...prevState,
-  windows: prevState.windows.map((window) =>
-    isPayloadId(payload, window.id)
-      ? {
-          ...window,
-          height: payload.height,
-          width: payload.width,
-        }
-      : window
-  ),
-}));
-
-export const showWindow = setState<ActionIds>(
-  "showWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    stackingOrder: [
-      ...prevState.stackingOrder.filter((id) => !isPayloadId(payload, id)),
-      ...("id" in payload ? [payload.id] : payload.ids),
-    ],
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            focused: true,
-            hidden: false,
+          }),
+          undefined,
+          {
+            payload,
+            type: "focusWindow",
           }
-        : window
-    ),
-  })
-);
-
-export const zoomWindow = setState<ActionIds>(
-  "zoomWindow",
-  (payload) => (prevState) => ({
-    ...prevState,
-    windows: prevState.windows.map((window) =>
-      isPayloadId(payload, window.id)
-        ? {
-            ...window,
-            zoomed: !window.zoomed,
+        ),
+      hideWindow: (payload) =>
+        set(
+          (prevState) => ({
+            stackingOrder: [
+              payload.id,
+              ...prevState.stackingOrder.filter((id) => id !== payload.id),
+            ],
+            windows: prevState.windows.map((window) =>
+              window.id === payload.id
+                ? {
+                    ...window,
+                    focused: false,
+                    hidden: true,
+                  }
+                : window
+            ),
+          }),
+          undefined,
+          {
+            payload,
+            type: "hideWindow",
           }
-        : window
-    ),
-  })
+        ),
+      moveWindow: (payload) =>
+        set(
+          (prevState) => ({
+            windows: prevState.windows.map((window) =>
+              window.id === payload.id
+                ? {
+                    ...window,
+                    left: payload.left,
+                    top: payload.top,
+                  }
+                : window
+            ),
+          }),
+          undefined,
+          {
+            payload,
+            type: "moveWindow",
+          }
+        ),
+      moveWindowTitlebar: (payload) =>
+        set(
+          (prevState) => ({
+            windows: prevState.windows.map((window) =>
+              window.id === payload.id
+                ? {
+                    ...window,
+                    titlebarLeft: payload.left,
+                  }
+                : window
+            ),
+          }),
+          undefined,
+          {
+            payload,
+            type: "moveWindowTitlebar",
+          }
+        ),
+      openApplication: (payload) =>
+        set(
+          (prevState) => {
+            const application = prevState.applications.find(
+              ({ id }) => id === payload.id
+            );
+
+            if (!application) {
+              return prevState;
+            }
+
+            const isApplicationOpen = prevState.openApplicationIds.includes(
+              payload.id
+            );
+
+            // if the application is already open, raise and focus its first visible window
+            if (isApplicationOpen) {
+              const firstVisibleWindow = application.windowIds
+                .map((id) =>
+                  prevState.windows.find((window) => window.id === id)
+                )
+                .find((window) => window && !window.hidden);
+
+              if (firstVisibleWindow) {
+                return {
+                  stackingOrder: [
+                    ...prevState.stackingOrder.filter(
+                      (id) => id !== firstVisibleWindow.id
+                    ),
+                    firstVisibleWindow.id,
+                  ],
+                  windows: prevState.windows.map((window) => ({
+                    ...window,
+                    focused: window.id === firstVisibleWindow.id,
+                  })),
+                };
+              }
+
+              return prevState;
+            }
+
+            const theme = prevState.themes.find(
+              ({ id }) => id === prevState.currentThemeId
+            )!;
+            const windowId = uuid();
+            const windowPosition = getFirstOpenWindowPosition(
+              prevState.windows
+            );
+            const window: Window = {
+              ...DEFAULT_WINDOW,
+              title: DEFAULT_WINDOW.title,
+              ...(application.getWindow?.(theme) ?? {}),
+              id: windowId,
+              left: windowPosition,
+              top: windowPosition,
+            };
+
+            // open application and its initial window
+            return {
+              applications: prevState.applications.map((application) =>
+                application.id === payload.id
+                  ? {
+                      ...application,
+                      windowIds: [...application.windowIds, windowId],
+                    }
+                  : application
+              ),
+              openApplicationIds: isApplicationOpen
+                ? prevState.openApplicationIds
+                : [...prevState.openApplicationIds, payload.id],
+              stackingOrder: [...prevState.stackingOrder, window.id],
+              windows: [
+                ...prevState.windows.map((window) => ({
+                  ...window,
+                  focused: false,
+                })),
+                window,
+              ],
+            };
+          },
+          undefined,
+          {
+            payload,
+            type: "openApplication",
+          }
+        ),
+      openFile: (payload) =>
+        set(
+          (prevState) => {
+            const file = prevState.files.find(({ id }) => id === payload.id);
+
+            if (!file) {
+              return prevState;
+            }
+
+            const fileWindow = prevState.windows.find(
+              ({ fileId }) => fileId === file.id
+            );
+
+            // if the file is already open, unhide and/or focus its window
+            if (fileWindow) {
+              if (fileWindow.hidden) {
+                return {
+                  stackingOrder: [
+                    ...prevState.stackingOrder.filter(
+                      (id) => id !== fileWindow.id
+                    ),
+                    fileWindow.id,
+                  ],
+                  windows: prevState.windows.map((window) => ({
+                    ...window,
+                    focused: window.id === fileWindow.id,
+                    hidden: window.hidden && window.id !== fileWindow.id,
+                  })),
+                };
+              }
+
+              return {
+                stackingOrder: [
+                  ...prevState.stackingOrder.filter(
+                    (id) => id !== fileWindow.id
+                  ),
+                  fileWindow.id,
+                ],
+                windows: prevState.windows.map((window) => ({
+                  ...window,
+                  focused: window.id === fileWindow.id,
+                })),
+              };
+            }
+
+            const applicationId = prevState.types[file.type]?.application;
+
+            if (!applicationId) {
+              return prevState;
+            }
+
+            const application = prevState.applications.find(
+              ({ id }) => id === applicationId
+            );
+            const theme = prevState.themes.find(
+              ({ id }) => id === prevState.currentThemeId
+            )!;
+            const existingWindow = payload.windowId
+              ? prevState.windows.find(({ id }) => id === payload.windowId)
+              : undefined;
+
+            // if opening file in an existing window
+            if (existingWindow) {
+              return {
+                stackingOrder: [
+                  ...prevState.stackingOrder.filter(
+                    (id) => id !== existingWindow.id
+                  ),
+                  existingWindow.id,
+                ],
+                windows: prevState.windows.map((window) =>
+                  window.id === existingWindow.id
+                    ? {
+                        ...window,
+                        title: file.getTitle(theme),
+                        ...(application?.getWindow?.(theme, file) ?? {}),
+                        fileId: file.id,
+                        focused: true,
+                      }
+                    : {
+                        ...window,
+                        focused: false,
+                      }
+                ),
+              };
+            }
+
+            const isApplicationOpen =
+              prevState.openApplicationIds.includes(applicationId);
+            const windowId = uuid();
+            const windowPosition = getFirstOpenWindowPosition(
+              prevState.windows
+            );
+            const window: Window = {
+              ...DEFAULT_WINDOW,
+              title: file.getTitle(theme),
+              ...(application?.getWindow?.(theme, file) ?? {}),
+              fileId: file.id,
+              id: windowId,
+              left: windowPosition,
+              top: windowPosition,
+            };
+
+            // open application and file window
+            return {
+              applications: prevState.applications.map((application) =>
+                application.id === applicationId
+                  ? {
+                      ...application,
+                      windowIds: [...application.windowIds, windowId],
+                    }
+                  : application
+              ),
+              openApplicationIds: isApplicationOpen
+                ? prevState.openApplicationIds
+                : [...prevState.openApplicationIds, applicationId],
+              stackingOrder: [...prevState.stackingOrder, window.id],
+              windows: [
+                ...prevState.windows.map((window) => ({
+                  ...window,
+                  focused: false,
+                })),
+                window,
+              ],
+            };
+          },
+          undefined,
+          {
+            payload,
+            type: "openFile",
+          }
+        ),
+      openWindow: (payload) =>
+        set(
+          (prevState) => {
+            const application = prevState.applications.find(
+              ({ id }) => id === payload.id
+            );
+
+            if (!application) {
+              return prevState;
+            }
+
+            const theme = prevState.themes.find(
+              ({ id }) => id === prevState.currentThemeId
+            )!;
+            const isApplicationOpen = prevState.openApplicationIds.includes(
+              payload.id
+            );
+            const windowId = uuid();
+            const windowPosition = getFirstOpenWindowPosition(
+              prevState.windows
+            );
+            const window: Window = {
+              ...DEFAULT_WINDOW,
+              title: DEFAULT_WINDOW.title,
+              ...(application.getWindow?.(theme) ?? {}),
+              id: windowId,
+              left: windowPosition,
+              top: windowPosition,
+            };
+
+            return {
+              applications: prevState.applications.map((application) =>
+                application.id === payload.id
+                  ? {
+                      ...application,
+                      windowIds: [...application.windowIds, windowId],
+                    }
+                  : application
+              ),
+              openApplicationIds: isApplicationOpen
+                ? prevState.openApplicationIds
+                : [...prevState.openApplicationIds, payload.id],
+              stackingOrder: [...prevState.stackingOrder, window.id],
+              windows: [
+                ...prevState.windows.map((window) => ({
+                  ...window,
+                  focused: false,
+                })),
+                window,
+              ],
+            };
+          },
+          undefined,
+          {
+            payload,
+            type: "openWindow",
+          }
+        ),
+      resizeWindow: (payload) =>
+        set(
+          (prevState) => ({
+            windows: prevState.windows.map((window) =>
+              window.id === payload.id
+                ? {
+                    ...window,
+                    height: payload.height,
+                    width: payload.width,
+                  }
+                : window
+            ),
+          }),
+          undefined,
+          {
+            payload,
+            type: "resizeWindow",
+          }
+        ),
+      setTheme: (payload) =>
+        set(
+          () => ({
+            currentThemeId: payload.id,
+          }),
+          undefined,
+          {
+            payload,
+            type: "setTheme",
+          }
+        ),
+      showWindow: (payload) =>
+        set(
+          (prevState) => ({
+            stackingOrder: [
+              ...prevState.stackingOrder.filter((id) => id !== payload.id),
+              payload.id,
+            ],
+            windows: prevState.windows.map((window) =>
+              window.id === payload.id
+                ? {
+                    ...window,
+                    focused: true,
+                    hidden: false,
+                  }
+                : window
+            ),
+          }),
+          undefined,
+          {
+            payload,
+            type: "showWindow",
+          }
+        ),
+      zoomWindow: (payload) =>
+        set(
+          (prevState) => ({
+            windows: prevState.windows.map((window) => {
+              if (window.id !== payload.id) {
+                return window;
+              }
+
+              const windowElement = document.getElementById(window.id)!;
+              const { offsetHeight, offsetWidth } = windowElement;
+              const { marginBottom, marginLeft, marginRight, marginTop } =
+                getComputedStyle(windowElement);
+              const marginX = parseFloat(marginLeft) + parseFloat(marginRight);
+              const marginY = parseFloat(marginBottom) + parseFloat(marginTop);
+              const frameHeight =
+                offsetHeight + marginY - (window.collapsed ? 0 : window.height);
+              const frameWidth = offsetWidth + marginX - window.width;
+              const maxHeight = document.body.offsetHeight - frameHeight;
+              const maxWidth = document.body.offsetWidth - frameWidth;
+              const isZoomed =
+                window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
+                window.height <= maxHeight + WINDOW_DIMENSION_BUFFER &&
+                window.width >= maxWidth - WINDOW_DIMENSION_BUFFER &&
+                window.width <= maxWidth + WINDOW_DIMENSION_BUFFER;
+
+              return isZoomed
+                ? {
+                    ...window,
+                    ...window.prev,
+                    prev: window.zoomed ? window.prev : undefined,
+                    zoomed: false,
+                  }
+                : {
+                    ...window,
+                    collapsed: false,
+                    height: maxHeight,
+                    left: 0,
+                    prev: {
+                      height: window.height,
+                      left: window.left,
+                      top: window.top,
+                      width: window.width,
+                    },
+                    top: 0,
+                    width: maxWidth,
+                    zoomed: true,
+                  };
+            }),
+          }),
+          undefined,
+          {
+            payload,
+            type: "zoomWindow",
+          }
+        ),
+    }),
+    { enabled: process.env.NODE_ENV === "development" }
+  )
 );

@@ -1,11 +1,10 @@
-import { forwardRef } from "react";
+"use client";
 
-import { IconComponent } from "@/types";
+import type { IconComponent } from "@/types";
 
-export const WindowHidden: IconComponent = forwardRef((props, ref) => (
+export const WindowHidden: IconComponent = ({ theme, ...props }) => (
   <svg
     {...props}
-    ref={ref}
     version="1.1"
     viewBox="-4 -4 64 64"
     xmlns="http://www.w3.org/2000/svg">
@@ -15,6 +14,6 @@ export const WindowHidden: IconComponent = forwardRef((props, ref) => (
     <path d="M0 56H52V12H48V52H0V56z" fill="#000000" />
     <path d="M32 4V8H36V4H32z" fill="#000000" />
   </svg>
-));
+);
 
 WindowHidden.displayName = "WindowHidden";

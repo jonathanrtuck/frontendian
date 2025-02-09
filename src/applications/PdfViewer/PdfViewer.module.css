@@ -1,9 +1,3 @@
-.root {
-}
-
-.page {
-}
-
 .page + .page {
   border-width: var(--border-width) 0 0;
 }

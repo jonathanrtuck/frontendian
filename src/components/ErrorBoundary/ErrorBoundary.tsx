@@ -1,19 +1,16 @@
-import { Component, ErrorInfo, PropsWithChildren, ReactElement } from "react";
+"use client";
 
-import { IS_DEBUG_MODE } from "@/constants";
-
-export type ErrorBoundaryProps = PropsWithChildren<{
-  fallback?: ReactElement;
-  onError?(error: Error): void;
-}>;
-
-export type ErrorBoundaryState = {
-  hasError: boolean;
-};
+import type { ErrorInfo, PropsWithChildren, ReactNode } from "react";
+import { Component } from "react";
 
 export class ErrorBoundary extends Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
+  PropsWithChildren<{
+    fallback?: ReactNode;
+    onError?(error: Error): void;
+  }>,
+  {
+    hasError: boolean;
+  }
 > {
   static displayName = "ErrorBoundary";
 
@@ -28,7 +25,7 @@ export class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, { componentStack }: ErrorInfo) {
-    if (IS_DEBUG_MODE) {
+    if (process.env.NODE_ENV === "development") {
       // eslint-disable-next-line no-console
       console.error(error, componentStack);
     }

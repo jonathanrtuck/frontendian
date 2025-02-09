@@ -1,10 +1,6 @@
 export type Coordinates = [rowIndex: number, columnIndex: number];
 
-export const enum Level {
-  Beginner = "beginner",
-  Expert = "expert",
-  Intermediate = "intermediate",
-}
+export type Level = "beginner" | "expert" | "intermediate";
 
 export interface Square {
   hasFlag: boolean;

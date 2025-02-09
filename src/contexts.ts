@@ -1,43 +1,48 @@
-import { createContext, createRef, RefObject } from "react";
-
-import { DEFAULT_WINDOW } from "@/constants";
 import { Window } from "@/types";
+import type { RefObject } from "react";
+import { createContext, createRef } from "react";
 
-export type MenuContextType = {
+export const MenuContext = createContext<{
   inactivate(): void;
   isActive: boolean;
   isFocusWithin: boolean;
-  isPointer: boolean;
   isTop: boolean;
   orientation: "horizontal" | "vertical";
-};
-
-export const MenuContext = createContext<MenuContextType>({
+}>({
   inactivate: () => {},
   isActive: false,
   isFocusWithin: false,
-  isPointer: false,
-  isTop: false,
+  isTop: true,
   orientation: "horizontal",
 });
 
-export type MenuitemContextType = {
+export const MenuitemContext = createContext<{
   collapse(): void;
   isExpanded: boolean;
-  topButtonRef: RefObject<HTMLElement>;
-};
-
-export const MenuitemContext = createContext<MenuitemContextType>({
+  topButtonRef: RefObject<HTMLElement | null>;
+}>({
   collapse: () => {},
   isExpanded: false,
   topButtonRef: createRef(),
 });
 
-export type WindowContextType = Window & {
-  menubarRef: RefObject<HTMLMenuElement>;
-};
-
-export const WindowContext = createContext<WindowContextType>({
-  ...DEFAULT_WINDOW,
+export const WindowContext = createContext<
+  Window & {
+    menubarRef: RefObject<HTMLMenuElement | null>;
+  }
+>({
+  collapsed: false,
+  focused: false,
+  height: 0,
+  hidden: true,
+  id: "",
+  left: 0,
   menubarRef: createRef(),
+  resizable: false,
+  scrollable: false,
+  title: "",
+  titlebarLeft: 0,
+  top: 0,
+  width: 0,
+  zoomed: false,
 });

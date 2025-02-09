@@ -1,4 +1,4 @@
-import { Square } from "./types";
+import type { Square } from "./types";
 
 type Coordinates = [rowIndex: number, columnIndex: number];
 
