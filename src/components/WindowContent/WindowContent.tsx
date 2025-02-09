@@ -6,13 +6,12 @@ import { Resize } from "@/icons";
 import { useStore } from "@/store";
 import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { Fragment, useContext, useLayoutEffect, useRef, useState } from "react";
+import { useContext, useLayoutEffect, useRef, useState } from "react";
 import { Resizable } from "react-resizable";
 
 const MIN_HEIGHT = 16 * 7; // 7rem
 const MIN_WIDTH = 16 * 10; // 10rem
 
-// @todo Resizable
 export const WindowContent: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
@@ -83,12 +82,10 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
       axis="both"
       handle={
         // @see https://github.com/react-grid-layout/react-resizable?tab=readme-ov-file#custom-function
-        resizable && !collapsed ? (
-          // eslint-disable-next-line react/no-unstable-nested-components
-          (_, ref) => <Resize aria-hidden ref={ref} theme={theme} />
-        ) : (
-          <Fragment /> // eslint-disable-line react/jsx-no-useless-fragment
-        )
+        resizable && !collapsed
+          ? // eslint-disable-next-line react/no-unstable-nested-components
+            (_, ref) => <Resize aria-hidden ref={ref} theme={theme} />
+          : null
       }
       height={height}
       minConstraints={[Math.max(minWidth, MIN_WIDTH), MIN_HEIGHT]}
