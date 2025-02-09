@@ -1,14 +1,12 @@
 :root.theme-beos {
-  .component-desktop {
+  body {
     align-items: start;
     background: var(--component-desktop-background);
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fill, 6rem);
-    inset: 0;
     justify-items: center;
     padding: 1rem calc(var(--component-system-bar-width) + 1rem) 1rem 1rem;
-    position: fixed;
 
     > mark {
       background: rgba(128, 187, 255, 0.2);

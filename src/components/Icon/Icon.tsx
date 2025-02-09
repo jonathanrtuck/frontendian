@@ -18,7 +18,7 @@ export const Icon: FunctionComponent<{
     title={title}
     type="button">
     <Component aria-hidden />
-    <span>{title}</span>
+    <label>{title}</label>
   </button>
 );
 

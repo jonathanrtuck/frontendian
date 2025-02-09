@@ -1,6 +1,6 @@
-import { UI } from "@/components";
+import { Desktop } from "@/components";
 import type { FunctionComponent } from "react";
 
-const Page: FunctionComponent = () => <UI />;
+const Page: FunctionComponent = () => <Desktop />;
 
 export default Page;

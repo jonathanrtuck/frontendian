@@ -4,6 +4,7 @@
 
     background-color: var(--component-window-background-image);
     color: var(--text-color--dark);
+    left: 0;
     margin: calc(
         var(--component-window-padding) + var(--component-window-header-height) +
           var(--component-window-padding)
@@ -11,6 +12,7 @@
       0 0;
     padding: 0;
     position: fixed;
+    top: 0;
 
     &:focus {
       outline: 0;

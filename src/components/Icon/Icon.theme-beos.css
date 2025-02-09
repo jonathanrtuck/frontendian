@@ -15,7 +15,7 @@
       width: 50%;
     }
 
-    > span {
+    > label {
       font-size: 0.875rem;
       font-weight: 400;
       max-width: 100%;
@@ -24,7 +24,7 @@
       white-space: nowrap;
     }
 
-    &:focus > span {
+    &:focus > label {
       background-color: rgba(0, 0, 0, 0.4);
     }
   }

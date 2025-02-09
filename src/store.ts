@@ -80,7 +80,6 @@ export const useStore = create(
       blurWindow: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             windows: prevState.windows.map((window) =>
               window.id === payload.id
                 ? {
@@ -108,7 +107,6 @@ export const useStore = create(
             }
 
             return {
-              ...prevState,
               applications: prevState.applications.map((application) =>
                 application.id === payload.id
                   ? {
@@ -150,7 +148,6 @@ export const useStore = create(
               applicationConfigurations.APPLICATION_FILE_MANAGER.id;
 
             return {
-              ...prevState,
               applications: prevState.applications.map((application) =>
                 application === windowApplication
                   ? {
@@ -182,7 +179,6 @@ export const useStore = create(
       collapseWindow: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             windows: prevState.windows.map((window) =>
               window.id === payload.id
                 ? {
@@ -201,7 +197,6 @@ export const useStore = create(
       expandWindow: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             windows: prevState.windows.map((window) =>
               window.id === payload.id
                 ? {
@@ -220,7 +215,6 @@ export const useStore = create(
       focusSystemBar: () =>
         set(
           (prevState) => ({
-            ...prevState,
             stackingOrder: [
               ...prevState.stackingOrder.filter((id) => id !== SYSTEM_BAR_ID),
               SYSTEM_BAR_ID,
@@ -239,7 +233,6 @@ export const useStore = create(
       focusWindow: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             stackingOrder: [
               ...prevState.stackingOrder.filter((id) => id !== payload.id),
               payload.id,
@@ -259,7 +252,6 @@ export const useStore = create(
       hideWindow: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             stackingOrder: [
               payload.id,
               ...prevState.stackingOrder.filter((id) => id !== payload.id),
@@ -283,7 +275,6 @@ export const useStore = create(
       moveWindow: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             windows: prevState.windows.map((window) =>
               window.id === payload.id
                 ? {
@@ -303,7 +294,6 @@ export const useStore = create(
       moveWindowTitlebar: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             windows: prevState.windows.map((window) =>
               window.id === payload.id
                 ? {
@@ -344,7 +334,6 @@ export const useStore = create(
 
               if (firstVisibleWindow) {
                 return {
-                  ...prevState,
                   stackingOrder: [
                     ...prevState.stackingOrder.filter(
                       (id) => id !== firstVisibleWindow.id
@@ -379,7 +368,6 @@ export const useStore = create(
 
             // open application and its initial window
             return {
-              ...prevState,
               applications: prevState.applications.map((application) =>
                 application.id === payload.id
                   ? {
@@ -424,7 +412,6 @@ export const useStore = create(
             if (fileWindow) {
               if (fileWindow.hidden) {
                 return {
-                  ...prevState,
                   stackingOrder: [
                     ...prevState.stackingOrder.filter(
                       (id) => id !== fileWindow.id
@@ -440,7 +427,6 @@ export const useStore = create(
               }
 
               return {
-                ...prevState,
                 stackingOrder: [
                   ...prevState.stackingOrder.filter(
                     (id) => id !== fileWindow.id
@@ -473,7 +459,6 @@ export const useStore = create(
             // if opening file in an existing window
             if (existingWindow) {
               return {
-                ...prevState,
                 stackingOrder: [
                   ...prevState.stackingOrder.filter(
                     (id) => id !== existingWindow.id
@@ -515,7 +500,6 @@ export const useStore = create(
 
             // open application and file window
             return {
-              ...prevState,
               applications: prevState.applications.map((application) =>
                 application.id === applicationId
                   ? {
@@ -574,7 +558,6 @@ export const useStore = create(
             };
 
             return {
-              ...prevState,
               applications: prevState.applications.map((application) =>
                 application.id === payload.id
                   ? {
@@ -605,7 +588,6 @@ export const useStore = create(
       resizeWindow: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             windows: prevState.windows.map((window) =>
               window.id === payload.id
                 ? {
@@ -624,8 +606,7 @@ export const useStore = create(
         ),
       setTheme: (payload) =>
         set(
-          (prevState) => ({
-            ...prevState,
+          () => ({
             currentThemeId: payload.id,
           }),
           undefined,
@@ -637,7 +618,6 @@ export const useStore = create(
       showWindow: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             stackingOrder: [
               ...prevState.stackingOrder.filter((id) => id !== payload.id),
               payload.id,
@@ -661,7 +641,6 @@ export const useStore = create(
       zoomWindow: (payload) =>
         set(
           (prevState) => ({
-            ...prevState,
             windows: prevState.windows.map((window) => {
               if (window.id !== payload.id) {
                 return window;

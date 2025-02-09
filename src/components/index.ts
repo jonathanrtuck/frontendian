@@ -10,7 +10,6 @@ export * from "./Menu";
 export * from "./Menuitem";
 export * from "./SystemBar";
 export * from "./Tray";
-export * from "./UI";
 export * from "./Window";
 export * from "./WindowContent";
 export * from "./WindowHeader";
