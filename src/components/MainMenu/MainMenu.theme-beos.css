@@ -4,10 +4,6 @@
     flex-direction: column;
     position: relative;
 
-    &:focus {
-      outline: 0;
-    }
-
     &.component-menu {
       > .component-menuitem {
         > button {

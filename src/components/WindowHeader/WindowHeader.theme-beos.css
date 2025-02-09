@@ -81,10 +81,6 @@
       flex: 0 0 var(--component-window-header-height);
       position: relative;
 
-      &:focus {
-        outline: 0;
-      }
-
       &:nth-of-type(1) {
         background-image: var(
           --component-window-header-button-background-image

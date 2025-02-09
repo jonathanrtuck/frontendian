@@ -10,10 +10,6 @@
       calc(1.25rem + var(--border-width));
     position: relative;
 
-    &:focus {
-      outline: 0;
-    }
-
     &::before,
     &::after {
       background-color: var(--background-color--inactive);

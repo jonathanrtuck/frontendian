@@ -4,9 +4,6 @@ Portfolio site for Jonathan Tucker
 
 ## Todo
 
-- `Menu` keyboard navigation
-- `Menuitem` arrow icon
-
 - **themes**
   - `mac-os-classic` theme
     - scrollbar button arrow background images

@@ -4,10 +4,6 @@
     flex-direction: column;
     position: relative;
 
-    &:focus {
-      outline: 0;
-    }
-
     &[role="separator"] {
       border-color: var(--color--lowlight) transparent var(--color--highlight);
       border-width: var(--border-width) 0;

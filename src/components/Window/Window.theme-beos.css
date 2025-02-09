@@ -20,7 +20,7 @@
       --component-window-background-image: var(--background-color--default);
     }
 
-    [role="article"] {
+    > article {
       border-color: var(--color--lowlight) var(--color--highlight)
         var(--color--highlight) var(--color--lowlight);
       border-width: var(--border-width);

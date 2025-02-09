@@ -164,7 +164,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
           tabIndex={-1}>
           <WindowContext.Provider value={contextValue}>
             <WindowHeader />
-            <div hidden={Boolean(isCollapsible && collapsed)} role="article">
+            <article hidden={Boolean(isCollapsible && collapsed)}>
               <application.Component
                 Content={WindowContent}
                 Menu={Menu}
@@ -180,7 +180,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
                 openableFiles={openableFiles}
                 theme={theme}
               />
-            </div>
+            </article>
           </WindowContext.Provider>
         </section>
       </Draggable>

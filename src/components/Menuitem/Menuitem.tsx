@@ -243,9 +243,7 @@ export const Menuitem: FunctionComponent<
 
                 if (
                   parentMenuitemButton &&
-                  parentMenuitem?.matches(
-                    "" // @todo `.${styles.horizontal[currentThemeId]}`
-                  )
+                  parentMenuitem?.matches("[aria-orientation='horizontal'] &")
                 ) {
                   const parentMenuitemButtons = Array.from<HTMLElement>(
                     parentMenuitem?.parentElement?.querySelectorAll(
@@ -286,9 +284,7 @@ export const Menuitem: FunctionComponent<
 
                   if (
                     topMenuitemButton &&
-                    topMenuitem?.matches(
-                      "" // @todo `.${styles.horizontal[currentThemeId]}`
-                    )
+                    topMenuitem?.matches("[aria-orientation='horizontal'] &")
                   ) {
                     const topMenuitemButtons = Array.from<HTMLElement>(
                       topMenuitem?.parentElement?.querySelectorAll(
@@ -304,8 +300,6 @@ export const Menuitem: FunctionComponent<
                     );
 
                     nextMenuitemButton?.focus();
-                  } else {
-                    parentMenuitemButton?.focus();
                   }
                 }
               }
