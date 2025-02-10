@@ -1,6 +1,7 @@
 "use client";
 
 import "./Window.theme-beos.css";
+import "./Window.theme-mac-os-classic.css";
 import {
   Button,
   Dialog,

@@ -1,0 +1,37 @@
+:root.theme-mac-os-classic {
+  .component-window {
+    --component-window-background-color: var(--background-color--inactive);
+
+    background-color: var(--component-window-background-color);
+    border-width: var(--border-width);
+    box-shadow: 0.125rem 0.125rem 0.0625rem var(--color--lowlight),
+      var(--box-shadow--high);
+    left: 0;
+    padding: calc(
+        var(--border-width) + var(--border-width) +
+          var(--component-window-padding) +
+          var(--component-window-header-height) +
+          var(--component-window-padding) + var(--border-width)
+      )
+      0 0;
+    position: absolute;
+    top: 0;
+
+    &:focus {
+      outline: 0;
+    }
+
+    &[aria-current="true"] {
+      --component-window-background-color: var(--background-color--default);
+    }
+
+    > article {
+      border-color: var(--color--lowlight) var(--color--highlight)
+        var(--color--highlight) var(--color--lowlight);
+      border-width: var(--border-width);
+      box-shadow: inset 0 0 0 var(--border-width) var(--border-color--dark);
+      padding: var(--border-width);
+      margin: 0 var(--component-window-padding) var(--component-window-padding);
+    }
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import "./WindowHeader.theme-beos.css";
+import "./WindowHeader.theme-mac-os-classic.css";
 import { WindowContext } from "@/contexts";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";

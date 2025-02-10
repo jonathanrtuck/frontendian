@@ -25,6 +25,15 @@ export const Desktop: FunctionComponent = () => {
     applicationsAndFiles.find((obj) => obj.id === id)
   );
   const theme = themes.find(({ id }) => id === currentThemeId)!;
+  const selectionStyle =
+    selection.from && selection.to
+      ? {
+          height: Math.abs(selection.from.y - selection.to.y),
+          left: Math.min(selection.from.x, selection.to.x),
+          top: Math.min(selection.from.y, selection.to.y),
+          width: Math.abs(selection.from.x - selection.to.x),
+        }
+      : undefined;
 
   useLayoutEffect(
     () =>
@@ -57,17 +66,8 @@ export const Desktop: FunctionComponent = () => {
           />
         ) : null
       )}
-      {selection.from && selection.to ? (
-        <mark
-          aria-hidden
-          role="presentation"
-          style={{
-            height: Math.abs(selection.from.y - selection.to.y),
-            left: Math.min(selection.from.x, selection.to.x),
-            top: Math.min(selection.from.y, selection.to.y),
-            width: Math.abs(selection.from.x - selection.to.x),
-          }}
-        />
+      {selectionStyle ? (
+        <mark aria-hidden role="presentation" style={selectionStyle} />
       ) : null}
       <SystemBar />
       {windows.map((window) => (

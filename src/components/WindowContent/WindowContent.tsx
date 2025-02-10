@@ -1,6 +1,7 @@
 "use client";
 
 import "./WindowContent.theme-beos.css";
+import "./WindowContent.theme-mac-os-classic.css";
 import { WindowContext } from "@/contexts";
 import { Resize } from "@/icons";
 import { useStore } from "@/store";

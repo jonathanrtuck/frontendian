@@ -1,8 +1,8 @@
 :root.theme-beos {
   .component-window {
-    --component-window-background-image: var(--background-color--inactive);
+    --component-window-background-color: var(--background-color--inactive);
 
-    background-color: var(--component-window-background-image);
+    background-color: var(--component-window-background-color);
     color: var(--text-color--dark);
     left: 0;
     margin: calc(
@@ -11,7 +11,7 @@
       )
       0 0;
     padding: 0;
-    position: fixed;
+    position: absolute;
     top: 0;
 
     &:focus {
@@ -19,7 +19,7 @@
     }
 
     &[aria-current="true"] {
-      --component-window-background-image: var(--background-color--default);
+      --component-window-background-color: var(--background-color--default);
     }
 
     > article {

@@ -7,7 +7,7 @@
     gap: 1rem;
     grid-template-columns: repeat(auto-fill, 6rem);
     justify-items: center;
-    padding: calc(var(--component-system-bar-height) + 1rem) 1rem 1rem;
+    padding: calc(1rem + var(--component-system-bar-height)) 1rem 1rem;
 
     > mark {
       background: transparent;
@@ -15,7 +15,7 @@
       border-style: dotted;
       border-width: var(--border-width);
       content: "";
-      position: absolute;
+      position: fixed;
 
       &::after {
         border-color: inherit;

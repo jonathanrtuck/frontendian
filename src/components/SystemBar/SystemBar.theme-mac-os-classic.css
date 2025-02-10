@@ -1,0 +1,18 @@
+:root.theme-mac-os-classic {
+  .component-system-bar {
+    background-color: rgb(221, 221, 221);
+    border-radius: var(--border-radius, 0) var(--border-radius, 0) 0 0;
+    border-width: 0 0 var(--border-width);
+    box-shadow: inset var(--border-width) var(--border-width)
+        var(--color--highlight),
+      inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+        var(--color--lowlight);
+    display: flex;
+    height: var(--component-system-bar-height);
+    inset: 0;
+    justify-content: space-between;
+    padding: var(--border-width) 1rem;
+    position: fixed;
+    z-index: 1000;
+  }
+}

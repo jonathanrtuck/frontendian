@@ -1,6 +1,7 @@
 "use client";
 
 import "./SystemBar.theme-beos.css";
+import "./SystemBar.theme-mac-os-classic.css";
 import { Applications, MainMenu, Tray } from "@/components";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
@@ -55,9 +56,13 @@ export const SystemBar: FunctionComponent = () => {
       }
       ref={rootRef}
       role="banner"
-      style={{
-        zIndex,
-      }}
+      style={
+        currentThemeId === THEME_BEOS.id
+          ? {
+              zIndex,
+            }
+          : undefined
+      }
       tabIndex={-1}>
       {currentThemeId === THEME_BEOS.id && (
         <>

@@ -11,9 +11,9 @@
       rgb(216, 216, 216)
     );
 
-    background-color: var(--component-window-background-image);
+    background-color: var(--component-window-background-color);
     border-color: var(--border-color--light) var(--border-color--dark)
-      var(--component-window-background-image) var(--border-color--light);
+      var(--component-window-background-color) var(--border-color--light);
     border-width: var(--border-width);
     box-shadow: inset var(--border-width) var(--border-width)
         var(--color--highlight),
@@ -39,7 +39,7 @@
     z-index: 1;
 
     &::after {
-      background-color: var(--component-window-background-image);
+      background-color: var(--component-window-background-color);
       bottom: calc(var(--border-width) * -2);
       content: "";
       height: var(--border-width);
