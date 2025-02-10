@@ -1,6 +1,7 @@
 "use client";
 
 import "./Icon.theme-beos.css";
+import "./Icon.theme-mac-os-classic.css";
 import { File } from "@/icons";
 import type { IconComponent } from "@/types";
 import type { FunctionComponent } from "react";
