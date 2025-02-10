@@ -4,14 +4,12 @@
 
     background-color: var(--component-window-background-color);
     border-width: var(--border-width);
-    box-shadow: 0.125rem 0.125rem 0.0625rem var(--color--lowlight),
-      var(--box-shadow--high);
+    box-shadow: var(--box-shadow--elevation), var(--box-shadow--high);
     left: 0;
     padding: calc(
-        var(--border-width) + var(--border-width) +
-          var(--component-window-padding) +
+        var(--border-width) + var(--component-window-padding) +
           var(--component-window-header-height) +
-          var(--component-window-padding) + var(--border-width)
+          var(--component-window-padding)
       )
       0 0;
     position: absolute;

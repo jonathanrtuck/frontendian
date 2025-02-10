@@ -1,18 +1,20 @@
 :root.theme-mac-os-classic {
   .component-system-bar {
-    background-color: rgb(221, 221, 221);
+    background-color: var(--background-color--inactive);
     border-radius: var(--border-radius, 0) var(--border-radius, 0) 0 0;
     border-width: 0 0 var(--border-width);
-    box-shadow: inset var(--border-width) var(--border-width)
-        var(--color--highlight),
-      inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
-        var(--color--lowlight);
+    box-shadow: var(--box-shadow--high);
     display: flex;
+    font-family: var(--font-family--system);
     height: var(--component-system-bar-height);
     inset: 0;
-    justify-content: space-between;
     padding: 0 1rem;
     position: fixed;
     z-index: 1000;
+
+    &::after {
+      content: "";
+      flex: 1 1 auto;
+    }
   }
 }

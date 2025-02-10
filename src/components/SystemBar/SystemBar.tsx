@@ -5,8 +5,14 @@ import "./SystemBar.theme-mac-os-classic.css";
 import { Applications, MainMenu, Tray } from "@/components";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
+import dynamic from "next/dynamic";
 import type { FunctionComponent } from "react";
 import { useRef } from "react";
+
+// @see https://nextjs.org/docs/messages/react-hydration-error
+const Clock = dynamic(() => import("../Clock").then(({ Clock }) => Clock), {
+  ssr: false,
+});
 
 export const SystemBar: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
@@ -73,8 +79,9 @@ export const SystemBar: FunctionComponent = () => {
       )}
       {currentThemeId === THEME_MAC_OS_CLASSIC.id && (
         <>
-          {!focusedWindowId && <MainMenu />}
-          <Tray />
+          <MainMenu />
+          <Clock />
+          <Applications />
         </>
       )}
     </header>

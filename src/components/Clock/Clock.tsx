@@ -3,26 +3,30 @@
 import "./Clock.theme-beos.css";
 import "./Clock.theme-mac-os-classic.css";
 import { useClock } from "@/hooks";
-import clsx from "clsx";
-import type {
-  DetailedHTMLProps,
-  FunctionComponent,
-  HTMLAttributes,
-} from "react";
+import { useStore } from "@/store";
+import { THEME_BEOS } from "@/themes";
+import type { FunctionComponent } from "react";
+import { useEffect, useState } from "react";
 
-export const Clock: FunctionComponent<
-  Omit<
-    DetailedHTMLProps<HTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
-    "type"
-  > &
-    Pick<Intl.DateTimeFormatOptions, "dateStyle" | "timeStyle">
-> = ({ className, dateStyle, timeStyle, ...props }) => {
+export const Clock: FunctionComponent = () => {
+  const currentThemeId = useStore((store) => store.currentThemeId);
   const date = useClock();
+  const [format, setFormat] = useState<"date" | "time">("time");
+
+  useEffect(() => {
+    if (format !== "time") {
+      const timeout = setTimeout(() => setFormat("time"), 5000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [format]);
 
   return (
     <button
-      {...props}
-      className={clsx("component-clock", className)}
+      className="component-clock"
+      onClick={() =>
+        setFormat((prevState) => (prevState === "time" ? "date" : "time"))
+      }
       tabIndex={0}
       type="button">
       <time
@@ -30,13 +34,13 @@ export const Clock: FunctionComponent<
         title={date.toLocaleDateString(navigator.language, {
           dateStyle: "full",
         })}>
-        {Boolean(dateStyle) &&
+        {format === "date" &&
           date.toLocaleDateString(navigator.language, {
-            dateStyle,
+            dateStyle: "short",
           })}
-        {Boolean(timeStyle) &&
+        {format === "time" &&
           date.toLocaleTimeString(navigator.language, {
-            timeStyle,
+            timeStyle: currentThemeId === THEME_BEOS.id ? "medium" : "short",
           })}
       </time>
     </button>

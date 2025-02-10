@@ -1,6 +1,7 @@
 :root.theme-mac-os-classic {
   .component-clock {
     font-size: 0.875rem;
+    order: 1;
     padding: 0 0.5rem;
     user-select: none;
   }

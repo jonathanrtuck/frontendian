@@ -30,8 +30,8 @@
     }
 
     &:focus > label {
-      background-color: var(--color--lowlight);
-      color: rgb(191, 191, 191);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: rgb(204, 204, 204);
     }
   }
 }

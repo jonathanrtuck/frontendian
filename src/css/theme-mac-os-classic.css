@@ -4,9 +4,10 @@
   --background-color--inactive: rgb(220, 220, 220);
   --background-color--selection: rgb(204, 204, 253);
   --border-color--dark: rgb(38, 38, 38);
-  --border-color--light: transparent;
+  --border-color--light: rgb(140, 140, 140);
   --border-radius: 0.75rem;
   --border-width: 0.0625rem;
+  --box-shadow--elevation: 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.8);
   --box-shadow--high: inset var(--border-width) var(--border-width)
       var(--color--highlight),
     inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
@@ -16,7 +17,7 @@
     inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
       var(--color--highlight);
   --color--highlight: rgba(255, 255, 255, 0.6);
-  --color--lowlight: rgba(0, 0, 0, 0.4);
+  --color--lowlight: rgba(0, 0, 0, 0.25);
   --component-desktop-background: url(/images/mac-os-classic.png)
     rgb(48, 48, 48);
   --component-system-bar-height: 1.5rem;
@@ -26,10 +27,11 @@
   --cursor--default: default;
   --cursor--pointer: pointer;
   --cursor--text: text;
-  --font-family--default: var(--font-family--charcoal);
+  --font-family--default: arial;
   --font-family--monospace: ui-monospace, Menlo, Monaco, "Cascadia Mono",
     "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
     "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  --font-family--system: var(--font-family--charcoal);
   --scrollbar-width: 1rem;
   --text-color--dark: rgb(0, 0, 0);
   --text-color--default: var(--text-color--dark);

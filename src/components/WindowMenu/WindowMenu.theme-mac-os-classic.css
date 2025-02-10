@@ -1,0 +1,6 @@
+:root.theme-mac-os-classic {
+  .component-window-menu {
+    font-family: var(--font-family--system);
+    order: -1;
+  }
+}
