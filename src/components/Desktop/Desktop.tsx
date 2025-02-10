@@ -1,6 +1,7 @@
 "use client";
 
 import "./Desktop.theme-beos.css";
+import "./Desktop.theme-mac-os-classic.css";
 import { Dialog, ErrorBoundary, Icon, SystemBar, Window } from "@/components";
 import { FILE_README_MD } from "@/files";
 import { useSelection } from "@/hooks";

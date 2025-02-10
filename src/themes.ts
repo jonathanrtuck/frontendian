@@ -4,12 +4,12 @@ import type { Theme } from "@/types";
 export const THEME_BEOS: Theme = {
   Icon: BeOS,
   id: "theme-beos",
-  isDefault: true,
   title: "BeOS",
 };
 
 export const THEME_MAC_OS_CLASSIC: Theme = {
   Icon: Apple,
   id: "theme-mac-os-classic",
+  isDefault: true, // @todo
   title: "Mac OS Classic",
 };

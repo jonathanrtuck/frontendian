@@ -30,7 +30,6 @@ export const MainMenu: FunctionComponent = () => {
             title={FILE_README_MD.getTitle(theme)}
           />
           <Menuitem separator />
-          {/*
           <Menuitem title="Theme">
             <Menu>
               {Object.values(themes).map(({ id, title }) => (
@@ -45,7 +44,6 @@ export const MainMenu: FunctionComponent = () => {
             </Menu>
           </Menuitem>
           <Menuitem separator />
-          */}
           {applications
             .filter(({ id }) => id !== APPLICATION_FILE_MANAGER.id)
             .map((application) => (

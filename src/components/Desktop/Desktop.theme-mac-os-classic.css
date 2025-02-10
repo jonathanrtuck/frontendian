@@ -1,0 +1,30 @@
+:root.theme-mac-os-classic {
+  body {
+    align-items: start;
+    background: var(--component-desktop-background);
+    border-radius: var(--border-radius);
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, 6rem);
+    justify-items: center;
+    padding: calc(var(--component-system-bar-height) + 1rem) 1rem 1rem;
+
+    > mark {
+      background: transparent;
+      border-color: rgba(0, 0, 0, 0.5);
+      border-style: dotted;
+      border-width: var(--border-width);
+      content: "";
+      position: absolute;
+
+      &::after {
+        border-color: inherit;
+        border-style: inherit;
+        border-width: inherit;
+        content: "";
+        inset: 0;
+        position: absolute;
+      }
+    }
+  }
+}

@@ -17,7 +17,8 @@
       var(--color--highlight);
   --color--highlight: rgba(255, 255, 255, 0.6);
   --color--lowlight: rgba(0, 0, 0, 0.4);
-  --component-desktop-background: url(/images/mac-os-classic.png);
+  --component-desktop-background: url(/images/mac-os-classic.png)
+    rgb(48, 48, 48);
   --component-system-bar-height: 1.5rem;
   --component-system-bar-width: auto;
   --component-window-header-height: 1rem;
