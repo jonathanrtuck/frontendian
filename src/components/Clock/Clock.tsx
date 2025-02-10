@@ -1,6 +1,7 @@
 "use client";
 
 import "./Clock.theme-beos.css";
+import "./Clock.theme-mac-os-classic.css";
 import { useClock } from "@/hooks";
 import clsx from "clsx";
 import type {

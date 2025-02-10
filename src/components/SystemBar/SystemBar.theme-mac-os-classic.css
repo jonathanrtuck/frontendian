@@ -11,7 +11,7 @@
     height: var(--component-system-bar-height);
     inset: 0;
     justify-content: space-between;
-    padding: var(--border-width) 1rem;
+    padding: 0 1rem;
     position: fixed;
     z-index: 1000;
   }

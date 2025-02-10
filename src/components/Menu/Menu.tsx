@@ -1,6 +1,7 @@
 "use client";
 
 import "./Menu.theme-beos.css";
+import "./Menu.theme-mac-os-classic.css";
 import { MenuContext, MenuitemContext } from "@/contexts";
 import clsx from "clsx";
 import type {

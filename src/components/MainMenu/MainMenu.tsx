@@ -1,6 +1,7 @@
 "use client";
 
 import "./MainMenu.theme-beos.css";
+import "./MainMenu.theme-mac-os-classic.css";
 import { APPLICATION_FILE_MANAGER } from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { FILE_README_MD } from "@/files";

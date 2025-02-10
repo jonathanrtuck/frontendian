@@ -1,6 +1,7 @@
 "use client";
 
 import "./Tray.theme-beos.css";
+import "./Tray.theme-mac-os-classic.css";
 import { Applications } from "@/components";
 import { Network } from "@/icons";
 import { useStore } from "@/store";

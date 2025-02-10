@@ -71,7 +71,12 @@ export const SystemBar: FunctionComponent = () => {
           <Applications />
         </>
       )}
-      {currentThemeId === THEME_MAC_OS_CLASSIC.id && <></>}
+      {currentThemeId === THEME_MAC_OS_CLASSIC.id && (
+        <>
+          {!focusedWindowId && <MainMenu />}
+          <Tray />
+        </>
+      )}
     </header>
   );
 };

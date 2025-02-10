@@ -1,0 +1,5 @@
+:root.theme-mac-os-classic {
+  .component-tray {
+    order: 2;
+  }
+}

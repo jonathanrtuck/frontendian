@@ -1,0 +1,13 @@
+:root.theme-mac-os-classic {
+  .component-main-menu {
+    &.component-menu {
+      > .component-menuitem {
+        > button {
+          label {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

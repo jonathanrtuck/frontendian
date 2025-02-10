@@ -1,6 +1,7 @@
 "use client";
 
 import "./Menuitem.theme-beos.css";
+import "./Menuitem.theme-mac-os-classic.css";
 import { MenuContext, MenuitemContext } from "@/contexts";
 import { useStore } from "@/store";
 import { IconComponent } from "@/types";
