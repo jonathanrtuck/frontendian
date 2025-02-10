@@ -24,7 +24,6 @@ export const WindowHeader: FunctionComponent = () => {
   const expandWindow = useStore((store) => store.expandWindow);
   const hideWindow = useStore((store) => store.hideWindow);
   const moveWindowTitlebar = useStore((store) => store.moveWindowTitlebar);
-  const themes = useStore((store) => store.themes);
   const zoomWindow = useStore((store) => store.zoomWindow);
   const { collapsed, id, resizable, scrollable, title, titlebarLeft, width } =
     useContext(WindowContext);
@@ -38,7 +37,6 @@ export const WindowHeader: FunctionComponent = () => {
   const isCollapsible = currentThemeId === THEME_MAC_OS_CLASSIC.id;
   const isDoubleClickable = currentThemeId === THEME_BEOS.id;
   const isDraggable = currentThemeId === THEME_BEOS.id;
-  const theme = themes.find(({ id }) => id === currentThemeId)!;
   const getMaxLeft = useCallback(
     () =>
       (rootRef.current
@@ -53,9 +51,9 @@ export const WindowHeader: FunctionComponent = () => {
   );
 
   useLayoutEffect(updatePosition, [
+    currentThemeId,
     resizable,
     scrollable,
-    theme,
     title,
     updatePosition,
     width,

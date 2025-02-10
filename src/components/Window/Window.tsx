@@ -41,7 +41,6 @@ export const Window: FunctionComponent<WindowType> = (props) => {
   const resizeWindow = useStore((store) => store.resizeWindow);
   const stackingOrder = useStore((store) => store.stackingOrder);
   const systemBarId = useStore((store) => store.systemBarId);
-  const themes = useStore((store) => store.themes);
   const types = useStore((store) => store.types);
   const menubarRef = useRef<HTMLMenuElement>(null);
   const rootRef = useRef<HTMLElement>(null);
@@ -68,7 +67,6 @@ export const Window: FunctionComponent<WindowType> = (props) => {
         acc.concat(files.filter((file) => file.type === type)),
       []
     );
-  const theme = themes.find(({ id }) => id === currentThemeId)!;
   const onAbout = useCallback(
     (node: ReactNode) => setAboutDialogContent(node),
     []
@@ -104,7 +102,10 @@ export const Window: FunctionComponent<WindowType> = (props) => {
     <ErrorBoundary
       fallback={
         <Dialog modal open type="error">
-          <p>{application.getTitle(theme)} has encountered an unknown error.</p>
+          <p>
+            {application.getTitle({ themeId: currentThemeId })} has encountered
+            an unknown error.
+          </p>
           <footer>
             <Button
               autoFocus
@@ -179,7 +180,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
                 onQuit={onQuit}
                 onResize={onResize}
                 openableFiles={openableFiles}
-                theme={theme}
+                themeId={currentThemeId}
               />
             </article>
           </WindowContext.Provider>

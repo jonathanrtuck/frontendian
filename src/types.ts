@@ -48,21 +48,21 @@ export type ApplicationComponentProps = {
   onQuit(): void;
   onResize(height: Pixels, width: Pixels): void;
   openableFiles: File[];
-  theme: Theme;
+  themeId: Theme["id"];
 };
 
 export type ApplicationConfiguration = Readonly<{
   Component: ApplicationComponent;
-  getTitle(theme: Theme): string;
-  getWindow?(theme: Theme, file?: File): Partial<Window>;
+  getTitle(obj: { themeId: Theme["id"] }): string;
+  getWindow?(obj: { file?: File; themeId: Theme["id"] }): Partial<Window>;
   Icon?: IconComponent;
   id: ID;
 }>;
 
 export type File = Readonly<
   {
-    getTitle(theme: Theme): string;
-    getUrl(theme: Theme): URL;
+    getTitle(obj: { themeId: Theme["id"] }): string;
+    getUrl(obj: { themeId: Theme["id"] }): URL;
     id: ID;
   } & (
     | {
@@ -78,7 +78,7 @@ export type File = Readonly<
 export type IconComponent = ComponentType<
   SVGAttributes<SVGSVGElement> & {
     ref?: RefObject<SVGSVGElement>;
-    theme?: Theme;
+    themeId?: Theme["id"];
   }
 >;
 

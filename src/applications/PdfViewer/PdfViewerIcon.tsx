@@ -3,7 +3,7 @@
 import { IconComponent } from "@/types";
 import { useId } from "react";
 
-export const PdfViewerIcon: IconComponent = ({ theme, ...props }) => {
+export const PdfViewerIcon: IconComponent = ({ themeId, ...props }) => {
   const id = useId();
 
   return (

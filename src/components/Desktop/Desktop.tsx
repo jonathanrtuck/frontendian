@@ -24,7 +24,6 @@ export const Desktop: FunctionComponent = () => {
   const icons = desktop.map((id) =>
     applicationsAndFiles.find((obj) => obj.id === id)
   );
-  const theme = themes.find(({ id }) => id === currentThemeId)!;
   const selectionStyle =
     selection.from && selection.to
       ? {
@@ -62,7 +61,7 @@ export const Desktop: FunctionComponent = () => {
                 ? openApplication({ id: obj.id })
                 : openFile({ id: obj.id })
             }
-            title={obj.getTitle(theme)}
+            title={obj.getTitle({ themeId: currentThemeId })}
           />
         ) : null
       )}

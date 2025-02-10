@@ -18,7 +18,6 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
 }) => {
   const currentThemeId = useStore((store) => store.currentThemeId);
   const resizeWindow = useStore((store) => store.resizeWindow);
-  const themes = useStore((store) => store.themes);
   const { collapsed, height, id, menubarRef, resizable, scrollable, width } =
     useContext(WindowContext);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -33,7 +32,6 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
         .map((element) => (element as HTMLElement).offsetWidth)
         .reduce((acc, width) => acc + width, 0)
     : 0;
-  const theme = themes.find(({ id }) => id === currentThemeId)!;
 
   useLayoutEffect(() => {
     const rootElement = rootRef.current;
@@ -85,7 +83,9 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
         // @see https://github.com/react-grid-layout/react-resizable?tab=readme-ov-file#custom-function
         resizable && !collapsed
           ? // eslint-disable-next-line react/no-unstable-nested-components
-            (_, ref) => <Resize aria-hidden ref={ref} theme={theme} />
+            (_, ref) => (
+              <Resize aria-hidden ref={ref} themeId={currentThemeId} />
+            )
           : null
       }
       height={height}

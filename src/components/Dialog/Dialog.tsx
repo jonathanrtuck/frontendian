@@ -32,10 +32,8 @@ export const Dialog: FunctionComponent<
   >
 > = ({ children, className, modal, open, type, ...props }) => {
   const currentThemeId = useStore((store) => store.currentThemeId);
-  const themes = useStore((store) => store.themes);
   const rootRef = useRef<HTMLDialogElement>(null);
   const Icon = ICONS_BY_TYPE[type];
-  const theme = themes.find(({ id }) => id === currentThemeId)!;
 
   useLayoutEffect(() => {
     if (open) {
@@ -54,7 +52,7 @@ export const Dialog: FunctionComponent<
       {...props}
       className={clsx("component-dialog", className)}
       ref={rootRef}>
-      <Icon theme={theme} />
+      <Icon themeId={currentThemeId} />
       {children}
     </dialog>
   );

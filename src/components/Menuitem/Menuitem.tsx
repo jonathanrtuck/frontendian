@@ -70,7 +70,6 @@ export const Menuitem: FunctionComponent<
     )
 > = ({ children, className, ...props }) => {
   const currentThemeId = useStore((store) => store.currentThemeId);
-  const themes = useStore((store) => store.themes);
   const { inactivate, isActive, isFocusWithin, isTop, orientation } =
     useContext(MenuContext);
   const { collapse: parentCollapse, topButtonRef: parentTopButtonRef } =
@@ -80,7 +79,6 @@ export const Menuitem: FunctionComponent<
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
-  const theme = themes.find(({ id }) => id === currentThemeId)!;
   const collapse = useCallback(() => {
     setIsExpanded(false);
     rootRef.current?.focus();
@@ -352,7 +350,7 @@ export const Menuitem: FunctionComponent<
         }
         tabIndex={tabIndex}
         type="button">
-        {!!Icon && <Icon aria-hidden theme={theme} />}
+        {!!Icon && <Icon aria-hidden themeId={currentThemeId} />}
         <label id={`${id}-title`}>{title}</label>
       </button>
       <MenuitemContext.Provider value={contextValue}>

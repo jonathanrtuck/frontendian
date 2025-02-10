@@ -5,11 +5,11 @@ import { FileManagerIcon } from "./FileManagerIcon";
 
 export const APPLICATION_FILE_MANAGER: ApplicationConfiguration = {
   Component: FileManager,
-  getTitle: (theme) =>
+  getTitle: ({ themeId }) =>
     ({
       [THEME_BEOS.id]: "Tracker",
       [THEME_MAC_OS_CLASSIC.id]: "Finder",
-    }[theme.id]),
+    }[themeId]),
   Icon: FileManagerIcon,
   id: "application-file-manager",
 };

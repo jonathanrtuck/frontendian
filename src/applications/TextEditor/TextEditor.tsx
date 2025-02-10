@@ -19,14 +19,14 @@ export const TextEditor: ApplicationComponent = ({
   onOpen,
   onQuit,
   openableFiles,
-  theme,
+  themeId,
 }) => {
   const [content, setContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [view, setView] = useState<"markdown" | "preview">(
-    file?.type === "text/markdown" && Boolean(file?.getUrl(theme))
+    file?.type === "text/markdown" && Boolean(file?.getUrl({ themeId }))
       ? "preview"
       : "markdown"
   );
@@ -34,7 +34,7 @@ export const TextEditor: ApplicationComponent = ({
   const inputLines = input.split("\n");
   const numInputCols = Math.max(...inputLines.map((line) => line.length));
   const numInputRows = inputLines.length;
-  const url = file?.type === "text/markdown" ? file.getUrl(theme) : null;
+  const url = file?.type === "text/markdown" ? file.getUrl({ themeId }) : null;
 
   useEffect(() => {
     if (url) {
@@ -66,11 +66,11 @@ export const TextEditor: ApplicationComponent = ({
   useEffect(
     () =>
       setView(
-        file?.type === "text/markdown" && Boolean(file?.getUrl(theme))
+        file?.type === "text/markdown" && Boolean(file?.getUrl({ themeId }))
           ? "preview"
           : "markdown"
       ),
-    [file, theme]
+    [file, themeId]
   );
 
   return (
@@ -88,7 +88,7 @@ export const TextEditor: ApplicationComponent = ({
                     onClick={() => {
                       onOpen(id);
                     }}
-                    title={getTitle(theme)}
+                    title={getTitle({ themeId })}
                   />
                 ))}
               </Menu>
@@ -137,7 +137,7 @@ export const TextEditor: ApplicationComponent = ({
                   </>
                 );
               }}
-              title={`About ${getTitle(theme)}…`}
+              title={`About ${getTitle({ themeId })}…`}
             />
           </Menu>
         </Menuitem>

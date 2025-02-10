@@ -3,7 +3,7 @@
 import type { IconComponent } from "@/types";
 import { useId } from "react";
 
-export const TextEditorIcon: IconComponent = ({ theme, ...props }) => {
+export const TextEditorIcon: IconComponent = ({ themeId, ...props }) => {
   const id = useId();
 
   return (

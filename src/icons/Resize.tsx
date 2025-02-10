@@ -3,13 +3,13 @@
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { IconComponent } from "@/types";
 
-export const Resize: IconComponent = ({ theme, ...props }) => (
+export const Resize: IconComponent = ({ themeId, ...props }) => (
   <svg
     {...props}
     version="1.1"
     viewBox="0 0 64 64"
     xmlns="http://www.w3.org/2000/svg">
-    {theme?.id === THEME_BEOS.id && (
+    {themeId === THEME_BEOS.id && (
       <>
         <circle cx="60" cy="12" fill="currentColor" r="4" />
         <circle cx="44" cy="28" fill="currentColor" r="4" />
@@ -23,7 +23,7 @@ export const Resize: IconComponent = ({ theme, ...props }) => (
         <circle cx="60" cy="60" fill="currentColor" r="4" />
       </>
     )}
-    {theme?.id === THEME_MAC_OS_CLASSIC.id && (
+    {themeId === THEME_MAC_OS_CLASSIC.id && (
       <>
         <line
           stroke="var(--color--highlight)"

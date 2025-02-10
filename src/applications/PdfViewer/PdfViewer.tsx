@@ -23,11 +23,11 @@ export const PdfViewer: ApplicationComponent = ({
   onOpen,
   onQuit,
   openableFiles,
-  theme,
+  themeId,
 }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [numPages, setNumPages] = useState<number>(0);
-  const url = file?.getUrl(theme) ?? null;
+  const url = file?.getUrl({ themeId }) ?? null;
 
   return (
     <>
@@ -44,7 +44,7 @@ export const PdfViewer: ApplicationComponent = ({
                     onClick={() => {
                       onOpen(id);
                     }}
-                    title={getTitle(theme)}
+                    title={getTitle({ themeId })}
                   />
                 ))}
               </Menu>
@@ -109,7 +109,7 @@ export const PdfViewer: ApplicationComponent = ({
               hidden
               ref={iframeRef}
               src={url}
-              title={file.getTitle(theme)}
+              title={file.getTitle({ themeId })}
             />
           </>
         ) : null}

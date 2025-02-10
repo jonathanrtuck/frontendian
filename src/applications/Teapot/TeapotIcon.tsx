@@ -1,7 +1,7 @@
 import { IconComponent } from "@/types";
 import { useId } from "react";
 
-export const TeapotIcon: IconComponent = ({ theme, ...props }) => {
+export const TeapotIcon: IconComponent = ({ themeId, ...props }) => {
   const id = useId();
 
   return (

@@ -2,7 +2,7 @@ import type { File } from "@/types";
 
 export const FILE_README_MD: File = {
   getTitle: () => "About this site",
-  getUrl: (theme) => `/files/README.${theme.id}.md`,
+  getUrl: ({ themeId }) => `/files/README.${themeId}.md`,
   id: "file-README.md",
   type: "text/markdown",
 };

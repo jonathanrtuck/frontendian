@@ -350,9 +350,6 @@ export const useStore = create(
               return prevState;
             }
 
-            const theme = prevState.themes.find(
-              ({ id }) => id === prevState.currentThemeId
-            )!;
             const windowId = uuid();
             const windowPosition = getFirstOpenWindowPosition(
               prevState.windows
@@ -360,7 +357,9 @@ export const useStore = create(
             const window: Window = {
               ...DEFAULT_WINDOW,
               title: DEFAULT_WINDOW.title,
-              ...(application.getWindow?.(theme) ?? {}),
+              ...(application.getWindow?.({
+                themeId: prevState.currentThemeId,
+              }) ?? {}),
               id: windowId,
               left: windowPosition,
               top: windowPosition,
@@ -449,9 +448,6 @@ export const useStore = create(
             const application = prevState.applications.find(
               ({ id }) => id === applicationId
             );
-            const theme = prevState.themes.find(
-              ({ id }) => id === prevState.currentThemeId
-            )!;
             const existingWindow = payload.windowId
               ? prevState.windows.find(({ id }) => id === payload.windowId)
               : undefined;
@@ -469,8 +465,13 @@ export const useStore = create(
                   window.id === existingWindow.id
                     ? {
                         ...window,
-                        title: file.getTitle(theme),
-                        ...(application?.getWindow?.(theme, file) ?? {}),
+                        title: file.getTitle({
+                          themeId: prevState.currentThemeId,
+                        }),
+                        ...(application?.getWindow?.({
+                          file,
+                          themeId: prevState.currentThemeId,
+                        }) ?? {}),
                         fileId: file.id,
                         focused: true,
                       }
@@ -490,8 +491,13 @@ export const useStore = create(
             );
             const window: Window = {
               ...DEFAULT_WINDOW,
-              title: file.getTitle(theme),
-              ...(application?.getWindow?.(theme, file) ?? {}),
+              title: file.getTitle({
+                themeId: prevState.currentThemeId,
+              }),
+              ...(application?.getWindow?.({
+                file,
+                themeId: prevState.currentThemeId,
+              }) ?? {}),
               fileId: file.id,
               id: windowId,
               left: windowPosition,
@@ -538,9 +544,6 @@ export const useStore = create(
               return prevState;
             }
 
-            const theme = prevState.themes.find(
-              ({ id }) => id === prevState.currentThemeId
-            )!;
             const isApplicationOpen = prevState.openApplicationIds.includes(
               payload.id
             );
@@ -551,7 +554,9 @@ export const useStore = create(
             const window: Window = {
               ...DEFAULT_WINDOW,
               title: DEFAULT_WINDOW.title,
-              ...(application.getWindow?.(theme) ?? {}),
+              ...(application.getWindow?.({
+                themeId: prevState.currentThemeId,
+              }) ?? {}),
               id: windowId,
               left: windowPosition,
               top: windowPosition,

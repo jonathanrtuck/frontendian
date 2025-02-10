@@ -3,7 +3,7 @@
 import { IconComponent } from "@/types";
 import { useId } from "react";
 
-export const MinesweeperIcon: IconComponent = ({ theme, ...props }) => {
+export const MinesweeperIcon: IconComponent = ({ themeId, ...props }) => {
   const id = useId();
 
   return (

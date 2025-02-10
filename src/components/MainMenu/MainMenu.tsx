@@ -28,7 +28,7 @@ export const MainMenu: FunctionComponent = () => {
         <Menu>
           <Menuitem
             onClick={() => openFile({ id: FILE_README_MD.id })}
-            title={FILE_README_MD.getTitle(theme)}
+            title={FILE_README_MD.getTitle({ themeId: currentThemeId })}
           />
           <Menuitem separator />
           <Menuitem title="Theme">
@@ -52,7 +52,7 @@ export const MainMenu: FunctionComponent = () => {
                 Icon={application.Icon}
                 key={application.id}
                 onClick={() => openApplication({ id: application.id })}
-                title={application.getTitle(theme)}
+                title={application.getTitle({ themeId: currentThemeId })}
               />
             ))}
         </Menu>

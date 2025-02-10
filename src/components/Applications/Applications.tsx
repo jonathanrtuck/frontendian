@@ -16,9 +16,7 @@ export const Applications: FunctionComponent = () => {
   const hideWindow = useStore((store) => store.hideWindow);
   const openApplicationIds = useStore((store) => store.openApplicationIds);
   const showWindow = useStore((store) => store.showWindow);
-  const themes = useStore((store) => store.themes);
   const windows = useStore((store) => store.windows);
-  const theme = themes.find(({ id }) => id === currentThemeId)!;
 
   switch (currentThemeId) {
     case THEME_BEOS.id:
@@ -33,7 +31,10 @@ export const Applications: FunctionComponent = () => {
             );
 
             return (
-              <Menuitem Icon={Icon} key={applicationId} title={getTitle(theme)}>
+              <Menuitem
+                Icon={Icon}
+                key={applicationId}
+                title={getTitle({ themeId: currentThemeId })}>
                 <Menu>
                   {applicationWindows.length === 0 ? (
                     <Menuitem disabled title="No windows" />
@@ -92,12 +93,14 @@ export const Applications: FunctionComponent = () => {
         <Menu bar className="component-applications" horizontal>
           <Menuitem
             Icon={activeApplication.Icon}
-            title={activeApplication.getTitle(theme)}>
+            title={activeApplication.getTitle({ themeId: currentThemeId })}>
             <Menu>
               <Menuitem
                 disabled={false} // @todo
                 onClick={() => {}}
-                title={`Hide ${activeApplication.getTitle(theme)}`}
+                title={`Hide ${activeApplication.getTitle({
+                  themeId: currentThemeId,
+                })}`}
               />
               <Menuitem
                 disabled={false} // @todo
@@ -127,7 +130,7 @@ export const Applications: FunctionComponent = () => {
                         blurWindow({ id: focusedWindow.id });
                       }
                     }}
-                    title={getTitle(theme)}
+                    title={getTitle({ themeId: currentThemeId })}
                     type="radio"
                   />
                 );
