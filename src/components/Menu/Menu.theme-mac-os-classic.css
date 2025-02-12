@@ -26,7 +26,7 @@
     &[role="menu"] {
       background-color: var(--background-color--inactive);
       border-width: var(--border-width);
-      box-shadow: var(--box-shadow--elevation), var(--box-shadow--high);
+      box-shadow: var(--box-shadow-elevation--high), var(--box-shadow--high);
       color: var(--text-color--dark);
       flex-direction: column;
       max-width: 20rem;

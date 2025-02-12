@@ -21,9 +21,9 @@
         var(--component-window-padding)
     );
     inset: 0;
-    margin: var(--border-width) var(--border-width) 0;
+    margin: var(--border-width);
     max-width: 100%;
-    padding: var(--component-window-padding);
+    padding: calc(var(--component-window-padding) - var(--border-width));
     position: absolute;
     z-index: 1;
 
@@ -59,6 +59,7 @@
     h1 {
       flex: 0 1 auto;
       font-size: 0.875rem;
+      line-height: 1;
       margin: 0;
       order: 4;
       overflow: hidden;
@@ -67,7 +68,7 @@
       white-space: nowrap;
 
       [aria-current="false"] & {
-        filter: opacity(40%);
+        filter: opacity(35%);
       }
     }
 
@@ -79,15 +80,15 @@
     }
 
     button {
+      aspect-ratio: 1 / 1;
       background-clip: content-box;
       background-image: var(--component-window-header-button-background-image);
       border-color: var(--color--lowlight) var(--color--highlight)
         var(--color--highlight) var(--color--lowlight);
       border-width: var(--border-width);
       flex: 0 0 var(--component-window-header-height);
-      height: var(--component-window-header-height);
+      height: 100%;
       position: relative;
-      width: var(--component-window-header-height);
 
       &:active,
       &:focus-visible {

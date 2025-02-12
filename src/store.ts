@@ -662,6 +662,7 @@ export const useStore = create(
               const frameWidth = offsetWidth + marginX - window.width;
               const maxHeight = document.body.offsetHeight - frameHeight;
               const maxWidth = document.body.offsetWidth - frameWidth;
+              // @todo
               const isZoomed =
                 window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
                 window.height <= maxHeight + WINDOW_DIMENSION_BUFFER &&
@@ -678,7 +679,6 @@ export const useStore = create(
                 : {
                     ...window,
                     collapsed: false,
-                    height: maxHeight,
                     left: 0,
                     prev: {
                       height: window.height,
@@ -687,7 +687,6 @@ export const useStore = create(
                       width: window.width,
                     },
                     top: 0,
-                    width: maxWidth,
                     zoomed: true,
                   };
             }),

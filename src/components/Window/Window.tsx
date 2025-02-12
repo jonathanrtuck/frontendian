@@ -27,7 +27,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import Draggable from "react-draggable";
 
 export const Window: FunctionComponent<WindowType> = (props) => {
-  const { collapsed, fileId, focused, hidden, id, left, top } = props;
+  const { collapsed, fileId, focused, hidden, id, left, top, zoomed } = props;
   const applications = useStore((store) => store.applications);
   const blurWindow = useStore((store) => store.blurWindow);
   const closeApplication = useStore((store) => store.closeApplication);
@@ -136,6 +136,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
         }}>
         <section
           aria-current={focused}
+          aria-expanded={zoomed}
           aria-labelledby={`${id}-title`}
           className="component-window"
           hidden={hidden}
@@ -166,7 +167,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
           tabIndex={-1}>
           <WindowContext.Provider value={contextValue}>
             <WindowHeader />
-            <article hidden={Boolean(isCollapsible && collapsed)}>
+            <article aria-hidden={Boolean(isCollapsible && collapsed)}>
               <application.Component
                 Content={WindowContent}
                 Menu={Menu}

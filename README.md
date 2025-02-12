@@ -6,8 +6,8 @@ Portfolio site for Jonathan Tucker
 
 - `mac-os-classic` theme
   - main menu interaction
-    - change expanded root menuitem on hover
-  - scrollbar button arrow background images
+    - submenus expand on hover
+    - root menuitems expand on hover when menubar active
   - `Window` collapse and zoom
   - about dialog
   - sad mac dialog

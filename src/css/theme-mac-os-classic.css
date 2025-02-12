@@ -7,7 +7,8 @@
   --border-color--light: rgb(140, 140, 140);
   --border-radius: 0.75rem;
   --border-width: 0.0625rem;
-  --box-shadow--elevation: 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.8);
+  --box-shadow-elevation--high: 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.8);
+  --box-shadow-elevation--low: 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.15);
   --box-shadow--high: inset var(--border-width) var(--border-width)
       var(--color--highlight),
     inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)

@@ -102,7 +102,6 @@ export const Applications: FunctionComponent = () => {
         ({ id }) => !activeApplication.windowIds.includes(id)
       );
       return (
-        // eslint-disable-next-line jsx-a11y/role-supports-aria-props
         <nav aria-expanded={isExpanded} className="component-applications">
           <button
             aria-hidden

@@ -22,9 +22,12 @@ const ICONS_BY_TYPE: Record<DialogType, IconComponent> = {
 
 export const Dialog: FunctionComponent<
   PropsWithChildren<
-    DetailedHTMLProps<
-      DialogHTMLAttributes<HTMLDialogElement>,
-      HTMLDialogElement
+    Omit<
+      DetailedHTMLProps<
+        DialogHTMLAttributes<HTMLDialogElement>,
+        HTMLDialogElement
+      >,
+      "role"
     > & {
       modal?: boolean;
       type: DialogType;
@@ -51,7 +54,8 @@ export const Dialog: FunctionComponent<
     <dialog
       {...props}
       className={clsx("component-dialog", className)}
-      ref={rootRef}>
+      ref={rootRef}
+      role="alertdialog">
       <Icon themeId={currentThemeId} />
       {children}
     </dialog>

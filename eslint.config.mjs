@@ -10,6 +10,7 @@ const eslintConfig = [
   ...compat.config({
     rules: {
       "@typescript-eslint/no-unused-vars": "warn",
+      "jsx-a11y/role-supports-aria-props": "off",
       "no-console": "warn",
       "react/button-has-type": "warn",
       "react/display-name": "error",
