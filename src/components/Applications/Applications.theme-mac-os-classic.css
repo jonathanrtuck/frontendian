@@ -1,5 +1,48 @@
 :root.theme-mac-os-classic {
   .component-applications {
+    display: flex;
     order: 2;
+
+    &[aria-expanded="false"] {
+      > .component-menu {
+        > .component-menuitem {
+          > button {
+            label {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    > button {
+      box-shadow: var(--box-shadow--high);
+      color: var(--background-color--inactive);
+
+      &::after {
+        content: "⁞";
+        display: inline-block;
+        font-family: var(--font-family--monospace);
+        font-size: 1.125rem;
+        line-height: var(--system-bar-height);
+        text-shadow: calc(var(--border-width) * -0.5)
+            calc(var(--border-width) * -0.5) 0 rgba(0, 0, 0, 0.6),
+          calc(var(--border-width) * 0.5) calc(var(--border-width) * 0.5) 0
+            rgba(255, 255, 255, 0.6);
+      }
+
+      &:active {
+        background-color: var(--border-color--light);
+        box-shadow: var(--box-shadow--low);
+        color: var(--border-color--light);
+      }
+    }
+
+    .component-menu {
+      &[aria-orientation="horizontal"] & {
+        left: auto;
+        right: 0;
+      }
+    }
   }
 }

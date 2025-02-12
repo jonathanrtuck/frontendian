@@ -2,7 +2,7 @@
   --background-color--dark: transparent;
   --background-color--default: rgb(204, 204, 204);
   --background-color--inactive: rgb(220, 220, 220);
-  --background-color--selection: rgb(204, 204, 253);
+  --background-color--selection: rgb(204, 204, 255);
   --border-color--dark: rgb(38, 38, 38);
   --border-color--light: rgb(140, 140, 140);
   --border-radius: 0.75rem;
@@ -24,9 +24,11 @@
   --component-system-bar-width: auto;
   --component-window-header-height: 1rem;
   --component-window-padding: 0.25rem;
-  --cursor--default: default;
-  --cursor--pointer: pointer;
-  --cursor--text: text;
+  --cursor--default: url("/cursors/default.theme-mac-os-classic.svg") 7 4,
+    default;
+  --cursor--pointer: url("/cursors/pointer.theme-mac-os-classic.svg") 8 3,
+    pointer;
+  --cursor--text: url("/cursors/text.theme-mac-os-classic.svg") 9 10, default;
   --font-family--default: arial;
   --font-family--monospace: ui-monospace, Menlo, Monaco, "Cascadia Mono",
     "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",

@@ -82,7 +82,7 @@
       flex: 0 0 var(--component-window-header-height);
       position: relative;
 
-      &:nth-of-type(1) {
+      &[aria-label="Close"] {
         background-image: var(
           --component-window-header-button-background-image
         );
@@ -107,7 +107,7 @@
         }
       }
 
-      &:nth-of-type(2) {
+      &[aria-label="Zoom"] {
         order: 3;
 
         &::before,

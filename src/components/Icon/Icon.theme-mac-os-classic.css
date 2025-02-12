@@ -25,6 +25,7 @@
       font-weight: 400;
       max-width: 100%;
       overflow: hidden;
+      padding: 0 0.125em;
       text-overflow: ellipsis;
       white-space: nowrap;
     }

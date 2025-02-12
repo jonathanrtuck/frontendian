@@ -119,7 +119,7 @@ export const WindowHeader: FunctionComponent = () => {
         }
         ref={rootRef}>
         {hasIcon && application.Icon !== undefined ? (
-          <application.Icon aria-hidden />
+          <application.Icon aria-hidden themeId={currentThemeId} /> // @todo use file icon
         ) : null}
         <h1 id={`${id}-title`} title={title}>
           {title}

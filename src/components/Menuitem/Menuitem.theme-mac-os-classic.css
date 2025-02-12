@@ -24,7 +24,7 @@
           font-family: var(--font-family--monospace);
           font-size: 1.25rem;
           font-weight: 700;
-          left: 0.1875rem;
+          left: 0.25rem;
           position: absolute;
           transform: rotate(135deg);
         }

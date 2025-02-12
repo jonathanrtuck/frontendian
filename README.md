@@ -4,8 +4,14 @@ Portfolio site for Jonathan Tucker
 
 ## Todo
 
-- add `mac-os-classic` theme styles
+- `mac-os-classic` theme
+  - main menu interaction
+    - change expanded root menuitem on hover
   - scrollbar button arrow background images
+  - `Window` collapse and zoom
+  - about dialog
+  - sad mac dialog
+  - control strip
 - create `FileManager` window
   - add `Icon`s for `File`s (md?)
     - bankx

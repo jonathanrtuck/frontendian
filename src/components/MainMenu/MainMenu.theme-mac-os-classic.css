@@ -1,9 +1,9 @@
 :root.theme-mac-os-classic {
   .component-main-menu {
-    order: -2;
+    order: -1;
 
     &.component-menu {
-      > .component-menuitem {
+      > .component-menuitem:first-of-type {
         > button {
           label {
             display: none;

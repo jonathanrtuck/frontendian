@@ -7,6 +7,7 @@ import { WindowHidden, WindowVisible } from "@/icons";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { FunctionComponent } from "react";
+import { useState } from "react";
 
 export const Applications: FunctionComponent = () => {
   const applications = useStore((store) => store.applications);
@@ -18,14 +19,7 @@ export const Applications: FunctionComponent = () => {
   const openApplicationIds = useStore((store) => store.openApplicationIds);
   const showWindow = useStore((store) => store.showWindow);
   const windows = useStore((store) => store.windows);
-  const focusedWindow = windows.find(({ focused }) => focused);
-  const activeApplication = (
-    focusedWindow
-      ? applications.find(({ windowIds }) =>
-          windowIds.includes(focusedWindow.id)
-        )
-      : applications.find(({ id }) => id === APPLICATION_FILE_MANAGER.id)
-  )!;
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
   switch (currentThemeId) {
     case THEME_BEOS.id:
@@ -92,13 +86,27 @@ export const Applications: FunctionComponent = () => {
           </Menu>
         </nav>
       );
-    case THEME_MAC_OS_CLASSIC.id:
+    case THEME_MAC_OS_CLASSIC.id: {
+      const focusedWindow = windows.find(({ focused }) => focused);
+      const activeApplication = (
+        focusedWindow
+          ? applications.find(({ windowIds }) =>
+              windowIds.includes(focusedWindow.id)
+            )
+          : applications.find(({ id }) => id === APPLICATION_FILE_MANAGER.id)
+      )!;
+      const activeApplicationWindows = windows.filter(({ id }) =>
+        activeApplication.windowIds.includes(id)
+      );
+      const otherApplicationWindows = windows.filter(
+        ({ id }) => !activeApplication.windowIds.includes(id)
+      );
       return (
-        <nav className="component-applications">
+        // eslint-disable-next-line jsx-a11y/role-supports-aria-props
+        <nav aria-expanded={isExpanded} className="component-applications">
           <button
-            onClick={() => {
-              // @todo
-            }}
+            aria-hidden
+            onClick={() => setIsExpanded((prevState) => !prevState)}
             role="presentation"
             type="button"
           />
@@ -108,20 +116,44 @@ export const Applications: FunctionComponent = () => {
               title={activeApplication.getTitle({ themeId: currentThemeId })}>
               <Menu>
                 <Menuitem
-                  disabled={false} // @todo
-                  onClick={() => {}}
+                  disabled={
+                    activeApplication.windowIds.length === 0 ||
+                    activeApplicationWindows.every(({ hidden }) => hidden)
+                  }
+                  onClick={() =>
+                    activeApplicationWindows.forEach(({ hidden, id }) => {
+                      if (!hidden) {
+                        hideWindow({ id });
+                      }
+                    })
+                  }
                   title={`Hide ${activeApplication.getTitle({
                     themeId: currentThemeId,
                   })}`}
                 />
                 <Menuitem
-                  disabled={false} // @todo
-                  onClick={() => {}}
+                  disabled={
+                    openApplicationIds.length < 2 ||
+                    otherApplicationWindows.every(({ hidden }) => hidden)
+                  }
+                  onClick={() =>
+                    otherApplicationWindows.forEach(({ hidden, id }) => {
+                      if (!hidden) {
+                        hideWindow({ id });
+                      }
+                    })
+                  }
                   title="Hide Others"
                 />
                 <Menuitem
-                  disabled={false} // @todo
-                  onClick={() => {}}
+                  disabled={windows.every(({ hidden }) => !hidden)}
+                  onClick={() =>
+                    windows.forEach(({ hidden, id }) => {
+                      if (hidden) {
+                        showWindow({ id });
+                      }
+                    })
+                  }
                   title="Show all"
                 />
                 <Menuitem separator />
@@ -152,6 +184,7 @@ export const Applications: FunctionComponent = () => {
           </Menu>
         </nav>
       );
+    }
   }
 };
 

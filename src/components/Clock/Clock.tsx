@@ -15,7 +15,7 @@ export const Clock: FunctionComponent = () => {
 
   useEffect(() => {
     if (format !== "time") {
-      const timeout = setTimeout(() => setFormat("time"), 5000);
+      const timeout = setTimeout(() => setFormat("time"), 4000);
 
       return () => clearTimeout(timeout);
     }

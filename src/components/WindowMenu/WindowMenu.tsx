@@ -1,6 +1,5 @@
 "use client";
 
-import "./WindowMenu.theme-mac-os-classic.css";
 import { Menu } from "@/components";
 import { WindowContext } from "@/contexts";
 import { useStore } from "@/store";
@@ -13,32 +12,20 @@ export const WindowMenu: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
   const currentThemeId = useStore((state) => state.currentThemeId);
-  const systemBarId = useStore((store) => store.systemBarId);
   const { focused, id, menubarRef } = useContext(WindowContext);
 
   switch (currentThemeId) {
     case THEME_BEOS.id:
       return (
-        <Menu
-          bar
-          className="component-window-menu"
-          draggable={false}
-          horizontal
-          ref={menubarRef}>
+        <Menu bar draggable={false} horizontal ref={menubarRef}>
           {children}
         </Menu>
       );
     case THEME_MAC_OS_CLASSIC.id:
       return id && focused
         ? createPortal(
-            <Menu
-              bar
-              className="component-window-menu"
-              draggable={false}
-              horizontal>
-              {children}
-            </Menu>,
-            document.getElementById(systemBarId)!
+            children,
+            document.querySelector(".component-main-menu")!
           )
         : null;
   }

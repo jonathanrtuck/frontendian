@@ -22,9 +22,9 @@
   --component-system-bar-width: 11rem;
   --component-window-header-height: 1.125rem;
   --component-window-padding: 0.25rem;
-  --cursor--default: url(/cursors/default.theme-beos.svg), default;
-  --cursor--pointer: url(/cursors/pointer.theme-beos.svg), pointer;
-  --cursor--text: url(/cursors/text.theme-beos.svg) 2 8, text;
+  --cursor--default: url("/cursors/default.theme-beos.svg") 1 0, default;
+  --cursor--pointer: url("/cursors/pointer.theme-beos.svg") 2 0, pointer;
+  --cursor--text: url("/cursors/text.theme-beos.svg") 7 10, text;
   --font-family--default: Helvetica;
   --font-family--monospace: var(--font-family--courier-10-pitch);
   --scrollbar-width: 1rem;
