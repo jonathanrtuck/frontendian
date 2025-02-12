@@ -5,6 +5,11 @@
     overflow: hidden;
     padding: 0;
 
+    [aria-expanded="true"] & {
+      height: 100% !important;
+      width: 100% !important;
+    }
+
     &[data-scrollable="true"] {
       overflow: scroll;
 

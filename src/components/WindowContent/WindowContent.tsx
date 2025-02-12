@@ -18,8 +18,16 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
 }) => {
   const currentThemeId = useStore((store) => store.currentThemeId);
   const resizeWindow = useStore((store) => store.resizeWindow);
-  const { collapsed, height, id, menubarRef, resizable, scrollable, width } =
-    useContext(WindowContext);
+  const {
+    collapsed,
+    height,
+    id,
+    menubarRef,
+    resizable,
+    scrollable,
+    width,
+    zoomed,
+  } = useContext(WindowContext);
   const contentRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const [hasHorizontalOverflow, setHasHorizontalOverflow] =
@@ -92,6 +100,15 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
       minConstraints={[Math.max(minWidth, MIN_WIDTH), MIN_HEIGHT]}
       onResize={(_, { size: { height, width } }) => {
         resizeWindow({ height, id, width });
+      }}
+      onResizeStart={() => {
+        if (zoomed && rootRef.current) {
+          resizeWindow({
+            height: rootRef.current.scrollHeight,
+            id,
+            width: rootRef.current.scrollWidth,
+          });
+        }
       }}
       width={width}>
       <div

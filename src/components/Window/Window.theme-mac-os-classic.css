@@ -7,7 +7,6 @@
     border-width: var(--border-width);
     box-shadow: var(--box-shadow-elevation--low), var(--box-shadow--high);
     left: 0;
-    margin: var(--component-system-bar-height) 0 0;
     padding: calc(
         var(--border-width) + var(--component-window-padding) +
           var(--component-window-header-height) +

@@ -1,5 +1,6 @@
 "use client";
 
+import "./WindowMenu.theme-beos.css";
 import { Menu } from "@/components";
 import { WindowContext } from "@/contexts";
 import { useStore } from "@/store";
@@ -17,7 +18,12 @@ export const WindowMenu: FunctionComponent<PropsWithChildren> = ({
   switch (currentThemeId) {
     case THEME_BEOS.id:
       return (
-        <Menu bar draggable={false} horizontal ref={menubarRef}>
+        <Menu
+          bar
+          className="component-window-menu"
+          draggable={false}
+          horizontal
+          ref={menubarRef}>
           {children}
         </Menu>
       );

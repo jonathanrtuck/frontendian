@@ -1,6 +1,8 @@
 :root {
   background-color: rgb(0, 0, 0);
-  overflow: auto;
+  height: 100dvh;
+  overflow: hiddden;
+  width: 100dvw;
 }
 
 body {

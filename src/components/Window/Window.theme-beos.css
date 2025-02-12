@@ -1,15 +1,17 @@
 :root.theme-beos {
   .component-window {
     --component-window-background-color: var(--background-color--inactive);
+    --component-window-margin-top: calc(
+      var(--component-window-padding) + var(--component-window-header-height) +
+        var(--component-window-padding)
+    );
 
     background-color: var(--component-window-background-color);
     color: var(--text-color--dark);
+    display: flex;
+    flex-direction: column;
     left: 0;
-    margin: calc(
-        var(--component-window-padding) + var(--component-window-header-height) +
-          var(--component-window-padding)
-      )
-      0 0;
+    margin: var(--component-window-margin-top) 0 0;
     padding: 0;
     position: fixed;
     top: 0;
@@ -22,11 +24,19 @@
       --component-window-background-color: var(--background-color--default);
     }
 
+    &[aria-expanded="true"] {
+      height: calc(100dvh - var(--component-window-margin-top));
+      width: 100dvw;
+    }
+
     > article {
       border-color: var(--color--lowlight) var(--color--highlight)
         var(--color--highlight) var(--color--lowlight);
       border-width: var(--border-width);
       box-shadow: inset 0 0 0 var(--border-width) var(--border-color--light);
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
       margin: var(--component-window-padding);
       padding: var(--border-width);
       position: relative;

@@ -599,6 +599,7 @@ export const useStore = create(
                     ...window,
                     height: payload.height,
                     width: payload.width,
+                    zoomed: false,
                   }
                 : window
             ),
@@ -657,17 +658,22 @@ export const useStore = create(
                 getComputedStyle(windowElement);
               const marginX = parseFloat(marginLeft) + parseFloat(marginRight);
               const marginY = parseFloat(marginBottom) + parseFloat(marginTop);
-              const frameHeight =
-                offsetHeight + marginY - (window.collapsed ? 0 : window.height);
-              const frameWidth = offsetWidth + marginX - window.width;
-              const maxHeight = document.body.offsetHeight - frameHeight;
-              const maxWidth = document.body.offsetWidth - frameWidth;
-              // @todo
+              const maxHeight = document.body.offsetHeight - marginY;
+              const maxWidth = document.body.offsetWidth - marginX;
+              const left = 0;
+              const top =
+                prevState.currentThemeId === themes.THEME_MAC_OS_CLASSIC.id
+                  ? document.getElementById(SYSTEM_BAR_ID)!.offsetHeight
+                  : 0;
               const isZoomed =
-                window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
-                window.height <= maxHeight + WINDOW_DIMENSION_BUFFER &&
-                window.width >= maxWidth - WINDOW_DIMENSION_BUFFER &&
-                window.width <= maxWidth + WINDOW_DIMENSION_BUFFER;
+                offsetHeight >= maxHeight - WINDOW_DIMENSION_BUFFER &&
+                offsetHeight <= maxHeight + WINDOW_DIMENSION_BUFFER &&
+                offsetWidth >= maxWidth - WINDOW_DIMENSION_BUFFER &&
+                offsetWidth <= maxWidth + WINDOW_DIMENSION_BUFFER &&
+                window.left >= left - WINDOW_DIMENSION_BUFFER &&
+                window.left <= left + WINDOW_DIMENSION_BUFFER &&
+                window.top >= top - WINDOW_DIMENSION_BUFFER &&
+                window.top <= top + WINDOW_DIMENSION_BUFFER;
 
               return isZoomed
                 ? {
@@ -679,14 +685,16 @@ export const useStore = create(
                 : {
                     ...window,
                     collapsed: false,
-                    left: 0,
-                    prev: {
-                      height: window.height,
-                      left: window.left,
-                      top: window.top,
-                      width: window.width,
-                    },
-                    top: 0,
+                    left,
+                    prev: window.zoomed
+                      ? window.prev
+                      : {
+                          height: window.height,
+                          left: window.left,
+                          top: window.top,
+                          width: window.width,
+                        },
+                    top,
                     zoomed: true,
                   };
             }),

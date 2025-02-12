@@ -8,7 +8,6 @@ Portfolio site for Jonathan Tucker
   - main menu interaction
     - submenus expand on hover
     - root menuitems expand on hover when menubar active
-  - `Window` collapse and zoom
   - about dialog
   - sad mac dialog
   - control strip

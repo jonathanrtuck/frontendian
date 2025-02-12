@@ -24,9 +24,18 @@ export const WindowHeader: FunctionComponent = () => {
   const expandWindow = useStore((store) => store.expandWindow);
   const hideWindow = useStore((store) => store.hideWindow);
   const moveWindowTitlebar = useStore((store) => store.moveWindowTitlebar);
+  const resizeWindow = useStore((store) => store.resizeWindow);
   const zoomWindow = useStore((store) => store.zoomWindow);
-  const { collapsed, id, resizable, scrollable, title, titlebarLeft, width } =
-    useContext(WindowContext);
+  const {
+    collapsed,
+    id,
+    resizable,
+    scrollable,
+    title,
+    titlebarLeft,
+    width,
+    zoomed,
+  } = useContext(WindowContext);
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<MS>(0);
   const [x, setX] = useState<Pixels>(0);
@@ -144,9 +153,27 @@ export const WindowHeader: FunctionComponent = () => {
           <button
             aria-label="Collapse"
             draggable={false}
-            onClick={() =>
-              collapsed ? expandWindow({ id }) : collapseWindow({ id })
-            }
+            onClick={() => {
+              if (collapsed) {
+                expandWindow({ id });
+              } else {
+                if (zoomed && rootRef.current) {
+                  const contentElement = rootRef.current
+                    .closest(".component-window")
+                    ?.querySelector(".component-window-content");
+
+                  if (contentElement) {
+                    resizeWindow({
+                      height: contentElement.scrollHeight,
+                      id,
+                      width: contentElement.scrollWidth,
+                    });
+                  }
+                }
+
+                collapseWindow({ id });
+              }
+            }}
             title="Collapse"
             type="button"
           />
