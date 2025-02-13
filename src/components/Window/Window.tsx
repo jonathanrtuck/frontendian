@@ -57,6 +57,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
   )!;
   const file = fileId ? files.find(({ id }) => id === fileId) : undefined;
   const isCollapsible = currentThemeId === THEME_MAC_OS_CLASSIC.id;
+  const isDialogModal = currentThemeId === THEME_BEOS.id;
   const isMenubarWindowed = currentThemeId === THEME_BEOS.id;
   const openableFiles = Object.entries(types)
     .filter(
@@ -101,20 +102,11 @@ export const Window: FunctionComponent<WindowType> = (props) => {
   return (
     <ErrorBoundary
       fallback={
-        <Dialog modal open type="error">
+        <Dialog modal={isDialogModal} onClose={onClose} open type="error">
           <p>
             {application.getTitle({ themeId: currentThemeId })} has encountered
             an unknown error.
           </p>
-          <footer>
-            <Button
-              autoFocus
-              formMethod="dialog"
-              onClick={onClose}
-              type="reset">
-              Close
-            </Button>
-          </footer>
         </Dialog>
       }>
       <Draggable
@@ -187,17 +179,12 @@ export const Window: FunctionComponent<WindowType> = (props) => {
           </WindowContext.Provider>
         </section>
       </Draggable>
-      <Dialog modal open={Boolean(aboutDialogContent)} type="info">
+      <Dialog
+        modal={isDialogModal}
+        onClose={() => setAboutDialogContent(null)}
+        open={Boolean(aboutDialogContent)}
+        type="info">
         {aboutDialogContent}
-        <footer>
-          <Button
-            autoFocus
-            formMethod="dialog"
-            onClick={() => setAboutDialogContent(null)}
-            type="reset">
-            Close
-          </Button>
-        </footer>
       </Dialog>
     </ErrorBoundary>
   );

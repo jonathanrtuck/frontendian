@@ -1,8 +1,11 @@
 "use client";
 
 import "./Dialog.theme-beos.css";
-import { AlertError, AlertInfo } from "@/icons";
+import "./Dialog.theme-mac-os-classic.css";
+import { Button } from "@/components";
+import { Error, Info } from "@/icons";
 import { useStore } from "@/store";
+import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { IconComponent } from "@/types";
 import clsx from "clsx";
 import type {
@@ -16,8 +19,8 @@ import { useLayoutEffect, useRef } from "react";
 type DialogType = "error" | "info";
 
 const ICONS_BY_TYPE: Record<DialogType, IconComponent> = {
-  error: AlertError,
-  info: AlertInfo,
+  error: Error,
+  info: Info,
 };
 
 export const Dialog: FunctionComponent<
@@ -30,10 +33,11 @@ export const Dialog: FunctionComponent<
       "role"
     > & {
       modal?: boolean;
+      onClose?(): void;
       type: DialogType;
     }
   >
-> = ({ children, className, modal, open, type, ...props }) => {
+> = ({ children, className, modal, onClose, open, type, ...props }) => {
   const currentThemeId = useStore((store) => store.currentThemeId);
   const rootRef = useRef<HTMLDialogElement>(null);
   const Icon = ICONS_BY_TYPE[type];
@@ -58,6 +62,13 @@ export const Dialog: FunctionComponent<
       role="alertdialog">
       <Icon themeId={currentThemeId} />
       {children}
+      {currentThemeId === THEME_BEOS.id && onClose ? (
+        <footer>
+          <Button autoFocus formMethod="dialog" onClick={onClose} type="reset">
+            Close
+          </Button>
+        </footer>
+      ) : null}
     </dialog>
   );
 };

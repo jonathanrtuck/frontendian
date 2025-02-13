@@ -73,7 +73,6 @@ export const Menu: FunctionComponent<
       }}
       onFocus={(e: FocusEvent<HTMLMenuElement>) => {
         onFocus?.(e);
-
         setIsActive(true);
         setIsFocusWithin(true);
       }}

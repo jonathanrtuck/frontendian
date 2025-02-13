@@ -107,7 +107,6 @@ export const Menuitem: FunctionComponent<
         if (isFocusWithin && isFirstMenuitem && !hasFocus) {
           return -1;
         }
-
         if (!isFocusWithin) {
           return isFirstMenuitem ? 0 : -1;
         }
@@ -156,7 +155,6 @@ export const Menuitem: FunctionComponent<
     if (!checked && !disabled) {
       onClick?.();
     }
-
     if (haspopup && !isExpanded) {
       setTabIndex(0);
       setIsExpanded(true);
@@ -326,6 +324,7 @@ export const Menuitem: FunctionComponent<
           }
         }}
         onMouseEnter={(e) => {
+          console.debug(isActive, isTop, haspopup);
           if (document.hasFocus() && isActive) {
             if (isTop) {
               setTabIndex(0);

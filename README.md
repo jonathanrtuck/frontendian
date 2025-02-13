@@ -9,8 +9,8 @@ Portfolio site for Jonathan Tucker
     - submenus expand on hover
     - root menuitems expand on hover when menubar active
   - about dialog
-  - sad mac dialog
-  - control strip
+  - move _Themes_ menu under `Finder` _View_ menu
+  - control strip?
 - create `FileManager` window
   - add `Icon`s for `File`s (md?)
     - bankx
