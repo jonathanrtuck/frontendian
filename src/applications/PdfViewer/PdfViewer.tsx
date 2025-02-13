@@ -3,8 +3,9 @@
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import styles from "./PdfViewer.module.css";
+import { ThemeIdContext } from "@/contexts";
 import type { ApplicationComponent } from "@/types";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useContext, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
 // @see https://github.com/wojtekmaj/react-pdf/tree/main#use-external-cdn
@@ -23,8 +24,8 @@ export const PdfViewer: ApplicationComponent = ({
   onOpen,
   onQuit,
   openableFiles,
-  themeId,
 }) => {
+  const themeId = useContext(ThemeIdContext);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const url = file?.getUrl({ themeId }) ?? null;

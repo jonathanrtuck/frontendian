@@ -3,6 +3,7 @@
 import "./WindowMenu.theme-beos.css";
 import { Menu } from "@/components";
 import { WindowContext } from "@/contexts";
+import { MAIN_MENU_ID } from "@/ids";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { FunctionComponent, PropsWithChildren } from "react";
@@ -29,10 +30,7 @@ export const WindowMenu: FunctionComponent<PropsWithChildren> = ({
       );
     case THEME_MAC_OS_CLASSIC.id:
       return id && focused
-        ? createPortal(
-            children,
-            document.querySelector(".component-main-menu")!
-          )
+        ? createPortal(children, document.getElementById(MAIN_MENU_ID)!)
         : null;
   }
 };

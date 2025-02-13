@@ -5,6 +5,7 @@ import "./MainMenu.theme-mac-os-classic.css";
 import * as applications from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { FILE_README_MD } from "@/files";
+import { MAIN_MENU_ID } from "@/ids";
 import { useStore } from "@/store";
 import * as themes from "@/themes";
 import type { Application } from "@/types";
@@ -32,7 +33,8 @@ export const MainMenu: FunctionComponent = () => {
       bar
       className="component-main-menu"
       draggable={false}
-      horizontal={themeId === themes.THEME_MAC_OS_CLASSIC.id}>
+      horizontal={themeId === themes.THEME_MAC_OS_CLASSIC.id}
+      id={MAIN_MENU_ID}>
       <Menuitem Icon={theme.Icon} title={`${theme.title} Menu`}>
         <Menu>
           <Menuitem

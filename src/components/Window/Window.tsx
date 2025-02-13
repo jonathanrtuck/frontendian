@@ -15,6 +15,7 @@ import {
 import { WindowContext } from "@/contexts";
 import * as files from "@/files";
 import { useFocus } from "@/hooks";
+import { SYSTEM_BAR_ID } from "@/ids";
 import { MIMETYPES } from "@/mimetypes";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
@@ -49,7 +50,6 @@ export const Window: FunctionComponent<WindowType> = (props) => {
   const openWindow = useStore((store) => store.openWindow);
   const resizeWindow = useStore((store) => store.resizeWindow);
   const stackingOrder = useStore((store) => store.stackingOrder);
-  const systemBarId = useStore((store) => store.systemBarId);
   const themeId = useStore((store) => store.themeId);
   const menubarRef = useRef<HTMLMenuElement>(null);
   const rootRef = useRef<HTMLElement>(null);
@@ -148,7 +148,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
               !e.currentTarget?.contains(e.relatedTarget) &&
               (isMenubarWindowed ||
                 !document
-                  .getElementById(systemBarId)
+                  .getElementById(SYSTEM_BAR_ID)
                   ?.contains(e.relatedTarget))
             ) {
               blurWindow({ id });
@@ -182,7 +182,6 @@ export const Window: FunctionComponent<WindowType> = (props) => {
                 onQuit={onQuit}
                 onResize={onResize}
                 openableFiles={openableFiles}
-                themeId={themeId}
               />
             </article>
           </WindowContext.Provider>

@@ -1,8 +1,9 @@
 import * as applications from "@/applications";
 import * as files from "@/files";
+import { SYSTEM_BAR_ID } from "@/ids";
 import { MIMETYPES } from "@/mimetypes";
 import * as themes from "@/themes";
-import type { Actions, ID, Pixels, State, Window } from "@/types";
+import type { Actions, Pixels, State, Window } from "@/types";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -26,7 +27,6 @@ const DEFAULT_WINDOW: Window = {
   width: 600,
   zoomed: false,
 };
-const SYSTEM_BAR_ID: ID = "system-bar";
 const WINDOW_DIMENSION_BUFFER = 12;
 
 const getFirstOpenWindowPosition = (windows: Window[]): Pixels => {
@@ -54,7 +54,6 @@ export const useStore = create(
       desktop: [files.FILE_RESUME_PDF.id],
       openApplicationIds: [applications.APPLICATION_FILE_MANAGER.id],
       stackingOrder: [SYSTEM_BAR_ID],
-      systemBarId: SYSTEM_BAR_ID,
       themeId: DEFAULT_THEME.id,
       windows: [],
       // eslint-disable-next-line sort-keys
@@ -88,8 +87,8 @@ export const useStore = create(
             }
 
             const applicationWindowIds = prevState.windows
-              .map(({ id }) => id)
-              .filter((id) => id === application.id);
+              .filter(({ applicationId }) => applicationId === application.id)
+              .map(({ id }) => id);
 
             return {
               openApplicationIds: prevState.openApplicationIds.filter(

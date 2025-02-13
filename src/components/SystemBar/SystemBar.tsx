@@ -3,6 +3,7 @@
 import "./SystemBar.theme-beos.css";
 import "./SystemBar.theme-mac-os-classic.css";
 import { Applications, MainMenu, Tray } from "@/components";
+import { SYSTEM_BAR_ID } from "@/ids";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import dynamic from "next/dynamic";
@@ -18,20 +19,19 @@ export const SystemBar: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
   const focusSystemBar = useStore((store) => store.focusSystemBar);
   const stackingOrder = useStore((store) => store.stackingOrder);
-  const systemBarId = useStore((store) => store.systemBarId);
   const themeId = useStore((store) => store.themeId);
   const windows = useStore((store) => store.windows);
   const rootRef = useRef<HTMLElement>(null);
   const focusedWindowId = windows.find(({ focused }) => focused)?.id;
-  const isFocused = stackingOrder.at(-1) === systemBarId;
+  const isFocused = stackingOrder.at(-1) === SYSTEM_BAR_ID;
   const isMenubarWindowed = themeId === THEME_BEOS.id;
-  const zIndex = stackingOrder.indexOf(systemBarId);
+  const zIndex = stackingOrder.indexOf(SYSTEM_BAR_ID);
 
   return (
     <header
       aria-label={themeId === THEME_BEOS.id ? "Deskbar" : "Menubar"}
       className="component-system-bar"
-      id={systemBarId}
+      id={SYSTEM_BAR_ID}
       onBlur={
         isMenubarWindowed
           ? undefined

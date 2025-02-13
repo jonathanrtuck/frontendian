@@ -1,9 +1,10 @@
 "use client";
 
 import styles from "./TextEditor.module.css";
+import { ThemeIdContext } from "@/contexts";
 import type { ApplicationComponent } from "@/types";
 import clsx from "clsx";
-import { useDeferredValue, useEffect, useState } from "react";
+import { useContext, useDeferredValue, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { getTitle } from "./utils";
 
@@ -19,8 +20,8 @@ export const TextEditor: ApplicationComponent = ({
   onOpen,
   onQuit,
   openableFiles,
-  themeId,
 }) => {
+  const themeId = useContext(ThemeIdContext);
   const [content, setContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");

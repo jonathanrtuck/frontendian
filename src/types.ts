@@ -42,7 +42,7 @@ export type ApplicationComponent = ComponentType<{
   Menu: ComponentType<ComponentProps<typeof Menu>>;
   Menubar: ComponentType<PropsWithChildren>;
   Menuitem: ComponentType<ComponentProps<typeof Menuitem>>;
-  file?: File; // @todo just pass `fileId` instead
+  file?: File;
   onAbout(node: ReactNode): void;
   onClose(): void;
   onNew(): void;
@@ -50,7 +50,6 @@ export type ApplicationComponent = ComponentType<{
   onQuit(): void;
   onResize(height: Pixels, width: Pixels): void;
   openableFiles: File[];
-  themeId: Theme["id"];
 }>;
 
 export type File = Readonly<
@@ -97,7 +96,6 @@ export type State = {
   desktop: (Application["id"] | File["id"])[]; // the order is used as the display order on the Desktop
   openApplicationIds: Application["id"][]; // the order is used as the display order in the SystemBar Applications Menu
   stackingOrder: (Application["id"] | ID)[];
-  systemBarId: ID; // @todo remove. export from `@/components/SystemBar` instead?
   themeId: Theme["id"];
   windows: Window[];
 };
