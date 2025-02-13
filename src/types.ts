@@ -29,18 +29,20 @@ export type Actions = Readonly<{
   zoomWindow(payload: PayloadWithID): void;
 }>;
 
-export type Application = ApplicationConfiguration & {
-  windowIds: Window["id"][];
-};
+export type Application = Readonly<{
+  Component: ApplicationComponent;
+  getTitle(obj: { themeId: Theme["id"] }): string;
+  getWindow?(obj: { file?: File; themeId: Theme["id"] }): Partial<Window>; // @todo just pass `fileId` instead
+  Icon: IconComponent;
+  id: ID;
+}>;
 
-export type ApplicationComponent = ComponentType<ApplicationComponentProps>;
-
-export type ApplicationComponentProps = {
+export type ApplicationComponent = ComponentType<{
   Content: ComponentType<PropsWithChildren>;
   Menu: ComponentType<ComponentProps<typeof Menu>>;
   Menubar: ComponentType<PropsWithChildren>;
   Menuitem: ComponentType<ComponentProps<typeof Menuitem>>;
-  file?: File;
+  file?: File; // @todo just pass `fileId` instead
   onAbout(node: ReactNode): void;
   onClose(): void;
   onNew(): void;
@@ -49,14 +51,6 @@ export type ApplicationComponentProps = {
   onResize(height: Pixels, width: Pixels): void;
   openableFiles: File[];
   themeId: Theme["id"];
-};
-
-export type ApplicationConfiguration = Readonly<{
-  Component: ApplicationComponent;
-  getTitle(obj: { themeId: Theme["id"] }): string;
-  getWindow?(obj: { file?: File; themeId: Theme["id"] }): Partial<Window>;
-  Icon?: IconComponent;
-  id: ID;
 }>;
 
 export type File = Readonly<
@@ -66,11 +60,11 @@ export type File = Readonly<
     id: ID;
   } & (
     | {
-        type: "application/pdf";
+        mimetype: "application/pdf";
         width: Pixels; // page width
       }
     | {
-        type: "text/markdown";
+        mimetype: "text/markdown";
       }
   )
 >;
@@ -78,7 +72,6 @@ export type File = Readonly<
 export type IconComponent = ComponentType<
   SVGAttributes<SVGSVGElement> & {
     ref?: RefObject<SVGSVGElement>;
-    themeId?: Theme["id"];
   }
 >;
 
@@ -101,23 +94,11 @@ export type Percentage = number;
 export type Pixels = number;
 
 export type State = {
-  applications: Application[]; // the order is used as the display order in the SystemBar MainMenu
-  currentThemeId: Theme["id"];
   desktop: (Application["id"] | File["id"])[]; // the order is used as the display order on the Desktop
-  files: File[];
   openApplicationIds: Application["id"][]; // the order is used as the display order in the SystemBar Applications Menu
-  stackingOrder: Application["id"][];
-  systemBarId: ID;
-  themes: Theme[];
-  types: Partial<
-    Record<
-      MimeType,
-      {
-        application?: Application["id"];
-        Icon: IconComponent;
-      }
-    >
-  >;
+  stackingOrder: (Application["id"] | ID)[];
+  systemBarId: ID; // @todo remove. export from `@/components/SystemBar` instead?
+  themeId: Theme["id"];
   windows: Window[];
 };
 
@@ -131,6 +112,7 @@ export type Theme = Readonly<{
 export type URL = string;
 
 export interface Window {
+  applicationId: Application["id"];
   collapsed: boolean;
   fileId?: File["id"];
   focused: boolean;

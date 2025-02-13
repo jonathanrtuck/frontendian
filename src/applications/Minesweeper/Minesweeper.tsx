@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./Minesweeper.module.css";
-import { ApplicationComponent } from "@/types";
+import type { ApplicationComponent } from "@/types";
 import clsx from "clsx";
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -119,7 +119,7 @@ export const Minesweeper: ApplicationComponent = ({
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() => {
+              onClick={() =>
                 onAbout(
                   <>
                     <p>
@@ -135,8 +135,8 @@ export const Minesweeper: ApplicationComponent = ({
                     <h4>Notes</h4>
                     <p>Custom boards not yet supported.</p>
                   </>
-                );
-              }}
+                )
+              }
               title="About Minesweeper…"
             />
           </Menu>

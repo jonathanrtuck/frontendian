@@ -1,5 +1,5 @@
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
-import { Theme } from "@/types";
+import type { Theme } from "@/types";
 
 export const getTitle = ({ themeId }: { themeId: Theme["id"] }): string =>
   ({

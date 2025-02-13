@@ -1,9 +1,9 @@
-import { ApplicationConfiguration } from "@/types";
+import type { Application } from "@/types";
 import { DEFAULT_LEVEL, DEFAULT_STATE } from "./constants";
 import { Minesweeper } from "./Minesweeper";
 import { MinesweeperIcon } from "./MinesweeperIcon";
 
-export const APPLICATION_MINESWEEPER: ApplicationConfiguration = {
+export const APPLICATION_MINESWEEPER: Application = {
   Component: Minesweeper,
   getTitle: () => "Minesweeper",
   getWindow: () => ({

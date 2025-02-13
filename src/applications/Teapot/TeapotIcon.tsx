@@ -1,12 +1,15 @@
-import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
-import { IconComponent } from "@/types";
-import { useId } from "react";
+"use client";
 
-export const TeapotIcon: IconComponent = ({ themeId, ...props }) => {
+import { ThemeIdContext } from "@/contexts";
+import type { IconComponent } from "@/types";
+import { useContext, useId } from "react";
+
+export const TeapotIcon: IconComponent = (props) => {
+  const themeId = useContext(ThemeIdContext);
   const id = useId();
 
   switch (themeId) {
-    case THEME_BEOS.id:
+    case "theme-beos":
       return (
         <svg
           {...props}
@@ -178,7 +181,7 @@ export const TeapotIcon: IconComponent = ({ themeId, ...props }) => {
           <path d="M3 43C3 40 4 39 7 39C7 42 6 43 3 43z" fill="#010000" />
         </svg>
       );
-    case THEME_MAC_OS_CLASSIC.id:
+    case "theme-mac-os-classic":
       return (
         <svg
           {...props}

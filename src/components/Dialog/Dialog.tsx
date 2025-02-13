@@ -5,7 +5,7 @@ import "./Dialog.theme-mac-os-classic.css";
 import { Button } from "@/components";
 import { Error, Info } from "@/icons";
 import { useStore } from "@/store";
-import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
+import { THEME_BEOS } from "@/themes";
 import type { IconComponent } from "@/types";
 import clsx from "clsx";
 import type {
@@ -38,7 +38,7 @@ export const Dialog: FunctionComponent<
     }
   >
 > = ({ children, className, modal, onClose, open, type, ...props }) => {
-  const currentThemeId = useStore((store) => store.currentThemeId);
+  const themeId = useStore((store) => store.themeId);
   const rootRef = useRef<HTMLDialogElement>(null);
   const Icon = ICONS_BY_TYPE[type];
 
@@ -60,9 +60,9 @@ export const Dialog: FunctionComponent<
       className={clsx("component-dialog", className)}
       ref={rootRef}
       role="alertdialog">
-      <Icon themeId={currentThemeId} />
+      <Icon />
       {children}
-      {currentThemeId === THEME_BEOS.id && onClose ? (
+      {themeId === THEME_BEOS.id && onClose ? (
         <footer>
           <Button autoFocus formMethod="dialog" onClick={onClose} type="reset">
             Close

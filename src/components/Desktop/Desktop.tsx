@@ -2,25 +2,29 @@
 
 import "./Desktop.theme-beos.css";
 import "./Desktop.theme-mac-os-classic.css";
+import * as applications from "@/applications";
 import { Dialog, ErrorBoundary, Icon, SystemBar, Window } from "@/components";
-import { FILE_README_MD } from "@/files";
+import { ThemeIdContext } from "@/contexts";
+import * as files from "@/files";
 import { useSelection } from "@/hooks";
+import { MIMETYPES } from "@/mimetypes";
 import { useStore } from "@/store";
+import * as themes from "@/themes";
+import type { Application, File } from "@/types";
 import type { FunctionComponent } from "react";
 import { useEffect, useLayoutEffect } from "react";
 
 export const Desktop: FunctionComponent = () => {
-  const applications = useStore((store) => store.applications);
-  const currentThemeId = useStore((store) => store.currentThemeId);
   const desktop = useStore((store) => store.desktop);
-  const files = useStore((store) => store.files);
   const openApplication = useStore((store) => store.openApplication);
   const openFile = useStore((store) => store.openFile);
-  const themes = useStore((store) => store.themes);
-  const types = useStore((store) => store.types);
+  const themeId = useStore((store) => store.themeId);
   const windows = useStore((store) => store.windows);
   const selection = useSelection();
-  const applicationsAndFiles = [...applications, ...files];
+  const applicationsAndFiles: (Application | File)[] = [
+    ...Object.values(applications),
+    ...Object.values(files),
+  ];
   const icons = desktop.map((id) =>
     applicationsAndFiles.find((obj) => obj.id === id)
   );
@@ -37,42 +41,46 @@ export const Desktop: FunctionComponent = () => {
   useLayoutEffect(
     () =>
       Object.values(themes).forEach(({ id }) => {
-        document.documentElement.classList.toggle(id, id === currentThemeId);
+        document.documentElement.classList.toggle(id, id === themeId);
       }),
-    [currentThemeId, themes]
+    [themeId]
   );
-  useEffect(() => openFile({ id: FILE_README_MD.id }), [openFile]);
+  useEffect(() => openFile({ id: files.FILE_README_MD.id }), [openFile]);
 
   return (
-    <ErrorBoundary
-      fallback={
-        <Dialog modal open type="error">
-          <p>An unknown error has occured.</p>
-          <p>Please reload the page.</p>
-        </Dialog>
-      }>
-      {icons.map((obj) =>
-        obj ? (
-          <Icon
-            Component={"windowIds" in obj ? obj.Icon : types[obj.type]?.Icon}
-            key={obj.id}
-            onClick={() =>
-              "windowIds" in obj
-                ? openApplication({ id: obj.id })
-                : openFile({ id: obj.id })
-            }
-            title={obj.getTitle({ themeId: currentThemeId })}
-          />
-        ) : null
-      )}
-      {selectionStyle ? (
-        <mark aria-hidden role="presentation" style={selectionStyle} />
-      ) : null}
-      <SystemBar />
-      {windows.map((window) => (
-        <Window {...window} key={window.id} />
-      ))}
-    </ErrorBoundary>
+    <ThemeIdContext.Provider value={themeId}>
+      <ErrorBoundary
+        fallback={
+          <Dialog modal open type="error">
+            <p>An unknown error has occured.</p>
+            <p>Please reload the page.</p>
+          </Dialog>
+        }>
+        {icons.map((obj) =>
+          obj ? (
+            <Icon
+              Component={
+                "mimetype" in obj ? MIMETYPES[obj.mimetype]?.Icon : obj.Icon
+              }
+              key={obj.id}
+              onClick={() =>
+                "mimetype" in obj
+                  ? openFile({ id: obj.id })
+                  : openApplication({ id: obj.id })
+              }
+              title={obj.getTitle({ themeId })}
+            />
+          ) : null
+        )}
+        {selectionStyle ? (
+          <mark aria-hidden role="presentation" style={selectionStyle} />
+        ) : null}
+        <SystemBar />
+        {windows.map((window) => (
+          <Window {...window} key={window.id} />
+        ))}
+      </ErrorBoundary>
+    </ThemeIdContext.Provider>
   );
 };
 

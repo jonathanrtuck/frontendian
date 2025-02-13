@@ -16,20 +16,20 @@ const Clock = dynamic(() => import("../Clock").then(({ Clock }) => Clock), {
 
 export const SystemBar: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
-  const currentThemeId = useStore((store) => store.currentThemeId);
   const focusSystemBar = useStore((store) => store.focusSystemBar);
   const stackingOrder = useStore((store) => store.stackingOrder);
   const systemBarId = useStore((store) => store.systemBarId);
+  const themeId = useStore((store) => store.themeId);
   const windows = useStore((store) => store.windows);
   const rootRef = useRef<HTMLElement>(null);
   const focusedWindowId = windows.find(({ focused }) => focused)?.id;
   const isFocused = stackingOrder.at(-1) === systemBarId;
-  const isMenubarWindowed = currentThemeId === THEME_BEOS.id;
+  const isMenubarWindowed = themeId === THEME_BEOS.id;
   const zIndex = stackingOrder.indexOf(systemBarId);
 
   return (
     <header
-      aria-label={currentThemeId === THEME_BEOS.id ? "Deskbar" : "Menubar"}
+      aria-label={themeId === THEME_BEOS.id ? "Deskbar" : "Menubar"}
       className="component-system-bar"
       id={systemBarId}
       onBlur={
@@ -63,21 +63,21 @@ export const SystemBar: FunctionComponent = () => {
       ref={rootRef}
       role="banner"
       style={
-        currentThemeId === THEME_BEOS.id
+        themeId === THEME_BEOS.id
           ? {
               zIndex,
             }
           : undefined
       }
       tabIndex={-1}>
-      {currentThemeId === THEME_BEOS.id && (
+      {themeId === THEME_BEOS.id && (
         <>
           <MainMenu />
           <Tray />
           <Applications />
         </>
       )}
-      {currentThemeId === THEME_MAC_OS_CLASSIC.id && (
+      {themeId === THEME_MAC_OS_CLASSIC.id && (
         <>
           <MainMenu />
           <Clock />

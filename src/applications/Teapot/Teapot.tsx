@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./Teapot.module.css";
-import { ApplicationComponent } from "@/types";
+import type { ApplicationComponent } from "@/types";
 import { useEffect, useRef } from "react";
 import { main } from "./webgl";
 
@@ -33,7 +33,7 @@ export const Teapot: ApplicationComponent = ({
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() => {
+              onClick={() =>
                 onAbout(
                   <p>
                     WebGL rendering of the{" "}
@@ -42,8 +42,8 @@ export const Teapot: ApplicationComponent = ({
                     </a>
                     .
                   </p>
-                );
-              }}
+                )
+              }
               title="About Teapot…"
             />
           </Menu>

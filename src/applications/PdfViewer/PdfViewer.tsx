@@ -3,7 +3,7 @@
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import styles from "./PdfViewer.module.css";
-import { ApplicationComponent } from "@/types";
+import type { ApplicationComponent } from "@/types";
 import { Fragment, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
@@ -41,9 +41,7 @@ export const PdfViewer: ApplicationComponent = ({
                   <Menuitem
                     disabled={id === file?.id}
                     key={id}
-                    onClick={() => {
-                      onOpen(id);
-                    }}
+                    onClick={() => onOpen(id)}
                     title={getTitle({ themeId })}
                   />
                 ))}
@@ -54,9 +52,7 @@ export const PdfViewer: ApplicationComponent = ({
               disabled={!url}
               onClick={
                 url
-                  ? () => {
-                      iframeRef.current?.contentWindow?.print();
-                    }
+                  ? () => iframeRef.current?.contentWindow?.print()
                   : undefined
               }
               title="Print"
@@ -69,7 +65,7 @@ export const PdfViewer: ApplicationComponent = ({
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() => {
+              onClick={() =>
                 onAbout(
                   <>
                     <p>
@@ -80,8 +76,8 @@ export const PdfViewer: ApplicationComponent = ({
                       Documents can be printed from the <b>File</b> menu.
                     </p>
                   </>
-                );
-              }}
+                )
+              }
               title="About PDF Viewer…"
             />
           </Menu>
@@ -93,9 +89,7 @@ export const PdfViewer: ApplicationComponent = ({
             <Document
               file={url}
               loading={<Fragment />} // eslint-disable-line react/jsx-no-useless-fragment
-              onLoadSuccess={({ numPages }) => {
-                setNumPages(numPages);
-              }}>
+              onLoadSuccess={({ numPages }) => setNumPages(numPages)}>
               {Array.from(new Array(numPages)).map((_, i) => (
                 <Page
                   className={styles.page}

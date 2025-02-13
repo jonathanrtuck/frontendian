@@ -2,10 +2,11 @@
 
 import "./WindowHeader.theme-beos.css";
 import "./WindowHeader.theme-mac-os-classic.css";
+import * as applications from "@/applications";
 import { WindowContext } from "@/contexts";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
-import { MS, Pixels } from "@/types";
+import type { MS, Pixels } from "@/types";
 import type { FunctionComponent, RefObject } from "react";
 import {
   useCallback,
@@ -17,16 +18,16 @@ import {
 import Draggable from "react-draggable";
 
 export const WindowHeader: FunctionComponent = () => {
-  const applications = useStore((store) => store.applications);
   const closeWindow = useStore((store) => store.closeWindow);
   const collapseWindow = useStore((store) => store.collapseWindow);
-  const currentThemeId = useStore((store) => store.currentThemeId);
   const expandWindow = useStore((store) => store.expandWindow);
   const hideWindow = useStore((store) => store.hideWindow);
   const moveWindowTitlebar = useStore((store) => store.moveWindowTitlebar);
   const resizeWindow = useStore((store) => store.resizeWindow);
+  const themeId = useStore((store) => store.themeId);
   const zoomWindow = useStore((store) => store.zoomWindow);
   const {
+    applicationId,
     collapsed,
     id,
     resizable,
@@ -39,13 +40,13 @@ export const WindowHeader: FunctionComponent = () => {
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<MS>(0);
   const [x, setX] = useState<Pixels>(0);
-  const application = applications.find(({ windowIds }) =>
-    windowIds.includes(id)
+  const application = Object.values(applications).find(
+    ({ id }) => id === applicationId
   )!;
-  const hasIcon = currentThemeId === THEME_MAC_OS_CLASSIC.id;
-  const isCollapsible = currentThemeId === THEME_MAC_OS_CLASSIC.id;
-  const isDoubleClickable = currentThemeId === THEME_BEOS.id;
-  const isDraggable = currentThemeId === THEME_BEOS.id;
+  const hasIcon = themeId === THEME_MAC_OS_CLASSIC.id;
+  const isCollapsible = themeId === THEME_MAC_OS_CLASSIC.id;
+  const isDoubleClickable = themeId === THEME_BEOS.id;
+  const isDraggable = themeId === THEME_BEOS.id;
   const getMaxLeft = useCallback(
     () =>
       (rootRef.current
@@ -60,9 +61,9 @@ export const WindowHeader: FunctionComponent = () => {
   );
 
   useLayoutEffect(updatePosition, [
-    currentThemeId,
     resizable,
     scrollable,
+    themeId,
     title,
     updatePosition,
     width,
@@ -128,7 +129,7 @@ export const WindowHeader: FunctionComponent = () => {
         }
         ref={rootRef}>
         {hasIcon && application.Icon !== undefined ? (
-          <application.Icon aria-hidden themeId={currentThemeId} /> // @todo use file icon
+          <application.Icon aria-hidden /> // @todo use file icon
         ) : null}
         <h1 id={`${id}-title`} title={title}>
           {title}

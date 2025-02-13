@@ -1,10 +1,12 @@
 "use client";
 
+import { ThemeIdContext } from "@/contexts";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { IconComponent } from "@/types";
-import { useId } from "react";
+import { useContext, useId } from "react";
 
-export const Error: IconComponent = ({ themeId, ...props }) => {
+export const Error: IconComponent = (props) => {
+  const themeId = useContext(ThemeIdContext);
   const id = useId();
 
   switch (themeId) {

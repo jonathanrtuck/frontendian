@@ -3,8 +3,7 @@
 import "./Menuitem.theme-beos.css";
 import "./Menuitem.theme-mac-os-classic.css";
 import { MenuContext, MenuitemContext } from "@/contexts";
-import { useStore } from "@/store";
-import { IconComponent } from "@/types";
+import type { IconComponent } from "@/types";
 import clsx from "clsx";
 import type {
   ContextType,
@@ -69,7 +68,6 @@ export const Menuitem: FunctionComponent<
         }
     )
 > = ({ children, className, ...props }) => {
-  const currentThemeId = useStore((store) => store.currentThemeId);
   const { inactivate, isActive, isFocusWithin, isTop, orientation } =
     useContext(MenuContext);
   const { collapse: parentCollapse, topButtonRef: parentTopButtonRef } =
@@ -324,7 +322,6 @@ export const Menuitem: FunctionComponent<
           }
         }}
         onMouseEnter={(e) => {
-          console.debug(isActive, isTop, haspopup);
           if (document.hasFocus() && isActive) {
             if (isTop) {
               setTabIndex(0);
@@ -349,7 +346,7 @@ export const Menuitem: FunctionComponent<
         }
         tabIndex={tabIndex}
         type="button">
-        {!!Icon && <Icon aria-hidden themeId={currentThemeId} />}
+        {!!Icon && <Icon aria-hidden />}
         <label id={`${id}-title`}>{title}</label>
       </button>
       <MenuitemContext.Provider value={contextValue}>

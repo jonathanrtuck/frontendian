@@ -2,8 +2,8 @@
 
 import "./Window.theme-beos.css";
 import "./Window.theme-mac-os-classic.css";
+import * as applications from "@/applications";
 import {
-  Button,
   Dialog,
   ErrorBoundary,
   Menu,
@@ -13,10 +13,12 @@ import {
   WindowMenu,
 } from "@/components";
 import { WindowContext } from "@/contexts";
+import * as files from "@/files";
 import { useFocus } from "@/hooks";
+import { MIMETYPES } from "@/mimetypes";
 import { useStore } from "@/store";
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
-import { File, Pixels, Window as WindowType } from "@/types";
+import type { File, Pixels, Window as WindowType } from "@/types";
 import type {
   ContextType,
   FunctionComponent,
@@ -27,13 +29,20 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import Draggable from "react-draggable";
 
 export const Window: FunctionComponent<WindowType> = (props) => {
-  const { collapsed, fileId, focused, hidden, id, left, top, zoomed } = props;
-  const applications = useStore((store) => store.applications);
+  const {
+    applicationId,
+    collapsed,
+    fileId,
+    focused,
+    hidden,
+    id,
+    left,
+    top,
+    zoomed,
+  } = props;
   const blurWindow = useStore((store) => store.blurWindow);
   const closeApplication = useStore((store) => store.closeApplication);
   const closeWindow = useStore((store) => store.closeWindow);
-  const currentThemeId = useStore((store) => store.currentThemeId);
-  const files = useStore((store) => store.files);
   const focusWindow = useStore((store) => store.focusWindow);
   const moveWindow = useStore((store) => store.moveWindow);
   const openFile = useStore((store) => store.openFile);
@@ -41,7 +50,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
   const resizeWindow = useStore((store) => store.resizeWindow);
   const stackingOrder = useStore((store) => store.stackingOrder);
   const systemBarId = useStore((store) => store.systemBarId);
-  const types = useStore((store) => store.types);
+  const themeId = useStore((store) => store.themeId);
   const menubarRef = useRef<HTMLMenuElement>(null);
   const rootRef = useRef<HTMLElement>(null);
   const [aboutDialogContent, setAboutDialogContent] = useState<ReactNode>(null);
@@ -52,20 +61,20 @@ export const Window: FunctionComponent<WindowType> = (props) => {
     }),
     [props]
   );
-  const application = applications.find(({ windowIds }) =>
-    windowIds.includes(id)
+  const application = Object.values(applications).find(
+    ({ id }) => id === applicationId
   )!;
-  const file = fileId ? files.find(({ id }) => id === fileId) : undefined;
-  const isCollapsible = currentThemeId === THEME_MAC_OS_CLASSIC.id;
-  const isDialogModal = currentThemeId === THEME_BEOS.id;
-  const isMenubarWindowed = currentThemeId === THEME_BEOS.id;
-  const openableFiles = Object.entries(types)
-    .filter(
-      ([, { application: applicationId }]) => applicationId === application.id
-    )
+  const file = Object.values(files).find(({ id }) => id === fileId);
+  const isCollapsible = themeId === THEME_MAC_OS_CLASSIC.id;
+  const isDialogModal = themeId === THEME_BEOS.id;
+  const isMenubarWindowed = themeId === THEME_BEOS.id;
+  const openableFiles = Object.entries(MIMETYPES)
+    .filter(([, { applicationId }]) => applicationId === application.id)
     .reduce(
-      (acc: File[], [type]) =>
-        acc.concat(files.filter((file) => file.type === type)),
+      (acc: File[], [mimetype]) =>
+        acc.concat(
+          Object.values(files).filter((file) => file.mimetype === mimetype)
+        ),
       []
     );
   const onAbout = useCallback(
@@ -104,8 +113,8 @@ export const Window: FunctionComponent<WindowType> = (props) => {
       fallback={
         <Dialog modal={isDialogModal} onClose={onClose} open type="error">
           <p>
-            {application.getTitle({ themeId: currentThemeId })} has encountered
-            an unknown error.
+            {application.getTitle({ themeId })} has encountered an unknown
+            error.
           </p>
         </Dialog>
       }>
@@ -173,7 +182,7 @@ export const Window: FunctionComponent<WindowType> = (props) => {
                 onQuit={onQuit}
                 onResize={onResize}
                 openableFiles={openableFiles}
-                themeId={currentThemeId}
+                themeId={themeId}
               />
             </article>
           </WindowContext.Provider>

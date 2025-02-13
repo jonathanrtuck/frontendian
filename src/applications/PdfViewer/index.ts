@@ -1,8 +1,8 @@
-import { ApplicationConfiguration } from "@/types";
+import type { Application } from "@/types";
 import { PdfViewer } from "./PdfViewer";
 import { PdfViewerIcon } from "./PdfViewerIcon";
 
-export const APPLICATION_PDF_VIEWER: ApplicationConfiguration = {
+export const APPLICATION_PDF_VIEWER: Application = {
   Component: PdfViewer,
   getTitle: () => "PDF Viewer",
   getWindow: ({ file, themeId }) => ({

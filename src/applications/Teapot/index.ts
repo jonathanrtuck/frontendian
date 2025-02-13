@@ -1,8 +1,8 @@
-import { ApplicationConfiguration } from "@/types";
+import type { Application } from "@/types";
 import { Teapot } from "./Teapot";
 import { TeapotIcon } from "./TeapotIcon";
 
-export const APPLICATION_TEAPOT: ApplicationConfiguration = {
+export const APPLICATION_TEAPOT: Application = {
   Component: Teapot,
   getTitle: () => "Teapot",
   getWindow: () => ({

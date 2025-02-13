@@ -1,6 +1,6 @@
-import * as applicationConfigurations from "@/applications";
+import * as applications from "@/applications";
 import * as files from "@/files";
-import { Pdf, Text } from "@/icons";
+import { MIMETYPES } from "@/mimetypes";
 import * as themes from "@/themes";
 import type { Actions, ID, Pixels, State, Window } from "@/types";
 import { v4 as uuid } from "uuid";
@@ -11,6 +11,7 @@ const DEFAULT_THEME = Object.values(themes).find(({ isDefault }) => isDefault)!;
 const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
 const DEFAULT_WINDOW_POSITION_OFFSET = 96;
 const DEFAULT_WINDOW: Window = {
+  applicationId: "",
   collapsed: false,
   focused: true,
   height: 450,
@@ -50,31 +51,11 @@ const getFirstOpenWindowPosition = (windows: Window[]): Pixels => {
 export const useStore = create(
   devtools<State & Actions>(
     (set) => ({
-      applications: Object.values(applicationConfigurations).map(
-        (applicationConfiguration) => ({
-          ...applicationConfiguration,
-          windowIds: [],
-        })
-      ),
-      currentThemeId: DEFAULT_THEME.id,
       desktop: [files.FILE_RESUME_PDF.id],
-      files: Object.values(files),
-      openApplicationIds: [
-        applicationConfigurations.APPLICATION_FILE_MANAGER.id,
-      ],
+      openApplicationIds: [applications.APPLICATION_FILE_MANAGER.id],
       stackingOrder: [SYSTEM_BAR_ID],
       systemBarId: SYSTEM_BAR_ID,
-      themes: Object.values(themes),
-      types: {
-        "application/pdf": {
-          application: applicationConfigurations.APPLICATION_PDF_VIEWER.id,
-          Icon: Pdf,
-        },
-        "text/markdown": {
-          application: applicationConfigurations.APPLICATION_TEXT_EDITOR.id,
-          Icon: Text,
-        },
-      },
+      themeId: DEFAULT_THEME.id,
       windows: [],
       // eslint-disable-next-line sort-keys
       blurWindow: (payload) =>
@@ -98,7 +79,7 @@ export const useStore = create(
       closeApplication: (payload) =>
         set(
           (prevState) => {
-            const application = prevState.applications.find(
+            const application = Object.values(applications).find(
               ({ id }) => id === payload.id
             );
 
@@ -106,26 +87,21 @@ export const useStore = create(
               return prevState;
             }
 
+            const applicationWindowIds = prevState.windows
+              .map(({ id }) => id)
+              .filter((id) => id === application.id);
+
             return {
-              applications: prevState.applications.map((application) =>
-                application.id === payload.id
-                  ? {
-                      ...application,
-                      windowIds: [],
-                    }
-                  : application
-              ),
               openApplicationIds: prevState.openApplicationIds.filter(
                 (id) =>
-                  id ===
-                    applicationConfigurations.APPLICATION_FILE_MANAGER.id ||
+                  id === applications.APPLICATION_FILE_MANAGER.id ||
                   id !== payload.id
               ),
               stackingOrder: prevState.stackingOrder.filter(
-                (id) => !application.windowIds.includes(id)
+                (id) => !applicationWindowIds.includes(id)
               ),
               windows: prevState.windows.filter(
-                ({ id }) => !application.windowIds.includes(id)
+                ({ id }) => !applicationWindowIds.includes(id)
               ),
             };
           },
@@ -138,30 +114,34 @@ export const useStore = create(
       closeWindow: (payload) =>
         set(
           (prevState) => {
-            const windowApplication = prevState.applications.find(
-              ({ windowIds }) => windowIds.includes(payload.id)
+            const window = prevState.windows.find(
+              ({ id }) => id === payload.id
             );
-            const isLastApplicationWindow =
-              windowApplication?.windowIds.length === 1;
+
+            if (!window) {
+              return prevState;
+            }
+
+            const application = Object.values(applications).find(
+              ({ id }) => id === window.applicationId
+            );
+
+            if (!application) {
+              return prevState;
+            }
+
+            const applicationWindowIds = prevState.windows
+              .filter(({ applicationId }) => applicationId === application.id)
+              .map(({ id }) => id);
+            const isLastApplicationWindow = applicationWindowIds.length === 1;
             const isFileManager =
-              windowApplication?.id ===
-              applicationConfigurations.APPLICATION_FILE_MANAGER.id;
+              application.id === applications.APPLICATION_FILE_MANAGER.id;
 
             return {
-              applications: prevState.applications.map((application) =>
-                application === windowApplication
-                  ? {
-                      ...application,
-                      windowIds: application.windowIds.filter(
-                        (id) => id !== payload.id
-                      ),
-                    }
-                  : application
-              ),
               openApplicationIds:
                 isLastApplicationWindow && !isFileManager
                   ? prevState.openApplicationIds.filter(
-                      (id) => id !== windowApplication?.id
+                      (id) => id !== application.id
                     )
                   : prevState.openApplicationIds,
               stackingOrder: prevState.stackingOrder.filter(
@@ -312,7 +292,7 @@ export const useStore = create(
       openApplication: (payload) =>
         set(
           (prevState) => {
-            const application = prevState.applications.find(
+            const application = Object.values(applications).find(
               ({ id }) => id === payload.id
             );
 
@@ -326,11 +306,10 @@ export const useStore = create(
 
             // if the application is already open, raise and focus its first visible window
             if (isApplicationOpen) {
-              const firstVisibleWindow = application.windowIds
-                .map((id) =>
-                  prevState.windows.find((window) => window.id === id)
-                )
-                .find((window) => window && !window.hidden);
+              const firstVisibleWindow = prevState.windows.find(
+                ({ applicationId, hidden }) =>
+                  applicationId === application.id && !hidden
+              );
 
               if (firstVisibleWindow) {
                 return {
@@ -358,8 +337,9 @@ export const useStore = create(
               ...DEFAULT_WINDOW,
               title: DEFAULT_WINDOW.title,
               ...(application.getWindow?.({
-                themeId: prevState.currentThemeId,
+                themeId: prevState.themeId,
               }) ?? {}),
+              applicationId: application.id,
               id: windowId,
               left: windowPosition,
               top: windowPosition,
@@ -367,14 +347,6 @@ export const useStore = create(
 
             // open application and its initial window
             return {
-              applications: prevState.applications.map((application) =>
-                application.id === payload.id
-                  ? {
-                      ...application,
-                      windowIds: [...application.windowIds, windowId],
-                    }
-                  : application
-              ),
               openApplicationIds: isApplicationOpen
                 ? prevState.openApplicationIds
                 : [...prevState.openApplicationIds, payload.id],
@@ -397,7 +369,9 @@ export const useStore = create(
       openFile: (payload) =>
         set(
           (prevState) => {
-            const file = prevState.files.find(({ id }) => id === payload.id);
+            const file = Object.values(files).find(
+              ({ id }) => id === payload.id
+            );
 
             if (!file) {
               return prevState;
@@ -439,15 +413,20 @@ export const useStore = create(
               };
             }
 
-            const applicationId = prevState.types[file.type]?.application;
+            const applicationId = MIMETYPES[file.mimetype]?.applicationId;
 
             if (!applicationId) {
               return prevState;
             }
 
-            const application = prevState.applications.find(
+            const application = Object.values(applications).find(
               ({ id }) => id === applicationId
             );
+
+            if (!application) {
+              return prevState;
+            }
+
             const existingWindow = payload.windowId
               ? prevState.windows.find(({ id }) => id === payload.windowId)
               : undefined;
@@ -466,11 +445,11 @@ export const useStore = create(
                     ? {
                         ...window,
                         title: file.getTitle({
-                          themeId: prevState.currentThemeId,
+                          themeId: prevState.themeId,
                         }),
-                        ...(application?.getWindow?.({
+                        ...(application.getWindow?.({
                           file,
-                          themeId: prevState.currentThemeId,
+                          themeId: prevState.themeId,
                         }) ?? {}),
                         fileId: file.id,
                         focused: true,
@@ -492,12 +471,13 @@ export const useStore = create(
             const window: Window = {
               ...DEFAULT_WINDOW,
               title: file.getTitle({
-                themeId: prevState.currentThemeId,
+                themeId: prevState.themeId,
               }),
-              ...(application?.getWindow?.({
+              ...(application.getWindow?.({
                 file,
-                themeId: prevState.currentThemeId,
+                themeId: prevState.themeId,
               }) ?? {}),
+              applicationId,
               fileId: file.id,
               id: windowId,
               left: windowPosition,
@@ -506,14 +486,6 @@ export const useStore = create(
 
             // open application and file window
             return {
-              applications: prevState.applications.map((application) =>
-                application.id === applicationId
-                  ? {
-                      ...application,
-                      windowIds: [...application.windowIds, windowId],
-                    }
-                  : application
-              ),
               openApplicationIds: isApplicationOpen
                 ? prevState.openApplicationIds
                 : [...prevState.openApplicationIds, applicationId],
@@ -536,7 +508,7 @@ export const useStore = create(
       openWindow: (payload) =>
         set(
           (prevState) => {
-            const application = prevState.applications.find(
+            const application = Object.values(applications).find(
               ({ id }) => id === payload.id
             );
 
@@ -555,22 +527,15 @@ export const useStore = create(
               ...DEFAULT_WINDOW,
               title: DEFAULT_WINDOW.title,
               ...(application.getWindow?.({
-                themeId: prevState.currentThemeId,
+                themeId: prevState.themeId,
               }) ?? {}),
+              applicationId: application.id,
               id: windowId,
               left: windowPosition,
               top: windowPosition,
             };
 
             return {
-              applications: prevState.applications.map((application) =>
-                application.id === payload.id
-                  ? {
-                      ...application,
-                      windowIds: [...application.windowIds, windowId],
-                    }
-                  : application
-              ),
               openApplicationIds: isApplicationOpen
                 ? prevState.openApplicationIds
                 : [...prevState.openApplicationIds, payload.id],
@@ -613,7 +578,7 @@ export const useStore = create(
       setTheme: (payload) =>
         set(
           () => ({
-            currentThemeId: payload.id,
+            themeId: payload.id,
           }),
           undefined,
           {
@@ -662,7 +627,7 @@ export const useStore = create(
               const maxWidth = document.body.offsetWidth - marginX;
               const left = 0;
               const top =
-                prevState.currentThemeId === themes.THEME_MAC_OS_CLASSIC.id
+                prevState.themeId === themes.THEME_MAC_OS_CLASSIC.id
                   ? document.getElementById(SYSTEM_BAR_ID)!.offsetHeight
                   : 0;
               const isZoomed =

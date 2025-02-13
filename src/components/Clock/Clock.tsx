@@ -9,7 +9,7 @@ import type { FunctionComponent } from "react";
 import { useEffect, useState } from "react";
 
 export const Clock: FunctionComponent = () => {
-  const currentThemeId = useStore((store) => store.currentThemeId);
+  const themeId = useStore((store) => store.themeId);
   const date = useClock();
   const [format, setFormat] = useState<"date" | "time">("time");
 
@@ -40,7 +40,7 @@ export const Clock: FunctionComponent = () => {
           })}
         {format === "time" &&
           date.toLocaleTimeString(navigator.language, {
-            timeStyle: currentThemeId === THEME_BEOS.id ? "medium" : "short",
+            timeStyle: themeId === THEME_BEOS.id ? "medium" : "short",
           })}
       </time>
     </button>

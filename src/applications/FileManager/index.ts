@@ -1,9 +1,9 @@
 import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
-import type { ApplicationConfiguration } from "@/types";
+import type { Application } from "@/types";
 import { FileManager } from "./FileManager";
 import { FileManagerIcon } from "./FileManagerIcon";
 
-export const APPLICATION_FILE_MANAGER: ApplicationConfiguration = {
+export const APPLICATION_FILE_MANAGER: Application = {
   Component: FileManager,
   getTitle: ({ themeId }) =>
     ({

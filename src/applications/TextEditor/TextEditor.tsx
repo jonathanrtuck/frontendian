@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./TextEditor.module.css";
-import { ApplicationComponent } from "@/types";
+import type { ApplicationComponent } from "@/types";
 import clsx from "clsx";
 import { useDeferredValue, useEffect, useState } from "react";
 import Markdown from "react-markdown";
@@ -26,7 +26,7 @@ export const TextEditor: ApplicationComponent = ({
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [view, setView] = useState<"markdown" | "preview">(
-    file?.type === "text/markdown" && Boolean(file?.getUrl({ themeId }))
+    file?.mimetype === "text/markdown" && Boolean(file?.getUrl({ themeId }))
       ? "preview"
       : "markdown"
   );
@@ -34,7 +34,8 @@ export const TextEditor: ApplicationComponent = ({
   const inputLines = input.split("\n");
   const numInputCols = Math.max(...inputLines.map((line) => line.length));
   const numInputRows = inputLines.length;
-  const url = file?.type === "text/markdown" ? file.getUrl({ themeId }) : null;
+  const url =
+    file?.mimetype === "text/markdown" ? file.getUrl({ themeId }) : null;
 
   useEffect(() => {
     if (url) {
@@ -66,7 +67,7 @@ export const TextEditor: ApplicationComponent = ({
   useEffect(
     () =>
       setView(
-        file?.type === "text/markdown" && Boolean(file?.getUrl({ themeId }))
+        file?.mimetype === "text/markdown" && Boolean(file?.getUrl({ themeId }))
           ? "preview"
           : "markdown"
       ),
@@ -85,9 +86,7 @@ export const TextEditor: ApplicationComponent = ({
                   <Menuitem
                     disabled={id === file?.id}
                     key={id}
-                    onClick={() => {
-                      onOpen(id);
-                    }}
+                    onClick={() => onOpen(id)}
                     title={getTitle({ themeId })}
                   />
                 ))}
@@ -102,17 +101,13 @@ export const TextEditor: ApplicationComponent = ({
           <Menu>
             <Menuitem
               checked={view === "markdown"}
-              onClick={() => {
-                setView("markdown");
-              }}
+              onClick={() => setView("markdown")}
               title="Markdown"
               type="radio"
             />
             <Menuitem
               checked={view === "preview"}
-              onClick={() => {
-                setView("preview");
-              }}
+              onClick={() => setView("preview")}
               title="Preview"
               type="radio"
             />
@@ -121,7 +116,7 @@ export const TextEditor: ApplicationComponent = ({
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() => {
+              onClick={() =>
                 onAbout(
                   <>
                     <p>
@@ -135,8 +130,8 @@ export const TextEditor: ApplicationComponent = ({
                       <b>View</b> can be toggled in the menu.
                     </p>
                   </>
-                );
-              }}
+                )
+              }
               title={`About ${getTitle({ themeId })}…`}
             />
           </Menu>
@@ -150,9 +145,7 @@ export const TextEditor: ApplicationComponent = ({
             autoFocus
             className={clsx(styles.root, styles.markdown)}
             cols={numInputCols}
-            onInput={(e) => {
-              setInput(e.currentTarget.value);
-            }}
+            onInput={(e) => setInput(e.currentTarget.value)}
             rows={numInputRows}
             value={input}
           />

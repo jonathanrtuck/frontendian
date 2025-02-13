@@ -16,8 +16,8 @@ const MIN_WIDTH = 16 * 10; // 10rem
 export const WindowContent: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
-  const currentThemeId = useStore((store) => store.currentThemeId);
   const resizeWindow = useStore((store) => store.resizeWindow);
+  const themeId = useStore((store) => store.themeId);
   const {
     collapsed,
     height,
@@ -82,7 +82,7 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
 
       return () => resizeObserver.unobserve(contentElement);
     }
-  }, [children, currentThemeId, height, width]);
+  }, [children, height, themeId, width]);
 
   return (
     <Resizable
@@ -91,9 +91,7 @@ export const WindowContent: FunctionComponent<PropsWithChildren> = ({
         // @see https://github.com/react-grid-layout/react-resizable?tab=readme-ov-file#custom-function
         resizable && !collapsed
           ? // eslint-disable-next-line react/no-unstable-nested-components
-            (_, ref) => (
-              <Resize aria-hidden ref={ref} themeId={currentThemeId} />
-            )
+            (_, ref) => <Resize aria-hidden ref={ref} />
           : null
       }
       height={height}

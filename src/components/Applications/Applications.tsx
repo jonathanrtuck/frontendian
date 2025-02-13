@@ -1,7 +1,7 @@
 "use client";
 
 import "./Applications.theme-mac-os-classic.css";
-import { APPLICATION_FILE_MANAGER } from "@/applications";
+import * as applications from "@/applications";
 import { Menu, Menuitem } from "@/components";
 import { WindowHidden, WindowVisible } from "@/icons";
 import { useStore } from "@/store";
@@ -10,35 +10,34 @@ import type { FunctionComponent } from "react";
 import { useState } from "react";
 
 export const Applications: FunctionComponent = () => {
-  const applications = useStore((store) => store.applications);
   const blurWindow = useStore((store) => store.blurWindow);
   const closeApplication = useStore((store) => store.closeApplication);
-  const currentThemeId = useStore((store) => store.currentThemeId);
   const focusWindow = useStore((store) => store.focusWindow);
   const hideWindow = useStore((store) => store.hideWindow);
   const openApplicationIds = useStore((store) => store.openApplicationIds);
   const showWindow = useStore((store) => store.showWindow);
+  const themeId = useStore((store) => store.themeId);
   const windows = useStore((store) => store.windows);
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
-  switch (currentThemeId) {
+  switch (themeId) {
     case THEME_BEOS.id:
       return (
         <nav className="component-applications">
           <Menu bar>
             {openApplicationIds.map((applicationId) => {
-              const { getTitle, Icon, windowIds } = applications.find(
+              const application = Object.values(applications).find(
                 (application) => application.id === applicationId
               )!;
-              const applicationWindows = windows.filter(({ id }) =>
-                windowIds.includes(id)
+              const applicationWindows = windows.filter(
+                ({ applicationId }) => applicationId === application.id
               );
 
               return (
                 <Menuitem
-                  Icon={Icon}
+                  Icon={application.Icon}
                   key={applicationId}
-                  title={getTitle({ themeId: currentThemeId })}>
+                  title={application.getTitle({ themeId })}>
                   <Menu>
                     {applicationWindows.length === 0 ? (
                       <Menuitem disabled title="No windows" />
@@ -58,7 +57,9 @@ export const Applications: FunctionComponent = () => {
                             ({ hidden }) => hidden
                           )}
                           onClick={() =>
-                            windowIds.map((id) => ({ id })).forEach(hideWindow)
+                            applicationWindows
+                              .map(({ id }) => ({ id }))
+                              .forEach(hideWindow)
                           }
                           title="Hide all"
                         />
@@ -67,7 +68,9 @@ export const Applications: FunctionComponent = () => {
                             ({ hidden }) => !hidden
                           )}
                           onClick={() =>
-                            windowIds.map((id) => ({ id })).forEach(showWindow)
+                            applicationWindows
+                              .map(({ id }) => ({ id }))
+                              .forEach(showWindow)
                           }
                           title="Show all"
                         />
@@ -88,19 +91,19 @@ export const Applications: FunctionComponent = () => {
       );
     case THEME_MAC_OS_CLASSIC.id: {
       const focusedWindow = windows.find(({ focused }) => focused);
-      const activeApplication = (
-        focusedWindow
-          ? applications.find(({ windowIds }) =>
-              windowIds.includes(focusedWindow.id)
-            )
-          : applications.find(({ id }) => id === APPLICATION_FILE_MANAGER.id)
+      const activeApplication = Object.values(applications).find(
+        ({ id }) =>
+          id ===
+          (focusedWindow?.applicationId ??
+            applications.APPLICATION_FILE_MANAGER.id)
       )!;
-      const activeApplicationWindows = windows.filter(({ id }) =>
-        activeApplication.windowIds.includes(id)
+      const activeApplicationWindows = windows.filter(
+        ({ applicationId }) => applicationId === activeApplication.id
       );
       const otherApplicationWindows = windows.filter(
-        ({ id }) => !activeApplication.windowIds.includes(id)
+        ({ applicationId }) => applicationId !== activeApplication.id
       );
+
       return (
         <nav aria-expanded={isExpanded} className="component-applications">
           <button
@@ -112,11 +115,11 @@ export const Applications: FunctionComponent = () => {
           <Menu bar horizontal>
             <Menuitem
               Icon={activeApplication.Icon}
-              title={activeApplication.getTitle({ themeId: currentThemeId })}>
+              title={activeApplication.getTitle({ themeId })}>
               <Menu>
                 <Menuitem
                   disabled={
-                    activeApplication.windowIds.length === 0 ||
+                    activeApplicationWindows.length === 0 ||
                     activeApplicationWindows.every(({ hidden }) => hidden)
                   }
                   onClick={() =>
@@ -127,7 +130,7 @@ export const Applications: FunctionComponent = () => {
                     })
                   }
                   title={`Hide ${activeApplication.getTitle({
-                    themeId: currentThemeId,
+                    themeId,
                   })}`}
                 />
                 <Menuitem
@@ -157,23 +160,26 @@ export const Applications: FunctionComponent = () => {
                 />
                 <Menuitem separator />
                 {openApplicationIds.map((applicationId) => {
-                  const { getTitle, Icon, windowIds } = applications.find(
+                  const application = Object.values(applications).find(
                     ({ id }) => id === applicationId
                   )!;
+                  const firstApplicationWindow = windows.find(
+                    ({ applicationId }) => applicationId === application.id
+                  );
 
                   return (
                     <Menuitem
-                      Icon={Icon}
+                      Icon={application.Icon}
                       checked={applicationId === activeApplication.id}
                       key={applicationId}
                       onClick={() => {
-                        if (windowIds.length !== 0) {
-                          focusWindow({ id: windowIds.at(0)! });
+                        if (firstApplicationWindow) {
+                          focusWindow({ id: firstApplicationWindow.id });
                         } else if (focusedWindow) {
                           blurWindow({ id: focusedWindow.id });
                         }
                       }}
-                      title={getTitle({ themeId: currentThemeId })}
+                      title={application.getTitle({ themeId })}
                       type="radio"
                     />
                   );

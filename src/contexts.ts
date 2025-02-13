@@ -1,4 +1,4 @@
-import { Window } from "@/types";
+import type { Theme, Window } from "@/types";
 import type { RefObject } from "react";
 import { createContext, createRef } from "react";
 
@@ -26,11 +26,14 @@ export const MenuitemContext = createContext<{
   topButtonRef: createRef(),
 });
 
+export const ThemeIdContext = createContext<Theme["id"]>("theme-beos");
+
 export const WindowContext = createContext<
   Window & {
     menubarRef: RefObject<HTMLMenuElement | null>;
   }
 >({
+  applicationId: "",
   collapsed: false,
   focused: false,
   height: 0,

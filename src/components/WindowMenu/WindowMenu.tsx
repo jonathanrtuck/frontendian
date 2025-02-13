@@ -12,10 +12,10 @@ import { createPortal } from "react-dom";
 export const WindowMenu: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
-  const currentThemeId = useStore((state) => state.currentThemeId);
+  const themeId = useStore((state) => state.themeId);
   const { focused, id, menubarRef } = useContext(WindowContext);
 
-  switch (currentThemeId) {
+  switch (themeId) {
     case THEME_BEOS.id:
       return (
         <Menu
