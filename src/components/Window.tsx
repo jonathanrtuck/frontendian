@@ -85,6 +85,19 @@ export const Window: FunctionComponent<
           aria-labelledby={labelledby}
           className="window"
           id={id}
+          onBlur={({ currentTarget, relatedTarget }) => {
+            if (
+              document.hasFocus() &&
+              !currentTarget?.contains(relatedTarget)
+            ) {
+              onBlur?.();
+            }
+          }}
+          onFocus={({ currentTarget, relatedTarget }) => {
+            if (!relatedTarget || !currentTarget.contains(relatedTarget)) {
+              onFocus?.();
+            }
+          }}
           ref={rootRef}
           role="dialog"
           style={{

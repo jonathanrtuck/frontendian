@@ -166,6 +166,12 @@ body {
 .menuitem {
   position: relative;
 
+  &[role="separator"] {
+    border-color: var(--color--lowlight) transparent var(--color--highlight);
+    border-width: var(--border-width) 0;
+    margin: 0.25rem 0.125rem;
+  }
+
   > button {
     align-items: center;
     display: flex;
@@ -174,6 +180,30 @@ body {
     gap: 0.5rem;
     line-height: 1.2;
     user-select: none;
+
+    &[role="menuitemcheckbox"],
+    &[role="menuitemradio"] {
+      &::before {
+        content: "";
+        font-family: var(--font-family--default);
+        font-size: 0.625rem;
+        width: 0.5rem;
+      }
+    }
+
+    &[aria-checked="true"] {
+      &::before {
+        content: "✔︎";
+      }
+    }
+
+    &[aria-disabled="true"] {
+      color: var(--text-color--disabled);
+    }
+
+    &[aria-expanded="true"] {
+      background-color: rgb(160, 160, 160);
+    }
 
     > svg {
       flex: 0 0 1rem;
@@ -357,5 +387,8 @@ body {
 
   &:focus {
     outline: 0;
+  }
+
+  > .resize {
   }
 }

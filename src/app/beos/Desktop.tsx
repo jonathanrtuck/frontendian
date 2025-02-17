@@ -1,6 +1,14 @@
 "use client";
 
-import { BeOS, File, Network, Pdf, Text } from "./_icons";
+import {
+  BeOS,
+  File,
+  Network,
+  Pdf,
+  Text,
+  WindowHidden,
+  WindowVisible,
+} from "./_icons";
 import * as applications from "@/applications";
 import {
   Dialog,
@@ -19,6 +27,7 @@ import {
   Window,
 } from "@/components";
 import * as files from "@/files";
+import { SYSTEM_BAR_ID } from "@/ids";
 import { useStore } from "@/store";
 import type { IconComponent, MimeType, Theme } from "@/types";
 import dynamic from "next/dynamic";
@@ -37,13 +46,19 @@ const ICONS: Partial<Record<MimeType, IconComponent>> = {
 const THEME: Theme = "beos";
 
 export const Desktop: FunctionComponent = () => {
+  const blurWindow = useStore((store) => store.blurWindow);
+  const closeApplication = useStore((store) => store.closeApplication);
   const closeWindow = useStore((store) => store.closeWindow);
+  const focusSystemBar = useStore((store) => store.focusSystemBar);
+  const focusWindow = useStore((store) => store.focusWindow);
   const hideWindow = useStore((store) => store.hideWindow);
   const moveWindow = useStore((store) => store.moveWindow);
   const moveWindowTitlebar = useStore((store) => store.moveWindowTitlebar);
+  const openApplication = useStore((store) => store.openApplication);
   const openApplicationIds = useStore((store) => store.openApplicationIds);
   const openFile = useStore((store) => store.openFile);
   const resizeWindow = useStore((store) => store.resizeWindow);
+  const showWindow = useStore((store) => store.showWindow);
   const stackingOrder = useStore((store) => store.stackingOrder);
   const windows = useStore((store) => store.windows);
   const zoomWindow = useStore((store) => store.zoomWindow);
@@ -66,10 +81,47 @@ export const Desktop: FunctionComponent = () => {
           />
         ))}
       </Grid>
-      <SystemBar>
+      <SystemBar
+        onFocus={focusSystemBar}
+        title="Deskbar"
+        z={stackingOrder.indexOf(SYSTEM_BAR_ID)}>
         <Menu bar>
           <Menuitem Icon={BeOS} title="BeOS">
-            <Menu>…</Menu>
+            <Menu>
+              <Menuitem
+                onClick={() => openFile({ id: files.FILE_README_MD.id })}
+                title={files.FILE_README_MD.title}
+              />
+              <Menuitem separator />
+              {/*
+              <Menuitem title="Theme">
+                <Menu>
+                  {Object.values(themes).map(({ id, title }) => (
+                    <Menuitem
+                      checked={id === currentThemeId}
+                      key={id}
+                      onClick={() => setTheme({ id })}
+                      title={title}
+                      type="radio"
+                    />
+                  ))}
+                </Menu>
+              </Menuitem>
+              <Menuitem separator />
+              */}
+              {Object.values(applications)
+                .filter(
+                  ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
+                )
+                .map((application) => (
+                  <Menuitem
+                    Icon={application.Icon(THEME)}
+                    key={application.id}
+                    onClick={() => openApplication({ id: application.id })}
+                    title={application.title(THEME)}
+                  />
+                ))}
+            </Menu>
           </Menuitem>
         </Menu>
         <Tray>
@@ -97,9 +149,47 @@ export const Desktop: FunctionComponent = () => {
                 <Menuitem Icon={Icon} key={application.id} title={title}>
                   <Menu>
                     {applicationWindows.length === 0 ? (
-                      <Menuitem disabled title="No Windows" />
+                      <Menuitem disabled title="No windows" />
                     ) : (
-                      <></>
+                      <>
+                        {applicationWindows.map(({ hidden, id, title }) => (
+                          <Menuitem
+                            Icon={hidden ? WindowHidden : WindowVisible}
+                            key={id}
+                            onClick={() => focusWindow({ id })}
+                            title={title}
+                          />
+                        ))}
+                        <Menuitem separator />
+                        <Menuitem
+                          disabled={applicationWindows.every(
+                            ({ hidden }) => hidden
+                          )}
+                          onClick={() =>
+                            applicationWindows.forEach(({ id }) =>
+                              hideWindow({ id })
+                            )
+                          }
+                          title="Hide all"
+                        />
+                        <Menuitem
+                          disabled={applicationWindows.every(
+                            ({ hidden }) => !hidden
+                          )}
+                          onClick={() =>
+                            applicationWindows.forEach(({ id }) =>
+                              showWindow({ id })
+                            )
+                          }
+                          title="Show all"
+                        />
+                        <Menuitem
+                          onClick={() =>
+                            closeApplication({ id: application.id })
+                          }
+                          title="Close all"
+                        />
+                      </>
                     )}
                   </Menu>
                 </Menuitem>
@@ -117,13 +207,9 @@ export const Desktop: FunctionComponent = () => {
             id={id}
             key={id}
             labelledby={`${id}-title`}
-            onBlur={() => {
-              // @todo
-            }}
+            onBlur={() => blurWindow({ id })}
             onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
-            onFocus={() => {
-              // @todo
-            }}
+            onFocus={() => focusWindow({ id })}
             onResize={(size) => resizeWindow({ id, ...size })}
             width={width}
             x={x}
