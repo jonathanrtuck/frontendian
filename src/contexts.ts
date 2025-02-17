@@ -26,26 +26,8 @@ export const MenuitemContext = createContext<{
   topButtonRef: createRef(),
 });
 
-export const ThemeIdContext = createContext<Theme["id"]>("theme-beos");
+export const ThemeContext = createContext<Theme>("beos");
 
-export const WindowContext = createContext<
-  Window & {
-    menubarRef: RefObject<HTMLMenuElement | null>;
-  }
->({
-  applicationId: "",
-  collapsed: false,
-  focused: false,
-  height: 0,
-  hidden: true,
-  id: "",
-  left: 0,
-  menubarRef: createRef(),
-  resizable: false,
-  scrollable: false,
-  title: "",
-  titlebarLeft: 0,
-  top: 0,
-  width: 0,
-  zoomed: false,
+export const WindowContext = createContext<Partial<Pick<Window, "id">>>({
+  id: undefined,
 });

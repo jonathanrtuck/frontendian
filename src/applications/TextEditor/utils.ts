@@ -1,8 +1,8 @@
-import { THEME_BEOS, THEME_MAC_OS_CLASSIC } from "@/themes";
 import type { Theme } from "@/types";
 
-export const getTitle = ({ themeId }: { themeId: Theme["id"] }): string =>
+// @todo
+export const getTitle = ({ themeId }: { themeId: Theme }): string =>
   ({
-    [THEME_BEOS.id]: "StyledEdit",
-    [THEME_MAC_OS_CLASSIC.id]: "SimpleText",
+    ["beos"]: "StyledEdit",
+    ["mac-os-classic"]: "SimpleText",
   }[themeId]);

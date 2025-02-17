@@ -1,12 +1,4 @@
-import { Menu, Menuitem } from "@/components";
-import type {
-  ComponentProps,
-  ComponentType,
-  PropsWithChildren,
-  ReactNode,
-  RefObject,
-  SVGAttributes,
-} from "react";
+import type { ComponentType, ReactNode, SVGProps } from "react";
 import { EmptyObject } from "type-fest";
 
 export type Actions = Readonly<{
@@ -18,45 +10,66 @@ export type Actions = Readonly<{
   focusSystemBar(): void;
   focusWindow(payload: PayloadWithID): void;
   hideWindow(payload: PayloadWithID): void;
-  moveWindow(payload: PayloadWithID<{ left: Pixels; top: Pixels }>): void;
-  moveWindowTitlebar(payload: PayloadWithID<{ left: Pixels }>): void;
+  moveWindow(payload: PayloadWithID<Coordinates>): void;
+  moveWindowTitlebar(payload: PayloadWithID<Coordinates>): void;
   openApplication(payload: PayloadWithID): void;
   openFile(payload: PayloadWithID<{ windowId?: ID }>): void;
-  openWindow(payload: PayloadWithID): void;
-  resizeWindow(payload: PayloadWithID<{ height: Pixels; width: Pixels }>): void;
-  setTheme(payload: PayloadWithID<{ id: Theme["id"] }>): void;
+  openWindow(payload: PayloadWithID<{ content?: ReactNode }>): void; // ???
+  resizeWindow(payload: PayloadWithID<Size>): void;
   showWindow(payload: PayloadWithID): void;
   zoomWindow(payload: PayloadWithID): void;
 }>;
 
 export type Application = Readonly<{
   Component: ApplicationComponent;
-  getTitle(obj: { themeId: Theme["id"] }): string;
-  getWindow?(obj: { file?: File; themeId: Theme["id"] }): Partial<Window>; // @todo just pass `fileId` instead
-  Icon: IconComponent;
+  getWindow?(
+    fileId?: File["id"]
+  ): Partial<
+    Pick<
+      Window,
+      | "collapsed"
+      | "height"
+      | "hidden"
+      | "resizable"
+      | "title"
+      | "width"
+      | "zoomed"
+    >
+  >;
+  Icon: IconComponent | ((theme: Theme) => IconComponent);
   id: ID;
+  mimetypes: MimeType[];
+  title: string | ((theme: Theme) => string);
 }>;
 
+// @todo
 export type ApplicationComponent = ComponentType<{
+  file?: File;
+  /*
   Content: ComponentType<PropsWithChildren>;
   Menu: ComponentType<ComponentProps<typeof Menu>>;
   Menubar: ComponentType<PropsWithChildren>;
   Menuitem: ComponentType<ComponentProps<typeof Menuitem>>;
-  file?: File;
   onAbout(node: ReactNode): void;
   onClose(): void;
   onNew(): void;
   onOpen(fileId: ID): void;
   onQuit(): void;
-  onResize(height: Pixels, width: Pixels): void;
+  onResize(height: Pixels, width: Pixels): void; // @todo `Size`
   openableFiles: File[];
+  */
 }>;
+
+export type Coordinates = {
+  x: Pixels;
+  y: Pixels;
+};
 
 export type File = Readonly<
   {
-    getTitle(obj: { themeId: Theme["id"] }): string;
-    getUrl(obj: { themeId: Theme["id"] }): URL;
     id: ID;
+    title: string;
+    url: string | ((theme: Theme) => string);
   } & (
     | {
         mimetype: "application/pdf";
@@ -68,11 +81,7 @@ export type File = Readonly<
   )
 >;
 
-export type IconComponent = ComponentType<
-  SVGAttributes<SVGSVGElement> & {
-    ref?: RefObject<SVGSVGElement>;
-  }
->;
+export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
 export type ID = string;
 
@@ -92,38 +101,38 @@ export type Percentage = number;
 
 export type Pixels = number;
 
+export type Size = {
+  height: Pixels;
+  width: Pixels;
+};
+
 export type State = {
-  desktop: (Application["id"] | File["id"])[]; // the order is used as the display order on the Desktop
   openApplicationIds: Application["id"][]; // the order is used as the display order in the SystemBar Applications Menu
   stackingOrder: (Application["id"] | ID)[];
-  themeId: Theme["id"];
   windows: Window[];
 };
 
-export type Theme = Readonly<{
-  Icon: IconComponent;
-  id: "theme-beos" | "theme-mac-os-classic";
-  isDefault?: boolean;
-  title: string;
-}>;
+export type Theme = "beos" | "mac-os-classic";
 
 export type URL = string;
 
-export interface Window {
-  applicationId: Application["id"];
-  collapsed: boolean;
-  fileId?: File["id"];
-  focused: boolean;
-  height: Pixels;
-  hidden: boolean;
-  id: ID;
-  left: Pixels;
-  prev?: Pick<this, "height" | "left" | "top" | "width">;
-  resizable: boolean;
-  scrollable: boolean;
-  title: string;
-  titlebarLeft: Percentage;
-  top: Pixels;
-  width: Pixels;
-  zoomed: boolean;
-}
+export type Window = Coordinates &
+  Size & {
+    applicationId: Application["id"];
+    collapsed: boolean;
+    focused: boolean;
+    hidden: boolean;
+    id: ID;
+    prev?: Coordinates & Size;
+    resizable: boolean;
+    title: string;
+    titlebar: Coordinates;
+    zoomed: boolean;
+  } & (
+    | {
+        content?: ReactNode;
+      }
+    | {
+        fileId?: File["id"];
+      }
+  );

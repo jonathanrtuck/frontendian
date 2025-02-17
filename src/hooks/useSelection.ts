@@ -1,12 +1,8 @@
 "use client";
 
-import type { Pixels } from "@/types";
+import type { Coordinates } from "@/types";
+import type { RefObject } from "react";
 import { useCallback, useEffect, useState } from "react";
-
-type Coordinates = {
-  x: Pixels;
-  y: Pixels;
-};
 
 type Selection = {
   from?: Coordinates;
@@ -23,7 +19,7 @@ const setUserSelect = (userSelect: boolean): void => {
   }
 };
 
-export const useSelection = (root?: HTMLElement | null): Selection => {
+export const useSelection = (ref: RefObject<HTMLElement | null>): Selection => {
   const [selection, setSelection] = useState<Selection>({});
   const onMouseMove = useCallback(
     ({ clientX, clientY }: MouseEvent) =>
@@ -67,7 +63,7 @@ export const useSelection = (root?: HTMLElement | null): Selection => {
   );
 
   useEffect(() => {
-    const element = root === undefined ? document.body : root;
+    const element = ref.current;
 
     if (element) {
       element.addEventListener("mousedown", onMouseDown);
@@ -79,7 +75,7 @@ export const useSelection = (root?: HTMLElement | null): Selection => {
         setUserSelect(true);
       };
     }
-  }, [onMouseDown, onMouseMove, onMouseUp, root]);
+  }, [onMouseDown, onMouseMove, onMouseUp, ref]);
 
   return selection;
 };

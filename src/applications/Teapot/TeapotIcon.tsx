@@ -1,14 +1,14 @@
 "use client";
 
-import { ThemeIdContext } from "@/contexts";
+import { ThemeContext } from "@/contexts";
 import type { IconComponent } from "@/types";
 import { useContext, useId } from "react";
 
 export const TeapotIcon: IconComponent = (props) => {
-  const themeId = useContext(ThemeIdContext);
+  const theme = useContext(ThemeContext);
   const id = useId();
 
-  switch (themeId) {
+  switch (theme.id) {
     case "theme-beos":
       return (
         <svg

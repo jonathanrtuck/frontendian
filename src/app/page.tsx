@@ -1,6 +1,6 @@
-import { Desktop } from "@/components";
+import { redirect } from "next/navigation";
 import type { FunctionComponent } from "react";
 
-const Page: FunctionComponent = () => <Desktop />;
+const Page: FunctionComponent = () => redirect("/beos");
 
 export default Page;

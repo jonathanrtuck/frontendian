@@ -3,7 +3,7 @@
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import styles from "./PdfViewer.module.css";
-import { ThemeIdContext } from "@/contexts";
+import { ThemeContext } from "@/contexts";
 import type { ApplicationComponent } from "@/types";
 import { Fragment, useContext, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
@@ -25,10 +25,10 @@ export const PdfViewer: ApplicationComponent = ({
   onQuit,
   openableFiles,
 }) => {
-  const themeId = useContext(ThemeIdContext);
+  const theme = useContext(ThemeContext);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [numPages, setNumPages] = useState<number>(0);
-  const url = file?.getUrl({ themeId }) ?? null;
+  const url = file?.getUrl({ themeId: theme.id }) ?? null;
 
   return (
     <>
@@ -43,7 +43,7 @@ export const PdfViewer: ApplicationComponent = ({
                     disabled={id === file?.id}
                     key={id}
                     onClick={() => onOpen(id)}
-                    title={getTitle({ themeId })}
+                    title={getTitle({ themeId: theme.id })}
                   />
                 ))}
               </Menu>
@@ -104,7 +104,7 @@ export const PdfViewer: ApplicationComponent = ({
               hidden
               ref={iframeRef}
               src={url}
-              title={file.getTitle({ themeId })}
+              title={file.getTitle({ themeId: theme.id })}
             />
           </>
         ) : null}

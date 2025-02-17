@@ -2,13 +2,11 @@ import * as applications from "@/applications";
 import * as files from "@/files";
 import { SYSTEM_BAR_ID } from "@/ids";
 import { MIMETYPES } from "@/mimetypes";
-import * as themes from "@/themes";
 import type { Actions, Pixels, State, Window } from "@/types";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-const DEFAULT_THEME = Object.values(themes).find(({ isDefault }) => isDefault)!;
 const DEFAULT_WINDOW_POSITION_INCREMENT = 32;
 const DEFAULT_WINDOW_POSITION_OFFSET = 96;
 const DEFAULT_WINDOW: Window = {
@@ -18,13 +16,15 @@ const DEFAULT_WINDOW: Window = {
   height: 450,
   hidden: false,
   id: "",
-  left: DEFAULT_WINDOW_POSITION_OFFSET,
   resizable: true,
-  scrollable: true,
   title: "Untitled",
-  titlebarLeft: 0,
-  top: DEFAULT_WINDOW_POSITION_OFFSET,
+  titlebar: {
+    x: 0,
+    y: 0,
+  },
   width: 600,
+  x: DEFAULT_WINDOW_POSITION_OFFSET,
+  y: DEFAULT_WINDOW_POSITION_OFFSET,
   zoomed: false,
 };
 const WINDOW_DIMENSION_BUFFER = 12;
@@ -34,7 +34,7 @@ const getFirstOpenWindowPosition = (windows: Window[]): Pixels => {
     const position =
       DEFAULT_WINDOW_POSITION_OFFSET + i * DEFAULT_WINDOW_POSITION_INCREMENT;
     const isPositionOpen = windows.every(
-      ({ left, top }) => left !== position || top !== position
+      ({ x, y }) => x !== position || y !== position
     );
 
     if (isPositionOpen) {
@@ -54,7 +54,6 @@ export const useStore = create(
       desktop: [files.FILE_RESUME_PDF.id],
       openApplicationIds: [applications.APPLICATION_FILE_MANAGER.id],
       stackingOrder: [SYSTEM_BAR_ID],
-      themeId: DEFAULT_THEME.id,
       windows: [],
       // eslint-disable-next-line sort-keys
       blurWindow: (payload) =>
@@ -258,8 +257,8 @@ export const useStore = create(
               window.id === payload.id
                 ? {
                     ...window,
-                    left: payload.left,
-                    top: payload.top,
+                    x: payload.x,
+                    y: payload.y,
                   }
                 : window
             ),
@@ -277,7 +276,10 @@ export const useStore = create(
               window.id === payload.id
                 ? {
                     ...window,
-                    titlebarLeft: payload.left,
+                    titlebar: {
+                      x: payload.x,
+                      y: payload.y,
+                    },
                   }
                 : window
             ),
@@ -335,13 +337,11 @@ export const useStore = create(
             const window: Window = {
               ...DEFAULT_WINDOW,
               title: DEFAULT_WINDOW.title,
-              ...(application.getWindow?.({
-                themeId: prevState.themeId,
-              }) ?? {}),
+              ...(application.getWindow?.() ?? {}),
               applicationId: application.id,
               id: windowId,
-              left: windowPosition,
-              top: windowPosition,
+              x: windowPosition,
+              y: windowPosition,
             };
 
             // open application and its initial window
@@ -377,7 +377,7 @@ export const useStore = create(
             }
 
             const fileWindow = prevState.windows.find(
-              ({ fileId }) => fileId === file.id
+              (window) => "fileId" in window && window.fileId === file.id
             );
 
             // if the file is already open, unhide and/or focus its window
@@ -443,13 +443,8 @@ export const useStore = create(
                   window.id === existingWindow.id
                     ? {
                         ...window,
-                        title: file.getTitle({
-                          themeId: prevState.themeId,
-                        }),
-                        ...(application.getWindow?.({
-                          file,
-                          themeId: prevState.themeId,
-                        }) ?? {}),
+                        title: file.title,
+                        ...(application.getWindow?.(file.id) ?? {}),
                         fileId: file.id,
                         focused: true,
                       }
@@ -469,18 +464,13 @@ export const useStore = create(
             );
             const window: Window = {
               ...DEFAULT_WINDOW,
-              title: file.getTitle({
-                themeId: prevState.themeId,
-              }),
-              ...(application.getWindow?.({
-                file,
-                themeId: prevState.themeId,
-              }) ?? {}),
+              title: file.title,
+              ...(application.getWindow?.(file.id) ?? {}),
               applicationId,
               fileId: file.id,
               id: windowId,
-              left: windowPosition,
-              top: windowPosition,
+              x: windowPosition,
+              y: windowPosition,
             };
 
             // open application and file window
@@ -525,13 +515,11 @@ export const useStore = create(
             const window: Window = {
               ...DEFAULT_WINDOW,
               title: DEFAULT_WINDOW.title,
-              ...(application.getWindow?.({
-                themeId: prevState.themeId,
-              }) ?? {}),
+              ...(application.getWindow?.() ?? {}),
               applicationId: application.id,
               id: windowId,
-              left: windowPosition,
-              top: windowPosition,
+              x: windowPosition,
+              y: windowPosition,
             };
 
             return {
@@ -574,17 +562,6 @@ export const useStore = create(
             type: "resizeWindow",
           }
         ),
-      setTheme: (payload) =>
-        set(
-          () => ({
-            themeId: payload.id,
-          }),
-          undefined,
-          {
-            payload,
-            type: "setTheme",
-          }
-        ),
       showWindow: (payload) =>
         set(
           (prevState) => ({
@@ -624,20 +601,17 @@ export const useStore = create(
               const marginY = parseFloat(marginBottom) + parseFloat(marginTop);
               const maxHeight = document.body.offsetHeight - marginY;
               const maxWidth = document.body.offsetWidth - marginX;
-              const left = 0;
-              const top =
-                prevState.themeId === themes.THEME_MAC_OS_CLASSIC.id
-                  ? document.getElementById(SYSTEM_BAR_ID)!.offsetHeight
-                  : 0;
+              const x = 0;
+              const y = document.getElementById(SYSTEM_BAR_ID)!.offsetHeight; // : 0; @todo
               const isZoomed =
                 offsetHeight >= maxHeight - WINDOW_DIMENSION_BUFFER &&
                 offsetHeight <= maxHeight + WINDOW_DIMENSION_BUFFER &&
                 offsetWidth >= maxWidth - WINDOW_DIMENSION_BUFFER &&
                 offsetWidth <= maxWidth + WINDOW_DIMENSION_BUFFER &&
-                window.left >= left - WINDOW_DIMENSION_BUFFER &&
-                window.left <= left + WINDOW_DIMENSION_BUFFER &&
-                window.top >= top - WINDOW_DIMENSION_BUFFER &&
-                window.top <= top + WINDOW_DIMENSION_BUFFER;
+                window.x >= x - WINDOW_DIMENSION_BUFFER &&
+                window.x <= x + WINDOW_DIMENSION_BUFFER &&
+                window.y >= y - WINDOW_DIMENSION_BUFFER &&
+                window.y <= y + WINDOW_DIMENSION_BUFFER;
 
               return isZoomed
                 ? {
@@ -649,16 +623,16 @@ export const useStore = create(
                 : {
                     ...window,
                     collapsed: false,
-                    left,
                     prev: window.zoomed
                       ? window.prev
                       : {
                           height: window.height,
-                          left: window.left,
-                          top: window.top,
                           width: window.width,
+                          x: window.x,
+                          y: window.y,
                         },
-                    top,
+                    x,
+                    y,
                     zoomed: true,
                   };
             }),
