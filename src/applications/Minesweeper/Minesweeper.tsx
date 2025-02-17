@@ -1,10 +1,6 @@
 "use client";
 
 import styles from "./Minesweeper.module.css";
-import type { ApplicationComponent } from "@/types";
-import clsx from "clsx";
-import type { CSSProperties } from "react";
-import { useEffect, useRef, useState } from "react";
 import {
   BORDER_SIZE,
   DEFAULT_LEVEL,
@@ -21,6 +17,10 @@ import {
   isEqualCoordinates,
   revealSquare,
 } from "./utils";
+import type { ApplicationComponent } from "@/types";
+import clsx from "clsx";
+import type { CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // @see https://github.com/jonathanrtuck/minesweeper
 export const Minesweeper: ApplicationComponent = ({

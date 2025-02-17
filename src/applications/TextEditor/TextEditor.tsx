@@ -1,12 +1,12 @@
 "use client";
 
 import styles from "./TextEditor.module.css";
-import { ThemeContext } from "@/contexts";
+import { title } from "./utils";
+import { useTheme } from "@/hooks";
 import type { ApplicationComponent } from "@/types";
 import clsx from "clsx";
-import { useContext, useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import Markdown from "react-markdown";
-import { getTitle } from "./utils";
 
 export const TextEditor: ApplicationComponent = ({
   Content,
@@ -21,14 +21,13 @@ export const TextEditor: ApplicationComponent = ({
   onQuit,
   openableFiles,
 }) => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const [content, setContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [view, setView] = useState<"markdown" | "preview">(
-    file?.mimetype === "text/markdown" &&
-      Boolean(file?.getUrl({ themeId: theme.id }))
+    file?.mimetype === "text/markdown" && Boolean(file?.url(theme))
       ? "preview"
       : "markdown"
   );
@@ -36,10 +35,7 @@ export const TextEditor: ApplicationComponent = ({
   const inputLines = input.split("\n");
   const numInputCols = Math.max(...inputLines.map((line) => line.length));
   const numInputRows = inputLines.length;
-  const url =
-    file?.mimetype === "text/markdown"
-      ? file.getUrl({ themeId: theme.id })
-      : null;
+  const url = file?.mimetype === "text/markdown" ? file.url(theme) : null;
 
   useEffect(() => {
     if (url) {
@@ -71,8 +67,7 @@ export const TextEditor: ApplicationComponent = ({
   useEffect(
     () =>
       setView(
-        file?.mimetype === "text/markdown" &&
-          Boolean(file?.getUrl({ themeId: theme.id }))
+        file?.mimetype === "text/markdown" && Boolean(file?.url(theme))
           ? "preview"
           : "markdown"
       ),
@@ -87,12 +82,12 @@ export const TextEditor: ApplicationComponent = ({
             <Menuitem onClick={onNew} title="New" />
             <Menuitem title="Open">
               <Menu>
-                {openableFiles.map(({ getTitle, id }) => (
+                {openableFiles.map(({ id, title }) => (
                   <Menuitem
                     disabled={id === file?.id}
                     key={id}
                     onClick={() => onOpen(id)}
-                    title={getTitle({ themeId: theme.id })}
+                    title={title}
                   />
                 ))}
               </Menu>
@@ -137,7 +132,7 @@ export const TextEditor: ApplicationComponent = ({
                   </>
                 )
               }
-              title={`About ${getTitle({ themeId: theme.id })}…`}
+              title={`About ${title(theme)}…`}
             />
           </Menu>
         </Menuitem>

@@ -1,6 +1,6 @@
 "use client";
 
-import { BeOS, Network, Pdf } from "./_icons";
+import { BeOS, File, Network, Pdf, Text } from "./_icons";
 import * as applications from "@/applications";
 import {
   Dialog,
@@ -20,7 +20,7 @@ import {
 } from "@/components";
 import * as files from "@/files";
 import { useStore } from "@/store";
-import { IconComponent } from "@/types";
+import type { IconComponent, MimeType, Theme } from "@/types";
 import dynamic from "next/dynamic";
 import type { FunctionComponent } from "react";
 
@@ -30,7 +30,11 @@ const Clock = dynamic(
   { ssr: false }
 );
 
-const THEME = "beos";
+const ICONS: Partial<Record<MimeType, IconComponent>> = {
+  "application/pdf": Pdf,
+  "text/markdown": Text,
+};
+const THEME: Theme = "beos";
 
 export const Desktop: FunctionComponent = () => {
   const closeWindow = useStore((store) => store.closeWindow);
@@ -55,7 +59,7 @@ export const Desktop: FunctionComponent = () => {
       <Grid>
         {Object.values(files).map(({ id, mimetype, title }) => (
           <Icon
-            Icon={Pdf}
+            Icon={ICONS[mimetype] ?? File}
             key={id}
             onDoubleClick={() => openFile({ id })}
             title={title}
@@ -83,17 +87,11 @@ export const Desktop: FunctionComponent = () => {
                 )!
             )
             .map((application) => {
+              const Icon = application.Icon(THEME);
+              const title = application.title(THEME);
               const applicationWindows = windows.filter(
                 ({ applicationId }) => applicationId === application.id
               );
-              const Icon =
-                typeof application.Icon === "function"
-                  ? application.Icon("beos")
-                  : application.Icon;
-              const title =
-                typeof application.title === "function"
-                  ? application.title("beos")
-                  : application.title;
 
               return (
                 <Menuitem Icon={Icon} key={application.id} title={title}>

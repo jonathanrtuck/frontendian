@@ -1,8 +1,10 @@
 import type { Theme } from "@/types";
 
-// @todo
-export const getTitle = ({ themeId }: { themeId: Theme }): string =>
-  ({
-    ["beos"]: "StyledEdit",
-    ["mac-os-classic"]: "SimpleText",
-  }[themeId]);
+export const title = (theme: Theme) => {
+  switch (theme) {
+    case "beos":
+      return "StyledEdit";
+    case "mac-os-classic":
+      return "SimpleText";
+  }
+};

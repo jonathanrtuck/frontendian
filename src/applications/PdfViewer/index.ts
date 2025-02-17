@@ -1,7 +1,7 @@
-import * as applications from "@/files";
-import type { Application } from "@/types";
+import { BeOS, MacOSClassic } from "./icons";
 import { PdfViewer } from "./PdfViewer";
-import { PdfViewerIcon } from "./PdfViewerIcon";
+import * as applications from "@/files";
+import type { Application, Theme } from "@/types";
 
 export const APPLICATION_PDF_VIEWER: Application = {
   Component: PdfViewer,
@@ -22,8 +22,15 @@ export const APPLICATION_PDF_VIEWER: Application = {
         : {}),
     };
   },
-  Icon: PdfViewerIcon,
+  Icon: (theme: Theme) => {
+    switch (theme) {
+      case "beos":
+        return BeOS;
+      case "mac-os-classic":
+        return MacOSClassic;
+    }
+  },
   id: "application-pdf-viewer",
   mimetypes: ["application/pdf"],
-  title: "PDF Viewer",
+  title: () => "PDF Viewer",
 };

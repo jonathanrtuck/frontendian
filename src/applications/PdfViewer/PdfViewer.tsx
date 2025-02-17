@@ -3,9 +3,9 @@
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import styles from "./PdfViewer.module.css";
-import { ThemeContext } from "@/contexts";
+import { useTheme } from "@/hooks";
 import type { ApplicationComponent } from "@/types";
-import { Fragment, useContext, useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
 // @see https://github.com/wojtekmaj/react-pdf/tree/main#use-external-cdn
@@ -25,10 +25,10 @@ export const PdfViewer: ApplicationComponent = ({
   onQuit,
   openableFiles,
 }) => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [numPages, setNumPages] = useState<number>(0);
-  const url = file?.getUrl({ themeId: theme.id }) ?? null;
+  const url = file?.url(theme) ?? null;
 
   return (
     <>
@@ -38,12 +38,12 @@ export const PdfViewer: ApplicationComponent = ({
             <Menuitem onClick={onNew} title="New" />
             <Menuitem title="Open">
               <Menu>
-                {openableFiles.map(({ id, getTitle }) => (
+                {openableFiles.map(({ id, title }) => (
                   <Menuitem
                     disabled={id === file?.id}
                     key={id}
                     onClick={() => onOpen(id)}
-                    title={getTitle({ themeId: theme.id })}
+                    title={title}
                   />
                 ))}
               </Menu>
@@ -100,12 +100,7 @@ export const PdfViewer: ApplicationComponent = ({
                 />
               ))}
             </Document>
-            <iframe
-              hidden
-              ref={iframeRef}
-              src={url}
-              title={file.getTitle({ themeId: theme.id })}
-            />
+            <iframe hidden ref={iframeRef} src={url} />
           </>
         ) : null}
       </Content>

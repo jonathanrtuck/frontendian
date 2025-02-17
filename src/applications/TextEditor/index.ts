@@ -1,18 +1,19 @@
-import type { Application, Theme } from "@/types";
+import { BeOS, MacOSClassic } from "./icons";
 import { TextEditor } from "./TextEditor";
-import { TextEditorIcon } from "./TextEditorIcon";
+import { title } from "./utils";
+import type { Application, Theme } from "@/types";
 
 export const APPLICATION_TEXT_EDITOR: Application = {
   Component: TextEditor,
-  Icon: TextEditorIcon,
-  id: "application-text-editor",
-  mimetypes: ["text/markdown"],
-  title: (theme: Theme) => {
+  Icon: (theme: Theme) => {
     switch (theme) {
       case "beos":
-        return "StyledEdit";
+        return BeOS;
       case "mac-os-classic":
-        return "SimpleText";
+        return MacOSClassic;
     }
   },
+  id: "application-text-editor",
+  mimetypes: ["text/markdown"],
+  title,
 };

@@ -36,10 +36,10 @@ export type Application = Readonly<{
       | "zoomed"
     >
   >;
-  Icon: IconComponent | ((theme: Theme) => IconComponent);
+  Icon: (theme: Theme) => IconComponent;
   id: ID;
   mimetypes: MimeType[];
-  title: string | ((theme: Theme) => string);
+  title: (theme: Theme) => string;
 }>;
 
 // @todo
@@ -69,7 +69,7 @@ export type File = Readonly<
   {
     id: ID;
     title: string;
-    url: string | ((theme: Theme) => string);
+    url: (theme: Theme) => string;
   } & (
     | {
         mimetype: "application/pdf";
@@ -107,7 +107,7 @@ export type Size = {
 };
 
 export type State = {
-  openApplicationIds: Application["id"][]; // the order is used as the display order in the SystemBar Applications Menu
+  openApplicationIds: Application["id"][];
   stackingOrder: (Application["id"] | ID)[];
   windows: Window[];
 };

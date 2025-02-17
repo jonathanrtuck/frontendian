@@ -1,7 +1,7 @@
-import type { Application, Theme } from "@/types";
 import { DEFAULT_LEVEL, DEFAULT_STATE } from "./constants";
+import { BeOS, MacOSClassic } from "./icons";
 import { Minesweeper } from "./Minesweeper";
-import { MinesweeperIcon } from "./MinesweeperIcon";
+import type { Application, Theme } from "@/types";
 
 export const APPLICATION_MINESWEEPER: Application = {
   Component: Minesweeper,
@@ -11,8 +11,15 @@ export const APPLICATION_MINESWEEPER: Application = {
     title: "Minesweeper",
     width: DEFAULT_STATE[DEFAULT_LEVEL].width,
   }),
-  Icon: (theme: Theme) => MinesweeperIcon, // @todo
+  Icon: (theme: Theme) => {
+    switch (theme) {
+      case "beos":
+        return BeOS;
+      case "mac-os-classic":
+        return MacOSClassic;
+    }
+  },
   id: "application-minesweeper",
   mimetypes: [],
-  title: "Minesweeper",
+  title: () => "Minesweeper",
 };

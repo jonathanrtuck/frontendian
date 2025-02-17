@@ -1,7 +1,6 @@
 import * as applications from "@/applications";
 import * as files from "@/files";
 import { SYSTEM_BAR_ID } from "@/ids";
-import { MIMETYPES } from "@/mimetypes";
 import type { Actions, Pixels, State, Window } from "@/types";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
@@ -412,14 +411,8 @@ export const useStore = create(
               };
             }
 
-            const applicationId = MIMETYPES[file.mimetype]?.applicationId;
-
-            if (!applicationId) {
-              return prevState;
-            }
-
             const application = Object.values(applications).find(
-              ({ id }) => id === applicationId
+              ({ mimetypes }) => mimetypes.includes(file.mimetype)
             );
 
             if (!application) {
@@ -456,8 +449,9 @@ export const useStore = create(
               };
             }
 
-            const isApplicationOpen =
-              prevState.openApplicationIds.includes(applicationId);
+            const isApplicationOpen = prevState.openApplicationIds.includes(
+              application.id
+            );
             const windowId = uuid();
             const windowPosition = getFirstOpenWindowPosition(
               prevState.windows
@@ -466,7 +460,7 @@ export const useStore = create(
               ...DEFAULT_WINDOW,
               title: file.title,
               ...(application.getWindow?.(file.id) ?? {}),
-              applicationId,
+              applicationId: application.id,
               fileId: file.id,
               id: windowId,
               x: windowPosition,
@@ -477,7 +471,7 @@ export const useStore = create(
             return {
               openApplicationIds: isApplicationOpen
                 ? prevState.openApplicationIds
-                : [...prevState.openApplicationIds, applicationId],
+                : [...prevState.openApplicationIds, application.id],
               stackingOrder: [...prevState.stackingOrder, window.id],
               windows: [
                 ...prevState.windows.map((window) => ({

@@ -45,7 +45,7 @@ body {
 
 *::selection {
   background-color: rgb(0, 0, 0);
-  color: var(--text-color--dark);
+  color: var(--text-color--light);
 }
 
 .clock {
@@ -130,12 +130,123 @@ body {
     }
   }
 
+  &[aria-orientation="horizontal"] & {
+    left: 0;
+    top: 100%;
+  }
+
   &[aria-orientation="vertical"] {
     flex-direction: column;
+  }
+
+  &[aria-orientation="vertical"] & {
+    right: calc(100% - var(--border-width));
+    top: 0;
+  }
+
+  &[role="menu"] {
+    background-color: var(--background-color--default);
+    border-width: var(--border-width);
+    box-shadow: var(--box-shadow--high--inset);
+    color: var(--text-color--dark);
+    flex-direction: column;
+    max-width: 20rem;
+    min-width: 5rem;
+    position: absolute;
+    z-index: 100;
+
+    & & {
+      left: 100%;
+      right: unset;
+      top: 0;
+    }
   }
 }
 
 .menuitem {
+  position: relative;
+
+  > button {
+    align-items: center;
+    display: flex;
+    font-size: 0.875rem;
+    font-weight: 500;
+    gap: 0.5rem;
+    line-height: 1.2;
+    user-select: none;
+
+    > svg {
+      flex: 0 0 1rem;
+      height: 1rem;
+      width: 1rem;
+    }
+
+    > label {
+      flex: 1 1 auto;
+      overflow: hidden;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  [aria-orientation="horizontal"] > & {
+    > button {
+      height: 100%;
+      padding: 0 0.5rem;
+    }
+  }
+
+  [aria-orientation="vertical"] > & {
+    > button {
+      padding: 0.25rem 0.5rem;
+      width: 100%;
+    }
+  }
+
+  [role="menubar"][aria-orientation="vertical"] > & {
+    > button {
+      box-shadow: var(--box-shadow--high--inset);
+
+      &[aria-expanded="true"] {
+        box-shadow: inset 0 var(--border-width) var(--border-color--dark);
+      }
+    }
+  }
+
+  [role="menu"] > & {
+    > button {
+      &:not([aria-checked="true"], [aria-disabled="true"]) {
+        &:hover {
+          background-color: rgb(160, 160, 160);
+        }
+      }
+
+      &[aria-haspopup="menu"] {
+        &::after {
+          color: rgb(240, 240, 240);
+          content: "▶︎";
+          font-size: 0.75rem;
+          position: absolute;
+          right: 0.5rem;
+          text-shadow: var(--border-color--dark) 0 0 var(--border-width),
+            var(--border-color--dark) var(--border-width) var(--border-width)
+              var(--border-width);
+          transform: scaleY(0.7);
+        }
+
+        &[aria-expanded="true"] {
+          &::after {
+            color: rgb(200, 200, 200);
+          }
+        }
+      }
+    }
+  }
+
+  [role="menu"]:has(> & > button[aria-haspopup="menu"]) > & > button {
+    padding-right: 2rem;
+  }
 }
 
 .scrollable {
@@ -153,6 +264,20 @@ body {
   right: 0;
   top: 0;
   width: var(--system-bar-width);
+
+  > .menu:first-of-type > .menuitem > button {
+    padding: 0.125rem;
+
+    > svg {
+      flex: 1 1 8rem;
+      height: 1.75rem;
+      width: unset;
+    }
+
+    > label {
+      display: none;
+    }
+  }
 }
 
 .title {
