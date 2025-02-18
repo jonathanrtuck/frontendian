@@ -57,6 +57,8 @@ body {
 }
 
 .content {
+  background-color: rgb(255, 255, 255);
+  color: var(--text-color--default);
 }
 
 .dialog {
@@ -325,21 +327,31 @@ body {
 }
 
 .title-bar {
-  background-color: var(--background-color--inactive);
-  border-color: var(--border-color--light) var(--border-color--dark) transparent
-    var(--border-color--light);
+  background-color: var(--window-background-color);
+  border-color: var(--border-color--light) var(--border-color--dark)
+    var(--window-background-color) var(--border-color--light);
   border-width: var(--border-width);
   bottom: 100%;
-  box-shadow: var(--box-shadow--high--inset);
-  box-sizing: content-box;
+  box-shadow: inset var(--border-width) var(--border-width)
+      var(--color--highlight),
+    inset calc(var(--border-width) * -1) 0 var(--color--lowlight),
+    0 var(--border-width) var(--window-background-color);
   display: flex;
   gap: 0.5rem;
-  height: var(--title-bar-height);
+  height: calc(
+    var(--border-width) + var(--window-padding) + var(--title-bar-height) +
+      var(--window-padding) + var(--border-width)
+  );
   left: 0;
+  margin: 0 calc(var(--border-width) * -1);
+  max-width: calc(100% + (var(--border-width) * 2));
   padding: var(--window-padding);
   position: absolute;
-  width: 100%;
   z-index: 1;
+
+  [aria-current="true"] > & {
+    background-color: rgb(240, 202, 68);
+  }
 }
 
 .title-bar-button {
@@ -375,13 +387,21 @@ body {
 }
 
 .window {
-  background-color: var(--background-color--inactive);
+  --window-background-color: var(--background-color--inactive);
+
+  background-color: var(--window-background-color);
   border-color: var(--border-color--light) var(--border-color--dark)
     var(--border-color--dark) var(--border-color--light);
   border-width: var(--border-width);
   box-shadow: var(--box-shadow--high--inset);
+  color: var(--text-color--default);
   left: 0;
-  padding: var(--window-padding);
+  margin: calc(
+      var(--border-width) + var(--window-padding) + var(--title-bar-height) +
+        var(--window-padding)
+    )
+    0 0;
+  padding: calc(var(--window-padding) + (var(--border-width) * 2));
   position: fixed;
   top: 0;
 
@@ -389,6 +409,33 @@ body {
     outline: 0;
   }
 
+  &[aria-current="true"] {
+    --window-background-color: var(--background-color--default);
+  }
+
+  &::before {
+    border-color: var(--color--lowlight) var(--color--highlight)
+      var(--color--highlight) var(--color--lowlight);
+    border-width: var(--border-width);
+    box-shadow: inset 0 0 0 var(--border-width) var(--border-color--light);
+    content: "";
+    inset: var(--window-padding);
+    position: absolute;
+    z-index: -1;
+  }
+
   > .resize {
+    border-color: var(--color--highlight);
+    border-width: var(--border-width) 0 0 var(--border-width);
+    bottom: calc(var(--border-width) * -1);
+    box-shadow: calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--border-color--light);
+    color: rgba(0, 0, 0, 0.2);
+    height: calc(var(--scrollbar-width) + var(--border-width));
+    padding: var(--border-width);
+    position: absolute;
+    right: calc(var(--border-width) * -1);
+    width: calc(var(--scrollbar-width) + var(--border-width));
+    z-index: 3;
   }
 }

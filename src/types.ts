@@ -115,7 +115,7 @@ export type Window = Coordinates &
     zoomed: boolean;
   } & (
     | {
-        content?: ReactNode;
+        Component: ComponentType;
       }
     | {
         fileId?: File["id"];

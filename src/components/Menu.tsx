@@ -17,7 +17,9 @@ export const Menu: FunctionComponent<
   return (
     <menu
       aria-hidden={bar ? undefined : true} // @todo
-      aria-orientation={"horizontal" in props ? "horizontal" : "vertical"}
+      aria-orientation={
+        "horizontal" in props && props.horizontal ? "horizontal" : "vertical"
+      }
       className="menu"
       onBlur={(e: FocusEvent<HTMLMenuElement>) => {
         // @todo

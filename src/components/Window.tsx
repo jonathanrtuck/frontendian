@@ -1,5 +1,6 @@
 "use client";
 
+import { useFocus } from "@/hooks";
 import type { Coordinates, ID, Size } from "@/types";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
 import { useRef } from "react";
@@ -28,8 +29,8 @@ export const Window: FunctionComponent<
   >
 > = ({
   children,
-  collapsed,
-  current,
+  collapsed = false,
+  current = false,
   height,
   id,
   labelledby,
@@ -45,6 +46,11 @@ export const Window: FunctionComponent<
 }) => {
   const rootRef = useRef<HTMLElement>(null);
   const minWidth = 0; // @todo
+
+  useFocus({
+    deps: [current],
+    ref: rootRef,
+  });
 
   return (
     <Draggable

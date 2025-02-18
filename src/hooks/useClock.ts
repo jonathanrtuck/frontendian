@@ -22,9 +22,7 @@ export const useClock = (): Date => {
 
     animationFrameRequest = requestAnimationFrame(tick);
 
-    return () => {
-      cancelAnimationFrame(animationFrameRequest);
-    };
+    return () => cancelAnimationFrame(animationFrameRequest);
   }, []);
 
   return date;

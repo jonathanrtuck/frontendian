@@ -10,13 +10,13 @@ export const useFocus = ({
 }: {
   deps: boolean[];
   ref: RefObject<HTMLElement | null>;
-  selector?: Parameters<ParentNode["querySelector"]>[0];
-}): void => {
+  selector?: string;
+}): void =>
   useEffect(
     () => {
       if (deps.every(Boolean) && ref.current) {
-        const element: HTMLElement | null = selector
-          ? ref.current.querySelector(selector)
+        const element = selector
+          ? ref.current.querySelector<HTMLElement>(selector)
           : ref.current;
 
         if (element && !element.contains(document.activeElement)) {
@@ -27,4 +27,3 @@ export const useFocus = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     deps
   );
-};
