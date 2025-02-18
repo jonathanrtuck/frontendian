@@ -2,25 +2,15 @@
 
 import styles from "./TextEditor.module.css";
 import { title } from "./utils";
+import { Content, Menu, Menubar, Menuitem } from "@/components";
 import { useTheme } from "@/hooks";
-import type { ApplicationComponent } from "@/types";
+import { useStore } from "@/store";
+import type { Application } from "@/types";
 import clsx from "clsx";
 import { useDeferredValue, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 
-export const TextEditor: ApplicationComponent = ({
-  Content,
-  Menu,
-  Menubar,
-  Menuitem,
-  file,
-  onAbout,
-  onClose,
-  onNew,
-  onOpen,
-  onQuit,
-  openableFiles,
-}) => {
+export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
   const theme = useTheme();
   const [content, setContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -79,22 +69,39 @@ export const TextEditor: ApplicationComponent = ({
       <Menubar>
         <Menuitem title="File">
           <Menu>
-            <Menuitem onClick={onNew} title="New" />
+            <Menuitem
+              onClick={() => {
+                // @todo
+              }}
+              title="New"
+            />
             <Menuitem title="Open">
               <Menu>
                 {openableFiles.map(({ id, title }) => (
                   <Menuitem
                     disabled={id === file?.id}
                     key={id}
-                    onClick={() => onOpen(id)}
+                    onClick={() => {
+                      // @todo
+                    }}
                     title={title}
                   />
                 ))}
               </Menu>
             </Menuitem>
             <Menuitem separator />
-            <Menuitem onClick={onClose} title="Close" />
-            <Menuitem onClick={onQuit} title="Quit" />
+            <Menuitem
+              onClick={() => {
+                // @todo
+              }}
+              title="Close"
+            />
+            <Menuitem
+              onClick={() => {
+                // @todo
+              }}
+              title="Quit"
+            />
           </Menu>
         </Menuitem>
         <Menuitem title="View">
@@ -116,22 +123,9 @@ export const TextEditor: ApplicationComponent = ({
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() =>
-                onAbout(
-                  <>
-                    <p>
-                      Edit and preview{" "}
-                      <a href="https://en.wikipedia.org/wiki/Markdown">
-                        markdown
-                      </a>
-                      .
-                    </p>
-                    <p>
-                      <b>View</b> can be toggled in the menu.
-                    </p>
-                  </>
-                )
-              }
+              onClick={() => {
+                // @todo
+              }}
               title={`About ${title(theme)}…`}
             />
           </Menu>

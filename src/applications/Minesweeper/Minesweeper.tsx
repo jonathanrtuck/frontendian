@@ -17,21 +17,15 @@ import {
   isEqualCoordinates,
   revealSquare,
 } from "./utils";
-import type { ApplicationComponent } from "@/types";
+import { Content, Menu, Menubar, Menuitem } from "@/components";
+import { useStore } from "@/store";
+import type { Application } from "@/types";
 import clsx from "clsx";
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
 // @see https://github.com/jonathanrtuck/minesweeper
-export const Minesweeper: ApplicationComponent = ({
-  Content,
-  Menu,
-  Menubar,
-  Menuitem,
-  onAbout,
-  onQuit,
-  onResize,
-}) => {
+export const Minesweeper: Application["Component"] = ({ fileId, windowId }) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [flagsRemaining, setFlagsRemaining] = useState<number>(10);
@@ -76,7 +70,12 @@ export const Minesweeper: ApplicationComponent = ({
       <Menubar>
         <Menuitem title="File">
           <Menu>
-            <Menuitem onClick={onQuit} title="Quit" />
+            <Menuitem
+              onClick={() => {
+                // @todo
+              }}
+              title="Quit"
+            />
           </Menu>
         </Menuitem>
         <Menuitem title="Game">
@@ -119,24 +118,9 @@ export const Minesweeper: ApplicationComponent = ({
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() =>
-                onAbout(
-                  <>
-                    <p>
-                      Recreation of{" "}
-                      <a href="https://en.wikipedia.org/wiki/Minesweeper_(video_game)">
-                        Minesweeper
-                      </a>
-                      .
-                    </p>
-                    <p>
-                      Difficulty can be selected from the <b>Game</b> menu.
-                    </p>
-                    <h4>Notes</h4>
-                    <p>Custom boards not yet supported.</p>
-                  </>
-                )
-              }
+              onClick={() => {
+                // @todo
+              }}
               title="About Minesweeper…"
             />
           </Menu>

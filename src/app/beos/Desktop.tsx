@@ -16,8 +16,8 @@ import {
   Grid,
   Icon,
   Menu,
+  Menubar,
   Menuitem,
-  Scrollable,
   SystemBar,
   Title,
   TitleBar,
@@ -85,7 +85,7 @@ export const Desktop: FunctionComponent = () => {
         onFocus={focusSystemBar}
         title="Deskbar"
         z={stackingOrder.indexOf(SYSTEM_BAR_ID)}>
-        <Menu bar>
+        <Menubar vertical>
           <Menuitem Icon={BeOS} title="BeOS">
             <Menu>
               <Menuitem
@@ -123,14 +123,14 @@ export const Desktop: FunctionComponent = () => {
                 ))}
             </Menu>
           </Menuitem>
-        </Menu>
+        </Menubar>
         <Tray>
           <TrayIcons>
             <Network />
           </TrayIcons>
           <Clock />
         </Tray>
-        <Menu bar>
+        <Menubar vertical>
           {openApplicationIds
             .map(
               (id) =>
@@ -195,7 +195,7 @@ export const Desktop: FunctionComponent = () => {
                 </Menuitem>
               );
             })}
-        </Menu>
+        </Menubar>
       </SystemBar>
       {windows.map(
         ({ collapsed, focused, height, hidden, id, title, width, x, y }) => (
@@ -229,8 +229,8 @@ export const Desktop: FunctionComponent = () => {
               </Title>
               <TitleBarButton onClick={() => zoomWindow({ id })} title="Zoom" />
             </TitleBar>
-            <Menu bar horizontal></Menu>
-            <Scrollable>content…</Scrollable>
+            <Menubar></Menubar>
+            content…
           </Window>
         )
       )}

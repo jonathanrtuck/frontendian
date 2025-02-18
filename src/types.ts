@@ -21,7 +21,10 @@ export type Actions = Readonly<{
 }>;
 
 export type Application = Readonly<{
-  Component: ApplicationComponent;
+  Component: ComponentType<{
+    fileId?: File["id"];
+    windowId: Window["id"];
+  }>;
   getWindow?(
     fileId?: File["id"]
   ): Partial<
@@ -40,24 +43,6 @@ export type Application = Readonly<{
   id: ID;
   mimetypes: MimeType[];
   title: (theme: Theme) => string;
-}>;
-
-// @todo
-export type ApplicationComponent = ComponentType<{
-  file?: File;
-  /*
-  Content: ComponentType<PropsWithChildren>;
-  Menu: ComponentType<ComponentProps<typeof Menu>>;
-  Menubar: ComponentType<PropsWithChildren>;
-  Menuitem: ComponentType<ComponentProps<typeof Menuitem>>;
-  onAbout(node: ReactNode): void;
-  onClose(): void;
-  onNew(): void;
-  onOpen(fileId: ID): void;
-  onQuit(): void;
-  onResize(height: Pixels, width: Pixels): void; // @todo `Size`
-  openableFiles: File[];
-  */
 }>;
 
 export type Coordinates = {

@@ -56,6 +56,9 @@ body {
   user-select: none;
 }
 
+.content {
+}
+
 .dialog {
 }
 
@@ -277,9 +280,6 @@ body {
   [role="menu"]:has(> & > button[aria-haspopup="menu"]) > & > button {
     padding-right: 2rem;
   }
-}
-
-.scrollable {
 }
 
 .system-bar {

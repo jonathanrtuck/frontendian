@@ -9,6 +9,7 @@ import { Resizable } from "react-resizable";
 const MIN_HEIGHT = 16 * 7; // 7rem
 const MIN_WIDTH = 16 * 10; // 10rem
 
+// @todo wrap with ErrorBoundary
 export const Window: FunctionComponent<
   PropsWithChildren<
     {
