@@ -4,7 +4,6 @@ import { getInitialSquares } from "./utils";
 const WINDOW_CHROME_HEIGHT = 16 * 2.25; // 2.25rem
 const WINDOW_CHROME_WIDTH = 16 * 0.75; // 0.75rem
 
-export const APPLICATION_ID = "application-minesweeper";
 export const BORDER_SIZE = 16 * 0.1875; // 0.1875rem
 export const HEADER_HEIGHT = 16 * 3.75; // 3.75rem
 export const PADDING_SIZE = 16 * 0.5; // 0.5rem

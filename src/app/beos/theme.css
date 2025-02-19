@@ -213,10 +213,6 @@ body {
       border-bottom-width: var(--border-width);
     }
   }
-
-  > div {
-    overflow: hidden;
-  }
 }
 
 .dialog {

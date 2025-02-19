@@ -7,8 +7,8 @@ export const APPLICATION_PDF_VIEWER: Application = {
   getWindow: (fileId) =>
     fileId
       ? {
-          height: 540,
-          width: 800, // @todo
+          height: 550,
+          width: 793,
         }
       : {},
   Icon: (theme: Theme) => {

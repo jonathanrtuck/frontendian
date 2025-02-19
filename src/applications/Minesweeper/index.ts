@@ -1,4 +1,4 @@
-import { APPLICATION_ID, DEFAULT_LEVEL, DEFAULT_STATE } from "./constants";
+import { DEFAULT_LEVEL, DEFAULT_STATE } from "./constants";
 import { BeOS, MacOSClassic } from "./icons";
 import { Minesweeper } from "./Minesweeper";
 import type { Application, Theme } from "@/types";
@@ -19,7 +19,7 @@ export const APPLICATION_MINESWEEPER: Application = {
         return MacOSClassic;
     }
   },
-  id: APPLICATION_ID,
+  id: "application-minesweeper",
   mimetypes: [],
   title: () => "Minesweeper",
 };

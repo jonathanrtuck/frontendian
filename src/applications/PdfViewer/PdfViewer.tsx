@@ -4,6 +4,7 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import styles from "./PdfViewer.module.css";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
+import * as files from "@/files";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import type { Application } from "@/types";
@@ -15,9 +16,20 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 // @see https://github.com/wojtekmaj/react-pdf
 export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
+  const closeApplication = useStore((store) => store.closeApplication);
+  const closeWindow = useStore((store) => store.closeWindow);
+  const openDialog = useStore((store) => store.openDialog);
+  const openFile = useStore((store) => store.openFile);
+  const openWindow = useStore((store) => store.openWindow);
   const theme = useTheme();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [numPages, setNumPages] = useState<number>(0);
+  const file = fileId
+    ? Object.values(files).find(({ id }) => id === fileId)
+    : undefined;
+  const openableFiles = Object.values(files).filter(
+    ({ mimetype }) => mimetype === "application/pdf"
+  );
   const url = file?.url(theme) ?? null;
 
   return (
@@ -26,9 +38,7 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
         <Menuitem title="File">
           <Menu>
             <Menuitem
-              onClick={() => {
-                // @todo
-              }}
+              onClick={() => openWindow({ id: "application-pdf-viewer" })}
               title="New"
             />
             <Menuitem title="Open">
@@ -37,9 +47,12 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
                   <Menuitem
                     disabled={id === file?.id}
                     key={id}
-                    onClick={() => {
-                      // @todo
-                    }}
+                    onClick={() =>
+                      openFile({
+                        id,
+                        windowId,
+                      })
+                    }
                     title={title}
                   />
                 ))}
@@ -55,15 +68,11 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
             />
             <Menuitem separator />
             <Menuitem
-              onClick={() => {
-                // @todo
-              }}
+              onClick={() => closeWindow({ id: windowId })}
               title="Close"
             />
             <Menuitem
-              onClick={() => {
-                // @todo
-              }}
+              onClick={() => closeApplication({ id: "application-pdf-viewer" })}
               title="Quit"
             />
           </Menu>
@@ -72,14 +81,14 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
           <Menu>
             <Menuitem
               onClick={() => {
-                // @todo
+                // @todo openDialog or openWindow
               }}
               title="About PDF Viewer…"
             />
           </Menu>
         </Menuitem>
       </Menubar>
-      <Content>
+      <Content scrollable>
         {file && url ? (
           <>
             <Document

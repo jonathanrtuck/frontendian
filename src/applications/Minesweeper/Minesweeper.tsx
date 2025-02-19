@@ -2,7 +2,6 @@
 
 import styles from "./Minesweeper.module.css";
 import {
-  APPLICATION_ID,
   BORDER_SIZE,
   DEFAULT_LEVEL,
   DEFAULT_STATE,
@@ -29,6 +28,7 @@ import { useEffect, useRef, useState } from "react";
 export const Minesweeper: Application["Component"] = ({ windowId }) => {
   const closeApplication = useStore((store) => store.closeApplication);
   const openDialog = useStore((store) => store.openDialog);
+  const openWindow = useStore((store) => store.openWindow);
   const resizeWindow = useStore((store) => store.resizeWindow);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
@@ -75,7 +75,9 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
         <Menuitem title="File">
           <Menu>
             <Menuitem
-              onClick={() => closeApplication({ id: APPLICATION_ID })}
+              onClick={() =>
+                closeApplication({ id: "application-minesweeper" })
+              }
               title="Quit"
             />
           </Menu>
@@ -126,7 +128,7 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
           <Menu>
             <Menuitem
               onClick={() => {
-                // @todo openDialog
+                // @todo openDialog or openWindow
               }}
               title="About Minesweeper…"
             />
