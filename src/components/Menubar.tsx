@@ -14,7 +14,7 @@ export const Menubar: FunctionComponent<
       <Menu bar horizontal>
         {children}
       </Menu>,
-      document.getElementById("")! // @todo
+      document.getElementById("")! // @todo pass `id` instead of `global`?
     )
   ) : (
     <Menu bar horizontal>
