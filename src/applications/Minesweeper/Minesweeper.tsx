@@ -2,6 +2,7 @@
 
 import styles from "./Minesweeper.module.css";
 import {
+  APPLICATION_ID,
   BORDER_SIZE,
   DEFAULT_LEVEL,
   DEFAULT_STATE,
@@ -25,7 +26,10 @@ import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
 // @see https://github.com/jonathanrtuck/minesweeper
-export const Minesweeper: Application["Component"] = ({ fileId, windowId }) => {
+export const Minesweeper: Application["Component"] = ({ windowId }) => {
+  const closeApplication = useStore((store) => store.closeApplication);
+  const openDialog = useStore((store) => store.openDialog);
+  const resizeWindow = useStore((store) => store.resizeWindow);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [flagsRemaining, setFlagsRemaining] = useState<number>(10);
@@ -71,9 +75,7 @@ export const Minesweeper: Application["Component"] = ({ fileId, windowId }) => {
         <Menuitem title="File">
           <Menu>
             <Menuitem
-              onClick={() => {
-                // @todo
-              }}
+              onClick={() => closeApplication({ id: APPLICATION_ID })}
               title="Quit"
             />
           </Menu>
@@ -86,10 +88,11 @@ export const Minesweeper: Application["Component"] = ({ fileId, windowId }) => {
                 setFlagsRemaining(DEFAULT_STATE[level].flagsRemaining);
                 setSquares(DEFAULT_STATE[level].squares);
                 // reset window dimensions
-                onResize(
-                  DEFAULT_STATE[level].height,
-                  DEFAULT_STATE[level].width
-                );
+                resizeWindow({
+                  height: DEFAULT_STATE[level].height,
+                  id: windowId,
+                  width: DEFAULT_STATE[level].width,
+                });
               }}
               title="New"
             />
@@ -107,7 +110,11 @@ export const Minesweeper: Application["Component"] = ({ fileId, windowId }) => {
                   setLevel(lvl);
                   setSquares(squares);
                   // update window dimensions
-                  onResize(height, width);
+                  resizeWindow({
+                    height,
+                    id: windowId,
+                    width,
+                  });
                 }}
                 title={title}
                 type="radio"
@@ -119,7 +126,7 @@ export const Minesweeper: Application["Component"] = ({ fileId, windowId }) => {
           <Menu>
             <Menuitem
               onClick={() => {
-                // @todo
+                // @todo openDialog
               }}
               title="About Minesweeper…"
             />

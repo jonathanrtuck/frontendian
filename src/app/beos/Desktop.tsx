@@ -11,13 +11,11 @@ import {
 } from "./_icons";
 import * as applications from "@/applications";
 import {
-  Content,
   Dialog,
   ErrorBoundary,
   Grid,
   Icon,
   Menu,
-  Menubar,
   Menuitem,
   SystemBar,
   Title,
@@ -200,6 +198,7 @@ export const Desktop: FunctionComponent = () => {
       </SystemBar>
       {windows.map(
         ({
+          applicationId,
           collapsed,
           focused,
           height,
@@ -211,44 +210,55 @@ export const Desktop: FunctionComponent = () => {
           width,
           x,
           y,
-        }) => (
-          <Window
-            collapsed={collapsed}
-            current={focused}
-            height={height}
-            hidden={hidden}
-            id={id}
-            key={id}
-            labelledby={`${id}-title`}
-            onBlur={() => blurWindow({ id })}
-            onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
-            onFocus={() => focusWindow({ id })}
-            onResize={
-              resizable ? (size) => resizeWindow({ id, ...size }) : undefined
-            }
-            width={width}
-            x={x}
-            y={y}
-            z={stackingOrder.indexOf(id)}>
-            <TitleBar
-              left={titlebar.left}
-              maxWidth={width}
-              onDoubleClick={() => hideWindow({ id })}
-              onDrag={(left) => moveTitlebar({ id, left })}>
-              <TitleBarButton
-                onClick={() => closeWindow({ id })}
-                title="Close"
-              />
-              <Title id={`${id}-title`} title={title}>
-                {title}
-              </Title>
-              <TitleBarButton onClick={() => zoomWindow({ id })} title="Zoom" />
-            </TitleBar>
-            <Menubar></Menubar>
-            {/* @todo move Content into application component */}
-            <Content scrollable>content…</Content>
-          </Window>
-        )
+          ...window
+        }) => {
+          const application = Object.values(applications).find(
+            ({ id }) => id === applicationId
+          )!;
+          const fileId = "fileId" in window ? window.fileId : undefined;
+
+          return (
+            <Window
+              collapsed={collapsed}
+              current={focused}
+              height={height}
+              hidden={hidden}
+              id={id}
+              key={id}
+              labelledby={`${id}-title`}
+              onBlur={() => blurWindow({ id })}
+              onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
+              onFocus={() => focusWindow({ id })}
+              onResize={
+                resizable ? (size) => resizeWindow({ id, ...size }) : undefined
+              }
+              width={width}
+              x={x}
+              y={y}
+              z={stackingOrder.indexOf(id)}>
+              <TitleBar
+                left={titlebar.left}
+                maxWidth={width}
+                onDoubleClick={() => hideWindow({ id })}
+                onDrag={(left) => moveTitlebar({ id, left })}>
+                <TitleBarButton
+                  onClick={() => closeWindow({ id })}
+                  title="Close"
+                />
+                <Title id={`${id}-title`} title={title}>
+                  {title}
+                </Title>
+                {resizable ? (
+                  <TitleBarButton
+                    onClick={() => zoomWindow({ id })}
+                    title="Zoom"
+                  />
+                ) : null}
+              </TitleBar>
+              <application.Component fileId={fileId} windowId={id} />
+            </Window>
+          );
+        }
       )}
     </ErrorBoundary>
   );
