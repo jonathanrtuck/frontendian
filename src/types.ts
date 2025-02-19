@@ -6,7 +6,9 @@ export type Actions = Readonly<{
   closeApplication(payload: PayloadWithID): void;
   closeDialog(payload: PayloadWithID): void;
   closeWindow(payload: PayloadWithID): void;
+  collapseMenuitem(payload: PayloadWithID): void;
   collapseWindow(payload: PayloadWithID): void;
+  expandMenuitem(payload: PayloadWithID): void;
   expandWindow(payload: PayloadWithID): void;
   focusSystemBar(): void;
   focusWindow(payload: PayloadWithID): void;
@@ -91,6 +93,7 @@ export type Size = {
 
 export type State = {
   dialogs: Dialog[];
+  expandedMenuitemIds: ID[];
   openApplicationIds: Application["id"][];
   stackingOrder: (Application["id"] | ID)[];
   windows: Window[];

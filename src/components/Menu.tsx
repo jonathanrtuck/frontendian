@@ -1,6 +1,6 @@
 "use client";
 
-import type { FocusEvent, FunctionComponent, PropsWithChildren } from "react";
+import type { FunctionComponent, PropsWithChildren } from "react";
 import type { EmptyObject } from "type-fest";
 
 export const Menu: FunctionComponent<
@@ -13,19 +13,17 @@ export const Menu: FunctionComponent<
   >
 > = ({ children, ...props }) => {
   const bar = "bar" in props && props.bar;
+  const horizontal = "horizontal" in props && props.horizontal;
 
   return (
     <menu
-      aria-hidden={bar ? undefined : true} // @todo
-      aria-orientation={
-        "horizontal" in props && props.horizontal ? "horizontal" : "vertical"
-      }
+      aria-orientation={horizontal ? "horizontal" : "vertical"}
       className="menu"
       draggable={false}
-      onBlur={(e: FocusEvent<HTMLMenuElement>) => {
+      onBlur={(e) => {
         // @todo
       }}
-      onFocus={(e: FocusEvent<HTMLMenuElement>) => {
+      onFocus={(e) => {
         // @todo
       }}
       role={bar ? "menubar" : "menu"}>

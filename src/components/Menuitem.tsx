@@ -1,5 +1,6 @@
 "use client";
 
+import { useStore } from "@/store";
 import type { IconComponent } from "@/types";
 import type { FunctionComponent, PropsWithChildren } from "react";
 import { useId } from "react";
@@ -25,12 +26,30 @@ export const Menuitem: FunctionComponent<
       separator: true;
     }
 > = (props) => {
-  const id = useId();
+  const id = `menuitem-${useId()}`;
+  const collapseMenuitem = useStore((store) => store.collapseMenuitem);
+  const expandedMenuitemIds = useStore((store) => store.expandedMenuitemIds);
+  const expandMenuitem = useStore((store) => store.expandMenuitem);
+  const onActivate = () => {
+    if (!checked && !disabled) {
+      onClick?.();
+    }
+
+    if (haspopup && !expanded) {
+      // @todo set tabIndex
+      expandMenuitem({ id });
+      // @todo focus first child menuitem
+    } else if (expandedMenuitemIds.length !== 0) {
+      collapseMenuitem({ id: expandedMenuitemIds.at(0)! });
+      // @todo focus top menuitem
+    }
+  };
 
   if ("separator" in props) {
     return (
       <li
         className="menuitem"
+        onClick={onActivate}
         onMouseEnter={(e) => {
           // @todo
         }}
@@ -48,30 +67,43 @@ export const Menuitem: FunctionComponent<
   const title = "title" in props ? props.title : undefined;
   const type = "type" in props ? props.type : undefined;
   const haspopup = Boolean(children);
+  const expanded = expandedMenuitemIds.includes(id);
 
   return (
     <li
       className="menuitem"
+      id={id}
       onBlur={(e) => {
-        // @todo
+        if (
+          haspopup &&
+          document.hasFocus() &&
+          !e.currentTarget?.contains(e.relatedTarget)
+        ) {
+          collapseMenuitem({ id });
+
+          /*
+          if (isTop) {
+            setTabIndex(-1);
+          }
+          */
+        }
       }}
       role="none">
       <button
         aria-checked={type ? checked : undefined}
-        aria-disabled={disabled}
-        aria-expanded={haspopup ? "false" : undefined} // @todo
+        aria-disabled={disabled || undefined}
+        aria-expanded={haspopup ? expanded : undefined}
         aria-haspopup={haspopup ? "menu" : undefined}
-        aria-labelledby={`${id}-title`}
-        onClick={onClick}
+        onClick={onActivate}
         onKeyDown={(e) => {
           // @todo
         }}
         onMouseEnter={(e) => {
           // @todo
         }}
-        onPointerDown={(e) => {
-          // @todo
-        }}
+        onPointerDown={(e) =>
+          haspopup && expanded ? e.preventDefault() : undefined
+        }
         role={
           (type === "checkbox" && "menuitemcheckbox") ||
           (type === "radio" && "menuitemradio") ||
@@ -79,7 +111,7 @@ export const Menuitem: FunctionComponent<
         }
         type="button">
         {Icon ? <Icon /> : null}
-        {title ? <label id={`${id}-title`}>{title}</label> : null}
+        {title ? <label>{title}</label> : null}
       </button>
       {children}
     </li>

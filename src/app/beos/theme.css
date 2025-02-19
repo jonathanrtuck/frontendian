@@ -313,11 +313,16 @@ body {
     border-width: var(--border-width);
     box-shadow: var(--box-shadow--high--inset);
     color: var(--text-color--dark);
+    display: none;
     flex-direction: column;
     max-width: 20rem;
     min-width: 5rem;
     position: absolute;
     z-index: 100;
+
+    [aria-expanded="true"] + & {
+      display: block;
+    }
 
     & & {
       left: 100%;
