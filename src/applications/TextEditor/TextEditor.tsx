@@ -3,6 +3,7 @@
 import styles from "./TextEditor.module.css";
 import { title } from "./utils";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
+import * as files from "@/files";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import type { Application } from "@/types";
@@ -11,7 +12,15 @@ import { useDeferredValue, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 
 export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
+  const closeApplication = useStore((store) => store.closeApplication);
+  const closeWindow = useStore((store) => store.closeWindow);
+  const openDialog = useStore((store) => store.openDialog);
+  const openFile = useStore((store) => store.openFile);
+  const openWindow = useStore((store) => store.openWindow);
   const theme = useTheme();
+  const file = fileId
+    ? Object.values(files).find(({ id }) => id === fileId)
+    : undefined;
   const [content, setContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
@@ -25,6 +34,9 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
   const inputLines = input.split("\n");
   const numInputCols = Math.max(...inputLines.map((line) => line.length));
   const numInputRows = inputLines.length;
+  const openableFiles = Object.values(files).filter(
+    ({ mimetype }) => mimetype === "text/markdown"
+  );
   const url = file?.mimetype === "text/markdown" ? file.url(theme) : null;
 
   useEffect(() => {
@@ -70,9 +82,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
         <Menuitem title="File">
           <Menu>
             <Menuitem
-              onClick={() => {
-                // @todo
-              }}
+              onClick={() => openWindow({ id: "application-text-editor" })}
               title="New"
             />
             <Menuitem title="Open">
@@ -81,9 +91,12 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
                   <Menuitem
                     disabled={id === file?.id}
                     key={id}
-                    onClick={() => {
-                      // @todo
-                    }}
+                    onClick={() =>
+                      openFile({
+                        id,
+                        windowId,
+                      })
+                    }
                     title={title}
                   />
                 ))}
@@ -91,15 +104,13 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
             </Menuitem>
             <Menuitem separator />
             <Menuitem
-              onClick={() => {
-                // @todo
-              }}
+              onClick={() => closeWindow({ id: windowId })}
               title="Close"
             />
             <Menuitem
-              onClick={() => {
-                // @todo
-              }}
+              onClick={() =>
+                closeApplication({ id: "application-text-editor" })
+              }
               title="Quit"
             />
           </Menu>
@@ -124,14 +135,14 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
           <Menu>
             <Menuitem
               onClick={() => {
-                // @todo
+                // @todo openDialog or openWindow
               }}
               title={`About ${title(theme)}…`}
             />
           </Menu>
         </Menuitem>
       </Menubar>
-      <Content>
+      <Content scrollable>
         {Boolean(isLoading) && "loading…"}
         {Boolean(!isLoading && error) && "error…"}
         {Boolean(!isLoading && !error && view === "markdown") && (
