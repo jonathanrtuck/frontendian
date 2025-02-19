@@ -21,6 +21,7 @@ export const Menu: FunctionComponent<
         "horizontal" in props && props.horizontal ? "horizontal" : "vertical"
       }
       className="menu"
+      draggable={false}
       onBlur={(e: FocusEvent<HTMLMenuElement>) => {
         // @todo
       }}

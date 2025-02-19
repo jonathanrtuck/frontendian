@@ -8,6 +8,7 @@ export const TitleBarButton: FunctionComponent<{
 }> = ({ onClick, title }) => (
   <button
     className="title-bar-button"
+    draggable={false}
     onClick={onClick}
     title={title}
     type="button"

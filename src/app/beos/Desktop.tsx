@@ -11,6 +11,7 @@ import {
 } from "./_icons";
 import * as applications from "@/applications";
 import {
+  Content,
   Dialog,
   ErrorBoundary,
   Grid,
@@ -85,7 +86,7 @@ export const Desktop: FunctionComponent = () => {
         onFocus={focusSystemBar}
         title="Deskbar"
         z={stackingOrder.indexOf(SYSTEM_BAR_ID)}>
-        <Menubar vertical>
+        <Menu bar>
           <Menuitem Icon={BeOS} title="BeOS">
             <Menu>
               <Menuitem
@@ -123,14 +124,14 @@ export const Desktop: FunctionComponent = () => {
                 ))}
             </Menu>
           </Menuitem>
-        </Menubar>
+        </Menu>
         <Tray>
           <TrayIcons>
             <Network />
           </TrayIcons>
           <Clock />
         </Tray>
-        <Menubar vertical>
+        <Menu bar>
           {openApplicationIds
             .map(
               (id) =>
@@ -195,10 +196,22 @@ export const Desktop: FunctionComponent = () => {
                 </Menuitem>
               );
             })}
-        </Menubar>
+        </Menu>
       </SystemBar>
       {windows.map(
-        ({ collapsed, focused, height, hidden, id, title, width, x, y }) => (
+        ({
+          collapsed,
+          focused,
+          height,
+          hidden,
+          id,
+          resizable,
+          title,
+          titlebar,
+          width,
+          x,
+          y,
+        }) => (
           <Window
             collapsed={collapsed}
             current={focused}
@@ -210,7 +223,9 @@ export const Desktop: FunctionComponent = () => {
             onBlur={() => blurWindow({ id })}
             onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
             onFocus={() => focusWindow({ id })}
-            onResize={(size) => resizeWindow({ id, ...size })}
+            onResize={
+              resizable ? (size) => resizeWindow({ id, ...size }) : undefined
+            }
             width={width}
             x={x}
             y={y}
@@ -219,7 +234,8 @@ export const Desktop: FunctionComponent = () => {
               onDoubleClick={() => hideWindow({ id })}
               onDrag={(coordinates) =>
                 moveWindowTitlebar({ id, ...coordinates })
-              }>
+              }
+              x={titlebar.x}>
               <TitleBarButton
                 onClick={() => closeWindow({ id })}
                 title="Close"
@@ -230,7 +246,8 @@ export const Desktop: FunctionComponent = () => {
               <TitleBarButton onClick={() => zoomWindow({ id })} title="Zoom" />
             </TitleBar>
             <Menubar></Menubar>
-            content…
+            {/* @todo move Content into application component */}
+            <Content scrollable>content…</Content>
           </Window>
         )
       )}
