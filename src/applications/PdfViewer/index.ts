@@ -1,6 +1,6 @@
-import { BeOS, MacOSClassic } from "./icons";
 import { PdfViewer } from "./PdfViewer";
-import type { Application, Theme } from "@/types";
+import { PdfViewerIcon } from "./PdfViewerIcon";
+import type { Application } from "@/types";
 
 export const APPLICATION_PDF_VIEWER: Application = {
   Component: PdfViewer,
@@ -11,14 +11,7 @@ export const APPLICATION_PDF_VIEWER: Application = {
           width: 793,
         }
       : {},
-  Icon: (theme: Theme) => {
-    switch (theme) {
-      case "beos":
-        return BeOS;
-      case "mac-os-classic":
-        return MacOSClassic;
-    }
-  },
+  Icon: PdfViewerIcon,
   id: "application-pdf-viewer",
   mimetypes: ["application/pdf"],
   title: () => "PDF Viewer",

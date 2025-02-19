@@ -1,6 +1,6 @@
-import { BeOS, MacOSClassic } from "./icons";
 import { Teapot } from "./Teapot";
-import type { Application, Theme } from "@/types";
+import { TeapotIcon } from "./TeapotIcon";
+import type { Application } from "@/types";
 
 export const APPLICATION_TEAPOT: Application = {
   Component: Teapot,
@@ -9,14 +9,7 @@ export const APPLICATION_TEAPOT: Application = {
     title: "Teapot",
     width: 312,
   }),
-  Icon: (theme: Theme) => {
-    switch (theme) {
-      case "beos":
-        return BeOS;
-      case "mac-os-classic":
-        return MacOSClassic;
-    }
-  },
+  Icon: TeapotIcon,
   id: "application-teapot",
   mimetypes: [],
   title: () => "Teapot",

@@ -3,6 +3,7 @@
 import {
   BeOS,
   File,
+  Info,
   Network,
   Pdf,
   Text,
@@ -11,6 +12,7 @@ import {
 } from "./_icons";
 import * as applications from "@/applications";
 import {
+  Button,
   Dialog,
   ErrorBoundary,
   Grid,
@@ -47,7 +49,9 @@ const THEME: Theme = "beos";
 export const Desktop: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
   const closeApplication = useStore((store) => store.closeApplication);
+  const closeDialog = useStore((store) => store.closeDialog);
   const closeWindow = useStore((store) => store.closeWindow);
+  const dialogs = useStore((store) => store.dialogs);
   const focusSystemBar = useStore((store) => store.focusSystemBar);
   const focusWindow = useStore((store) => store.focusWindow);
   const hideWindow = useStore((store) => store.hideWindow);
@@ -65,7 +69,7 @@ export const Desktop: FunctionComponent = () => {
   return (
     <ErrorBoundary
       fallback={
-        <Dialog modal open type="error">
+        <Dialog open>
           <p>An unknown error has occured.</p>
           <p>Please reload the page.</p>
         </Dialog>
@@ -114,7 +118,7 @@ export const Desktop: FunctionComponent = () => {
                 )
                 .map((application) => (
                   <Menuitem
-                    Icon={application.Icon(THEME)}
+                    Icon={application.Icon}
                     key={application.id}
                     onClick={() => openApplication({ id: application.id })}
                     title={application.title(THEME)}
@@ -138,14 +142,16 @@ export const Desktop: FunctionComponent = () => {
                 )!
             )
             .map((application) => {
-              const Icon = application.Icon(THEME);
               const title = application.title(THEME);
               const applicationWindows = windows.filter(
                 ({ applicationId }) => applicationId === application.id
               );
 
               return (
-                <Menuitem Icon={Icon} key={application.id} title={title}>
+                <Menuitem
+                  Icon={application.Icon}
+                  key={application.id}
+                  title={title}>
                   <Menu>
                     {applicationWindows.length === 0 ? (
                       <Menuitem disabled title="No windows" />
@@ -260,6 +266,25 @@ export const Desktop: FunctionComponent = () => {
           );
         }
       )}
+      {dialogs.map(({ Component, id, title }) => (
+        <Dialog id={id} key={id} labelledby={`${id}-title`} open>
+          <TitleBar className="visually-hidden">
+            <Title id={`${id}-title`} title={title}>
+              {title}
+            </Title>
+          </TitleBar>
+          <Info />
+          <Component />
+          <footer>
+            <Button
+              formMethod="dialog"
+              onClick={() => closeDialog({ id })}
+              type="reset">
+              Close
+            </Button>
+          </footer>
+        </Dialog>
+      ))}
     </ErrorBoundary>
   );
 };

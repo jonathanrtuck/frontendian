@@ -1,18 +1,27 @@
 "use client";
 
 import type { MS, Percentage, Pixels } from "@/types";
+import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
 import { useMemo, useRef } from "react";
 import Draggable from "react-draggable";
 
 export const TitleBar: FunctionComponent<
   PropsWithChildren<{
+    className?: string;
     left?: Percentage;
     maxWidth?: Pixels;
     onDoubleClick?(): void;
     onDrag?(left: Percentage): void;
   }>
-> = ({ children, left = 0, maxWidth = 0, onDoubleClick, onDrag }) => {
+> = ({
+  children,
+  className,
+  left = 0,
+  maxWidth = 0,
+  onDoubleClick,
+  onDrag,
+}) => {
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<MS>(0);
   const maxLeft = useMemo<Pixels>(
@@ -40,7 +49,7 @@ export const TitleBar: FunctionComponent<
         y: 0,
       }}>
       <header
-        className="title-bar"
+        className={clsx("title-bar", className)}
         onDoubleClick={
           onDoubleClick
             ? (e) =>

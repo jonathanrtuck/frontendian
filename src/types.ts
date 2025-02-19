@@ -43,7 +43,7 @@ export type Application = Readonly<{
       | "zoomed"
     >
   >;
-  Icon(theme: Theme): IconComponent;
+  Icon: IconComponent;
   id: ID;
   mimetypes: MimeType[];
   title(theme: Theme): string;
@@ -57,6 +57,7 @@ export type Coordinates = {
 export type Dialog = {
   Component: ComponentType;
   id: ID;
+  title: string;
 };
 
 export type File = Readonly<{

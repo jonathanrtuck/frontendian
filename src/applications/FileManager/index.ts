@@ -1,17 +1,10 @@
 import { FileManager } from "./FileManager";
-import { BeOS, MacOSClassic } from "./icons";
+import { FileManagerIcon } from "./FileManagerIcon";
 import type { Application, Theme } from "@/types";
 
 export const APPLICATION_FILE_MANAGER: Application = {
   Component: FileManager,
-  Icon: (theme: Theme) => {
-    switch (theme) {
-      case "beos":
-        return BeOS;
-      case "mac-os-classic":
-        return MacOSClassic;
-    }
-  },
+  Icon: FileManagerIcon,
   id: "application-file-manager",
   mimetypes: [],
   title: (theme: Theme) => {

@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "./TextEditor.module.css";
+import { AboutTextEditor } from "./AboutTextEditor";
 import { title } from "./utils";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import * as files from "@/files";
@@ -134,9 +135,17 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() => {
-                // @todo openDialog or openWindow
-              }}
+              onClick={() =>
+                theme === "mac-os-classic"
+                  ? openWindow({
+                      Component: AboutTextEditor,
+                      id: "application-text-editor",
+                    })
+                  : openDialog({
+                      Component: AboutTextEditor,
+                      title: `About ${title(theme)}`,
+                    })
+              }
               title={`About ${title(theme)}…`}
             />
           </Menu>

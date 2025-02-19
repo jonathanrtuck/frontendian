@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "./Minesweeper.module.css";
+import { AboutMinesweeper } from "./AboutMinesweeper";
 import {
   BORDER_SIZE,
   DEFAULT_LEVEL,
@@ -18,6 +19,7 @@ import {
   revealSquare,
 } from "./utils";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
+import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import type { Application } from "@/types";
 import clsx from "clsx";
@@ -30,6 +32,7 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
   const openDialog = useStore((store) => store.openDialog);
   const openWindow = useStore((store) => store.openWindow);
   const resizeWindow = useStore((store) => store.resizeWindow);
+  const theme = useTheme();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [flagsRemaining, setFlagsRemaining] = useState<number>(10);
@@ -127,9 +130,17 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() => {
-                // @todo openDialog or openWindow
-              }}
+              onClick={() =>
+                theme === "mac-os-classic"
+                  ? openWindow({
+                      Component: AboutMinesweeper,
+                      id: "application-minesweeper",
+                    })
+                  : openDialog({
+                      Component: AboutMinesweeper,
+                      title: "About Minesweeper",
+                    })
+              }
               title="About Minesweeper…"
             />
           </Menu>

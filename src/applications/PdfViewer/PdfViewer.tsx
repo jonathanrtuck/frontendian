@@ -3,6 +3,7 @@
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import styles from "./PdfViewer.module.css";
+import { AboutPdfViewer } from "./AboutPdfViewer";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import * as files from "@/files";
 import { useTheme } from "@/hooks";
@@ -80,9 +81,17 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() => {
-                // @todo openDialog or openWindow
-              }}
+              onClick={() =>
+                theme === "mac-os-classic"
+                  ? openWindow({
+                      Component: AboutPdfViewer,
+                      id: "application-pdf-viewer",
+                    })
+                  : openDialog({
+                      Component: AboutPdfViewer,
+                      title: "About PDF Viewer",
+                    })
+              }
               title="About PDF Viewer…"
             />
           </Menu>
