@@ -4,7 +4,7 @@ import { useStore } from "@/store";
 import type { IconComponent } from "@/types";
 import type { FunctionComponent, PropsWithChildren } from "react";
 import { useId } from "react";
-import type { RequireAllOrNone } from "type-fest";
+import type { EmptyObject } from "type-fest";
 
 export const Menuitem: FunctionComponent<
   | ({
@@ -13,14 +13,15 @@ export const Menuitem: FunctionComponent<
       title: string;
     } & (
       | PropsWithChildren
-      | RequireAllOrNone<
-          {
-            checked?: boolean;
-            onClick?(): void;
-            type: "checkbox" | "radio";
-          },
-          "checked" | "type"
-        >
+      | ({
+          onClick?(): void;
+        } & (
+          | {
+              checked?: boolean;
+              type: "checkbox" | "radio";
+            }
+          | EmptyObject
+        ))
     ))
   | {
       separator: true;

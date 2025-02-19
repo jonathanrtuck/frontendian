@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
-import { EmptyObject, SimplifyDeep } from "type-fest";
+import type { EmptyObject, SimplifyDeep } from "type-fest";
 
 export type Actions = Readonly<{
   blurWindow(payload: PayloadWithID): void;
