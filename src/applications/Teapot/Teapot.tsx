@@ -8,7 +8,10 @@ import type { Application } from "@/types";
 import { useEffect, useRef } from "react";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
-export const Teapot: Application["Component"] = ({ fileId, windowId }) => {
+export const Teapot: Application["Component"] = () => {
+  const closeApplication = useStore((store) => store.closeApplication);
+  const openDialog = useStore((store) => store.openDialog);
+  const openWindow = useStore((store) => store.openWindow);
   const rootRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -23,9 +26,7 @@ export const Teapot: Application["Component"] = ({ fileId, windowId }) => {
         <Menuitem title="File">
           <Menu>
             <Menuitem
-              onClick={() => {
-                // @todo
-              }}
+              onClick={() => closeApplication({ id: "application-teapot" })}
               title="Quit"
             />
           </Menu>
@@ -34,7 +35,7 @@ export const Teapot: Application["Component"] = ({ fileId, windowId }) => {
           <Menu>
             <Menuitem
               onClick={() => {
-                // @todo
+                // @todo openDialog or openWindow
               }}
               title="About Teapot…"
             />

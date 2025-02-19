@@ -5,9 +5,9 @@ import type { Application, Theme } from "@/types";
 export const APPLICATION_TEAPOT: Application = {
   Component: Teapot,
   getWindow: () => ({
-    height: 300,
+    height: 336,
     title: "Teapot",
-    width: 300,
+    width: 312,
   }),
   Icon: (theme: Theme) => {
     switch (theme) {
