@@ -90,26 +90,18 @@ export const Window: FunctionComponent<
           id={id}
           onBlur={
             onBlur
-              ? ({ currentTarget, relatedTarget }) => {
-                  if (
-                    document.hasFocus() &&
-                    !currentTarget?.contains(relatedTarget)
-                  ) {
-                    onBlur();
-                  }
-                }
+              ? ({ currentTarget, relatedTarget }) =>
+                  document.hasFocus() && !currentTarget?.contains(relatedTarget)
+                    ? onBlur()
+                    : undefined
               : undefined
           }
           onFocus={
             onFocus
-              ? ({ currentTarget, relatedTarget }) => {
-                  if (
-                    !relatedTarget ||
-                    !currentTarget.contains(relatedTarget)
-                  ) {
-                    onFocus();
-                  }
-                }
+              ? ({ currentTarget, relatedTarget }) =>
+                  !relatedTarget || !currentTarget.contains(relatedTarget)
+                    ? onFocus()
+                    : undefined
               : undefined
           }
           ref={rootRef}

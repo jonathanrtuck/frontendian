@@ -12,15 +12,13 @@ export const SystemBar: FunctionComponent<
   <header
     aria-label={title}
     className="system-bar"
-    onFocus={({ currentTarget, relatedTarget }) => {
-      if (!relatedTarget || !currentTarget.contains(relatedTarget)) {
-        onFocus?.();
-      }
-    }}
+    onFocus={({ currentTarget, relatedTarget }) =>
+      !relatedTarget || !currentTarget.contains(relatedTarget)
+        ? onFocus?.()
+        : undefined
+    }
     role="banner"
-    style={{
-      zIndex: z,
-    }}>
+    style={{ zIndex: z }}>
     {children}
   </header>
 );

@@ -621,17 +621,11 @@ export const useStore = create(
               const marginY = parseFloat(marginBottom) + parseFloat(marginTop);
               const maxHeight = document.body.offsetHeight - marginY;
               const maxWidth = document.body.offsetWidth - marginX;
-              const x = 0;
-              const y = document.getElementById(SYSTEM_BAR_ID)!.offsetHeight; // : 0; @todo
               const isZoomed =
                 offsetHeight >= maxHeight - WINDOW_DIMENSION_BUFFER &&
                 offsetHeight <= maxHeight + WINDOW_DIMENSION_BUFFER &&
                 offsetWidth >= maxWidth - WINDOW_DIMENSION_BUFFER &&
-                offsetWidth <= maxWidth + WINDOW_DIMENSION_BUFFER &&
-                window.x >= x - WINDOW_DIMENSION_BUFFER &&
-                window.x <= x + WINDOW_DIMENSION_BUFFER &&
-                window.y >= y - WINDOW_DIMENSION_BUFFER &&
-                window.y <= y + WINDOW_DIMENSION_BUFFER;
+                offsetWidth <= maxWidth + WINDOW_DIMENSION_BUFFER;
 
               return isZoomed
                 ? {
@@ -643,6 +637,7 @@ export const useStore = create(
                 : {
                     ...window,
                     collapsed: false,
+                    height: maxHeight,
                     prev: window.zoomed
                       ? window.prev
                       : {
@@ -651,8 +646,9 @@ export const useStore = create(
                           x: window.x,
                           y: window.y,
                         },
-                    x,
-                    y,
+                    width: maxWidth,
+                    x: 0,
+                    y: 0,
                     zoomed: true,
                   };
             }),

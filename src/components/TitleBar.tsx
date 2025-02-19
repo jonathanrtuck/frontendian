@@ -1,17 +1,16 @@
 "use client";
 
-import type { MS, Pixels } from "@/types";
+import type { MS, Percentage, Pixels } from "@/types";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
 import { useMemo, useRef } from "react";
 import Draggable from "react-draggable";
 
-// @todo get maxLeft
 export const TitleBar: FunctionComponent<
   PropsWithChildren<{
-    left?: number;
+    left?: Percentage;
     maxWidth?: Pixels;
     onDoubleClick?(): void;
-    onDrag?(left: number): void;
+    onDrag?(left: Percentage): void;
   }>
 > = ({ children, left = 0, maxWidth = 0, onDoubleClick, onDrag }) => {
   const rootRef = useRef<HTMLElement>(null);
@@ -44,22 +43,18 @@ export const TitleBar: FunctionComponent<
         className="title-bar"
         onDoubleClick={
           onDoubleClick
-            ? (e) => {
-                const isButton = e.target instanceof HTMLButtonElement;
-
-                if (!isButton) {
-                  onDoubleClick();
-                }
-              }
+            ? (e) =>
+                !(e.target instanceof HTMLButtonElement)
+                  ? onDoubleClick()
+                  : undefined
             : undefined
         }
         onPointerUp={
           onDoubleClick
             ? (e) => {
                 const now = Date.now();
-                const isButton = e.target instanceof HTMLButtonElement;
 
-                if (!isButton) {
+                if (!(e.target instanceof HTMLButtonElement)) {
                   const isDoubleClick = now - touchRef.current < 500;
 
                   if (isDoubleClick) {

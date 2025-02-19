@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
-import { EmptyObject } from "type-fest";
+import { EmptyObject, SimplifyDeep } from "type-fest";
 
 export type Actions = Readonly<{
   blurWindow(payload: PayloadWithID): void;
@@ -11,7 +11,7 @@ export type Actions = Readonly<{
   focusSystemBar(): void;
   focusWindow(payload: PayloadWithID): void;
   hideWindow(payload: PayloadWithID): void;
-  moveTitlebar(payload: PayloadWithID<{ left: number }>): void;
+  moveTitlebar(payload: PayloadWithID<{ left: Percentage }>): void;
   moveWindow(payload: PayloadWithID<Coordinates>): void;
   openApplication(payload: PayloadWithID): void;
   openDialog(payload: Omit<Dialog, "id">): void;
@@ -41,10 +41,10 @@ export type Application = Readonly<{
       | "zoomed"
     >
   >;
-  Icon: (theme: Theme) => IconComponent;
+  Icon(theme: Theme): IconComponent;
   id: ID;
   mimetypes: MimeType[];
-  title: (theme: Theme) => string;
+  title(theme: Theme): string;
 }>;
 
 export type Coordinates = {
@@ -57,21 +57,12 @@ export type Dialog = {
   id: ID;
 };
 
-export type File = Readonly<
-  {
-    id: ID;
-    title: string;
-    url: (theme: Theme) => string;
-  } & (
-    | {
-        mimetype: "application/pdf";
-        width: Pixels; // page width
-      }
-    | {
-        mimetype: "text/markdown";
-      }
-  )
->;
+export type File = Readonly<{
+  id: ID;
+  mimetype: MimeType;
+  title: string;
+  url(theme: Theme): string;
+}>;
 
 export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
@@ -109,21 +100,24 @@ export type Theme = "beos" | "mac-os-classic";
 
 export type URL = string;
 
-export type Window = Coordinates &
-  Size & {
-    applicationId: Application["id"];
-    collapsed: boolean;
-    focused: boolean;
-    hidden: boolean;
-    id: ID;
-    prev?: Coordinates & Size;
-    resizable: boolean;
-    title: string;
-    titlebar: {
-      left: number; // percentage (0–1)
-    };
-    zoomed: boolean;
-  } & (
+export type Window = SimplifyDeep<
+  Coordinates &
+    Size & {
+      applicationId: Application["id"];
+      collapsed: boolean;
+      focused: boolean;
+      hidden: boolean;
+      id: ID;
+      prev?: Coordinates & Size;
+      resizable: boolean;
+      title: string;
+      titlebar: {
+        left: Percentage;
+      };
+      zoomed: boolean;
+    }
+> &
+  (
     | {
         Component: ComponentType;
       }

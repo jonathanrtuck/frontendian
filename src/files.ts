@@ -12,5 +12,4 @@ export const FILE_RESUME_PDF: File = {
   mimetype: "application/pdf",
   title: "Résumé",
   url: () => "/files/resume.pdf",
-  width: 765,
 };
