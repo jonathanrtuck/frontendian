@@ -25,10 +25,12 @@ export const useOverflow = (
 
     resizeObserver.observe(parent);
     resizeObserver.observe(element);
-
     setOverflow();
 
-    return () => resizeObserver.unobserve(element);
+    return () => {
+      resizeObserver.unobserve(parent);
+      resizeObserver.unobserve(element);
+    };
   }, [ref]);
 
   return [horizontal, vertical];

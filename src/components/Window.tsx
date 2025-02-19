@@ -57,11 +57,7 @@ export const Window: FunctionComponent<
       cancel="[draggable='false']"
       disabled={!onDrag}
       nodeRef={rootRef as RefObject<HTMLElement>}
-      onStart={(e) => {
-        if (e.shiftKey) {
-          return false;
-        }
-      }}
+      onStart={(e) => (e.shiftKey ? false : undefined)}
       onStop={(_, coordinates) => onDrag?.(coordinates)}
       position={{
         x,

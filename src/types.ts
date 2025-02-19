@@ -1,20 +1,22 @@
-import type { ComponentType, ReactNode, SVGProps } from "react";
+import type { ComponentType, SVGProps } from "react";
 import { EmptyObject } from "type-fest";
 
 export type Actions = Readonly<{
   blurWindow(payload: PayloadWithID): void;
   closeApplication(payload: PayloadWithID): void;
+  closeDialog(payload: PayloadWithID): void;
   closeWindow(payload: PayloadWithID): void;
   collapseWindow(payload: PayloadWithID): void;
   expandWindow(payload: PayloadWithID): void;
   focusSystemBar(): void;
   focusWindow(payload: PayloadWithID): void;
   hideWindow(payload: PayloadWithID): void;
+  moveTitlebar(payload: PayloadWithID<{ left: number }>): void;
   moveWindow(payload: PayloadWithID<Coordinates>): void;
-  moveWindowTitlebar(payload: PayloadWithID<Coordinates>): void;
   openApplication(payload: PayloadWithID): void;
+  openDialog(payload: Omit<Dialog, "id">): void;
   openFile(payload: PayloadWithID<{ windowId?: ID }>): void;
-  openWindow(payload: PayloadWithID<{ content?: ReactNode }>): void; // ???
+  openWindow(payload: PayloadWithID<{ Component?: ComponentType }>): void;
   resizeWindow(payload: PayloadWithID<Size>): void;
   showWindow(payload: PayloadWithID): void;
   zoomWindow(payload: PayloadWithID): void;
@@ -48,6 +50,11 @@ export type Application = Readonly<{
 export type Coordinates = {
   x: Pixels;
   y: Pixels;
+};
+
+export type Dialog = {
+  Component: ComponentType;
+  id: ID;
 };
 
 export type File = Readonly<
@@ -92,6 +99,7 @@ export type Size = {
 };
 
 export type State = {
+  dialogs: Dialog[];
   openApplicationIds: Application["id"][];
   stackingOrder: (Application["id"] | ID)[];
   windows: Window[];
@@ -111,7 +119,9 @@ export type Window = Coordinates &
     prev?: Coordinates & Size;
     resizable: boolean;
     title: string;
-    titlebar: Coordinates;
+    titlebar: {
+      left: number; // percentage (0–1)
+    };
     zoomed: boolean;
   } & (
     | {

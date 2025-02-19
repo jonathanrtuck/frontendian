@@ -18,8 +18,7 @@ const DEFAULT_WINDOW: Window = {
   resizable: true,
   title: "Untitled",
   titlebar: {
-    x: 0,
-    y: 0,
+    left: 0,
   },
   width: 600,
   x: DEFAULT_WINDOW_POSITION_OFFSET,
@@ -50,7 +49,7 @@ const getFirstOpenWindowPosition = (windows: Window[]): Pixels => {
 export const useStore = create(
   devtools<State & Actions>(
     (set) => ({
-      desktop: [files.FILE_RESUME_PDF.id],
+      dialogs: [],
       openApplicationIds: [applications.APPLICATION_FILE_MANAGER.id],
       stackingOrder: [SYSTEM_BAR_ID],
       windows: [],
@@ -106,6 +105,17 @@ export const useStore = create(
           {
             payload,
             type: "closeApplication",
+          }
+        ),
+      closeDialog: (payload) =>
+        set(
+          (prevState) => ({
+            dialogs: prevState.dialogs.filter(({ id }) => id !== payload.id),
+          }),
+          undefined,
+          {
+            payload,
+            type: "closeDialog",
           }
         ),
       closeWindow: (payload) =>
@@ -249,6 +259,26 @@ export const useStore = create(
             type: "hideWindow",
           }
         ),
+      moveTitlebar: (payload) =>
+        set(
+          (prevState) => ({
+            windows: prevState.windows.map((window) =>
+              window.id === payload.id
+                ? {
+                    ...window,
+                    titlebar: {
+                      left: payload.left,
+                    },
+                  }
+                : window
+            ),
+          }),
+          undefined,
+          {
+            payload,
+            type: "moveTitlebar",
+          }
+        ),
       moveWindow: (payload) =>
         set(
           (prevState) => ({
@@ -266,27 +296,6 @@ export const useStore = create(
           {
             payload,
             type: "moveWindow",
-          }
-        ),
-      moveWindowTitlebar: (payload) =>
-        set(
-          (prevState) => ({
-            windows: prevState.windows.map((window) =>
-              window.id === payload.id
-                ? {
-                    ...window,
-                    titlebar: {
-                      x: payload.x,
-                      y: payload.y,
-                    },
-                  }
-                : window
-            ),
-          }),
-          undefined,
-          {
-            payload,
-            type: "moveWindowTitlebar",
           }
         ),
       openApplication: (payload) =>
@@ -329,7 +338,7 @@ export const useStore = create(
               return prevState;
             }
 
-            const windowId = uuid();
+            const windowId = `window-${uuid()}`;
             const windowPosition = getFirstOpenWindowPosition(
               prevState.windows
             );
@@ -362,6 +371,23 @@ export const useStore = create(
           {
             payload,
             type: "openApplication",
+          }
+        ),
+      openDialog: (payload) =>
+        set(
+          (prevState) => ({
+            dialogs: [
+              ...prevState.dialogs,
+              {
+                ...payload,
+                id: `dialog-${uuid()}`,
+              },
+            ],
+          }),
+          undefined,
+          {
+            payload,
+            type: "openDialog",
           }
         ),
       openFile: (payload) =>
@@ -452,7 +478,7 @@ export const useStore = create(
             const isApplicationOpen = prevState.openApplicationIds.includes(
               application.id
             );
-            const windowId = uuid();
+            const windowId = `window-${uuid()}`;
             const windowPosition = getFirstOpenWindowPosition(
               prevState.windows
             );
@@ -502,7 +528,7 @@ export const useStore = create(
             const isApplicationOpen = prevState.openApplicationIds.includes(
               payload.id
             );
-            const windowId = uuid();
+            const windowId = `window-${uuid()}`;
             const windowPosition = getFirstOpenWindowPosition(
               prevState.windows
             );

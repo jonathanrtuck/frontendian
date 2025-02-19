@@ -53,8 +53,8 @@ export const Desktop: FunctionComponent = () => {
   const focusSystemBar = useStore((store) => store.focusSystemBar);
   const focusWindow = useStore((store) => store.focusWindow);
   const hideWindow = useStore((store) => store.hideWindow);
+  const moveTitlebar = useStore((store) => store.moveTitlebar);
   const moveWindow = useStore((store) => store.moveWindow);
-  const moveWindowTitlebar = useStore((store) => store.moveWindowTitlebar);
   const openApplication = useStore((store) => store.openApplication);
   const openApplicationIds = useStore((store) => store.openApplicationIds);
   const openFile = useStore((store) => store.openFile);
@@ -231,11 +231,10 @@ export const Desktop: FunctionComponent = () => {
             y={y}
             z={stackingOrder.indexOf(id)}>
             <TitleBar
+              left={titlebar.left}
+              maxWidth={width}
               onDoubleClick={() => hideWindow({ id })}
-              onDrag={(coordinates) =>
-                moveWindowTitlebar({ id, ...coordinates })
-              }
-              x={titlebar.x}>
+              onDrag={(left) => moveTitlebar({ id, left })}>
               <TitleBarButton
                 onClick={() => closeWindow({ id })}
                 title="Close"

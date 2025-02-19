@@ -1,21 +1,29 @@
 "use client";
 
-import type { Coordinates, MS } from "@/types";
+import type { MS, Pixels } from "@/types";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import Draggable from "react-draggable";
 
 // @todo get maxLeft
 export const TitleBar: FunctionComponent<
-  PropsWithChildren<
-    {
-      onDoubleClick?(): void;
-      onDrag?(coordinates: Coordinates): void;
-    } & Pick<Coordinates, "x">
-  >
-> = ({ children, onDoubleClick, onDrag, x }) => {
+  PropsWithChildren<{
+    left?: number;
+    maxWidth?: Pixels;
+    onDoubleClick?(): void;
+    onDrag?(left: number): void;
+  }>
+> = ({ children, left = 0, maxWidth = 0, onDoubleClick, onDrag }) => {
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<MS>(0);
+  const maxLeft = useMemo<Pixels>(
+    () =>
+      maxWidth && rootRef.current
+        ? maxWidth - rootRef.current.getBoundingClientRect().width
+        : 0,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [children, maxWidth]
+  );
 
   return (
     <Draggable
@@ -24,25 +32,14 @@ export const TitleBar: FunctionComponent<
       cancel="[draggable='false']"
       disabled={!onDrag}
       nodeRef={rootRef as RefObject<HTMLElement>}
-      onStart={(e) => {
-        if (!e.shiftKey) {
-          return false;
-        }
-      }}
-      onStop={(_, { x }) => {
-        onDrag?.({
-          x,
-          y: 0,
-        });
-      }}
-      position={
-        onDrag
-          ? {
-              x,
-              y: 0,
-            }
-          : undefined
-      }>
+      onStart={(e) => (e.shiftKey ? undefined : false)}
+      onStop={(_, { x }) =>
+        onDrag?.(Math.max(0, Math.min(maxLeft <= 0 ? 0 : x / maxLeft, 1)))
+      }
+      position={{
+        x: left * maxLeft,
+        y: 0,
+      }}>
       <header
         className="title-bar"
         onDoubleClick={
