@@ -1,0 +1,91 @@
+:root {
+  --background-color--default: rgb(204, 204, 204);
+  --background-color--inactive: rgb(220, 220, 220);
+  --border-color--dark: rgb(38, 38, 38);
+  --border-color--default: var(--border-color--dark);
+  --border-color--light: rgb(140, 140, 140);
+  --border-radius: 0.75rem;
+  --border-width: 0.0625rem;
+  --box-shadow--high: 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.8);
+  --box-shadow--high--inset: inset var(--border-width) var(--border-width)
+      var(--color--highlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--lowlight);
+  --box-shadow--low: 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.15);
+  --box-shadow--low--inset: inset var(--border-width) var(--border-width)
+      var(--color--lowlight),
+    inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
+      var(--color--highlight);
+  --color--highlight: rgba(255, 255, 255, 0.6);
+  --color--lowlight: rgba(0, 0, 0, 0.25);
+  --cursor--default: url("/themes/mac-os-classic/default.svg") 7 4, default;
+  --cursor--pointer: url("/themes/mac-os-classic/pointer.svg") 8 3, pointer;
+  --cursor--text: url("/themes/mac-os-classic/text.svg") 9 10, text;
+  --font-family--default: arial;
+  --font-family--monospace: ui-monospace, Menlo, Monaco, "Cascadia Mono",
+    "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
+    "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  --font-family--system: var(--font-family--charcoal);
+  --scrollbar-width: 1rem;
+  --system-bar-height: 1.5rem;
+  --text-color--dark: rgb(0, 0, 0);
+  --text-color--default: var(--text-color--dark);
+  --text-color--disabled: rgb(160, 160, 160);
+  --text-color--light: rgb(255, 255, 255);
+  --title-bar-height: 1rem;
+  --window-padding: 0.25rem;
+
+  border-radius: var(--border-radius);
+  contain: paint;
+}
+
+body {
+  background: url(./mac-os-classic.png) rgb(48, 48, 48);
+  margin: var(--system-bar-height) 0 0;
+}
+
+::selection {
+  background-color: rgb(204, 204, 255);
+  color: var(--text-color--dark);
+}
+
+.clock {
+}
+
+.content {
+}
+
+.grid {
+}
+
+.icon {
+}
+
+.menu {
+}
+
+.menuitem {
+}
+
+.system-bar {
+  background-color: var(--background-color--inactive);
+  border-radius: var(--border-radius, 0) var(--border-radius, 0) 0 0;
+  border-width: 0 0 var(--border-width);
+  box-shadow: var(--box-shadow--high--inset);
+  display: flex;
+  font-family: var(--font-family--system);
+  height: var(--system-bar-height);
+  inset: 0;
+  padding: 0 1rem;
+  position: fixed;
+  z-index: 1000;
+}
+
+.title-bar {
+}
+
+.title-bar-button {
+}
+
+.window {
+}

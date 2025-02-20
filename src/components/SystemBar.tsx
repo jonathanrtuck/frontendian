@@ -6,7 +6,7 @@ export const SystemBar: FunctionComponent<
   PropsWithChildren<{
     onFocus?(): void;
     title: string;
-    z: number;
+    z?: number;
   }>
 > = ({ children, onFocus, title, z }) => (
   <header

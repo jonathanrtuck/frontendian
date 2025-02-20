@@ -24,9 +24,9 @@
       var(--color--highlight);
   --color--highlight: rgba(255, 255, 255, 0.6);
   --color--lowlight: rgba(0, 0, 0, 0.2);
-  --cursor--default: url("./_cursors/default.svg") 1 0, default;
-  --cursor--pointer: url("./_cursors/pointer.svg") 2 0, pointer;
-  --cursor--text: url("./_cursors/text.svg") 7 10, text;
+  --cursor--default: url("/themes/beos/default.svg") 1 0, default;
+  --cursor--pointer: url("/themes/beos/pointer.svg") 2 0, pointer;
+  --cursor--text: url("/themes/beos/text.svg") 7 10, text;
   --font-family--default: Helvetica;
   --font-family--monospace: var(--font-family--courier-10-pitch);
   --scrollbar-width: 1rem;

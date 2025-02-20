@@ -1,5 +1,6 @@
+import { MacOSClassic } from "@/themes";
 import type { FunctionComponent } from "react";
 
-const MacOsClassic: FunctionComponent = () => <h1>mac os classic…</h1>;
+const MacOSClassicPage: FunctionComponent = () => <MacOSClassic />;
 
-export default MacOsClassic;
+export default MacOSClassicPage;
