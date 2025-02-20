@@ -35,23 +35,9 @@ export const Menuitem: FunctionComponent<
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
   const id = `menuitem-${useId()}`;
   const expanded = expandedMenuitemIds.includes(id);
-  const getMenubarHasFocus = useCallback(
-    () =>
-      rootRef.current
-        ?.closest<HTMLElement>('[role="menubar"]')
-        ?.matches(":focus-within") ?? false,
-    []
-  );
-  const getTopMenuitem = useCallback(
-    () => rootRef.current?.closest<HTMLElement>('[role="menubar"] > .menuitem'),
-    []
-  );
-  const getIsTopMenuitem = useCallback(
-    () => rootRef.current?.parentElement?.role === "menubar",
-    []
-  );
-  const getIsFirstMenuitem = useCallback(
-    () => rootRef.current?.matches(":first-of-type"),
+  const getButton = useCallback(
+    (menuitem?: HTMLElement | null) =>
+      menuitem?.querySelector<HTMLElement>(':scope > [role^="menuitem"]'),
     []
   );
   const getChildMenuitems = useCallback(
@@ -63,9 +49,40 @@ export const Menuitem: FunctionComponent<
       ),
     []
   );
-  const getButton = useCallback(
-    (menuitem?: HTMLElement | null) =>
-      menuitem?.querySelector<HTMLElement>(':scope > [role="menuitem"]'),
+  const getIsFirstMenuitem = useCallback(
+    () => rootRef.current?.matches(":first-of-type"),
+    []
+  );
+  const getIsParentMenuHorizontal = useCallback(
+    () => rootRef.current?.parentElement?.ariaOrientation === "horizontal",
+    []
+  );
+  const getIsTopMenuitem = useCallback(
+    () => rootRef.current?.parentElement?.role === "menubar",
+    []
+  );
+  const getMenubarHasFocus = useCallback(
+    () =>
+      rootRef.current
+        ?.closest<HTMLElement>('[role="menubar"]')
+        ?.matches(":focus-within") ?? false,
+    []
+  );
+  const getParentMenuitem = useCallback(
+    () => rootRef.current?.parentElement?.closest<HTMLElement>(".menuitem"),
+    []
+  );
+  const getSiblingMenuitemButtons = useCallback(
+    () =>
+      Array.from(
+        rootRef.current?.parentElement?.querySelectorAll<HTMLElement>(
+          ':scope > .menuitem > [role^="menuitem"]'
+        ) ?? []
+      ),
+    []
+  );
+  const getTopMenuitem = useCallback(
+    () => rootRef.current?.closest<HTMLElement>('[role="menubar"] > .menuitem'),
     []
   );
   const collapseAll = () => {
@@ -117,10 +134,19 @@ export const Menuitem: FunctionComponent<
   const children = "children" in props ? props.children : undefined;
   const disabled = "disabled" in props && props.disabled;
   const Icon = "Icon" in props ? props.Icon : undefined;
-  const onClick = "onClick" in props ? props.onClick : undefined;
   const title = "title" in props ? props.title : undefined;
   const type = "type" in props ? props.type : undefined;
   const haspopup = Boolean(children);
+  const onClick = () => {
+    if ("onClick" in props && !checked && !disabled) {
+      props.onClick?.();
+    }
+    if (haspopup && !expanded) {
+      expandMenuitem({ id });
+    } else {
+      collapseAll();
+    }
+  };
 
   return (
     <li
@@ -142,18 +168,117 @@ export const Menuitem: FunctionComponent<
         aria-disabled={disabled || undefined}
         aria-expanded={haspopup ? expanded : undefined}
         aria-haspopup={haspopup ? "menu" : undefined}
-        onClick={() => {
-          if (!checked && !disabled) {
-            onClick?.();
-          }
-          if (haspopup && !expanded) {
-            expandMenuitem({ id });
-          } else {
-            collapseAll();
-          }
-        }}
+        onClick={onClick}
         onKeyDown={(e) => {
-          // @todo
+          // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/#keyboardinteraction
+          switch (e.key) {
+            case "ArrowDown":
+              if (getIsTopMenuitem() && getIsParentMenuHorizontal()) {
+                if (haspopup && !expanded) {
+                  expandMenuitem({ id });
+                }
+              } else {
+                const siblingMenuitemButtons = getSiblingMenuitemButtons();
+                const index = siblingMenuitemButtons.indexOf(e.currentTarget);
+
+                siblingMenuitemButtons
+                  .at((index + 1) % siblingMenuitemButtons.length)
+                  ?.focus();
+              }
+              break;
+            case "ArrowLeft":
+              if (getIsTopMenuitem()) {
+                if (getIsParentMenuHorizontal()) {
+                  const siblingMenuitemButtons = getSiblingMenuitemButtons();
+                  const index = siblingMenuitemButtons.indexOf(e.currentTarget);
+
+                  siblingMenuitemButtons.at(index - 1)?.focus();
+                }
+              } else {
+                collapseMenuitem({ id: expandedMenuitemIds.at(-1)! });
+
+                const parentMenuitem = getParentMenuitem();
+                const grandparentMenu = parentMenuitem?.parentElement;
+
+                if (grandparentMenu?.ariaOrientation === "horizontal") {
+                  const parentMenuitemButtons = Array.from(
+                    grandparentMenu?.querySelectorAll<HTMLElement>(
+                      ":scope > .menuitem > button"
+                    ) ?? []
+                  );
+                  const parentMenuitemButton = getButton(parentMenuitem);
+                  const parentIndex = parentMenuitemButton
+                    ? parentMenuitemButtons.indexOf(parentMenuitemButton)
+                    : -1;
+
+                  parentMenuitemButtons.at(parentIndex - 1)?.focus();
+                } else {
+                  getButton(getParentMenuitem())?.focus();
+                }
+              }
+              break;
+            case "ArrowRight":
+              if (getIsTopMenuitem()) {
+                if (getIsParentMenuHorizontal()) {
+                  const siblingMenuitemButtons = getSiblingMenuitemButtons();
+                  const index = siblingMenuitemButtons.indexOf(e.currentTarget);
+
+                  siblingMenuitemButtons
+                    .at((index + 1) % siblingMenuitemButtons.length)
+                    ?.focus();
+                } else if (haspopup && !expanded) {
+                  expandMenuitem({ id });
+                }
+              } else {
+                if (haspopup) {
+                  if (!expanded) {
+                    expandMenuitem({ id });
+                  }
+                } else {
+                  const parentMenuitem = getParentMenuitem();
+                  const grandparentMenu = parentMenuitem?.parentElement;
+
+                  if (grandparentMenu?.ariaOrientation === "horizontal") {
+                    const parentMenuitemButtons = Array.from(
+                      grandparentMenu?.querySelectorAll<HTMLElement>(
+                        ":scope > .menuitem > button"
+                      ) ?? []
+                    );
+                    const parentMenuitemButton = getButton(parentMenuitem);
+                    const parentIndex = parentMenuitemButton
+                      ? parentMenuitemButtons.indexOf(parentMenuitemButton)
+                      : -1;
+
+                    parentMenuitemButtons
+                      .at((parentIndex + 1) % parentMenuitemButtons.length)
+                      ?.focus();
+                  }
+                }
+              }
+              break;
+            case "ArrowUp":
+              if (getIsTopMenuitem() && getIsParentMenuHorizontal()) {
+                if (haspopup && !expanded) {
+                  expandMenuitem({ id });
+                }
+              } else {
+                const siblingMenuitemButtons = getSiblingMenuitemButtons();
+                const index = siblingMenuitemButtons.indexOf(e.currentTarget);
+
+                siblingMenuitemButtons.at(index - 1)?.focus();
+              }
+              break;
+            case "Enter":
+            case " ":
+              e.preventDefault();
+              onClick();
+              break;
+            case "Escape":
+              e.preventDefault();
+              getButton(getParentMenuitem())?.focus();
+              collapseMenuitem({ id: expandedMenuitemIds.at(-1)! });
+              break;
+          }
         }}
         onMouseEnter={({ currentTarget }) => {
           if (document.hasFocus() && getMenubarHasFocus()) {
