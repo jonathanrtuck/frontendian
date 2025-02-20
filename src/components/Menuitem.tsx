@@ -2,7 +2,12 @@
 
 import { useStore } from "@/store";
 import type { IconComponent } from "@/types";
-import type { FunctionComponent, PropsWithChildren } from "react";
+import Link, { LinkProps } from "next/link";
+import type {
+  AnchorHTMLAttributes,
+  FunctionComponent,
+  PropsWithChildren,
+} from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { EmptyObject } from "type-fest";
 
@@ -14,6 +19,7 @@ export const Menuitem: FunctionComponent<
       title: string;
     } & (
       | PropsWithChildren
+      | Pick<LinkProps, "href"> // add others as needed
       | ({
           onClick?(): void;
         } & (
@@ -130,11 +136,10 @@ export const Menuitem: FunctionComponent<
     );
   }
 
+  const { disabled = false, Icon, title } = props;
   const checked = "checked" in props && props.checked;
   const children = "children" in props ? props.children : undefined;
-  const disabled = "disabled" in props && props.disabled;
-  const Icon = "Icon" in props ? props.Icon : undefined;
-  const title = "title" in props ? props.title : undefined;
+  const href = "href" in props ? props.href : undefined;
   const type = "type" in props ? props.type : undefined;
   const haspopup = Boolean(children);
   const onClick = () => {
@@ -147,163 +152,165 @@ export const Menuitem: FunctionComponent<
       collapseAll();
     }
   };
+  const anchorProps: AnchorHTMLAttributes<HTMLAnchorElement> = {
+    ["aria-checked"]: type ? checked : undefined,
+    ["aria-disabled"]: disabled || undefined,
+    ["aria-expanded"]: haspopup ? expanded : undefined,
+    ["aria-haspopup"]: haspopup ? "menu" : undefined,
+    children: (
+      <>
+        {Icon ? <Icon /> : null}
+        {title ? <label>{title}</label> : null}
+      </>
+    ),
+    className: "menuitem-button",
+    onClick,
+    onKeyDown: (e) => {
+      // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/#keyboardinteraction
+      switch (e.key) {
+        case "ArrowDown":
+          if (getIsTopMenuitem() && getIsParentMenuHorizontal()) {
+            if (haspopup && !expanded) {
+              expandMenuitem({ id });
+            }
+          } else {
+            const siblingMenuitemButtons = getSiblingMenuitemButtons();
+            const index = siblingMenuitemButtons.indexOf(e.currentTarget);
+
+            siblingMenuitemButtons
+              .at((index + 1) % siblingMenuitemButtons.length)
+              ?.focus();
+          }
+          break;
+        case "ArrowLeft":
+          if (getIsTopMenuitem()) {
+            if (getIsParentMenuHorizontal()) {
+              const siblingMenuitemButtons = getSiblingMenuitemButtons();
+              const index = siblingMenuitemButtons.indexOf(e.currentTarget);
+
+              siblingMenuitemButtons.at(index - 1)?.focus();
+            }
+          } else {
+            collapseMenuitem({ id: expandedMenuitemIds.at(-1)! });
+
+            const parentMenuitem = getParentMenuitem();
+            const grandparentMenu = parentMenuitem?.parentElement;
+
+            if (grandparentMenu?.ariaOrientation === "horizontal") {
+              const parentMenuitemButtons = Array.from(
+                grandparentMenu?.querySelectorAll<HTMLElement>(
+                  ":scope > .menuitem > button"
+                ) ?? []
+              );
+              const parentMenuitemButton = getButton(parentMenuitem);
+              const parentIndex = parentMenuitemButton
+                ? parentMenuitemButtons.indexOf(parentMenuitemButton)
+                : -1;
+
+              parentMenuitemButtons.at(parentIndex - 1)?.focus();
+            } else {
+              getButton(getParentMenuitem())?.focus();
+            }
+          }
+          break;
+        case "ArrowRight":
+          if (getIsTopMenuitem()) {
+            if (getIsParentMenuHorizontal()) {
+              const siblingMenuitemButtons = getSiblingMenuitemButtons();
+              const index = siblingMenuitemButtons.indexOf(e.currentTarget);
+
+              siblingMenuitemButtons
+                .at((index + 1) % siblingMenuitemButtons.length)
+                ?.focus();
+            } else if (haspopup && !expanded) {
+              expandMenuitem({ id });
+            }
+          } else {
+            if (haspopup) {
+              if (!expanded) {
+                expandMenuitem({ id });
+              }
+            } else {
+              const parentMenuitem = getParentMenuitem();
+              const grandparentMenu = parentMenuitem?.parentElement;
+
+              if (grandparentMenu?.ariaOrientation === "horizontal") {
+                const parentMenuitemButtons = Array.from(
+                  grandparentMenu?.querySelectorAll<HTMLElement>(
+                    ":scope > .menuitem > button"
+                  ) ?? []
+                );
+                const parentMenuitemButton = getButton(parentMenuitem);
+                const parentIndex = parentMenuitemButton
+                  ? parentMenuitemButtons.indexOf(parentMenuitemButton)
+                  : -1;
+
+                parentMenuitemButtons
+                  .at((parentIndex + 1) % parentMenuitemButtons.length)
+                  ?.focus();
+              }
+            }
+          }
+          break;
+        case "ArrowUp":
+          if (getIsTopMenuitem() && getIsParentMenuHorizontal()) {
+            if (haspopup && !expanded) {
+              expandMenuitem({ id });
+            }
+          } else {
+            const siblingMenuitemButtons = getSiblingMenuitemButtons();
+            const index = siblingMenuitemButtons.indexOf(e.currentTarget);
+
+            siblingMenuitemButtons.at(index - 1)?.focus();
+          }
+          break;
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          onClick();
+          break;
+        case "Escape":
+          e.preventDefault();
+          getButton(getParentMenuitem())?.focus();
+          collapseMenuitem({ id: expandedMenuitemIds.at(-1)! });
+          break;
+      }
+    },
+    onMouseEnter: ({ currentTarget }) => {
+      if (document.hasFocus() && getMenubarHasFocus()) {
+        if (getIsTopMenuitem()) {
+          // @todo currentTarget.focus(); if mac-os-classic
+        } else if (haspopup) {
+          expandMenuitem({ id });
+        } else {
+          currentTarget.focus();
+        }
+      }
+    },
+    onPointerDown: (e) =>
+      haspopup && expanded ? e.preventDefault() : undefined,
+    role:
+      (type === "checkbox" && "menuitemcheckbox") ||
+      (type === "radio" && "menuitemradio") ||
+      "menuitem",
+    tabIndex,
+  };
 
   return (
     <li
       className="menuitem"
       id={id}
-      onBlur={({ currentTarget, relatedTarget }) => {
-        if (
-          haspopup &&
-          document.hasFocus() &&
-          !currentTarget?.contains(relatedTarget)
-        ) {
-          collapseMenuitem({ id });
-        }
-      }}
+      onBlur={
+        haspopup
+          ? ({ currentTarget, relatedTarget }) =>
+              document.hasFocus() && !currentTarget?.contains(relatedTarget)
+                ? collapseMenuitem({ id })
+                : undefined
+          : undefined
+      }
       ref={rootRef}
       role="none">
-      <button
-        aria-checked={type ? checked : undefined}
-        aria-disabled={disabled || undefined}
-        aria-expanded={haspopup ? expanded : undefined}
-        aria-haspopup={haspopup ? "menu" : undefined}
-        onClick={onClick}
-        onKeyDown={(e) => {
-          // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/#keyboardinteraction
-          switch (e.key) {
-            case "ArrowDown":
-              if (getIsTopMenuitem() && getIsParentMenuHorizontal()) {
-                if (haspopup && !expanded) {
-                  expandMenuitem({ id });
-                }
-              } else {
-                const siblingMenuitemButtons = getSiblingMenuitemButtons();
-                const index = siblingMenuitemButtons.indexOf(e.currentTarget);
-
-                siblingMenuitemButtons
-                  .at((index + 1) % siblingMenuitemButtons.length)
-                  ?.focus();
-              }
-              break;
-            case "ArrowLeft":
-              if (getIsTopMenuitem()) {
-                if (getIsParentMenuHorizontal()) {
-                  const siblingMenuitemButtons = getSiblingMenuitemButtons();
-                  const index = siblingMenuitemButtons.indexOf(e.currentTarget);
-
-                  siblingMenuitemButtons.at(index - 1)?.focus();
-                }
-              } else {
-                collapseMenuitem({ id: expandedMenuitemIds.at(-1)! });
-
-                const parentMenuitem = getParentMenuitem();
-                const grandparentMenu = parentMenuitem?.parentElement;
-
-                if (grandparentMenu?.ariaOrientation === "horizontal") {
-                  const parentMenuitemButtons = Array.from(
-                    grandparentMenu?.querySelectorAll<HTMLElement>(
-                      ":scope > .menuitem > button"
-                    ) ?? []
-                  );
-                  const parentMenuitemButton = getButton(parentMenuitem);
-                  const parentIndex = parentMenuitemButton
-                    ? parentMenuitemButtons.indexOf(parentMenuitemButton)
-                    : -1;
-
-                  parentMenuitemButtons.at(parentIndex - 1)?.focus();
-                } else {
-                  getButton(getParentMenuitem())?.focus();
-                }
-              }
-              break;
-            case "ArrowRight":
-              if (getIsTopMenuitem()) {
-                if (getIsParentMenuHorizontal()) {
-                  const siblingMenuitemButtons = getSiblingMenuitemButtons();
-                  const index = siblingMenuitemButtons.indexOf(e.currentTarget);
-
-                  siblingMenuitemButtons
-                    .at((index + 1) % siblingMenuitemButtons.length)
-                    ?.focus();
-                } else if (haspopup && !expanded) {
-                  expandMenuitem({ id });
-                }
-              } else {
-                if (haspopup) {
-                  if (!expanded) {
-                    expandMenuitem({ id });
-                  }
-                } else {
-                  const parentMenuitem = getParentMenuitem();
-                  const grandparentMenu = parentMenuitem?.parentElement;
-
-                  if (grandparentMenu?.ariaOrientation === "horizontal") {
-                    const parentMenuitemButtons = Array.from(
-                      grandparentMenu?.querySelectorAll<HTMLElement>(
-                        ":scope > .menuitem > button"
-                      ) ?? []
-                    );
-                    const parentMenuitemButton = getButton(parentMenuitem);
-                    const parentIndex = parentMenuitemButton
-                      ? parentMenuitemButtons.indexOf(parentMenuitemButton)
-                      : -1;
-
-                    parentMenuitemButtons
-                      .at((parentIndex + 1) % parentMenuitemButtons.length)
-                      ?.focus();
-                  }
-                }
-              }
-              break;
-            case "ArrowUp":
-              if (getIsTopMenuitem() && getIsParentMenuHorizontal()) {
-                if (haspopup && !expanded) {
-                  expandMenuitem({ id });
-                }
-              } else {
-                const siblingMenuitemButtons = getSiblingMenuitemButtons();
-                const index = siblingMenuitemButtons.indexOf(e.currentTarget);
-
-                siblingMenuitemButtons.at(index - 1)?.focus();
-              }
-              break;
-            case "Enter":
-            case " ":
-              e.preventDefault();
-              onClick();
-              break;
-            case "Escape":
-              e.preventDefault();
-              getButton(getParentMenuitem())?.focus();
-              collapseMenuitem({ id: expandedMenuitemIds.at(-1)! });
-              break;
-          }
-        }}
-        onMouseEnter={({ currentTarget }) => {
-          if (document.hasFocus() && getMenubarHasFocus()) {
-            if (getIsTopMenuitem()) {
-              // @todo currentTarget.focus(); if mac-os-classic
-            } else if (haspopup) {
-              expandMenuitem({ id });
-            } else {
-              currentTarget.focus();
-            }
-          }
-        }}
-        onPointerDown={(e) =>
-          haspopup && expanded ? e.preventDefault() : undefined
-        }
-        role={
-          (type === "checkbox" && "menuitemcheckbox") ||
-          (type === "radio" && "menuitemradio") ||
-          "menuitem"
-        }
-        tabIndex={tabIndex}
-        type="button">
-        {Icon ? <Icon /> : null}
-        {title ? <label>{title}</label> : null}
-      </button>
+      {href ? <Link {...anchorProps} href={href} /> : <a {...anchorProps} />}
       {children}
     </li>
   );

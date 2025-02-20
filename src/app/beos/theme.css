@@ -451,13 +451,15 @@ body {
     margin: 0.25rem 0.125rem;
   }
 
-  > button {
+  > .menuitem-button {
     align-items: center;
+    color: inherit;
     display: flex;
     font-size: 0.875rem;
     font-weight: 500;
     gap: 0.5rem;
     line-height: 1.2;
+    text-decoration: none;
     user-select: none;
 
     &[role="menuitemcheckbox"],
@@ -500,21 +502,21 @@ body {
   }
 
   [aria-orientation="horizontal"] > & {
-    > button {
+    > .menuitem-button {
       height: 100%;
       padding: 0 0.5rem;
     }
   }
 
   [aria-orientation="vertical"] > & {
-    > button {
+    > .menuitem-button {
       padding: 0.25rem 0.5rem;
       width: 100%;
     }
   }
 
   [role="menubar"][aria-orientation="vertical"] > & {
-    > button {
+    > .menuitem-button {
       box-shadow: var(--box-shadow--high--inset);
 
       &[aria-expanded="true"] {
@@ -524,7 +526,7 @@ body {
   }
 
   [role="menu"] > & {
-    > button {
+    > .menuitem-button {
       &:not([aria-checked="true"], [aria-disabled="true"]) {
         &:hover {
           background-color: rgb(160, 160, 160);
@@ -553,7 +555,9 @@ body {
     }
   }
 
-  [role="menu"]:has(> & > button[aria-haspopup="menu"]) > & > button {
+  [role="menu"]:has(> & > .menuitem-button[aria-haspopup="menu"])
+    > &
+    > .menuitem-button {
     padding-right: 2rem;
   }
 }
@@ -571,7 +575,7 @@ body {
   top: 0;
   width: var(--system-bar-width);
 
-  > .menu:first-of-type > .menuitem > button {
+  > .menu:first-of-type > .menuitem > .menuitem-button {
     padding: 0.125rem;
 
     > svg {

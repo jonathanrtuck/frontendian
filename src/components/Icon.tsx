@@ -15,8 +15,8 @@ export const Icon: FunctionComponent<{
     <button
       className="icon"
       onDoubleClick={onDoubleClick}
-      onKeyDown={(e) =>
-        e.key === "Enter" || e.key === " " ? onDoubleClick() : undefined
+      onKeyDown={({ key }) =>
+        key === "Enter" || key === " " ? onDoubleClick() : undefined
       }
       onPointerUp={
         onDoubleClick

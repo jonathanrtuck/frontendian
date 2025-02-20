@@ -40,7 +40,7 @@ export const TitleBar: FunctionComponent<
       cancel="[draggable='false']"
       disabled={!onDrag}
       nodeRef={rootRef as RefObject<HTMLElement>}
-      onStart={(e) => (e.shiftKey ? undefined : false)}
+      onStart={({ shiftKey }) => (shiftKey ? undefined : false)}
       onStop={(_, { x }) =>
         onDrag?.(Math.max(0, Math.min(maxLeft <= 0 ? 0 : x / maxLeft, 1)))
       }
@@ -52,18 +52,18 @@ export const TitleBar: FunctionComponent<
         className={clsx("title-bar", className)}
         onDoubleClick={
           onDoubleClick
-            ? (e) =>
-                !(e.target instanceof HTMLButtonElement)
+            ? ({ target }) =>
+                !(target instanceof HTMLButtonElement)
                   ? onDoubleClick()
                   : undefined
             : undefined
         }
         onPointerUp={
           onDoubleClick
-            ? (e) => {
+            ? ({ target }) => {
                 const now = Date.now();
 
-                if (!(e.target instanceof HTMLButtonElement)) {
+                if (!(target instanceof HTMLButtonElement)) {
                   const isDoubleClick = now - touchRef.current < 500;
 
                   if (isDoubleClick) {

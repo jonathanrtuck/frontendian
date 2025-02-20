@@ -10,7 +10,6 @@ import { Resizable } from "react-resizable";
 const MIN_HEIGHT = 16 * 7; // 7rem
 const MIN_WIDTH = 16 * 10; // 10rem
 
-// @todo wrap with ErrorBoundary
 export const Window: FunctionComponent<
   PropsWithChildren<
     {
@@ -45,7 +44,6 @@ export const Window: FunctionComponent<
   ...props
 }) => {
   const rootRef = useRef<HTMLElement>(null);
-  const minWidth = 0; // @todo
 
   useFocus({
     deps: [current],
@@ -57,7 +55,7 @@ export const Window: FunctionComponent<
       cancel="[draggable='false']"
       disabled={!onDrag}
       nodeRef={rootRef as RefObject<HTMLElement>}
-      onStart={(e) => (e.shiftKey ? false : undefined)}
+      onStart={({ shiftKey }) => (shiftKey ? false : undefined)}
       onStop={(_, coordinates) => onDrag?.(coordinates)}
       position={{
         x,
@@ -79,7 +77,7 @@ export const Window: FunctionComponent<
             : null
         }
         height={height}
-        minConstraints={[Math.max(minWidth, MIN_WIDTH), MIN_HEIGHT]}
+        minConstraints={[MIN_WIDTH, MIN_HEIGHT]}
         onResize={onResize ? (_, { size }) => onResize(size) : undefined}
         width={width}>
         <section

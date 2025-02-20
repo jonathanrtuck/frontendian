@@ -101,22 +101,17 @@ export const Desktop: FunctionComponent = () => {
                 title={files.FILE_README_MD.title}
               />
               <Menuitem separator />
-              {/*
               <Menuitem title="Theme">
                 <Menu>
-                  {Object.values(themes).map(({ id, title }) => (
-                    <Menuitem
-                      checked={id === currentThemeId}
-                      key={id}
-                      onClick={() => setTheme({ id })}
-                      title={title}
-                      type="radio"
-                    />
-                  ))}
+                  <Menuitem checked href="beos" title="BeOS" type="radio" />
+                  <Menuitem
+                    href="mac-os-classic"
+                    title="Mac OS Classic"
+                    type="radio"
+                  />
                 </Menu>
               </Menuitem>
               <Menuitem separator />
-              */}
               {Object.values(applications)
                 .filter(
                   ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
@@ -266,7 +261,28 @@ export const Desktop: FunctionComponent = () => {
                   />
                 ) : null}
               </TitleBar>
-              <application.Component fileId={fileId} windowId={id} />
+              <ErrorBoundary
+                fallback={
+                  <Dialog id="dialog-error" labelledby="dialog-error-title">
+                    <TitleBar className="visually-hidden">
+                      <Title id="dialog-error-title" title="Error" />
+                    </TitleBar>
+                    <Error />
+                    <p>
+                      <em>{title}</em> has encountered an unknown error.
+                    </p>
+                    <footer>
+                      <Button
+                        formMethod="dialog"
+                        onClick={() => closeWindow({ id })}
+                        type="reset">
+                        Close
+                      </Button>
+                    </footer>
+                  </Dialog>
+                }>
+                <application.Component fileId={fileId} windowId={id} />
+              </ErrorBoundary>
             </Window>
           );
         }

@@ -157,7 +157,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
             autoFocus
             className={clsx(styles.root, styles.markdown)}
             cols={numInputCols}
-            onInput={(e) => setInput(e.currentTarget.value)}
+            onInput={({ currentTarget }) => setInput(currentTarget.value)}
             rows={numInputRows}
             value={input}
           />
