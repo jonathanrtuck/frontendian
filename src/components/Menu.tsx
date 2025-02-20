@@ -1,9 +1,9 @@
 "use client";
 
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { useRef } from "react";
 import type { EmptyObject } from "type-fest";
 
+// @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu: FunctionComponent<
   PropsWithChildren<
     | {
@@ -12,20 +12,16 @@ export const Menu: FunctionComponent<
       }
     | EmptyObject
   >
-> = ({ children, ...props }) => {
-  const rootRef = useRef<HTMLLIElement>(null);
-  const bar = "bar" in props && props.bar;
-  const horizontal = "horizontal" in props && props.horizontal;
-  return (
-    <menu
-      aria-orientation={horizontal ? "horizontal" : "vertical"}
-      className="menu"
-      draggable={false}
-      ref={rootRef}
-      role={bar ? "menubar" : "menu"}>
-      {children}
-    </menu>
-  );
-};
+> = ({ children, ...props }) => (
+  <menu
+    aria-orientation={
+      "horizontal" in props && props.horizontal ? "horizontal" : "vertical"
+    }
+    className="menu"
+    draggable={false}
+    role={"bar" in props && props.bar ? "menubar" : "menu"}>
+    {children}
+  </menu>
+);
 
 Menu.displayName = "Menu";

@@ -6,6 +6,7 @@ import type { FunctionComponent, PropsWithChildren } from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { EmptyObject } from "type-fest";
 
+// @see https://refine.dev/blog/react-createportal/#mismatch-between-location-in-the-dom-and-event-bubbling
 export const Menuitem: FunctionComponent<
   | ({
       disabled?: boolean;
