@@ -3,7 +3,7 @@
 import { useStore } from "@/store";
 import type { IconComponent } from "@/types";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { useId } from "react";
+import { useId, useRef } from "react";
 import type { EmptyObject } from "type-fest";
 
 export const Menuitem: FunctionComponent<
@@ -27,22 +27,20 @@ export const Menuitem: FunctionComponent<
       separator: true;
     }
 > = (props) => {
-  const id = `menuitem-${useId()}`;
   const collapseMenuitem = useStore((store) => store.collapseMenuitem);
   const expandedMenuitemIds = useStore((store) => store.expandedMenuitemIds);
   const expandMenuitem = useStore((store) => store.expandMenuitem);
-  const onActivate = () => {
-    if (!checked && !disabled) {
-      onClick?.();
-    }
-
-    if (haspopup && !expanded) {
-      // @todo set tabIndex
-      expandMenuitem({ id });
-      // @todo focus first child menuitem
-    } else if (expandedMenuitemIds.length !== 0) {
+  const rootRef = useRef<HTMLLIElement>(null);
+  const id = `menuitem-${useId()}`;
+  const isTop = rootRef.current?.parentElement?.role === "menubar";
+  const getTopMenuitem = () =>
+    rootRef.current?.closest<HTMLElement>('[role="menubar"] > .menuitem');
+  const collapseAll = () => {
+    if (expandedMenuitemIds.length !== 0) {
       collapseMenuitem({ id: expandedMenuitemIds.at(0)! });
-      // @todo focus top menuitem
+      getTopMenuitem()
+        ?.querySelector<HTMLElement>(':scope > [role="menuitem"]')
+        ?.focus();
     }
   };
 
@@ -50,10 +48,11 @@ export const Menuitem: FunctionComponent<
     return (
       <li
         className="menuitem"
-        onClick={onActivate}
+        onClick={collapseAll}
         onMouseEnter={(e) => {
           // @todo
         }}
+        ref={rootRef}
         role="separator"
         tabIndex={-1}
       />
@@ -67,8 +66,8 @@ export const Menuitem: FunctionComponent<
   const onClick = "onClick" in props ? props.onClick : undefined;
   const title = "title" in props ? props.title : undefined;
   const type = "type" in props ? props.type : undefined;
-  const haspopup = Boolean(children);
   const expanded = expandedMenuitemIds.includes(id);
+  const haspopup = Boolean(children);
 
   return (
     <li
@@ -82,20 +81,31 @@ export const Menuitem: FunctionComponent<
         ) {
           collapseMenuitem({ id });
 
-          /*
           if (isTop) {
-            setTabIndex(-1);
+            // setTabIndex(-1);
           }
-          */
         }
       }}
+      ref={rootRef}
       role="none">
       <button
         aria-checked={type ? checked : undefined}
         aria-disabled={disabled || undefined}
         aria-expanded={haspopup ? expanded : undefined}
         aria-haspopup={haspopup ? "menu" : undefined}
-        onClick={onActivate}
+        onClick={() => {
+          if (!checked && !disabled) {
+            onClick?.();
+          }
+
+          if (haspopup && !expanded) {
+            // @todo set tabIndex
+            expandMenuitem({ id });
+            // @todo focus first child menuitem
+          } else {
+            collapseAll();
+          }
+        }}
         onKeyDown={(e) => {
           // @todo
         }}

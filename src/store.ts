@@ -219,8 +219,8 @@ export const useStore = create(
               .filter((element) => element !== menuitem)
               .map(({ id }) => id);
 
-            for (const siblingId of siblingIds) {
-              const index = prevState.expandedMenuitemIds.indexOf(siblingId);
+            for (const id of siblingIds) {
+              const index = prevState.expandedMenuitemIds.indexOf(id);
 
               if (index !== -1) {
                 return {

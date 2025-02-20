@@ -49,11 +49,9 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
       fetch(url, { signal: controller.signal })
         .then((response) => response.text())
         .then(setContent)
-        .catch((error) => {
-          if (error.name !== "AbortError") {
-            setError(error.message);
-          }
-        })
+        .catch(({ message, name }) =>
+          name === "AbortError" ? undefined : setError(message)
+        )
         .finally(() => setIsLoading(false));
 
       return () => {
@@ -62,11 +60,10 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
       };
     }
   }, [url]);
-  useEffect(() => {
-    if (!isLoading && !error && content) {
-      setInput(content);
-    }
-  }, [error, content, isLoading]);
+  useEffect(
+    () => (!isLoading && !error && content ? setInput(content) : undefined),
+    [error, content, isLoading]
+  );
   useEffect(
     () =>
       setView(
