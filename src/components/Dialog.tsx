@@ -7,12 +7,11 @@ export const Dialog: FunctionComponent<
   PropsWithChildren<{
     id?: string;
     labelledby?: string;
-    open?: boolean;
   }>
-> = ({ children, id, labelledby, open }) => {
+> = ({ children, id, labelledby }) => {
   const rootRef = useRef<HTMLDialogElement>(null);
 
-  useEffect(() => rootRef.current?.[open ? "showModal" : "close"](), [open]);
+  useEffect(() => rootRef.current?.showModal(), []);
 
   return (
     <dialog

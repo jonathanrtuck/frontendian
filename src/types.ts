@@ -34,13 +34,7 @@ export type Application = Readonly<{
   ): Partial<
     Pick<
       Window,
-      | "collapsed"
-      | "height"
-      | "hidden"
-      | "resizable"
-      | "title"
-      | "width"
-      | "zoomed"
+      "collapsed" | "height" | "hidden" | "resizable" | "title" | "width"
     >
   >;
   Icon: IconComponent;
@@ -58,6 +52,7 @@ export type Dialog = {
   Component: ComponentType;
   id: ID;
   title: string;
+  windowId?: Window["id"];
 };
 
 export type File = Readonly<{
@@ -118,7 +113,6 @@ export type Window = SimplifyDeep<
       titlebar: {
         left: Percentage;
       };
-      zoomed: boolean;
     }
 > &
   (

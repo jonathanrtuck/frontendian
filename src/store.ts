@@ -23,7 +23,6 @@ const DEFAULT_WINDOW: Window = {
   width: 600,
   x: DEFAULT_WINDOW_POSITION_OFFSET,
   y: DEFAULT_WINDOW_POSITION_OFFSET,
-  zoomed: false,
 };
 const WINDOW_DIMENSION_BUFFER = 12;
 
@@ -110,9 +109,34 @@ export const useStore = create(
         ),
       closeDialog: (payload) =>
         set(
-          (prevState) => ({
-            dialogs: prevState.dialogs.filter(({ id }) => id !== payload.id),
-          }),
+          (prevState) => {
+            const dialog = prevState.dialogs.find(
+              ({ id }) => id === payload.id
+            );
+
+            if (!dialog) {
+              return prevState;
+            }
+
+            return {
+              dialogs: prevState.dialogs.filter(({ id }) => id !== payload.id),
+              stackingOrder: dialog.windowId
+                ? [
+                    ...prevState.stackingOrder.filter(
+                      (id) => id !== dialog.windowId
+                    ),
+                    dialog.windowId,
+                  ]
+                : prevState.stackingOrder,
+              windows: dialog.windowId
+                ? prevState.windows.map((window) => ({
+                    ...window,
+                    focused: window.id === dialog.windowId,
+                    hidden: window.hidden && window.id !== dialog.windowId,
+                  }))
+                : prevState.windows,
+            };
+          },
           undefined,
           {
             payload,
@@ -644,7 +668,6 @@ export const useStore = create(
                     ...window,
                     height: payload.height,
                     width: payload.width,
-                    zoomed: false,
                   }
                 : window
             ),
@@ -687,7 +710,6 @@ export const useStore = create(
               }
 
               const windowElement = document.getElementById(window.id)!;
-              const { offsetHeight, offsetWidth } = windowElement;
               const { marginBottom, marginLeft, marginRight, marginTop } =
                 getComputedStyle(windowElement);
               const marginX = parseFloat(marginLeft) + parseFloat(marginRight);
@@ -695,35 +717,33 @@ export const useStore = create(
               const maxHeight = document.body.offsetHeight - marginY;
               const maxWidth = document.body.offsetWidth - marginX;
               const isZoomed =
-                offsetHeight >= maxHeight - WINDOW_DIMENSION_BUFFER &&
-                offsetHeight <= maxHeight + WINDOW_DIMENSION_BUFFER &&
-                offsetWidth >= maxWidth - WINDOW_DIMENSION_BUFFER &&
-                offsetWidth <= maxWidth + WINDOW_DIMENSION_BUFFER;
+                window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
+                window.height <= maxHeight + WINDOW_DIMENSION_BUFFER &&
+                window.width >= maxWidth - WINDOW_DIMENSION_BUFFER &&
+                window.width <= maxWidth + WINDOW_DIMENSION_BUFFER;
 
-              return isZoomed
-                ? {
-                    ...window,
-                    ...window.prev,
-                    prev: window.zoomed ? window.prev : undefined,
-                    zoomed: false,
-                  }
-                : {
-                    ...window,
-                    collapsed: false,
-                    height: maxHeight,
-                    prev: window.zoomed
-                      ? window.prev
-                      : {
-                          height: window.height,
-                          width: window.width,
-                          x: window.x,
-                          y: window.y,
-                        },
-                    width: maxWidth,
-                    x: 0,
-                    y: 0,
-                    zoomed: true,
-                  };
+              if (isZoomed) {
+                return {
+                  ...window,
+                  ...window.prev,
+                  prev: undefined,
+                };
+              }
+
+              return {
+                ...window,
+                collapsed: false,
+                height: maxHeight,
+                prev: {
+                  height: window.height,
+                  width: window.width,
+                  x: window.x,
+                  y: window.y,
+                },
+                width: maxWidth,
+                x: 0,
+                y: 0,
+              };
             }),
           }),
           undefined,

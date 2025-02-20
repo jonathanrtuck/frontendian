@@ -10,7 +10,7 @@ import type { Application } from "@/types";
 import { useEffect, useRef } from "react";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
-export const Teapot: Application["Component"] = () => {
+export const Teapot: Application["Component"] = ({ windowId }) => {
   const closeApplication = useStore((store) => store.closeApplication);
   const openDialog = useStore((store) => store.openDialog);
   const openWindow = useStore((store) => store.openWindow);
@@ -46,6 +46,7 @@ export const Teapot: Application["Component"] = () => {
                   : openDialog({
                       Component: AboutTeapot,
                       title: "About Teapot",
+                      windowId,
                     })
               }
               title="About Teapot…"

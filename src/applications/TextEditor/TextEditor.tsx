@@ -141,6 +141,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
                   : openDialog({
                       Component: AboutTextEditor,
                       title: `About ${title(theme)}`,
+                      windowId,
                     })
               }
               title={`About ${title(theme)}…`}

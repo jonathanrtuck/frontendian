@@ -2,6 +2,7 @@
 
 import {
   BeOS,
+  Error,
   File,
   Info,
   Network,
@@ -69,7 +70,11 @@ export const Desktop: FunctionComponent = () => {
   return (
     <ErrorBoundary
       fallback={
-        <Dialog open>
+        <Dialog id="dialog-error" labelledby="dialog-error-title">
+          <TitleBar className="visually-hidden">
+            <Title id="dialog-error-title" title="Error" />
+          </TitleBar>
+          <Error />
           <p>An unknown error has occured.</p>
           <p>Please reload the page.</p>
         </Dialog>
@@ -267,11 +272,9 @@ export const Desktop: FunctionComponent = () => {
         }
       )}
       {dialogs.map(({ Component, id, title }) => (
-        <Dialog id={id} key={id} labelledby={`${id}-title`} open>
+        <Dialog id={id} key={id} labelledby={`${id}-title`}>
           <TitleBar className="visually-hidden">
-            <Title id={`${id}-title`} title={title}>
-              {title}
-            </Title>
+            <Title id={`${id}-title`} title={title} />
           </TitleBar>
           <Info />
           <Component />
