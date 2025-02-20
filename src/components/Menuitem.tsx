@@ -3,7 +3,7 @@
 import { useStore } from "@/store";
 import type { IconComponent } from "@/types";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { useId, useRef } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { EmptyObject } from "type-fest";
 
 export const Menuitem: FunctionComponent<
@@ -31,27 +31,80 @@ export const Menuitem: FunctionComponent<
   const expandedMenuitemIds = useStore((store) => store.expandedMenuitemIds);
   const expandMenuitem = useStore((store) => store.expandMenuitem);
   const rootRef = useRef<HTMLLIElement>(null);
+  const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
   const id = `menuitem-${useId()}`;
-  const isTop = rootRef.current?.parentElement?.role === "menubar";
-  const getTopMenuitem = () =>
-    rootRef.current?.closest<HTMLElement>('[role="menubar"] > .menuitem');
+  const expanded = expandedMenuitemIds.includes(id);
+  const getMenubarHasFocus = useCallback(
+    () =>
+      rootRef.current
+        ?.closest<HTMLElement>('[role="menubar"]')
+        ?.matches(":focus-within") ?? false,
+    []
+  );
+  const getTopMenuitem = useCallback(
+    () => rootRef.current?.closest<HTMLElement>('[role="menubar"] > .menuitem'),
+    []
+  );
+  const getIsTopMenuitem = useCallback(
+    () => rootRef.current?.parentElement?.role === "menubar",
+    []
+  );
+  const getIsFirstMenuitem = useCallback(
+    () => rootRef.current?.matches(":first-of-type"),
+    []
+  );
+  const getChildMenuitems = useCallback(
+    () =>
+      Array.from(
+        rootRef.current?.querySelectorAll<HTMLElement>(
+          ":scope > .menu > .menuitem"
+        ) ?? []
+      ),
+    []
+  );
+  const getButton = useCallback(
+    (menuitem?: HTMLElement | null) =>
+      menuitem?.querySelector<HTMLElement>(':scope > [role="menuitem"]'),
+    []
+  );
   const collapseAll = () => {
     if (expandedMenuitemIds.length !== 0) {
       collapseMenuitem({ id: expandedMenuitemIds.at(0)! });
-      getTopMenuitem()
-        ?.querySelector<HTMLElement>(':scope > [role="menuitem"]')
-        ?.focus();
+      getButton(getTopMenuitem())?.focus();
     }
   };
+
+  useEffect(
+    () =>
+      getIsTopMenuitem()
+        ? setTabIndex(
+            expanded || (getIsFirstMenuitem() && !getMenubarHasFocus()) ? 0 : -1
+          )
+        : undefined,
+    [
+      expanded,
+      expandedMenuitemIds,
+      getIsFirstMenuitem,
+      getIsTopMenuitem,
+      getMenubarHasFocus,
+    ]
+  );
+  useEffect(
+    () =>
+      expanded ? getButton(getChildMenuitems().at(0))?.focus() : undefined,
+    [expanded, getButton, getChildMenuitems]
+  );
 
   if ("separator" in props) {
     return (
       <li
         className="menuitem"
         onClick={collapseAll}
-        onMouseEnter={(e) => {
-          // @todo
-        }}
+        onMouseEnter={({ currentTarget }) =>
+          document.hasFocus() && getMenubarHasFocus()
+            ? currentTarget.focus()
+            : undefined
+        }
         ref={rootRef}
         role="separator"
         tabIndex={-1}
@@ -66,24 +119,19 @@ export const Menuitem: FunctionComponent<
   const onClick = "onClick" in props ? props.onClick : undefined;
   const title = "title" in props ? props.title : undefined;
   const type = "type" in props ? props.type : undefined;
-  const expanded = expandedMenuitemIds.includes(id);
   const haspopup = Boolean(children);
 
   return (
     <li
       className="menuitem"
       id={id}
-      onBlur={(e) => {
+      onBlur={({ currentTarget, relatedTarget }) => {
         if (
           haspopup &&
           document.hasFocus() &&
-          !e.currentTarget?.contains(e.relatedTarget)
+          !currentTarget?.contains(relatedTarget)
         ) {
           collapseMenuitem({ id });
-
-          if (isTop) {
-            // setTabIndex(-1);
-          }
         }
       }}
       ref={rootRef}
@@ -97,11 +145,8 @@ export const Menuitem: FunctionComponent<
           if (!checked && !disabled) {
             onClick?.();
           }
-
           if (haspopup && !expanded) {
-            // @todo set tabIndex
             expandMenuitem({ id });
-            // @todo focus first child menuitem
           } else {
             collapseAll();
           }
@@ -109,8 +154,16 @@ export const Menuitem: FunctionComponent<
         onKeyDown={(e) => {
           // @todo
         }}
-        onMouseEnter={(e) => {
-          // @todo
+        onMouseEnter={({ currentTarget }) => {
+          if (document.hasFocus() && getMenubarHasFocus()) {
+            if (getIsTopMenuitem()) {
+              // @todo currentTarget.focus(); if mac-os-classic
+            } else if (haspopup) {
+              expandMenuitem({ id });
+            } else {
+              currentTarget.focus();
+            }
+          }
         }}
         onPointerDown={(e) =>
           haspopup && expanded ? e.preventDefault() : undefined
@@ -120,6 +173,7 @@ export const Menuitem: FunctionComponent<
           (type === "radio" && "menuitemradio") ||
           "menuitem"
         }
+        tabIndex={tabIndex}
         type="button">
         {Icon ? <Icon /> : null}
         {title ? <label>{title}</label> : null}
