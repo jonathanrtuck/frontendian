@@ -2,14 +2,14 @@
 
 import { TitleBarContext } from "@/components";
 import { useFocus } from "@/hooks";
-import type { Coordinates, ID, Size } from "@/types";
+import type { Coordinates, ID, Pixels, Size } from "@/types";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
 
-const MIN_HEIGHT = 16 * 7; // 7rem
-const MIN_WIDTH = 16 * 10; // 10rem
+const MIN_HEIGHT: Pixels = 16 * 7; // 7rem
+const MIN_WIDTH: Pixels = 16 * 10; // 10rem
 
 export const Window: FunctionComponent<
   PropsWithChildren<
@@ -30,28 +30,31 @@ export const Window: FunctionComponent<
   children,
   collapsed = false,
   current = false,
-  height,
   id,
   onBlur,
   onDrag,
   onFocus,
   onResize,
-  width,
   x,
   y,
   z,
   ...props
 }) => {
   const rootRef = useRef<HTMLElement>(null);
+  const [height, setHeight] = useState<Pixels>(props.height);
+  const [width, setWidth] = useState<Pixels>(props.width);
 
   useFocus({
     deps: [current],
     ref: rootRef,
   });
 
+  useEffect(() => setHeight(props.height), [props.height]);
+  useEffect(() => setWidth(props.width), [props.width]);
+
   return (
     <Draggable
-      cancel="[draggable='false']"
+      cancel="[draggable='false'], .react-resizable-handle"
       disabled={!onDrag}
       nodeRef={rootRef as RefObject<HTMLElement>}
       onStart={({ shiftKey }) => (shiftKey ? false : undefined)}
@@ -62,17 +65,17 @@ export const Window: FunctionComponent<
       }}>
       <Resizable
         axis="both"
-        handle={
-          onResize && !collapsed
-            ? // eslint-disable-next-line react/no-unstable-nested-components
-              (_, ref) => (
-                <span aria-hidden draggable="false" ref={ref} role="img" />
-              )
-            : null
-        }
         height={height}
         minConstraints={[MIN_WIDTH, MIN_HEIGHT]}
-        onResize={onResize ? (_, { size }) => onResize(size) : undefined}
+        onResize={
+          onResize
+            ? (_, { size }) => {
+                setHeight(size.height);
+                setWidth(size.width);
+              }
+            : undefined
+        }
+        onResizeStop={onResize ? (_, { size }) => onResize(size) : undefined}
         width={width}>
         <section
           {...props}
