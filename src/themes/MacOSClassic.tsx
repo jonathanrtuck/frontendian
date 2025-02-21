@@ -50,6 +50,18 @@ export const MacOSClassic: FunctionComponent = () => {
   const stackingOrder = useStore((store) => store.stackingOrder);
   const windows = useStore((store) => store.windows);
   const zoomWindow = useStore((store) => store.zoomWindow);
+  const focusedWindow = windows.find(({ focused }) => focused);
+  const activeApplication = focusedWindow
+    ? Object.values(applications).find(
+        ({ id }) => id === focusedWindow.applicationId
+      )!
+    : applications.APPLICATION_FILE_MANAGER;
+  const activeApplicationWindows = windows.filter(
+    ({ applicationId }) => applicationId === activeApplication.id
+  );
+  const otherApplicationWindows = windows.filter(
+    ({ applicationId }) => applicationId !== activeApplication.id
+  );
 
   return (
     <>
@@ -65,16 +77,6 @@ export const MacOSClassic: FunctionComponent = () => {
             <p>Please reload the page.</p>
           </Dialog>
         }>
-        <Grid>
-          {Object.values(files).map(({ id, mimetype, title }) => (
-            <Icon
-              Icon={ICONS[mimetype] ?? File}
-              key={id}
-              onDoubleClick={() => openFile({ id })}
-              title={title}
-            />
-          ))}
-        </Grid>
         <SystemBar title="Menubar">
           <Menu bar horizontal id={MENU_BAR_ID}>
             <Menuitem Icon={Logo} title="Apple Menu">
@@ -112,7 +114,84 @@ export const MacOSClassic: FunctionComponent = () => {
             </Menuitem>
           </Menu>
           <Clock />
+          <Menu bar collapsible horizontal>
+            <Menuitem
+              Icon={activeApplication.Icon}
+              title={activeApplication.title("mac-os-classic")}>
+              <Menu>
+                <Menuitem
+                  disabled={
+                    activeApplicationWindows.length === 0 ||
+                    activeApplicationWindows.every(({ hidden }) => hidden)
+                  }
+                  onClick={() =>
+                    activeApplicationWindows.forEach(({ hidden, id }) =>
+                      !hidden ? hideWindow({ id }) : undefined
+                    )
+                  }
+                  title={`Hide ${activeApplication.title("mac-os-classic")}`}
+                />
+                <Menuitem
+                  disabled={
+                    openApplicationIds.length < 2 ||
+                    otherApplicationWindows.every(({ hidden }) => hidden)
+                  }
+                  onClick={() =>
+                    otherApplicationWindows.forEach(({ hidden, id }) =>
+                      !hidden ? hideWindow({ id }) : undefined
+                    )
+                  }
+                  title="Hide Others"
+                />
+                <Menuitem
+                  disabled={windows.every(({ hidden }) => !hidden)}
+                  onClick={() =>
+                    windows.forEach(({ hidden, id }) =>
+                      hidden ? showWindow({ id }) : undefined
+                    )
+                  }
+                  title="Show all"
+                />
+                <Menuitem separator />
+                {openApplicationIds.map((applicationId) => {
+                  const application = Object.values(applications).find(
+                    ({ id }) => id === applicationId
+                  )!;
+                  const firstApplicationWindow = windows.find(
+                    ({ applicationId }) => applicationId === application.id
+                  );
+
+                  return (
+                    <Menuitem
+                      Icon={application.Icon}
+                      checked={applicationId === activeApplication.id}
+                      key={applicationId}
+                      onClick={() => {
+                        if (firstApplicationWindow) {
+                          focusWindow({ id: firstApplicationWindow.id });
+                        } else if (focusedWindow) {
+                          blurWindow({ id: focusedWindow.id });
+                        }
+                      }}
+                      title={application.title("mac-os-classic")}
+                      type="radio"
+                    />
+                  );
+                })}
+              </Menu>
+            </Menuitem>
+          </Menu>
         </SystemBar>
+        <Grid>
+          {Object.values(files).map(({ id, mimetype, title }) => (
+            <Icon
+              Icon={ICONS[mimetype] ?? File}
+              key={id}
+              onDoubleClick={() => openFile({ id })}
+              title={title}
+            />
+          ))}
+        </Grid>
         {windows.map(({ id, title }) => (
           <h1 key={id}>{title}</h1>
         ))}

@@ -56,7 +56,6 @@ body {
 .clock {
   font-size: 0.875rem;
   line-height: var(--system-bar-height);
-  margin-left: 1rem;
   padding: 0 0.5rem;
   user-select: none;
 }
@@ -202,6 +201,29 @@ body {
   }
 }
 
+.menu-button {
+  box-shadow: var(--box-shadow--high--inset);
+  color: var(--background-color--inactive);
+
+  &::after {
+    content: "⁞";
+    display: inline-block;
+    font-family: var(--font-family--monospace);
+    font-size: 1.125rem;
+    line-height: var(--system-bar-height);
+    text-shadow: calc(var(--border-width) * -0.5)
+        calc(var(--border-width) * -0.5) 0 rgba(0, 0, 0, 0.6),
+      calc(var(--border-width) * 0.5) calc(var(--border-width) * 0.5) 0
+        rgba(255, 255, 255, 0.6);
+  }
+
+  &:active {
+    background-color: var(--border-color--light);
+    box-shadow: var(--box-shadow--low--inset);
+    color: var(--border-color--light);
+  }
+}
+
 .menuitem {
   display: flex;
   position: relative;
@@ -255,6 +277,10 @@ body {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  .menu.isCollapsed > & > .menuitem-button > label {
+    display: none;
   }
 
   [aria-orientation="horizontal"] > & {
@@ -312,12 +338,23 @@ body {
   position: fixed;
   z-index: 1000;
 
+  &::before {
+    content: "";
+    flex: 1 0 1rem;
+    order: -1;
+  }
+
   > .menu:first-of-type {
-    flex: 1 0 auto;
+    order: -2;
 
     > .menuitem:first-of-type > .menuitem-button > label {
       display: none;
     }
+  }
+
+  > .menu:last-of-type > .menuitem > .menu {
+    left: unset;
+    right: 0;
   }
 }
 
