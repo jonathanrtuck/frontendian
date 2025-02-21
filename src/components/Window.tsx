@@ -1,5 +1,6 @@
 "use client";
 
+import { TitleBarContext } from "@/components";
 import { useFocus } from "@/hooks";
 import type { Coordinates, ID, Size } from "@/types";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
@@ -17,7 +18,6 @@ export const Window: FunctionComponent<
       current?: boolean;
       hidden?: boolean;
       id: ID;
-      labelledby?: string;
       onBlur?(): void;
       onDrag?(coordinates: Coordinates): void;
       onFocus?(): void;
@@ -32,7 +32,6 @@ export const Window: FunctionComponent<
   current = false,
   height,
   id,
-  labelledby,
   onBlur,
   onDrag,
   onFocus,
@@ -78,7 +77,7 @@ export const Window: FunctionComponent<
         <section
           {...props}
           aria-current={current}
-          aria-labelledby={labelledby}
+          aria-labelledby={`${id}-title`}
           className="window"
           id={id}
           onBlur={
@@ -105,7 +104,13 @@ export const Window: FunctionComponent<
             zIndex: z,
           }}
           tabIndex={-1}>
-          {children}
+          <TitleBarContext.Provider
+            value={{
+              id: `${id}-title`,
+              width,
+            }}>
+            {children}
+          </TitleBarContext.Provider>
         </section>
       </Resizable>
     </Draggable>

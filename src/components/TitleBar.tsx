@@ -3,34 +3,34 @@
 import type { MS, Percentage, Pixels } from "@/types";
 import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
-import { useMemo, useRef } from "react";
+import { createContext, useContext, useMemo, useRef } from "react";
 import Draggable from "react-draggable";
+
+export const TitleBarContext = createContext<
+  Partial<{
+    id: string;
+    width: Pixels;
+  }>
+>({});
 
 export const TitleBar: FunctionComponent<
   PropsWithChildren<{
     className?: string;
     left?: Percentage;
-    maxWidth?: Pixels;
     onDoubleClick?(): void;
     onDrag?(left: Percentage): void;
   }>
-> = ({
-  children,
-  className,
-  left = 0,
-  maxWidth = 0,
-  onDoubleClick,
-  onDrag,
-}) => {
+> = ({ children, className, left = 0, onDoubleClick, onDrag }) => {
+  const { width } = useContext(TitleBarContext);
   const rootRef = useRef<HTMLElement>(null);
   const touchRef = useRef<MS>(0);
   const maxLeft = useMemo<Pixels>(
     () =>
-      maxWidth && rootRef.current
-        ? maxWidth - rootRef.current.getBoundingClientRect().width
+      width && rootRef.current
+        ? width - rootRef.current.getBoundingClientRect().width
         : 0,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [children, maxWidth]
+    [children, width]
   );
 
   return (

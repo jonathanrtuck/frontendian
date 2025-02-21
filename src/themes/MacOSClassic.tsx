@@ -59,9 +59,9 @@ export const MacOSClassic: FunctionComponent = () => {
       <link href="/themes/mac-os-classic/styles.css" rel="stylesheet" />
       <ErrorBoundary
         fallback={
-          <Dialog id="dialog-error" labelledby="dialog-error-title">
+          <Dialog id="dialog-error">
             <TitleBar className="visually-hidden">
-              <Title id="dialog-error-title" title="Error" />
+              <Title text="Error" />
             </TitleBar>
             <Error />
             <p>An unknown error has occured.</p>

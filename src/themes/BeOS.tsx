@@ -71,9 +71,9 @@ export const BeOS: FunctionComponent = () => {
       <link href="/themes/beos/styles.css" rel="stylesheet" />
       <ErrorBoundary
         fallback={
-          <Dialog id="dialog-error" labelledby="dialog-error-title">
+          <Dialog id="dialog-error">
             <TitleBar className="visually-hidden">
-              <Title id="dialog-error-title" title="Error" />
+              <Title text="Error" />
             </TitleBar>
             <Error />
             <p>An unknown error has occured.</p>
@@ -226,7 +226,6 @@ export const BeOS: FunctionComponent = () => {
                 hidden={hidden}
                 id={id}
                 key={id}
-                labelledby={`${id}-title`}
                 onBlur={() => blurWindow({ id })}
                 onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
                 onFocus={() => focusWindow({ id })}
@@ -241,16 +240,13 @@ export const BeOS: FunctionComponent = () => {
                 z={stackingOrder.indexOf(id)}>
                 <TitleBar
                   left={titlebar.left}
-                  maxWidth={width}
                   onDoubleClick={() => hideWindow({ id })}
                   onDrag={(left) => moveTitlebar({ id, left })}>
                   <TitleBarButton
                     onClick={() => closeWindow({ id })}
                     title="Close"
                   />
-                  <Title id={`${id}-title`} title={title}>
-                    {title}
-                  </Title>
+                  <Title text={title} />
                   {resizable ? (
                     <TitleBarButton
                       onClick={() => zoomWindow({ id })}
@@ -260,9 +256,9 @@ export const BeOS: FunctionComponent = () => {
                 </TitleBar>
                 <ErrorBoundary
                   fallback={
-                    <Dialog id="dialog-error" labelledby="dialog-error-title">
+                    <Dialog id="dialog-error">
                       <TitleBar className="visually-hidden">
-                        <Title id="dialog-error-title" title="Error" />
+                        <Title text="Error" />
                       </TitleBar>
                       <Error />
                       <p>
@@ -285,9 +281,9 @@ export const BeOS: FunctionComponent = () => {
           }
         )}
         {dialogs.map(({ Component, id, title }) => (
-          <Dialog id={id} key={id} labelledby={`${id}-title`}>
+          <Dialog id={id} key={id}>
             <TitleBar className="visually-hidden">
-              <Title id={`${id}-title`} title={title} />
+              <Title text={title} />
             </TitleBar>
             <Info />
             <Component />

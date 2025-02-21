@@ -1,25 +1,27 @@
 "use client";
 
+import { TitleBarContext } from "@/components";
 import type { FunctionComponent, PropsWithChildren } from "react";
 import { useEffect, useRef } from "react";
 
 export const Dialog: FunctionComponent<
   PropsWithChildren<{
     id?: string;
-    labelledby?: string;
   }>
-> = ({ children, id, labelledby }) => {
+> = ({ children, id }) => {
   const rootRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => rootRef.current?.showModal(), []);
 
   return (
     <dialog
-      aria-labelledby={labelledby}
+      aria-labelledby={`${id}-title`}
       className="dialog"
       id={id}
       ref={rootRef}>
-      {children}
+      <TitleBarContext.Provider value={{ id: `${id}-title` }}>
+        {children}
+      </TitleBarContext.Provider>
     </dialog>
   );
 };
