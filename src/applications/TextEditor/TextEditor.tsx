@@ -8,7 +8,6 @@ import * as files from "@/files";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import type { Application } from "@/types";
-import clsx from "clsx";
 import { useDeferredValue, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 

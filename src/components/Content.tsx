@@ -11,14 +11,14 @@ export const Content: FunctionComponent<
   }>
 > = ({ children, scrollable = false }) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const [horizontal, vertical] = useOverflow(contentRef);
+  const [isHorizontal, isVertical] = useOverflow(contentRef);
 
   if (scrollable) {
     return (
       <div
         className={clsx("content", "isScrollable", {
-          horizontal,
-          vertical,
+          isHorizontal,
+          isVertical,
         })}
         draggable={false}>
         <div ref={contentRef}>{children}</div>

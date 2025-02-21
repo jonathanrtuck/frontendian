@@ -4,12 +4,13 @@ Portfolio site for Jonathan Tucker
 
 ## Todo
 
-- `mac-os-classic` theme
-  - only drag/resize `Window` outline
+- ***test browsers and devices***
+- mac os classic theme
+  - only drag/resize window outline
   - control strip?
-- `beos` theme
-  - special resize handle for non-scrollable `Window`s
-  - support the other `SystemBar` layouts
-- add `File`s (md?)
+- beos theme
+  - special resize handle for non-scrollable windows
+  - support the other system bar layouts
+- add files (md?)
   - bankx
   - mario
