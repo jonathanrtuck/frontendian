@@ -28,6 +28,7 @@ export const Window: FunctionComponent<
 > = ({
   children,
   current = false,
+  hidden,
   id,
   onBlur,
   onDrag,
@@ -56,7 +57,11 @@ export const Window: FunctionComponent<
       disabled={!onDrag}
       nodeRef={rootRef as RefObject<HTMLElement>}
       onStart={({ shiftKey }) => (shiftKey ? false : undefined)}
-      onStop={(_, coordinates) => onDrag?.(coordinates)}
+      onStop={(_, coordinates) =>
+        coordinates.x !== x || coordinates.y !== y
+          ? onDrag?.(coordinates)
+          : undefined
+      }
       position={{
         x,
         y,
@@ -73,12 +78,19 @@ export const Window: FunctionComponent<
               }
             : undefined
         }
-        onResizeStop={onResize ? (_, { size }) => onResize(size) : undefined}
+        onResizeStop={
+          onResize
+            ? (_, { size }) =>
+                (size.height !== props.height || size.width !== props.width) &&
+                onResize(size)
+            : undefined
+        }
         width={width}>
         <section
           aria-current={current}
           aria-labelledby={`${id}-title`}
           className="window"
+          hidden={hidden}
           id={id}
           onBlur={
             onBlur

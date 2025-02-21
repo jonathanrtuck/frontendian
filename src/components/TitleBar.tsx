@@ -1,6 +1,6 @@
 "use client";
 
-import type { MS, Percentage, Pixels } from "@/types";
+import type { Percentage, Pixels } from "@/types";
 import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
 import { createContext, useContext, useMemo, useRef } from "react";
@@ -23,7 +23,6 @@ export const TitleBar: FunctionComponent<
 > = ({ children, className, left = 0, onDoubleClick, onDrag }) => {
   const { width } = useContext(TitleBarContext);
   const rootRef = useRef<HTMLElement>(null);
-  const touchRef = useRef<MS>(0);
   const maxLeft = useMemo<Pixels>(
     () =>
       width && rootRef.current
@@ -56,23 +55,6 @@ export const TitleBar: FunctionComponent<
                 !(target instanceof HTMLButtonElement)
                   ? onDoubleClick()
                   : undefined
-            : undefined
-        }
-        onPointerUp={
-          onDoubleClick
-            ? ({ target }) => {
-                const now = Date.now();
-
-                if (!(target instanceof HTMLButtonElement)) {
-                  const isDoubleClick = now - touchRef.current < 500;
-
-                  if (isDoubleClick) {
-                    onDoubleClick();
-                  }
-
-                  touchRef.current = now;
-                }
-              }
             : undefined
         }
         ref={rootRef}>
