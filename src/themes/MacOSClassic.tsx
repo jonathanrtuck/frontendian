@@ -58,56 +58,68 @@ export const MacOSClassic: FunctionComponent = () => {
   return (
     <>
       <link href="/themes/mac-os-classic/styles.css" rel="stylesheet" />
-      <Grid>
-        {Object.values(files).map(({ id, mimetype, title }) => (
-          <Icon
-            Icon={ICONS[mimetype] ?? File}
-            key={id}
-            onDoubleClick={() => openFile({ id })}
-            title={title}
-          />
+      <ErrorBoundary
+        fallback={
+          <Dialog id="dialog-error" labelledby="dialog-error-title">
+            <TitleBar className="visually-hidden">
+              <Title id="dialog-error-title" title="Error" />
+            </TitleBar>
+            <Error />
+            <p>An unknown error has occured.</p>
+            <p>Please reload the page.</p>
+          </Dialog>
+        }>
+        <Grid>
+          {Object.values(files).map(({ id, mimetype, title }) => (
+            <Icon
+              Icon={ICONS[mimetype] ?? File}
+              key={id}
+              onDoubleClick={() => openFile({ id })}
+              title={title}
+            />
+          ))}
+        </Grid>
+        <SystemBar title="Menubar">
+          <Menu bar>
+            <Menuitem Icon={Logo} title="Apple Menu">
+              <Menu>
+                <Menuitem
+                  onClick={() => openFile({ id: files.FILE_README_MD.id })}
+                  title={files.FILE_README_MD.title}
+                />
+                <Menuitem separator />
+                <Menuitem title="Theme">
+                  <Menu>
+                    <Menuitem href="beos" title="BeOS" type="radio" />
+                    <Menuitem
+                      checked
+                      href="mac-os-classic"
+                      title="Mac OS Classic"
+                      type="radio"
+                    />
+                  </Menu>
+                </Menuitem>
+                <Menuitem separator />
+                {Object.values(applications)
+                  .filter(
+                    ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
+                  )
+                  .map(({ Icon, id, title }) => (
+                    <Menuitem
+                      Icon={Icon}
+                      key={id}
+                      onClick={() => openApplication({ id })}
+                      title={title("mac-os-classic")}
+                    />
+                  ))}
+              </Menu>
+            </Menuitem>
+          </Menu>
+        </SystemBar>
+        {windows.map(({ id, title }) => (
+          <h1 key={id}>{title}</h1>
         ))}
-      </Grid>
-      <SystemBar title="Menubar">
-        <Menu bar>
-          <Menuitem Icon={Logo} title="Apple Menu">
-            <Menu>
-              <Menuitem
-                onClick={() => openFile({ id: files.FILE_README_MD.id })}
-                title={files.FILE_README_MD.title}
-              />
-              <Menuitem separator />
-              <Menuitem title="Theme">
-                <Menu>
-                  <Menuitem href="beos" title="BeOS" type="radio" />
-                  <Menuitem
-                    checked
-                    href="mac-os-classic"
-                    title="Mac OS Classic"
-                    type="radio"
-                  />
-                </Menu>
-              </Menuitem>
-              <Menuitem separator />
-              {Object.values(applications)
-                .filter(
-                  ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
-                )
-                .map(({ Icon, id, title }) => (
-                  <Menuitem
-                    Icon={Icon}
-                    key={id}
-                    onClick={() => openApplication({ id })}
-                    title={title("mac-os-classic")}
-                  />
-                ))}
-            </Menu>
-          </Menuitem>
-        </Menu>
-      </SystemBar>
-      {windows.map(({ id, title }) => (
-        <h1 key={id}>{title}</h1>
-      ))}
+      </ErrorBoundary>
     </>
   );
 };
