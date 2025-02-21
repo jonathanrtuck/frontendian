@@ -576,7 +576,7 @@ body {
   top: 0;
   width: var(--system-bar-width);
 
-  > .menu:first-of-type > .menuitem > .menuitem-button {
+  > .menu:first-of-type > .menuitem:first-of-type > .menuitem-button {
     padding: 0.125rem;
 
     > svg {

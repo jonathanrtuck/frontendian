@@ -2,7 +2,6 @@
 
 import * as applications from "@/applications";
 import {
-  Button,
   Dialog,
   ErrorBoundary,
   Grid,
@@ -13,15 +12,13 @@ import {
   Title,
   TitleBar,
   TitleBarButton,
-  Tray,
-  TrayIcons,
   Window,
 } from "@/components";
 import * as files from "@/files";
 import { Apple as Logo, Error, File, Pdf } from "@/icons";
-import { SYSTEM_BAR_ID } from "@/ids";
+import { MENU_BAR_ID } from "@/ids";
 import { useStore } from "@/store";
-import type { IconComponent, MimeType, Theme } from "@/types";
+import type { IconComponent, MimeType } from "@/types";
 import dynamic from "next/dynamic";
 import type { FunctionComponent } from "react";
 
@@ -79,7 +76,7 @@ export const MacOSClassic: FunctionComponent = () => {
           ))}
         </Grid>
         <SystemBar title="Menubar">
-          <Menu bar>
+          <Menu bar horizontal id={MENU_BAR_ID}>
             <Menuitem Icon={Logo} title="Apple Menu">
               <Menu>
                 <Menuitem
@@ -114,6 +111,7 @@ export const MacOSClassic: FunctionComponent = () => {
               </Menu>
             </Menuitem>
           </Menu>
+          <Clock />
         </SystemBar>
         {windows.map(({ id, title }) => (
           <h1 key={id}>{title}</h1>
