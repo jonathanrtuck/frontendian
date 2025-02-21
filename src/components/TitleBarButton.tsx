@@ -7,6 +7,7 @@ export const TitleBarButton: FunctionComponent<{
   title: string;
 }> = ({ onClick, title }) => (
   <button
+    aria-label={title}
     className="title-bar-button"
     draggable={false}
     onClick={onClick}

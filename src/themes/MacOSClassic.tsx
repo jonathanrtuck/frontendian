@@ -35,12 +35,11 @@ const ICONS: Partial<Record<MimeType, IconComponent>> = {
 
 export const MacOSClassic: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
-  const closeApplication = useStore((store) => store.closeApplication);
   const closeWindow = useStore((store) => store.closeWindow);
-  const focusSystemBar = useStore((store) => store.focusSystemBar);
+  const collapseWindow = useStore((store) => store.collapseWindow);
+  const expandWindow = useStore((store) => store.expandWindow);
   const focusWindow = useStore((store) => store.focusWindow);
   const hideWindow = useStore((store) => store.hideWindow);
-  const moveTitlebar = useStore((store) => store.moveTitlebar);
   const moveWindow = useStore((store) => store.moveWindow);
   const openApplication = useStore((store) => store.openApplication);
   const openApplicationIds = useStore((store) => store.openApplicationIds);
@@ -192,9 +191,81 @@ export const MacOSClassic: FunctionComponent = () => {
             />
           ))}
         </Grid>
-        {windows.map(({ id, title }) => (
-          <h1 key={id}>{title}</h1>
-        ))}
+        {windows.map(
+          ({
+            applicationId,
+            collapsed,
+            focused,
+            height,
+            hidden,
+            id,
+            resizable,
+            title,
+            width,
+            x,
+            y,
+            ...window
+          }) => {
+            const { Component, Icon } = Object.values(applications).find(
+              ({ id }) => id === applicationId
+            )!;
+            const fileId = "fileId" in window ? window.fileId : undefined;
+            const file = fileId
+              ? Object.values(files).find(({ id }) => id === fileId)
+              : undefined;
+            const TitleBarIcon = file ? ICONS[file.mimetype] ?? File : Icon;
+
+            return (
+              <Window
+                current={focused}
+                height={collapsed ? 0 : height}
+                hidden={hidden}
+                id={id}
+                key={id}
+                onBlur={() => blurWindow({ id })}
+                onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
+                onFocus={() => focusWindow({ id })}
+                onResize={
+                  resizable && !collapsed
+                    ? (size) => resizeWindow({ id, ...size })
+                    : undefined
+                }
+                width={width}
+                x={x}
+                y={y}
+                z={stackingOrder.indexOf(id)}>
+                <TitleBar
+                  onDoubleClick={() =>
+                    collapsed ? expandWindow({ id }) : collapseWindow({ id })
+                  }>
+                  <TitleBarButton
+                    onClick={() => closeWindow({ id })}
+                    title="Close"
+                  />
+                  <TitleBarIcon />
+                  <Title text={title} />
+                  {resizable ? (
+                    <TitleBarButton
+                      onClick={() => zoomWindow({ id })}
+                      title="Zoom"
+                    />
+                  ) : null}
+                  <TitleBarButton
+                    onClick={() =>
+                      collapsed ? expandWindow({ id }) : collapseWindow({ id })
+                    }
+                    title={collapsed ? "Expand" : "Collapse"}
+                  />
+                </TitleBar>
+                <ErrorBoundary fallback={null}>
+                  {collapsed ? null : (
+                    <Component fileId={fileId} windowId={id} />
+                  )}
+                </ErrorBoundary>
+              </Window>
+            );
+          }
+        )}
       </ErrorBoundary>
     </>
   );

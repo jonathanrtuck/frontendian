@@ -200,7 +200,6 @@ export const BeOS: FunctionComponent = () => {
         {windows.map(
           ({
             applicationId,
-            collapsed,
             focused,
             height,
             hidden,
@@ -220,7 +219,6 @@ export const BeOS: FunctionComponent = () => {
 
             return (
               <Window
-                collapsed={collapsed}
                 current={focused}
                 height={height}
                 hidden={hidden}

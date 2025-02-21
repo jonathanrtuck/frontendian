@@ -14,7 +14,6 @@ const MIN_WIDTH: Pixels = 16 * 10; // 10rem
 export const Window: FunctionComponent<
   PropsWithChildren<
     {
-      collapsed?: boolean;
       current?: boolean;
       hidden?: boolean;
       id: ID;
@@ -28,7 +27,6 @@ export const Window: FunctionComponent<
   >
 > = ({
   children,
-  collapsed = false,
   current = false,
   id,
   onBlur,
@@ -78,7 +76,6 @@ export const Window: FunctionComponent<
         onResizeStop={onResize ? (_, { size }) => onResize(size) : undefined}
         width={width}>
         <section
-          {...props}
           aria-current={current}
           aria-labelledby={`${id}-title`}
           className="window"
