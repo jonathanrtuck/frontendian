@@ -1,6 +1,6 @@
-import { BeOS } from "@/themes";
+import { BeOS as Desktop } from "@/themes";
 import type { FunctionComponent } from "react";
 
-const BeOSPage: FunctionComponent = () => <BeOS />;
+const BeOSPage: FunctionComponent = () => <Desktop />;
 
 export default BeOSPage;

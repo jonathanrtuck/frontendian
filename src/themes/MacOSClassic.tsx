@@ -36,7 +36,6 @@ const ICONS: Partial<Record<MimeType, IconComponent>> = {
   "application/pdf": Pdf,
   "text/markdown": Pdf, // @todo
 };
-const THEME: Theme = "mac-os-classic";
 
 export const MacOSClassic: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
@@ -94,12 +93,12 @@ export const MacOSClassic: FunctionComponent = () => {
                 .filter(
                   ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
                 )
-                .map((application) => (
+                .map(({ Icon, id, title }) => (
                   <Menuitem
-                    Icon={application.Icon}
-                    key={application.id}
-                    onClick={() => openApplication({ id: application.id })}
-                    title={application.title(THEME)}
+                    Icon={Icon}
+                    key={id}
+                    onClick={() => openApplication({ id })}
+                    title={title("mac-os-classic")}
                   />
                 ))}
             </Menu>

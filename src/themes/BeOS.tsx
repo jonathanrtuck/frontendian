@@ -32,7 +32,7 @@ import {
 } from "@/icons";
 import { SYSTEM_BAR_ID } from "@/ids";
 import { useStore } from "@/store";
-import type { IconComponent, MimeType, Theme } from "@/types";
+import type { IconComponent, MimeType } from "@/types";
 import dynamic from "next/dynamic";
 import type { FunctionComponent } from "react";
 
@@ -46,7 +46,6 @@ const ICONS: Partial<Record<MimeType, IconComponent>> = {
   "application/pdf": Pdf,
   "text/markdown": Text,
 };
-const THEME: Theme = "beos";
 
 export const BeOS: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
@@ -119,12 +118,12 @@ export const BeOS: FunctionComponent = () => {
                   .filter(
                     ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
                   )
-                  .map((application) => (
+                  .map(({ Icon, id, title }) => (
                     <Menuitem
-                      Icon={application.Icon}
-                      key={application.id}
-                      onClick={() => openApplication({ id: application.id })}
-                      title={application.title(THEME)}
+                      Icon={Icon}
+                      key={id}
+                      onClick={() => openApplication({ id })}
+                      title={title("beos")}
                     />
                   ))}
               </Menu>
@@ -139,22 +138,18 @@ export const BeOS: FunctionComponent = () => {
           <Menu bar>
             {openApplicationIds
               .map(
-                (id) =>
+                (openApplicationId) =>
                   Object.values(applications).find(
-                    (application) => application.id === id
+                    ({ id }) => id === openApplicationId
                   )!
               )
-              .map((application) => {
-                const title = application.title(THEME);
+              .map(({ Icon, id, title }) => {
                 const applicationWindows = windows.filter(
-                  ({ applicationId }) => applicationId === application.id
+                  ({ applicationId }) => applicationId === id
                 );
 
                 return (
-                  <Menuitem
-                    Icon={application.Icon}
-                    key={application.id}
-                    title={title}>
+                  <Menuitem Icon={Icon} key={id} title={title("beos")}>
                     <Menu>
                       {applicationWindows.length === 0 ? (
                         <Menuitem disabled title="No windows" />
@@ -192,9 +187,7 @@ export const BeOS: FunctionComponent = () => {
                             title="Show all"
                           />
                           <Menuitem
-                            onClick={() =>
-                              closeApplication({ id: application.id })
-                            }
+                            onClick={() => closeApplication({ id })}
                             title="Close all"
                           />
                         </>
@@ -221,7 +214,7 @@ export const BeOS: FunctionComponent = () => {
             y,
             ...window
           }) => {
-            const application = Object.values(applications).find(
+            const { Component } = Object.values(applications).find(
               ({ id }) => id === applicationId
             )!;
             const fileId = "fileId" in window ? window.fileId : undefined;
@@ -286,7 +279,7 @@ export const BeOS: FunctionComponent = () => {
                       </footer>
                     </Dialog>
                   }>
-                  <application.Component fileId={fileId} windowId={id} />
+                  <Component fileId={fileId} windowId={id} />
                 </ErrorBoundary>
               </Window>
             );
