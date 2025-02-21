@@ -8,7 +8,7 @@ export const APPLICATION_PDF_VIEWER: Application = {
     fileId
       ? {
           height: 550,
-          width: 793,
+          width: 800,
         }
       : {},
   Icon: PdfViewerIcon,

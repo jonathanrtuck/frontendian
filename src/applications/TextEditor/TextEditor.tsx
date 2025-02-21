@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./TextEditor.module.css";
+import "./TextEditor.css";
 import { AboutTextEditor } from "./AboutTextEditor";
 import { title } from "./utils";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
@@ -155,7 +155,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
         {Boolean(!isLoading && !error && view === "markdown") && (
           <textarea
             autoFocus
-            className={clsx(styles.root, styles.markdown)}
+            className="text-editor"
             cols={numInputCols}
             onInput={({ currentTarget }) => setInput(currentTarget.value)}
             rows={numInputRows}
@@ -163,7 +163,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
           />
         )}
         {Boolean(!isLoading && !error && view === "preview") && (
-          <samp className={clsx(styles.root, styles.preview)}>
+          <samp className="text-editor">
             <Markdown>{deferredInput}</Markdown>
           </samp>
         )}

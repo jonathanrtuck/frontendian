@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import type { FunctionComponent } from "react";
 
-const Page: FunctionComponent = () => redirect("/beos");
+const HomePage: FunctionComponent = () => redirect("/beos");
 
-export default Page;
+export default HomePage;

@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./Minesweeper.module.css";
+import "./Minesweeper.css";
 import { AboutMinesweeper } from "./AboutMinesweeper";
 import {
   BORDER_SIZE,
@@ -49,26 +49,26 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
 
   useEffect(() => {
     if (elapsedTime === 1) {
-      intervalRef.current = setInterval(() => {
-        setElapsedTime((prevState) => prevState + 1);
-      }, 1000);
+      intervalRef.current = setInterval(
+        () => setElapsedTime((prevState) => prevState + 1),
+        1000
+      );
     }
 
     if (intervalRef.current && (elapsedTime === 0 || elapsedTime === 999)) {
       clearInterval(intervalRef.current);
     }
   }, [elapsedTime]);
-  useEffect(() => {
-    if (intervalRef.current && (isLost || isWon)) {
-      clearInterval(intervalRef.current);
-    }
-  }, [isLost, isWon]);
   useEffect(
-    () => () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    },
+    () =>
+      intervalRef.current && (isLost || isWon)
+        ? clearInterval(intervalRef.current)
+        : undefined,
+    [isLost, isWon]
+  );
+  useEffect(
+    () => () =>
+      intervalRef.current ? clearInterval(intervalRef.current) : undefined,
     []
   );
 
@@ -149,25 +149,25 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
       </Menubar>
       <Content>
         <div
-          className={styles.root}
+          className="minesweeper"
           onContextMenu={(e) => e.preventDefault()}
           style={
             {
-              "--application-minesweeper-border-size": `${BORDER_SIZE}px`,
-              "--application-minesweeper-header-height": `${HEADER_HEIGHT}px`,
-              "--application-minesweeper-padding-size": `${PADDING_SIZE}px`,
-              "--application-minesweeper-square-size": `${SQUARE_SIZE}px`,
+              "--minesweeper-border-size": `${BORDER_SIZE}px`,
+              "--minesweeper-header-height": `${HEADER_HEIGHT}px`,
+              "--minesweeper-padding-size": `${PADDING_SIZE}px`,
+              "--minesweeper-square-size": `${SQUARE_SIZE}px`,
             } as CSSProperties
           }>
-          <header className={styles.header}>
-            <data className={styles.ticker} value={flagsRemaining}>
+          <header>
+            <data value={flagsRemaining}>
               {flagsRemaining.toString().padStart(3, "0")}
             </data>
             <button
               aria-label="Reset"
-              className={clsx(styles.reset, {
-                [styles.lost]: isLost,
-                [styles.won]: isWon,
+              className={clsx({
+                isLost,
+                isWon,
               })}
               onClick={() => {
                 setElapsedTime(0);
@@ -176,16 +176,14 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
               }}
               type="reset"
             />
-            <time className={styles.ticker} dateTime={`PT${elapsedTime}S`}>
+            <time dateTime={`PT${elapsedTime}S`}>
               {elapsedTime.toString().padStart(3, "0")}
             </time>
           </header>
-          <div className={styles.grid}>
+          <div>
             {squares.map((row, rowIndex) => (
-              <div
-                className={styles.row}
-                key={rowIndex} // eslint-disable-line react/no-array-index-key
-              >
+              // eslint-disable-next-line react/no-array-index-key
+              <div key={rowIndex}>
                 {row.map((_, columnIndex) => {
                   const { hasFlag, hasMine, isRevealed, numAdjacentMines } =
                     squares[rowIndex][columnIndex];
@@ -197,15 +195,14 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
                   return (
                     <button
                       aria-disabled={isRevealed || isGameOver}
-                      className={clsx(styles.square, {
-                        [styles[`number-${numAdjacentMines}`]]: isRevealed,
-                        [styles.button]: !isRevealed && !isRevealedMine,
-                        [styles.flag]: hasFlag,
-                        [styles.gameOver]: isGameOver,
-                        [styles.mine]: hasMine,
-                        [styles.number]: isRevealed,
-                        [styles.revealed]: isRevealed,
+                      className={clsx({
+                        hasFlag,
+                        hasMine,
+                        isButton: !isRevealed && !isRevealedMine,
+                        isGameOver,
+                        isRevealed,
                       })}
+                      data-number={isRevealed ? numAdjacentMines : undefined}
                       key={columnIndex} // eslint-disable-line react/no-array-index-key
                       onClick={
                         isRevealed || isGameOver || hasFlag

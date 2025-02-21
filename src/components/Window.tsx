@@ -67,12 +67,7 @@ export const Window: FunctionComponent<
           onResize && !collapsed
             ? // eslint-disable-next-line react/no-unstable-nested-components
               (_, ref) => (
-                <span
-                  aria-hidden
-                  className="resize"
-                  draggable="false"
-                  ref={ref}
-                />
+                <span aria-hidden draggable="false" ref={ref} role="img" />
               )
             : null
         }

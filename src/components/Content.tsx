@@ -16,7 +16,7 @@ export const Content: FunctionComponent<
   if (scrollable) {
     return (
       <div
-        className={clsx("content", "scrollable", {
+        className={clsx("content", "isScrollable", {
           horizontal,
           vertical,
         })}

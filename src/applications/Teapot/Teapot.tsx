@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./Teapot.module.css";
+import "./Teapot.css";
 import { AboutTeapot } from "./AboutTeapot";
 import { main } from "./webgl";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
@@ -55,7 +55,7 @@ export const Teapot: Application["Component"] = ({ windowId }) => {
         </Menuitem>
       </Menubar>
       <Content>
-        <canvas className={styles.root} ref={rootRef} />
+        <canvas className="teapot" ref={rootRef} />
       </Content>
     </>
   );

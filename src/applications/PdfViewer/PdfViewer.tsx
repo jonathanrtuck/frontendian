@@ -2,7 +2,7 @@
 
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
-import styles from "./PdfViewer.module.css";
+import "./PdfViewer.css";
 import { AboutPdfViewer } from "./AboutPdfViewer";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import * as files from "@/files";
@@ -106,12 +106,8 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
               loading={<Fragment />} // eslint-disable-line react/jsx-no-useless-fragment
               onLoadSuccess={({ numPages }) => setNumPages(numPages)}>
               {Array.from(new Array(numPages)).map((_, i) => (
-                <Page
-                  className={styles.page}
-                  key={i} // eslint-disable-line react/no-array-index-key
-                  pageIndex={i}
-                  scale={1.25}
-                />
+                // eslint-disable-next-line react/no-array-index-key
+                <Page key={i} pageIndex={i} scale={1.25} />
               ))}
             </Document>
             <iframe hidden ref={iframeRef} src={url} />
