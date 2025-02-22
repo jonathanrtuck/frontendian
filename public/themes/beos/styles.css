@@ -35,7 +35,7 @@
   --text-color--default: var(--text-color--dark);
   --text-color--disabled: rgb(160, 160, 160);
   --text-color--light: rgb(255, 255, 255);
-  --title-bar-height: 1.125rem;
+  --title-bar-height: 1.6875rem;
   --window-padding: 0.1875rem;
 }
 
@@ -605,30 +605,44 @@ body {
 }
 
 .title-bar {
+  align-self: flex-start;
   background-color: var(--window-background-color);
   border-color: var(--border-color--light) var(--border-color--dark)
     var(--window-background-color) var(--border-color--light);
-  border-width: var(--border-width);
-  bottom: calc(100% - var(--border-width));
+  border-width: var(--border-width) var(--border-width) 0;
   box-shadow: inset var(--border-width) var(--border-width)
       var(--color--highlight),
     inset calc(var(--border-width) * -1) 0 var(--color--lowlight),
-    0 calc(var(--border-width) * 2) 0 calc(var(--border-width) * -1)
+    0 calc(var(--border-width) * 3) 0 calc(var(--border-width) * -1)
       var(--window-background-color);
   display: flex;
   gap: 0.5rem;
-  height: calc(
-    (var(--border-width) * 4) + (var(--window-padding) * 2) +
-      var(--title-bar-height)
-  );
-  left: 0;
+  height: var(--title-bar-height);
   max-width: 100%;
   padding: calc(var(--window-padding) + var(--border-width));
-  position: absolute;
-  z-index: 1;
+  position: relative;
 
   [aria-current="true"] & {
     background-color: rgb(240, 202, 68);
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: var(--border-width);
+  }
+  &::before {
+    background-color: var(--color--highlight);
+    bottom: calc(var(--border-width) * -2);
+    height: calc(var(--border-width) * 2);
+    left: 0;
+  }
+  &::after {
+    background-color: var(--color--lowlight);
+    bottom: calc(var(--border-width) * -1);
+    height: var(--border-width);
+    right: 0;
   }
 }
 
@@ -645,7 +659,8 @@ body {
   );
 
   aspect-ratio: 1 / 1;
-  flex: 0 0 var(--title-bar-height);
+  flex: 0 0 auto;
+  height: 100%;
   position: relative;
 
   [aria-current="true"] & {
@@ -742,16 +757,10 @@ body {
 .window {
   --window-background-color: var(--background-color--inactive);
 
-  background-color: var(--window-background-color);
   color: var(--text-color--default);
   display: flex;
   flex-direction: column;
   left: 0;
-  margin: calc(
-      var(--border-width) + var(--window-padding) + var(--border-width) +
-        var(--title-bar-height) + var(--border-width) + var(--window-padding)
-    )
-    0 0;
   position: fixed;
   top: 0;
 
@@ -768,12 +777,13 @@ body {
   }
 
   &::before {
+    background-color: var(--window-background-color);
     border-color: var(--border-color--light) var(--border-color--dark)
       var(--border-color--dark) var(--border-color--light);
     border-width: var(--border-width);
     box-shadow: var(--box-shadow--high--inset);
     content: "";
-    inset: 0;
+    inset: var(--title-bar-height) 0 0;
     position: absolute;
     z-index: -2;
   }
@@ -783,7 +793,11 @@ body {
     border-width: var(--border-width);
     box-shadow: inset 0 0 0 var(--border-width) var(--border-color--light);
     content: "";
-    inset: calc(var(--border-width) + var(--window-padding));
+    inset: calc(
+        var(--title-bar-height) + var(--border-width) + var(--window-padding)
+      )
+      calc(var(--border-width) + var(--window-padding))
+      calc(var(--border-width) + var(--window-padding));
     position: absolute;
     z-index: -1;
   }

@@ -32,7 +32,7 @@
   --text-color--default: var(--text-color--dark);
   --text-color--disabled: rgb(160, 160, 160);
   --text-color--light: rgb(255, 255, 255);
-  --title-bar-height: 1.25rem;
+  --title-bar-height: 1.125rem;
   --window-padding: 0.25rem;
 
   border-radius: var(--border-radius);
@@ -442,8 +442,7 @@ body {
   border-color: var(--color--lowlight) var(--color--highlight)
     var(--color--highlight) var(--color--lowlight);
   border-width: var(--border-width);
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   height: 100%;
   position: relative;
 
