@@ -16,7 +16,6 @@ const MIN_WIDTH: Pixels = 16 * 10; // 10rem
 export const Window: FunctionComponent<
   PropsWithChildren<
     {
-      collapsed?: boolean;
       current?: boolean;
       hasMenubar?: boolean;
       hidden?: boolean;
@@ -31,7 +30,6 @@ export const Window: FunctionComponent<
   >
 > = ({
   children,
-  collapsed,
   current = false,
   hasMenubar,
   hidden,
@@ -65,6 +63,8 @@ export const Window: FunctionComponent<
       resizeObserver.observe(root);
 
       return () => resizeObserver.unobserve(root);
+    } else {
+      setHeight(props.height);
     }
   }, [props.height]);
   useLayoutEffect(() => {
@@ -78,6 +78,8 @@ export const Window: FunctionComponent<
       resizeObserver.observe(root);
 
       return () => resizeObserver.unobserve(root);
+    } else {
+      setWidth(props.width);
     }
   }, [props.width]);
 
@@ -130,7 +132,7 @@ export const Window: FunctionComponent<
         <section
           aria-current={current}
           aria-labelledby={`${id}-title`}
-          className={clsx("window", { isCollapsed: collapsed })}
+          className={clsx("window", { isCollapsed: props.height === 0 })}
           hidden={hidden}
           id={id}
           onBlur={
@@ -158,7 +160,9 @@ export const Window: FunctionComponent<
           role="dialog"
           style={{
             height:
-              props.height === "auto" ? "auto" : height === 0 ? "auto" : height,
+              props.height === 0 || props.height === "auto" || height === 0
+                ? "auto"
+                : height,
             width: props.width === "auto" ? "auto" : width,
             zIndex: z,
           }}

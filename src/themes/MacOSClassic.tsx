@@ -223,7 +223,6 @@ export const MacOSClassic: FunctionComponent = () => {
 
             return (
               <Window
-                collapsed={collapsed}
                 current={focused}
                 height={collapsed ? 0 : height}
                 hidden={hidden}
