@@ -9,7 +9,7 @@ import * as files from "@/files";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import type { Application } from "@/types";
-import { Fragment, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
 // @see https://github.com/wojtekmaj/react-pdf/tree/main#use-external-cdn
@@ -63,7 +63,9 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
             <Menuitem
               disabled={!url}
               onClick={
-                url ? iframeRef.current?.contentWindow?.print : undefined
+                url
+                  ? () => iframeRef.current?.contentWindow?.print()
+                  : undefined
               }
               title="Print"
             />
@@ -102,8 +104,9 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
         {file && url ? (
           <>
             <Document
+              className="pdf-viewer"
               file={url}
-              loading={<Fragment />} // eslint-disable-line react/jsx-no-useless-fragment
+              loading={<div className="pdf-viewer isLoading">loading…</div>}
               onLoadSuccess={({ numPages }) => setNumPages(numPages)}>
               {Array.from(new Array(numPages)).map((_, i) => (
                 // eslint-disable-next-line react/no-array-index-key

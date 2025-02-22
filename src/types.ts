@@ -13,6 +13,7 @@ export type Actions = Readonly<{
   focusSystemBar(): void;
   focusWindow(payload: PayloadWithID): void;
   hideWindow(payload: PayloadWithID): void;
+  maximizeWindow(payload: PayloadWithID): void;
   moveTitlebar(payload: PayloadWithID<{ left: Percentage }>): void;
   moveWindow(payload: PayloadWithID<Coordinates>): void;
   openApplication(payload: PayloadWithID): void;

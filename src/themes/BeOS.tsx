@@ -55,6 +55,7 @@ export const BeOS: FunctionComponent = () => {
   const focusSystemBar = useStore((store) => store.focusSystemBar);
   const focusWindow = useStore((store) => store.focusWindow);
   const hideWindow = useStore((store) => store.hideWindow);
+  const maximizeWindow = useStore((store) => store.maximizeWindow);
   const moveTitlebar = useStore((store) => store.moveTitlebar);
   const moveWindow = useStore((store) => store.moveWindow);
   const openApplication = useStore((store) => store.openApplication);
@@ -64,7 +65,6 @@ export const BeOS: FunctionComponent = () => {
   const showWindow = useStore((store) => store.showWindow);
   const stackingOrder = useStore((store) => store.stackingOrder);
   const windows = useStore((store) => store.windows);
-  const zoomWindow = useStore((store) => store.zoomWindow);
 
   return (
     <>
@@ -248,7 +248,7 @@ export const BeOS: FunctionComponent = () => {
                   <Title text={title} />
                   {resizable ? (
                     <TitleBarButton
-                      onClick={() => zoomWindow({ id })}
+                      onClick={() => maximizeWindow({ id })}
                       title="Zoom"
                     />
                   ) : null}

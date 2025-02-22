@@ -356,6 +356,58 @@ export const useStore = create(
             type: "hideWindow",
           }
         ),
+      maximizeWindow: (payload) =>
+        set(
+          (prevState) => ({
+            windows: prevState.windows.map((window) => {
+              if (window.id !== payload.id) {
+                return window;
+              }
+
+              const windowElement = document.getElementById(window.id)!;
+              const { marginBottom, marginLeft, marginRight, marginTop } =
+                getComputedStyle(windowElement);
+              const marginX = parseFloat(marginLeft) + parseFloat(marginRight);
+              const marginY = parseFloat(marginBottom) + parseFloat(marginTop);
+              const maxHeight = document.body.offsetHeight - marginY;
+              const maxWidth = document.body.offsetWidth - marginX;
+              const isMaximized =
+                window.height !== "auto" &&
+                window.width !== "auto" &&
+                window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
+                window.height <= maxHeight + WINDOW_DIMENSION_BUFFER &&
+                window.width >= maxWidth - WINDOW_DIMENSION_BUFFER &&
+                window.width <= maxWidth + WINDOW_DIMENSION_BUFFER;
+
+              if (isMaximized) {
+                return {
+                  ...window,
+                  ...window.prev,
+                  prev: undefined,
+                };
+              }
+
+              return {
+                ...window,
+                height: maxHeight,
+                prev: {
+                  height: window.height,
+                  width: window.width,
+                  x: window.x,
+                  y: window.y,
+                },
+                width: maxWidth,
+                x: 0,
+                y: 0,
+              };
+            }),
+          }),
+          undefined,
+          {
+            payload,
+            type: "maximizeWindow",
+          }
+        ),
       moveTitlebar: (payload) =>
         set(
           (prevState) => ({
@@ -692,7 +744,10 @@ export const useStore = create(
                     focused: true,
                     hidden: false,
                   }
-                : window
+                : {
+                    ...window,
+                    focused: false,
+                  }
             ),
           }),
           undefined,
@@ -709,37 +764,30 @@ export const useStore = create(
                 return window;
               }
 
-              const maxHeight = document.body.offsetHeight;
-              const maxWidth = document.body.offsetWidth;
               const isZoomed =
-                window.height !== "auto" &&
-                window.width !== "auto" &&
-                window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
-                window.height <= maxHeight + WINDOW_DIMENSION_BUFFER &&
-                window.width >= maxWidth - WINDOW_DIMENSION_BUFFER &&
-                window.width <= maxWidth + WINDOW_DIMENSION_BUFFER;
+                window.height === "auto" && window.width === "auto";
 
               if (isZoomed) {
                 return {
                   ...window,
-                  ...window.prev,
+                  collapsed: false,
+                  height: window.prev?.height ?? window.height,
                   prev: undefined,
+                  width: window.prev?.width ?? window.width,
                 };
               }
 
               return {
                 ...window,
                 collapsed: false,
-                height: maxHeight,
+                height: "auto",
                 prev: {
                   height: window.height,
                   width: window.width,
                   x: window.x,
                   y: window.y,
                 },
-                width: maxWidth,
-                x: 0,
-                y: 0,
+                width: "auto",
               };
             }),
           }),

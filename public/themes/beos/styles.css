@@ -342,12 +342,12 @@ body {
   justify-items: center;
   min-height: 100%;
   padding: 1rem;
-  position: relative;
-  width: 100%;
 
   body > & {
     color: var(--text-color--light);
+    inset: 0;
     padding-right: calc(1rem + var(--system-bar-width));
+    position: fixed;
   }
 
   > mark {
@@ -619,9 +619,11 @@ body {
   display: flex;
   gap: 0.5rem;
   height: var(--title-bar-height);
+  left: 0;
   max-width: 100%;
   padding: calc(var(--window-padding) + var(--border-width));
-  position: relative;
+  position: absolute;
+  top: calc(var(--title-bar-height) * -1);
 
   [aria-current="true"] & {
     background-color: rgb(240, 202, 68);
@@ -762,6 +764,7 @@ body {
   display: flex;
   flex-direction: column;
   left: 0;
+  margin-top: var(--title-bar-height);
   position: fixed;
   top: 0;
 
@@ -784,7 +787,7 @@ body {
     border-width: var(--border-width);
     box-shadow: var(--box-shadow--high--inset);
     content: "";
-    inset: var(--title-bar-height) 0 0;
+    inset: 0;
     position: absolute;
     z-index: -2;
   }
@@ -794,11 +797,7 @@ body {
     border-width: var(--border-width);
     box-shadow: inset 0 0 0 var(--border-width) var(--border-color--light);
     content: "";
-    inset: calc(
-        var(--title-bar-height) + var(--border-width) + var(--window-padding)
-      )
-      calc(var(--border-width) + var(--window-padding))
-      calc(var(--border-width) + var(--window-padding));
+    inset: calc(var(--border-width) + var(--window-padding));
     position: absolute;
     z-index: -1;
   }

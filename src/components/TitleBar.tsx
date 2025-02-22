@@ -4,7 +4,7 @@ import { WindowContext } from "@/contexts";
 import type { Percentage, Pixels } from "@/types";
 import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
-import { useContext, useMemo, useRef } from "react";
+import { useContext, useLayoutEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 
 export const TitleBar: FunctionComponent<
@@ -17,12 +17,13 @@ export const TitleBar: FunctionComponent<
 > = ({ children, className, left = 0, onDoubleClick, onDrag }) => {
   const { width } = useContext(WindowContext);
   const rootRef = useRef<HTMLElement>(null);
-  const maxLeft = useMemo<Pixels>(
+  const [maxLeft, setMaxLeft] = useState<Pixels>(0);
+
+  useLayoutEffect(
     () =>
       width !== "auto" && rootRef.current
-        ? width - rootRef.current.getBoundingClientRect().width
-        : 0,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        ? setMaxLeft(width - rootRef.current.getBoundingClientRect().width)
+        : undefined,
     [children, width]
   );
 

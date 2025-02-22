@@ -54,8 +54,24 @@ export const Window: FunctionComponent<
     ref: rootRef,
   });
 
-  useEffect(() => setHeight(props.height), [props.height]);
-  useEffect(() => setWidth(props.width), [props.width]);
+  useEffect(
+    () =>
+      setHeight(
+        props.height === "auto"
+          ? rootRef.current?.getBoundingClientRect().height ?? 0
+          : props.height
+      ),
+    [props.height]
+  );
+  useEffect(
+    () =>
+      setWidth(
+        props.width === "auto"
+          ? rootRef.current?.getBoundingClientRect().width ?? 0
+          : props.width
+      ),
+    [props.width]
+  );
 
   return (
     <Draggable
@@ -75,7 +91,7 @@ export const Window: FunctionComponent<
       <Resizable
         axis="both"
         handle={onResize ? undefined : <span hidden />}
-        height={typeof height === "string" ? 0 : height}
+        height={height === "auto" ? 0 : height}
         minConstraints={[MIN_WIDTH, MIN_HEIGHT]}
         onResize={
           onResize
@@ -85,6 +101,16 @@ export const Window: FunctionComponent<
               }
             : undefined
         }
+        onResizeStart={
+          onResize
+            ? () =>
+                (props.height === "auto" || props.width === "auto") &&
+                onResize?.({
+                  height,
+                  width,
+                })
+            : undefined
+        }
         onResizeStop={
           onResize
             ? (_, { size }) =>
@@ -92,7 +118,7 @@ export const Window: FunctionComponent<
                 onResize(size)
             : undefined
         }
-        width={typeof width === "string" ? 0 : width}>
+        width={width === "auto" ? 0 : width}>
         <section
           aria-current={current}
           aria-labelledby={`${id}-title`}
@@ -108,25 +134,24 @@ export const Window: FunctionComponent<
                   (hasMenubar ||
                     !document
                       .getElementById(SYSTEM_BAR_ID)
-                      ?.contains(relatedTarget))
-                    ? onBlur()
-                    : undefined
+                      ?.contains(relatedTarget)) &&
+                  onBlur()
               : undefined
           }
           onFocus={
             onFocus
               ? ({ currentTarget, relatedTarget }) =>
                   !current &&
-                  (!relatedTarget || !currentTarget.contains(relatedTarget))
-                    ? onFocus()
-                    : undefined
+                  (!relatedTarget || !currentTarget.contains(relatedTarget)) &&
+                  onFocus()
               : undefined
           }
           ref={rootRef}
           role="dialog"
           style={{
-            height,
-            width,
+            height:
+              props.height === "auto" ? "auto" : height === 0 ? "auto" : height,
+            width: props.width === "auto" ? "auto" : width,
             zIndex: z,
           }}
           tabIndex={-1}>
