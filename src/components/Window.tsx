@@ -6,7 +6,7 @@ import { SYSTEM_BAR_ID } from "@/ids";
 import type { Coordinates, ID, Pixels, Size } from "@/types";
 import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
 
@@ -54,24 +54,32 @@ export const Window: FunctionComponent<
     ref: rootRef,
   });
 
-  useEffect(
-    () =>
-      setHeight(
-        props.height === "auto"
-          ? rootRef.current?.getBoundingClientRect().height ?? 0
-          : props.height
-      ),
-    [props.height]
-  );
-  useEffect(
-    () =>
-      setWidth(
-        props.width === "auto"
-          ? rootRef.current?.getBoundingClientRect().width ?? 0
-          : props.width
-      ),
-    [props.width]
-  );
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+
+    if (root && props.height === "auto") {
+      const resizeObserver = new ResizeObserver(() => {
+        setHeight(root.getBoundingClientRect().height ?? 0);
+      });
+
+      resizeObserver.observe(root);
+
+      return () => resizeObserver.unobserve(root);
+    }
+  }, [props.height]);
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+
+    if (root && props.width === "auto") {
+      const resizeObserver = new ResizeObserver(() => {
+        setWidth(root.getBoundingClientRect().width ?? 0);
+      });
+
+      resizeObserver.observe(root);
+
+      return () => resizeObserver.unobserve(root);
+    }
+  }, [props.width]);
 
   return (
     <Draggable
