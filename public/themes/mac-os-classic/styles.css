@@ -32,7 +32,7 @@
   --text-color--default: var(--text-color--dark);
   --text-color--disabled: rgb(160, 160, 160);
   --text-color--light: rgb(255, 255, 255);
-  --title-bar-height: 1.625rem;
+  --title-bar-height: 1.25rem;
   --window-padding: 0.25rem;
 
   border-radius: var(--border-radius);
@@ -61,7 +61,12 @@ body {
 }
 
 .content {
+  background-clip: content-box;
   background-color: rgb(255, 255, 255);
+  border-color: var(--color--lowlight) var(--color--highlight)
+    var(--color--highlight) var(--color--lowlight);
+  border-width: var(--border-width);
+  box-shadow: inset 0 0 0 var(--border-width) var(--border-color--dark);
   color: var(--text-color--default);
   flex: 1 1 auto;
   isolation: isolate;
@@ -382,10 +387,6 @@ body {
   font-family: var(--font-family--system);
   gap: 0.25rem;
   height: var(--title-bar-height);
-  inset: 0;
-  padding: var(--window-padding);
-  position: absolute;
-  z-index: 1;
 
   &::before,
   &::after {
@@ -508,13 +509,17 @@ body {
 
 .window {
   background-color: var(--background-color--inactive);
-  box-shadow: var(--box-shadow--low);
-  box-sizing: content-box;
+  border-color: var(--border-color--light);
+  border-width: var(--border-width);
+  box-shadow: var(--box-shadow--low), var(--box-shadow--high--inset);
   color: var(--text-color--dark);
   display: flex;
   flex-direction: column;
+  gap: var(--window-padding);
   left: 0;
+  margin: var(--system-bar-height) 0 0;
   overflow: hidden;
+  padding: var(--window-padding);
   position: fixed;
   top: 0;
 
@@ -522,57 +527,26 @@ body {
     outline: 0;
   }
 
+  &[hidden] {
+    display: none;
+  }
+
   &[aria-current="true"] {
     background-color: var(--background-color--default);
-    box-shadow: var(--box-shadow--high);
-  }
-
-  &:has(> .title-bar) {
-    padding-top: var(--title-bar-height);
-
-    &:has(> .content) {
-      padding-top: calc(var(--title-bar-height) - (var(--border-width) * 6));
-    }
-  }
-
-  &::before {
-    border-color: var(--border-color--light);
-    border-width: var(--border-width);
-    box-shadow: var(--box-shadow--high--inset);
-    content: "";
-    inset: 0;
-    position: absolute;
-    z-index: -2;
-  }
-  &[aria-current="true"]::before {
     border-color: var(--border-color--dark);
-    box-shadow: var(--box-shadow--high--inset);
-  }
-  &::after {
-    background-clip: content-box;
-    background-color: rgb(255, 255, 255);
-    border-color: var(--color--lowlight) var(--color--highlight)
-      var(--color--highlight) var(--color--lowlight);
-    border-width: var(--border-width);
-    box-shadow: inset 0 0 0 var(--border-width) var(--border-color--dark);
-    content: "";
-    inset: var(--window-padding);
-    position: absolute;
-    z-index: -1;
-  }
-  &:has(> .title-bar)::after {
-    top: var(--title-bar-height);
-  }
-  &:has(> .title-bar):has(> .content)::after {
-    top: calc(var(--title-bar-height) - (var(--border-width) * 2));
+    box-shadow: var(--box-shadow--high), var(--box-shadow--high--inset);
   }
 
-  > .content {
-    margin: calc((var(--border-width) * 2) + var(--window-padding));
+  &.isCollapsed {
+    > .content {
+      display: none;
+    }
   }
 
   .react-resizable-handle {
     display: none;
+    position: absolute;
+    z-index: 1;
 
     .content + & {
       display: unset;

@@ -709,13 +709,8 @@ export const useStore = create(
                 return window;
               }
 
-              const windowElement = document.getElementById(window.id)!;
-              const { marginBottom, marginLeft, marginRight, marginTop } =
-                getComputedStyle(windowElement);
-              const marginX = parseFloat(marginLeft) + parseFloat(marginRight);
-              const marginY = parseFloat(marginBottom) + parseFloat(marginTop);
-              const maxHeight = document.body.offsetHeight - marginY;
-              const maxWidth = document.body.offsetWidth - marginX;
+              const maxHeight = document.body.offsetHeight;
+              const maxWidth = document.body.offsetWidth;
               const isZoomed =
                 window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
                 window.height <= maxHeight + WINDOW_DIMENSION_BUFFER &&

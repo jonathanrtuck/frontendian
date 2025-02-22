@@ -3,6 +3,7 @@
 import { TitleBarContext } from "@/components";
 import { useFocus } from "@/hooks";
 import type { Coordinates, ID, Pixels, Size } from "@/types";
+import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
@@ -14,6 +15,7 @@ const MIN_WIDTH: Pixels = 16 * 10; // 10rem
 export const Window: FunctionComponent<
   PropsWithChildren<
     {
+      collapsed?: boolean;
       current?: boolean;
       hidden?: boolean;
       id: ID;
@@ -22,11 +24,14 @@ export const Window: FunctionComponent<
       onFocus?(): void;
       onResize?(size: Size): void;
       z: number;
-    } & Coordinates &
-      Size
+    } & Coordinates & {
+        height: Pixels | "auto";
+        width: Pixels;
+      }
   >
 > = ({
   children,
+  collapsed,
   current = false,
   hidden,
   id,
@@ -40,7 +45,7 @@ export const Window: FunctionComponent<
   ...props
 }) => {
   const rootRef = useRef<HTMLElement>(null);
-  const [height, setHeight] = useState<Pixels>(props.height);
+  const [height, setHeight] = useState<Pixels | "auto">(props.height);
   const [width, setWidth] = useState<Pixels>(props.width);
 
   useFocus({
@@ -68,7 +73,7 @@ export const Window: FunctionComponent<
       }}>
       <Resizable
         axis="both"
-        height={height}
+        height={typeof height === "string" ? 0 : height}
         minConstraints={[MIN_WIDTH, MIN_HEIGHT]}
         onResize={
           onResize
@@ -89,7 +94,7 @@ export const Window: FunctionComponent<
         <section
           aria-current={current}
           aria-labelledby={`${id}-title`}
-          className="window"
+          className={clsx("window", { isCollapsed: collapsed })}
           hidden={hidden}
           id={id}
           onBlur={

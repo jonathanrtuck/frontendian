@@ -217,8 +217,9 @@ export const MacOSClassic: FunctionComponent = () => {
 
             return (
               <Window
+                collapsed={collapsed}
                 current={focused}
-                height={collapsed ? 0 : height}
+                height={collapsed ? "auto" : height}
                 hidden={hidden}
                 id={id}
                 key={id}
@@ -258,9 +259,7 @@ export const MacOSClassic: FunctionComponent = () => {
                   />
                 </TitleBar>
                 <ErrorBoundary fallback={null}>
-                  {collapsed ? null : (
-                    <Component fileId={fileId} windowId={id} />
-                  )}
+                  <Component fileId={fileId} windowId={id} />
                 </ErrorBoundary>
               </Window>
             );
