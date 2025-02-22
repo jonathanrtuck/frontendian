@@ -15,7 +15,7 @@ import {
   Window,
 } from "@/components";
 import * as files from "@/files";
-import { Apple as Logo, Error, File, Pdf } from "@/icons";
+import { Apple as Logo, Error, File, Pdf, Text } from "@/icons";
 import { MENU_BAR_ID } from "@/ids";
 import { useStore } from "@/store";
 import type { IconComponent, MimeType } from "@/types";
@@ -30,7 +30,7 @@ const Clock = dynamic(
 
 const ICONS: Partial<Record<MimeType, IconComponent>> = {
   "application/pdf": Pdf,
-  "text/markdown": Pdf, // @todo
+  "text/markdown": Text,
 };
 
 export const MacOSClassic: FunctionComponent = () => {

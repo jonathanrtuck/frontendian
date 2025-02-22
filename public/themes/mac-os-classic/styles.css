@@ -245,12 +245,16 @@ body {
 
 .grid {
   align-items: start;
+  direction: rtl;
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fill, 6rem);
+  grid-auto-flow: column;
+  grid-template-columns: repeat(auto-fill, 5.5rem);
+  grid-template-rows: repeat(auto-fill, 5.5rem);
   justify-items: center;
   min-height: 100%;
   padding: 1rem;
+  position: relative;
 
   > mark {
     background: transparent;
@@ -268,6 +272,11 @@ body {
       inset: 0;
       position: absolute;
     }
+  }
+
+  body > & {
+    inset: 0;
+    position: absolute;
   }
 }
 
@@ -294,7 +303,7 @@ body {
   > label {
     background-color: var(--color--highlight);
     color: var(--text-color--default);
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 400;
     max-width: 100%;
     overflow: hidden;

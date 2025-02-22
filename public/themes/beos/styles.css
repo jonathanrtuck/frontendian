@@ -338,6 +338,7 @@ body {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fill, 6rem);
+  grid-template-rows: repeat(auto-fill, 6rem);
   justify-items: center;
   min-height: 100%;
   padding: 1rem;
