@@ -1,4 +1,3 @@
-import { DEFAULT_LEVEL, DEFAULT_STATE } from "./constants";
 import { Minesweeper } from "./Minesweeper";
 import { MinesweeperIcon } from "./MinesweeperIcon";
 import type { Application } from "@/types";
@@ -6,10 +5,10 @@ import type { Application } from "@/types";
 export const APPLICATION_MINESWEEPER: Application = {
   Component: Minesweeper,
   getWindow: () => ({
-    height: DEFAULT_STATE[DEFAULT_LEVEL].height,
+    height: "auto",
     resizable: false,
     title: "Minesweeper",
-    width: DEFAULT_STATE[DEFAULT_LEVEL].width,
+    width: "auto",
   }),
   Icon: MinesweeperIcon,
   id: "application-minesweeper",

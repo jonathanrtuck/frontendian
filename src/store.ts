@@ -712,6 +712,8 @@ export const useStore = create(
               const maxHeight = document.body.offsetHeight;
               const maxWidth = document.body.offsetWidth;
               const isZoomed =
+                window.height !== "auto" &&
+                window.width !== "auto" &&
                 window.height >= maxHeight - WINDOW_DIMENSION_BUFFER &&
                 window.height <= maxHeight + WINDOW_DIMENSION_BUFFER &&
                 window.width >= maxWidth - WINDOW_DIMENSION_BUFFER &&

@@ -1,6 +1,8 @@
 .minesweeper {
   --minesweeper-background-color: rgb(192, 192, 192);
   --minesweeper-border-color: rgb(238, 238, 238);
+  --minesweeper-border-size: 0.1875rem;
+  --minesweeper-padding-size: 0.5rem;
 
   background-color: var(--minesweeper-background-color);
   border: var(--minesweeper-border-size) outset var(--minesweeper-border-color);
@@ -15,7 +17,7 @@
     border: var(--minesweeper-border-size) inset var(--minesweeper-border-color);
     display: flex;
     gap: var(--minesweeper-padding-size);
-    height: var(--minesweeper-header-height);
+    height: 3.75rem;
     justify-content: space-between;
     padding: var(--minesweeper-padding-size);
 
@@ -77,14 +79,15 @@
     }
 
     button {
+      aspect-ratio: 1 / 1;
       appearance: none;
       border: var(--minesweeper-border-size) solid transparent;
       box-sizing: border-box;
-      height: var(--minesweeper-square-size);
+      overflow: hidden;
       padding: 0;
       position: relative;
       text-align: center;
-      width: var(--minesweeper-square-size);
+      width: 1.5rem;
 
       &.isButton {
         background-color: var(--minesweeper-background-color);

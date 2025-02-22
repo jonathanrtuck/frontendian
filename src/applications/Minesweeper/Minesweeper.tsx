@@ -2,36 +2,176 @@
 
 import "./Minesweeper.css";
 import { AboutMinesweeper } from "./AboutMinesweeper";
-import {
-  BORDER_SIZE,
-  DEFAULT_LEVEL,
-  DEFAULT_STATE,
-  HEADER_HEIGHT,
-  LEVELS,
-  PADDING_SIZE,
-  SQUARE_SIZE,
-} from "./constants";
-import type { Coordinates, Level, Square } from "./types";
-import {
-  getAdjacentSquareCoordinates,
-  getMineCoordinates,
-  isEqualCoordinates,
-  revealSquare,
-} from "./utils";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import type { Application } from "@/types";
 import clsx from "clsx";
-import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
+
+type Coordinates = [rowIndex: number, columnIndex: number];
+type Level = "beginner" | "expert" | "intermediate";
+type Square = {
+  hasFlag: boolean;
+  hasMine: boolean;
+  isRevealed: boolean;
+  numAdjacentMines: number | undefined;
+};
+
+const getAdjacentSquareCoordinates = (
+  numRows: number,
+  numColumns: number,
+  coordinates: Coordinates
+): Coordinates[] =>
+  [
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+  ]
+    // adjecent squares' coordinates
+    .map(
+      ([rowOffset, columnOffset]): Coordinates => [
+        coordinates[0] + rowOffset,
+        coordinates[1] + columnOffset,
+      ]
+    )
+    // remove coordinates outside of the board
+    .filter(
+      ([rowIndex, columnIndex]) =>
+        rowIndex !== -1 &&
+        rowIndex !== numRows &&
+        columnIndex !== -1 &&
+        columnIndex !== numColumns
+    );
+
+export const getInitialSquares = (
+  numRows: number,
+  numColumns: number
+): Square[][] =>
+  new Array(numRows).fill(
+    new Array(numColumns).fill({
+      hasFlag: false,
+      hasMine: false,
+      isRevealed: false,
+      numAdjacentMines: undefined,
+    })
+  );
+const isEqualCoordinates =
+  ([rowA, columnA]: Coordinates) =>
+  ([rowB, columnB]: Coordinates) =>
+    rowA === rowB && columnA === columnB;
+const getMineCoordinates = (
+  numRows: number,
+  numColumns: number,
+  numMines: number,
+  avoidCoordinates: Coordinates
+): Coordinates[] => {
+  const arr: Coordinates[] = [];
+
+  while (arr.length < numMines) {
+    const coordinates: Coordinates = [
+      Math.floor(Math.random() * numRows),
+      Math.floor(Math.random() * numColumns),
+    ];
+    const isEqualWith = isEqualCoordinates(coordinates);
+
+    // square to avoid or already has mine
+    if (isEqualWith(avoidCoordinates) || arr.some(isEqualWith)) {
+      continue;
+    }
+
+    arr.push(coordinates);
+  }
+
+  return arr;
+};
+// @recursive
+const revealSquare = (
+  numRows: number,
+  numColumns: number,
+  squares: Square[][],
+  coordinates: Coordinates
+): Square[][] => {
+  const [rowIndex, columnIndex] = coordinates;
+  const square = squares[rowIndex][columnIndex];
+  const { hasMine, isRevealed, numAdjacentMines } = square;
+
+  if (isRevealed) {
+    return squares;
+  }
+
+  const isEqualCoordinatesTo = isEqualCoordinates(coordinates);
+  const nextSquares = squares.map((row, rowIndex) =>
+    row.map((square, columnIndex) => ({
+      ...square,
+      isRevealed:
+        isEqualCoordinatesTo([rowIndex, columnIndex]) || square.isRevealed,
+    }))
+  );
+
+  if (!hasMine && numAdjacentMines === 0) {
+    return getAdjacentSquareCoordinates(
+      numRows,
+      numColumns,
+      coordinates
+    ).reduce(
+      (acc, coordinates) => revealSquare(numRows, numColumns, acc, coordinates),
+      nextSquares
+    );
+  }
+
+  return nextSquares;
+};
+
+const DEFAULT_LEVEL: Level = "beginner";
+const DEFAULT_STATE: Record<
+  Level,
+  {
+    flagsRemaining: number;
+    numColumns: number;
+    numMines: number;
+    numRows: number;
+    squares: Square[][];
+  }
+> = {
+  beginner: {
+    flagsRemaining: 10,
+    numColumns: 9,
+    numMines: 10,
+    numRows: 9,
+    squares: getInitialSquares(9, 9),
+  },
+  expert: {
+    flagsRemaining: 99,
+    numColumns: 30,
+    numMines: 99,
+    numRows: 16,
+    squares: getInitialSquares(16, 30),
+  },
+  intermediate: {
+    flagsRemaining: 40,
+    numColumns: 16,
+    numMines: 40,
+    numRows: 16,
+    squares: getInitialSquares(16, 16),
+  },
+};
+const LEVELS: [key: Level, value: string][] = [
+  ["beginner", "Beginner"],
+  ["intermediate", "Intermediate"],
+  ["expert", "Expert"],
+];
 
 // @see https://github.com/jonathanrtuck/minesweeper
 export const Minesweeper: Application["Component"] = ({ windowId }) => {
   const closeApplication = useStore((store) => store.closeApplication);
   const openDialog = useStore((store) => store.openDialog);
   const openWindow = useStore((store) => store.openWindow);
-  const resizeWindow = useStore((store) => store.resizeWindow);
   const theme = useTheme();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
@@ -92,12 +232,6 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
                 setElapsedTime(0);
                 setFlagsRemaining(DEFAULT_STATE[level].flagsRemaining);
                 setSquares(DEFAULT_STATE[level].squares);
-                // reset window dimensions
-                resizeWindow({
-                  height: DEFAULT_STATE[level].height,
-                  id: windowId,
-                  width: DEFAULT_STATE[level].width,
-                });
               }}
               title="New"
             />
@@ -107,19 +241,12 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
                 checked={level === lvl}
                 key={lvl}
                 onClick={() => {
-                  const { flagsRemaining, height, squares, width } =
-                    DEFAULT_STATE[lvl];
+                  const { flagsRemaining, squares } = DEFAULT_STATE[lvl];
 
                   setElapsedTime(0);
                   setFlagsRemaining(flagsRemaining);
                   setLevel(lvl);
                   setSquares(squares);
-                  // update window dimensions
-                  resizeWindow({
-                    height,
-                    id: windowId,
-                    width,
-                  });
                 }}
                 title={title}
                 type="radio"
@@ -148,17 +275,7 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
         </Menuitem>
       </Menubar>
       <Content>
-        <div
-          className="minesweeper"
-          onContextMenu={(e) => e.preventDefault()}
-          style={
-            {
-              "--minesweeper-border-size": `${BORDER_SIZE}px`,
-              "--minesweeper-header-height": `${HEADER_HEIGHT}px`,
-              "--minesweeper-padding-size": `${PADDING_SIZE}px`,
-              "--minesweeper-square-size": `${SQUARE_SIZE}px`,
-            } as CSSProperties
-          }>
+        <div className="minesweeper" onContextMenu={(e) => e.preventDefault()}>
           <header>
             <data value={flagsRemaining}>
               {flagsRemaining.toString().padStart(3, "0")}

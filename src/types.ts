@@ -83,8 +83,8 @@ export type Percentage = number;
 export type Pixels = number;
 
 export type Size = {
-  height: Pixels;
-  width: Pixels;
+  height: Pixels | "auto";
+  width: Pixels | "auto";
 };
 
 export type State = {

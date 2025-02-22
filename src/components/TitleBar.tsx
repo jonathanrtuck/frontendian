@@ -1,17 +1,15 @@
 "use client";
 
-import type { Percentage, Pixels } from "@/types";
+import type { Percentage, Pixels, Size } from "@/types";
 import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
 import { createContext, useContext, useMemo, useRef } from "react";
 import Draggable from "react-draggable";
 
-export const TitleBarContext = createContext<
-  Partial<{
-    id: string;
-    width: Pixels;
-  }>
->({});
+export const TitleBarContext = createContext<{
+  id?: string;
+  width: Size["width"];
+}>({ width: "auto" });
 
 export const TitleBar: FunctionComponent<
   PropsWithChildren<{
@@ -25,7 +23,7 @@ export const TitleBar: FunctionComponent<
   const rootRef = useRef<HTMLElement>(null);
   const maxLeft = useMemo<Pixels>(
     () =>
-      width && rootRef.current
+      width !== "auto" && rootRef.current
         ? width - rootRef.current.getBoundingClientRect().width
         : 0,
     // eslint-disable-next-line react-hooks/exhaustive-deps

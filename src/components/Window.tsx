@@ -24,10 +24,8 @@ export const Window: FunctionComponent<
       onFocus?(): void;
       onResize?(size: Size): void;
       z: number;
-    } & Coordinates & {
-        height: Pixels | "auto";
-        width: Pixels;
-      }
+    } & Coordinates &
+      Size
   >
 > = ({
   children,
@@ -45,8 +43,8 @@ export const Window: FunctionComponent<
   ...props
 }) => {
   const rootRef = useRef<HTMLElement>(null);
-  const [height, setHeight] = useState<Pixels | "auto">(props.height);
-  const [width, setWidth] = useState<Pixels>(props.width);
+  const [height, setHeight] = useState<Size["height"]>(props.height);
+  const [width, setWidth] = useState<Size["width"]>(props.width);
 
   useFocus({
     deps: [current],
@@ -73,6 +71,7 @@ export const Window: FunctionComponent<
       }}>
       <Resizable
         axis="both"
+        handle={onResize ? undefined : <span hidden />}
         height={typeof height === "string" ? 0 : height}
         minConstraints={[MIN_WIDTH, MIN_HEIGHT]}
         onResize={
@@ -90,7 +89,7 @@ export const Window: FunctionComponent<
                 onResize(size)
             : undefined
         }
-        width={width}>
+        width={typeof width === "string" ? 0 : width}>
         <section
           aria-current={current}
           aria-labelledby={`${id}-title`}
