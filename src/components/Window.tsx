@@ -1,7 +1,8 @@
 "use client";
 
-import { TitleBarContext } from "@/components";
+import { WindowContext } from "@/contexts";
 import { useFocus } from "@/hooks";
+import { SYSTEM_BAR_ID } from "@/ids";
 import type { Coordinates, ID, Pixels, Size } from "@/types";
 import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
@@ -17,6 +18,7 @@ export const Window: FunctionComponent<
     {
       collapsed?: boolean;
       current?: boolean;
+      hasMenubar?: boolean;
       hidden?: boolean;
       id: ID;
       onBlur?(): void;
@@ -31,6 +33,7 @@ export const Window: FunctionComponent<
   children,
   collapsed,
   current = false,
+  hasMenubar,
   hidden,
   id,
   onBlur,
@@ -99,7 +102,13 @@ export const Window: FunctionComponent<
           onBlur={
             onBlur
               ? ({ currentTarget, relatedTarget }) =>
-                  document.hasFocus() && !currentTarget?.contains(relatedTarget)
+                  current &&
+                  document.hasFocus() &&
+                  !currentTarget?.contains(relatedTarget) &&
+                  (hasMenubar ||
+                    !document
+                      .getElementById(SYSTEM_BAR_ID)
+                      ?.contains(relatedTarget))
                     ? onBlur()
                     : undefined
               : undefined
@@ -107,7 +116,8 @@ export const Window: FunctionComponent<
           onFocus={
             onFocus
               ? ({ currentTarget, relatedTarget }) =>
-                  !relatedTarget || !currentTarget.contains(relatedTarget)
+                  !current &&
+                  (!relatedTarget || !currentTarget.contains(relatedTarget))
                     ? onFocus()
                     : undefined
               : undefined
@@ -120,13 +130,14 @@ export const Window: FunctionComponent<
             zIndex: z,
           }}
           tabIndex={-1}>
-          <TitleBarContext.Provider
+          <WindowContext.Provider
             value={{
-              id: `${id}-title`,
+              current,
+              id,
               width,
             }}>
             {children}
-          </TitleBarContext.Provider>
+          </WindowContext.Provider>
         </section>
       </Resizable>
     </Draggable>

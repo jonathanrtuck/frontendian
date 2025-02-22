@@ -1,14 +1,13 @@
 "use client";
 
-import { TitleBarContext } from "@/components";
+import { WindowContext } from "@/contexts";
 import type { FunctionComponent, PropsWithChildren } from "react";
 import { useEffect, useRef } from "react";
 
-export const Dialog: FunctionComponent<
-  PropsWithChildren<{
-    id?: string;
-  }>
-> = ({ children, id }) => {
+export const Dialog: FunctionComponent<PropsWithChildren<{ id: string }>> = ({
+  children,
+  id,
+}) => {
   const rootRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => rootRef.current?.showModal(), []);
@@ -19,9 +18,14 @@ export const Dialog: FunctionComponent<
       className="dialog"
       id={id}
       ref={rootRef}>
-      <TitleBarContext.Provider value={{ id: `${id}-title` }}>
+      <WindowContext.Provider
+        value={{
+          current: true,
+          id,
+          width: "auto",
+        }}>
         {children}
-      </TitleBarContext.Provider>
+      </WindowContext.Provider>
     </dialog>
   );
 };

@@ -1,15 +1,11 @@
 "use client";
 
-import type { Percentage, Pixels, Size } from "@/types";
+import { WindowContext } from "@/contexts";
+import type { Percentage, Pixels } from "@/types";
 import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
-import { createContext, useContext, useMemo, useRef } from "react";
+import { useContext, useMemo, useRef } from "react";
 import Draggable from "react-draggable";
-
-export const TitleBarContext = createContext<{
-  id?: string;
-  width: Size["width"];
-}>({ width: "auto" });
 
 export const TitleBar: FunctionComponent<
   PropsWithChildren<{
@@ -19,7 +15,7 @@ export const TitleBar: FunctionComponent<
     onDrag?(left: Percentage): void;
   }>
 > = ({ children, className, left = 0, onDoubleClick, onDrag }) => {
-  const { width } = useContext(TitleBarContext);
+  const { width } = useContext(WindowContext);
   const rootRef = useRef<HTMLElement>(null);
   const maxLeft = useMemo<Pixels>(
     () =>

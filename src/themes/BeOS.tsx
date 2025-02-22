@@ -220,6 +220,7 @@ export const BeOS: FunctionComponent = () => {
             return (
               <Window
                 current={focused}
+                hasMenubar
                 height={height}
                 hidden={hidden}
                 id={id}

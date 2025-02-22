@@ -76,7 +76,13 @@ export const MacOSClassic: FunctionComponent = () => {
             <p>Please reload the page.</p>
           </Dialog>
         }>
-        <SystemBar title="Menubar">
+        <SystemBar
+          onBlur={(windowId) =>
+            !windowId && focusedWindow
+              ? blurWindow({ id: focusedWindow.id })
+              : undefined
+          }
+          title="Menubar">
           <Menu bar horizontal id={MENU_BAR_ID}>
             <Menuitem Icon={Logo} title="Apple Menu">
               <Menu>
