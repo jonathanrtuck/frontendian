@@ -262,6 +262,7 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
                   ? openWindow({
                       Component: AboutMinesweeper,
                       id: "application-minesweeper",
+                      title: "About Minesweeper",
                     })
                   : openDialog({
                       Component: AboutMinesweeper,

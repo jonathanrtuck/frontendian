@@ -678,6 +678,36 @@ export const useStore = create(
               payload.id
             );
             const windowId = `window-${uuid()}`;
+
+            if (payload.Component) {
+              const window: Window = {
+                ...DEFAULT_WINDOW,
+                applicationId: application.id,
+                Component: payload.Component,
+                height: 200, // @todo
+                id: windowId,
+                resizable: false,
+                title: payload.title ?? DEFAULT_WINDOW.title,
+                width: 400, // @todo
+                x: 400, // @todo
+                y: 200, // @todo
+              };
+
+              return {
+                openApplicationIds: isApplicationOpen
+                  ? prevState.openApplicationIds
+                  : [...prevState.openApplicationIds, payload.id],
+                stackingOrder: [...prevState.stackingOrder, window.id],
+                windows: [
+                  ...prevState.windows.map((window) => ({
+                    ...window,
+                    focused: false,
+                  })),
+                  window,
+                ],
+              };
+            }
+
             const windowPosition = getFirstOpenWindowPosition(
               prevState.windows
             );

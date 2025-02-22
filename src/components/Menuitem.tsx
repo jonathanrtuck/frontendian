@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import type { IconComponent } from "@/types";
 import Link, { LinkProps } from "next/link";
@@ -37,6 +38,7 @@ export const Menuitem: FunctionComponent<
   const collapseMenuitem = useStore((store) => store.collapseMenuitem);
   const expandedMenuitemIds = useStore((store) => store.expandedMenuitemIds);
   const expandMenuitem = useStore((store) => store.expandMenuitem);
+  const theme = useTheme();
   const rootRef = useRef<HTMLLIElement>(null);
   const [tabIndex, setTabIndex] = useState<-1 | 0>(-1);
   const id = `menuitem-${useId()}`;
@@ -279,7 +281,9 @@ export const Menuitem: FunctionComponent<
     onMouseEnter: ({ currentTarget }) => {
       if (document.hasFocus() && getMenubarHasFocus()) {
         if (getIsTopMenuitem()) {
-          // @todo currentTarget.focus(); if mac-os-classic
+          if (theme === "mac-os-classic") {
+            expandMenuitem({ id });
+          }
         } else if (haspopup) {
           expandMenuitem({ id });
         } else {

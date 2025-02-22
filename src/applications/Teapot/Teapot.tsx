@@ -42,6 +42,7 @@ export const Teapot: Application["Component"] = ({ windowId }) => {
                   ? openWindow({
                       Component: AboutTeapot,
                       id: "application-teapot",
+                      title: "About Teapot",
                     })
                   : openDialog({
                       Component: AboutTeapot,

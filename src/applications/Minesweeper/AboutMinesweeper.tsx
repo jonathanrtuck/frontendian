@@ -1,9 +1,10 @@
 "use client";
 
+import { Content } from "@/components";
 import type { FunctionComponent } from "react";
 
 export const AboutMinesweeper: FunctionComponent = () => (
-  <>
+  <Content>
     <p>
       Recreation of{" "}
       <a href="https://en.wikipedia.org/wiki/Minesweeper_(video_game)">
@@ -16,7 +17,7 @@ export const AboutMinesweeper: FunctionComponent = () => (
     </p>
     <h4>Notes</h4>
     <p>Custom boards not yet supported.</p>
-  </>
+  </Content>
 );
 
 AboutMinesweeper.displayName = "AboutMinesweeper";

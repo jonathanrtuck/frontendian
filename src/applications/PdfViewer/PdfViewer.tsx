@@ -88,6 +88,7 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
                   ? openWindow({
                       Component: AboutPdfViewer,
                       id: "application-pdf-viewer",
+                      title: "About PDF Viewer",
                     })
                   : openDialog({
                       Component: AboutPdfViewer,

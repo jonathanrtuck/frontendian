@@ -18,8 +18,13 @@ export type Actions = Readonly<{
   moveWindow(payload: PayloadWithID<Coordinates>): void;
   openApplication(payload: PayloadWithID): void;
   openDialog(payload: Omit<Dialog, "id">): void;
-  openFile(payload: PayloadWithID<{ windowId?: ID }>): void;
-  openWindow(payload: PayloadWithID<{ Component?: ComponentType }>): void;
+  openFile(payload: PayloadWithID<{ windowId?: Window["id"] }>): void;
+  openWindow(
+    payload: PayloadWithID<{
+      Component?: ComponentType;
+      title?: Window["title"];
+    }>
+  ): void;
   resizeWindow(payload: PayloadWithID<Size>): void;
   showWindow(payload: PayloadWithID): void;
   zoomWindow(payload: PayloadWithID): void;

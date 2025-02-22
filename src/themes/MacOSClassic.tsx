@@ -212,14 +212,18 @@ export const MacOSClassic: FunctionComponent = () => {
             y,
             ...window
           }) => {
-            const { Component, Icon } = Object.values(applications).find(
-              ({ id }) => id === applicationId
-            )!;
+            const Component =
+              "Component" in window ? window.Component : undefined;
             const fileId = "fileId" in window ? window.fileId : undefined;
             const file = fileId
               ? Object.values(files).find(({ id }) => id === fileId)
               : undefined;
-            const TitleBarIcon = file ? ICONS[file.mimetype] ?? File : Icon;
+            const application = Object.values(applications).find(
+              ({ id }) => id === applicationId
+            )!;
+            const TitleBarIcon = file
+              ? ICONS[file.mimetype] ?? File
+              : application.Icon;
 
             return (
               <Window
@@ -264,7 +268,11 @@ export const MacOSClassic: FunctionComponent = () => {
                   />
                 </TitleBar>
                 <ErrorBoundary fallback={null}>
-                  <Component fileId={fileId} windowId={id} />
+                  {Component ? (
+                    <Component />
+                  ) : (
+                    <application.Component fileId={fileId} windowId={id} />
+                  )}
                 </ErrorBoundary>
               </Window>
             );

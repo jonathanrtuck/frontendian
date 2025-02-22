@@ -136,6 +136,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
                   ? openWindow({
                       Component: AboutTextEditor,
                       id: "application-text-editor",
+                      title: `About ${title(theme)}`,
                     })
                   : openDialog({
                       Component: AboutTextEditor,
