@@ -2,7 +2,6 @@
 
 import "./Minesweeper.css";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
-import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import type { Application } from "@/types";
 import clsx from "clsx";
