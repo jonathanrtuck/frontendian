@@ -29,7 +29,12 @@ export const Menubar: FunctionComponent<PropsWithChildren> = ({ children }) => {
         <Menuitem title="Help">
           <Menu>
             <Menuitem
-              onClick={() => openDialog({ id: applicationId })}
+              onClick={() =>
+                openDialog({
+                  id: applicationId,
+                  type: "about",
+                })
+              }
               title={`About ${Object.values(applications)
                 .find(({ id }) => id === applicationId)!
                 .title(theme)}…`}

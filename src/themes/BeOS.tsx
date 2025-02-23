@@ -59,6 +59,7 @@ export const BeOS: FunctionComponent = () => {
   const moveWindow = useStore((store) => store.moveWindow);
   const openApplication = useStore((store) => store.openApplication);
   const openApplicationIds = useStore((store) => store.openApplicationIds);
+  const openDialog = useStore((store) => store.openDialog);
   const openFile = useStore((store) => store.openFile);
   const resizeWindow = useStore((store) => store.resizeWindow);
   const showWindow = useStore((store) => store.showWindow);
@@ -68,242 +69,239 @@ export const BeOS: FunctionComponent = () => {
 
   return (
     <>
-      <link href="/themes/beos/styles.css" rel="stylesheet" />
-      <ErrorBoundary
-        fallback={
-          <Dialog id="dialog-error">
-            <TitleBar className="visually-hidden">
-              <Title text="Error" />
-            </TitleBar>
-            <Error />
-            <p>An unknown error has occured.</p>
-            <p>Please reload the page.</p>
-          </Dialog>
-        }>
-        <Grid>
-          {Object.values(files).map(({ id, mimetype, title }) => (
-            <Icon
-              Icon={ICONS[mimetype] ?? File}
-              key={id}
-              onDoubleClick={() => openFile({ id })}
-              title={title}
-            />
-          ))}
-        </Grid>
-        <SystemBar
-          onFocus={focusSystemBar}
-          title="Deskbar"
-          z={stackingOrder.indexOf(SYSTEM_BAR_ID)}>
-          <Menu bar>
-            <Menuitem Icon={Logo} title="BeOS Menu">
-              <Menu>
-                <Menuitem
-                  onClick={() => openFile({ id: files.FILE_README_MD.id })}
-                  title={files.FILE_README_MD.title}
-                />
-                <Menuitem separator />
-                <Menuitem title="Theme">
+      <Grid>
+        {Object.values(files).map(({ id, mimetype, title }) => (
+          <Icon
+            Icon={ICONS[mimetype] ?? File}
+            key={id}
+            onDoubleClick={() => openFile({ id })}
+            title={title}
+          />
+        ))}
+      </Grid>
+      <SystemBar
+        onFocus={focusSystemBar}
+        title="Deskbar"
+        z={stackingOrder.indexOf(SYSTEM_BAR_ID)}>
+        <Menu bar>
+          <Menuitem Icon={Logo} title="BeOS Menu">
+            <Menu>
+              <Menuitem
+                onClick={() => openFile({ id: files.FILE_README_MD.id })}
+                title={files.FILE_README_MD.title}
+              />
+              <Menuitem separator />
+              <Menuitem title="Theme">
+                <Menu>
+                  <Menuitem checked href="beos" title="BeOS" type="radio" />
+                  <Menuitem
+                    href="mac-os-classic"
+                    title="Mac OS Classic"
+                    type="radio"
+                  />
+                </Menu>
+              </Menuitem>
+              <Menuitem separator />
+              {Object.values(applications)
+                .filter(
+                  ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
+                )
+                .map(({ Icon, id, title }) => (
+                  <Menuitem
+                    Icon={Icon}
+                    key={id}
+                    onClick={() => openApplication({ id })}
+                    title={title("beos")}
+                  />
+                ))}
+            </Menu>
+          </Menuitem>
+        </Menu>
+        <Tray>
+          <TrayIcons>
+            <Network />
+          </TrayIcons>
+          <Clock />
+        </Tray>
+        <Menu bar>
+          {openApplicationIds
+            .map(
+              (openApplicationId) =>
+                Object.values(applications).find(
+                  ({ id }) => id === openApplicationId
+                )!
+            )
+            .map(({ Icon, id, title }) => {
+              const applicationWindows = windows.filter(
+                ({ applicationId }) => applicationId === id
+              );
+
+              return (
+                <Menuitem Icon={Icon} key={id} title={title("beos")}>
                   <Menu>
-                    <Menuitem checked href="beos" title="BeOS" type="radio" />
-                    <Menuitem
-                      href="mac-os-classic"
-                      title="Mac OS Classic"
-                      type="radio"
-                    />
+                    {applicationWindows.length === 0 ? (
+                      <Menuitem disabled title="No windows" />
+                    ) : (
+                      <>
+                        {applicationWindows.map(({ hidden, id, title }) => (
+                          <Menuitem
+                            Icon={hidden ? WindowHidden : WindowVisible}
+                            key={id}
+                            onClick={() => focusWindow({ id })}
+                            title={title}
+                          />
+                        ))}
+                        <Menuitem separator />
+                        <Menuitem
+                          disabled={applicationWindows.every(
+                            ({ hidden }) => hidden
+                          )}
+                          onClick={() =>
+                            applicationWindows.forEach(({ id }) =>
+                              hideWindow({ id })
+                            )
+                          }
+                          title="Hide all"
+                        />
+                        <Menuitem
+                          disabled={applicationWindows.every(
+                            ({ hidden }) => !hidden
+                          )}
+                          onClick={() =>
+                            applicationWindows.forEach(({ id }) =>
+                              showWindow({ id })
+                            )
+                          }
+                          title="Show all"
+                        />
+                        <Menuitem
+                          onClick={() => closeApplication({ id })}
+                          title="Close all"
+                        />
+                      </>
+                    )}
                   </Menu>
                 </Menuitem>
-                <Menuitem separator />
-                {Object.values(applications)
-                  .filter(
-                    ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
-                  )
-                  .map(({ Icon, id, title }) => (
-                    <Menuitem
-                      Icon={Icon}
-                      key={id}
-                      onClick={() => openApplication({ id })}
-                      title={title("beos")}
-                    />
-                  ))}
-              </Menu>
-            </Menuitem>
-          </Menu>
-          <Tray>
-            <TrayIcons>
-              <Network />
-            </TrayIcons>
-            <Clock />
-          </Tray>
-          <Menu bar>
-            {openApplicationIds
-              .map(
-                (openApplicationId) =>
-                  Object.values(applications).find(
-                    ({ id }) => id === openApplicationId
-                  )!
-              )
-              .map(({ Icon, id, title }) => {
-                const applicationWindows = windows.filter(
-                  ({ applicationId }) => applicationId === id
-                );
-
-                return (
-                  <Menuitem Icon={Icon} key={id} title={title("beos")}>
-                    <Menu>
-                      {applicationWindows.length === 0 ? (
-                        <Menuitem disabled title="No windows" />
-                      ) : (
-                        <>
-                          {applicationWindows.map(({ hidden, id, title }) => (
-                            <Menuitem
-                              Icon={hidden ? WindowHidden : WindowVisible}
-                              key={id}
-                              onClick={() => focusWindow({ id })}
-                              title={title}
-                            />
-                          ))}
-                          <Menuitem separator />
-                          <Menuitem
-                            disabled={applicationWindows.every(
-                              ({ hidden }) => hidden
-                            )}
-                            onClick={() =>
-                              applicationWindows.forEach(({ id }) =>
-                                hideWindow({ id })
-                              )
-                            }
-                            title="Hide all"
-                          />
-                          <Menuitem
-                            disabled={applicationWindows.every(
-                              ({ hidden }) => !hidden
-                            )}
-                            onClick={() =>
-                              applicationWindows.forEach(({ id }) =>
-                                showWindow({ id })
-                              )
-                            }
-                            title="Show all"
-                          />
-                          <Menuitem
-                            onClick={() => closeApplication({ id })}
-                            title="Close all"
-                          />
-                        </>
-                      )}
-                    </Menu>
-                  </Menuitem>
-                );
-              })}
-          </Menu>
-        </SystemBar>
-        {windows.map(
-          ({
-            applicationId,
-            focused,
-            height,
-            hidden,
-            id,
-            resizable,
-            title,
-            titlebar,
-            width,
-            x,
-            y,
-            ...window
-          }) => {
-            const application = Object.values(applications).find(
-              ({ id }) => id === applicationId
-            )!;
-            const fileId = "fileId" in window ? window.fileId : undefined;
-
-            return (
-              <Window
-                applicationId={applicationId}
-                current={focused}
-                hasMenubar
-                height={height}
-                hidden={hidden}
-                id={id}
-                key={id}
-                onBlur={() => blurWindow({ id })}
-                onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
-                onFocus={() => focusWindow({ id })}
-                onResize={
-                  resizable
-                    ? (size) => resizeWindow({ id, ...size })
-                    : undefined
-                }
-                width={width}
-                x={x}
-                y={y}
-                z={stackingOrder.indexOf(id)}>
-                <TitleBar
-                  left={titlebar.left}
-                  onDoubleClick={() => hideWindow({ id })}
-                  onDrag={(left) => moveTitlebar({ id, left })}>
-                  <TitleBarButton
-                    onClick={() => closeWindow({ id })}
-                    title="Close"
-                  />
-                  <Title text={title} />
-                  {resizable ? (
-                    <TitleBarButton
-                      onClick={() => zoomWindow({ id })}
-                      title="Zoom"
-                    />
-                  ) : null}
-                </TitleBar>
-                <ErrorBoundary
-                  fallback={
-                    <Dialog id="dialog-error">
-                      <TitleBar className="visually-hidden">
-                        <Title text="Error" />
-                      </TitleBar>
-                      <Error />
-                      <p>
-                        <em>{title}</em> has encountered an unknown error.
-                      </p>
-                      <footer>
-                        <Button
-                          formMethod="dialog"
-                          onClick={() => closeWindow({ id })}
-                          type="reset">
-                          Close
-                        </Button>
-                      </footer>
-                    </Dialog>
-                  }>
-                  <application.Component fileId={fileId} windowId={id} />
-                </ErrorBoundary>
-              </Window>
-            );
-          }
-        )}
-        {dialogs.map(({ applicationId, id }) => {
+              );
+            })}
+        </Menu>
+      </SystemBar>
+      {windows.map(
+        ({
+          applicationId,
+          focused,
+          height,
+          hidden,
+          id,
+          resizable,
+          title,
+          titlebar,
+          width,
+          x,
+          y,
+          ...window
+        }) => {
           const application = Object.values(applications).find(
             ({ id }) => id === applicationId
           )!;
+          const fileId = "fileId" in window ? window.fileId : undefined;
 
           return (
-            <Dialog id={id} key={id}>
-              <TitleBar className="visually-hidden">
-                <Title text={`About ${application.title("beos")}`} />
+            <Window
+              applicationId={applicationId}
+              current={focused}
+              hasMenubar
+              height={height}
+              hidden={hidden}
+              id={id}
+              key={id}
+              onBlur={() => blurWindow({ id })}
+              onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
+              onFocus={() => focusWindow({ id })}
+              onResize={
+                resizable ? (size) => resizeWindow({ id, ...size }) : undefined
+              }
+              width={width}
+              x={x}
+              y={y}
+              z={stackingOrder.indexOf(id)}>
+              <TitleBar
+                left={titlebar.left}
+                onDoubleClick={() => hideWindow({ id })}
+                onDrag={(left) => moveTitlebar({ id, left })}>
+                <TitleBarButton
+                  onClick={() => closeWindow({ id })}
+                  title="Close"
+                />
+                <Title text={title} />
+                {resizable ? (
+                  <TitleBarButton
+                    onClick={() => zoomWindow({ id })}
+                    title="Zoom"
+                  />
+                ) : null}
               </TitleBar>
-              <Info />
-              <application.About />
-              <footer>
-                <Button
-                  formMethod="dialog"
-                  onClick={() => closeDialog({ id })}
-                  type="reset">
-                  Close
-                </Button>
-              </footer>
-            </Dialog>
+              <ErrorBoundary
+                onError={() =>
+                  openDialog({
+                    id: applicationId,
+                    type: "error",
+                  })
+                }>
+                <application.Component fileId={fileId} windowId={id} />
+              </ErrorBoundary>
+            </Window>
           );
-        })}
-      </ErrorBoundary>
+        }
+      )}
+      {dialogs.map(({ applicationId, id, type }) => {
+        const application = Object.values(applications).find(
+          ({ id }) => id === applicationId
+        )!;
+
+        switch (type) {
+          case "about":
+            return (
+              <Dialog Icon={Info} id={id} key={id}>
+                <h1 className="visually-hidden" id={`${id}--title`}>
+                  About {application.title("beos")}
+                </h1>
+                <application.About />
+                <footer>
+                  <Button
+                    formMethod="dialog"
+                    onClick={() => closeDialog({ id })}
+                    type="reset">
+                    Close
+                  </Button>
+                </footer>
+              </Dialog>
+            );
+          case "error":
+            return (
+              <Dialog Icon={Error} id={id} key={id}>
+                <h1 className="visually-hidden" id={`${id}--title`}>
+                  Error
+                </h1>
+                <p>
+                  <em>{application.title("beos")}</em> has encountered an
+                  unknown error.
+                </p>
+                <footer>
+                  <Button
+                    formMethod="dialog"
+                    onClick={() => {
+                      closeApplication({ id: applicationId });
+                      closeDialog({ id });
+                    }}
+                    type="reset">
+                    Close
+                  </Button>
+                </footer>
+              </Dialog>
+            );
+        }
+      })}
     </>
   );
 };

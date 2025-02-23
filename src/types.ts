@@ -17,7 +17,7 @@ export type Actions = Readonly<{
   moveTitlebar(payload: PayloadWithID<{ left: Percentage }>): void;
   moveWindow(payload: PayloadWithID<Coordinates>): void;
   openApplication(payload: PayloadWithID): void;
-  openDialog(payload: PayloadWithID): void;
+  openDialog(payload: PayloadWithID<{ type: Dialog["type"] }>): void;
   openFile(payload: PayloadWithID<{ windowId?: Window["id"] }>): void;
   openWindow(payload: PayloadWithID): void;
   resizeWindow(payload: PayloadWithID<Size>): void;
@@ -53,6 +53,7 @@ export type Coordinates = {
 export type Dialog = {
   applicationId: Application["id"];
   id: ID;
+  type: "about" | "error";
 };
 
 export type File = Readonly<{

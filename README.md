@@ -12,6 +12,3 @@ Portfolio site for Jonathan Tucker
 - beos theme
   - different resize handle style for non-scrollable windows
   - support the other system bar layouts
-- add recent projects
-  - bankx
-  - mario

@@ -109,9 +109,58 @@ export const useStore = create(
         ),
       closeDialog: (payload) =>
         set(
-          (prevState) => ({
-            dialogs: prevState.dialogs.filter(({ id }) => id !== payload.id),
-          }),
+          (prevState) => {
+            const dialog = prevState.dialogs.find(
+              ({ id }) => id === payload.id
+            );
+
+            if (!dialog) {
+              return prevState;
+            }
+
+            const nextState = {
+              dialogs: prevState.dialogs.filter(({ id }) => id !== payload.id),
+            };
+
+            const application = Object.values(applications).find(
+              ({ id }) => id === dialog.applicationId
+            );
+
+            if (!application) {
+              return nextState;
+            }
+
+            const applicationWindowIds = prevState.windows
+              .filter(({ applicationId }) => applicationId === application.id)
+              .map(({ id }) => id);
+
+            if (applicationWindowIds.length === 0) {
+              return nextState;
+            }
+
+            const highestWindowId = prevState.stackingOrder
+              .toReversed()
+              .find((id) => applicationWindowIds.includes(id));
+
+            if (!highestWindowId) {
+              return nextState;
+            }
+
+            return {
+              ...nextState,
+              stackingOrder: [
+                ...prevState.stackingOrder.filter(
+                  (id) => id !== highestWindowId
+                ),
+                highestWindowId,
+              ],
+              windows: prevState.windows.map((window) => ({
+                ...window,
+                focused: window.id === highestWindowId,
+                hidden: window.hidden && window.id !== highestWindowId,
+              })),
+            };
+          },
           undefined,
           {
             payload,
@@ -134,7 +183,14 @@ export const useStore = create(
             );
 
             if (!application) {
-              return prevState;
+              return {
+                stackingOrder: prevState.stackingOrder.filter(
+                  (id) => id !== payload.id
+                ),
+                windows: prevState.windows.filter(
+                  ({ id }) => id !== payload.id
+                ),
+              };
             }
 
             const applicationWindowIds = prevState.windows
@@ -505,6 +561,7 @@ export const useStore = create(
               {
                 applicationId: payload.id,
                 id: `dialog-${uuid()}`,
+                type: payload.type,
               },
             ],
           }),
@@ -531,22 +588,6 @@ export const useStore = create(
 
             // if the file is already open, unhide and/or focus its window
             if (fileWindow) {
-              if (fileWindow.hidden) {
-                return {
-                  stackingOrder: [
-                    ...prevState.stackingOrder.filter(
-                      (id) => id !== fileWindow.id
-                    ),
-                    fileWindow.id,
-                  ],
-                  windows: prevState.windows.map((window) => ({
-                    ...window,
-                    focused: window.id === fileWindow.id,
-                    hidden: window.hidden && window.id !== fileWindow.id,
-                  })),
-                };
-              }
-
               return {
                 stackingOrder: [
                   ...prevState.stackingOrder.filter(
@@ -557,6 +598,7 @@ export const useStore = create(
                 windows: prevState.windows.map((window) => ({
                   ...window,
                   focused: window.id === fileWindow.id,
+                  hidden: window.hidden && window.id !== fileWindow.id,
                 })),
               };
             }
