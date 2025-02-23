@@ -1,10 +1,11 @@
 "use client";
 
 import { WindowContext } from "@/contexts";
+import { ID } from "@/types";
 import type { FunctionComponent, PropsWithChildren } from "react";
 import { useEffect, useRef } from "react";
 
-export const Dialog: FunctionComponent<PropsWithChildren<{ id: string }>> = ({
+export const Dialog: FunctionComponent<PropsWithChildren<{ id: ID }>> = ({
   children,
   id,
 }) => {
@@ -18,14 +19,7 @@ export const Dialog: FunctionComponent<PropsWithChildren<{ id: string }>> = ({
       className="dialog"
       id={id}
       ref={rootRef}>
-      <WindowContext.Provider
-        value={{
-          current: true,
-          id,
-          width: "auto",
-        }}>
-        {children}
-      </WindowContext.Provider>
+      <WindowContext.Provider value={{ id }}>{children}</WindowContext.Provider>
     </dialog>
   );
 };

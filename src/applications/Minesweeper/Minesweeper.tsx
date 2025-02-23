@@ -1,7 +1,6 @@
 "use client";
 
 import "./Minesweeper.css";
-import { AboutMinesweeper } from "./AboutMinesweeper";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
@@ -168,11 +167,8 @@ const LEVELS: [key: Level, value: string][] = [
 ];
 
 // @see https://github.com/jonathanrtuck/minesweeper
-export const Minesweeper: Application["Component"] = ({ windowId }) => {
+export const Minesweeper: Application["Component"] = () => {
   const closeApplication = useStore((store) => store.closeApplication);
-  const openDialog = useStore((store) => store.openDialog);
-  const openWindow = useStore((store) => store.openWindow);
-  const theme = useTheme();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [flagsRemaining, setFlagsRemaining] = useState<number>(10);
@@ -252,26 +248,6 @@ export const Minesweeper: Application["Component"] = ({ windowId }) => {
                 type="radio"
               />
             ))}
-          </Menu>
-        </Menuitem>
-        <Menuitem title="Help">
-          <Menu>
-            <Menuitem
-              onClick={() =>
-                theme === "mac-os-classic"
-                  ? openWindow({
-                      Component: AboutMinesweeper,
-                      id: "application-minesweeper",
-                      title: "About Minesweeper",
-                    })
-                  : openDialog({
-                      Component: AboutMinesweeper,
-                      title: "About Minesweeper",
-                      windowId,
-                    })
-              }
-              title="About Minesweeper…"
-            />
           </Menu>
         </Menuitem>
       </Menubar>

@@ -15,7 +15,7 @@ export const TitleBar: FunctionComponent<
     onDrag?(left: Percentage): void;
   }>
 > = ({ children, className, left = 0, onDoubleClick, onDrag }) => {
-  const { width } = useContext(WindowContext);
+  const { width = "auto" } = useContext(WindowContext);
   const rootRef = useRef<HTMLElement>(null);
   const [maxLeft, setMaxLeft] = useState<Pixels>(0);
 

@@ -336,9 +336,9 @@ body {
 .grid {
   align-items: start;
   display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, 6rem);
-  grid-template-rows: repeat(auto-fill, 6rem);
+  gap: 2rem 1rem;
+  grid-template-columns: repeat(auto-fill, 6.75rem);
+  grid-template-rows: repeat(auto-fill, 4rem);
   justify-items: center;
   min-height: 100%;
   padding: 1rem;
@@ -372,8 +372,12 @@ body {
 
   > svg {
     aspect-ratio: 1 / 1;
-    margin: 0 25%;
-    width: 50%;
+    margin: 0 30%;
+    width: 40%;
+  }
+
+  &:focus > svg {
+    filter: brightness(0.6);
   }
 
   > label {
@@ -386,7 +390,7 @@ body {
   }
 
   &:focus > label {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgb(0, 0, 0);
   }
 }
 

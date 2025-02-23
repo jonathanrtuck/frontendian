@@ -1,11 +1,9 @@
-import type { Size } from "@/types";
+import type { Application, Size } from "@/types";
 import { createContext } from "react";
 
 export const WindowContext = createContext<{
-  current: boolean;
+  applicationId?: Application["id"];
+  current?: boolean;
   id?: string;
-  width: Size["width"];
-}>({
-  current: false,
-  width: "auto",
-});
+  width?: Size["width"];
+}>({});

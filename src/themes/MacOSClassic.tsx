@@ -35,14 +35,17 @@ const ICONS: Partial<Record<MimeType, IconComponent>> = {
 
 export const MacOSClassic: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
+  const closeDialog = useStore((store) => store.closeDialog);
   const closeWindow = useStore((store) => store.closeWindow);
   const collapseWindow = useStore((store) => store.collapseWindow);
+  const dialogs = useStore((store) => store.dialogs);
   const expandWindow = useStore((store) => store.expandWindow);
   const focusWindow = useStore((store) => store.focusWindow);
   const hideWindow = useStore((store) => store.hideWindow);
   const moveWindow = useStore((store) => store.moveWindow);
   const openApplication = useStore((store) => store.openApplication);
   const openApplicationIds = useStore((store) => store.openApplicationIds);
+  const openDialog = useStore((store) => store.openDialog);
   const openFile = useStore((store) => store.openFile);
   const resizeWindow = useStore((store) => store.resizeWindow);
   const showWindow = useStore((store) => store.showWindow);
@@ -86,10 +89,18 @@ export const MacOSClassic: FunctionComponent = () => {
           <Menu bar horizontal id={MENU_BAR_ID}>
             <Menuitem Icon={Logo} title="Apple Menu">
               <Menu>
-                <Menuitem
-                  onClick={() => openFile({ id: files.FILE_README_MD.id })}
-                  title={files.FILE_README_MD.title}
-                />
+                {activeApplication &&
+                activeApplication !== applications.APPLICATION_FILE_MANAGER ? (
+                  <Menuitem
+                    onClick={() => openDialog({ id: activeApplication.id })}
+                    title={`About ${activeApplication.title("mac-os-classic")}`}
+                  />
+                ) : (
+                  <Menuitem
+                    onClick={() => openFile({ id: files.FILE_README_MD.id })}
+                    title={files.FILE_README_MD.title}
+                  />
+                )}
                 <Menuitem separator />
                 <Menuitem title="Theme">
                   <Menu>
@@ -212,21 +223,20 @@ export const MacOSClassic: FunctionComponent = () => {
             y,
             ...window
           }) => {
-            const Component =
-              "Component" in window ? window.Component : undefined;
+            const application = Object.values(applications).find(
+              ({ id }) => id === applicationId
+            )!;
             const fileId = "fileId" in window ? window.fileId : undefined;
             const file = fileId
               ? Object.values(files).find(({ id }) => id === fileId)
               : undefined;
-            const application = Object.values(applications).find(
-              ({ id }) => id === applicationId
-            )!;
             const TitleBarIcon = file
               ? ICONS[file.mimetype] ?? File
               : application.Icon;
 
             return (
               <Window
+                applicationId={applicationId}
                 current={focused}
                 height={collapsed ? 0 : height}
                 hidden={hidden}
@@ -268,16 +278,30 @@ export const MacOSClassic: FunctionComponent = () => {
                   />
                 </TitleBar>
                 <ErrorBoundary fallback={null}>
-                  {Component ? (
-                    <Component />
-                  ) : (
-                    <application.Component fileId={fileId} windowId={id} />
-                  )}
+                  <application.Component fileId={fileId} windowId={id} />
                 </ErrorBoundary>
               </Window>
             );
           }
         )}
+        {dialogs.map(({ applicationId, id }) => {
+          const application = Object.values(applications).find(
+            ({ id }) => id === applicationId
+          )!;
+
+          return (
+            <Dialog id={id} key={id}>
+              <TitleBar>
+                <TitleBarButton
+                  onClick={() => closeDialog({ id })}
+                  title="Close"
+                />
+                <Title text={`About ${application.title("mac-os-classic")}`} />
+              </TitleBar>
+              <application.About />
+            </Dialog>
+          );
+        })}
       </ErrorBoundary>
     </>
   );

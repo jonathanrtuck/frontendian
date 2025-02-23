@@ -17,20 +17,16 @@ export type Actions = Readonly<{
   moveTitlebar(payload: PayloadWithID<{ left: Percentage }>): void;
   moveWindow(payload: PayloadWithID<Coordinates>): void;
   openApplication(payload: PayloadWithID): void;
-  openDialog(payload: Omit<Dialog, "id">): void;
+  openDialog(payload: PayloadWithID): void;
   openFile(payload: PayloadWithID<{ windowId?: Window["id"] }>): void;
-  openWindow(
-    payload: PayloadWithID<{
-      Component?: ComponentType;
-      title?: Window["title"];
-    }>
-  ): void;
+  openWindow(payload: PayloadWithID): void;
   resizeWindow(payload: PayloadWithID<Size>): void;
   showWindow(payload: PayloadWithID): void;
   zoomWindow(payload: PayloadWithID): void;
 }>;
 
 export type Application = Readonly<{
+  About: ComponentType;
   Component: ComponentType<{
     fileId?: File["id"];
     windowId: Window["id"];
@@ -55,10 +51,8 @@ export type Coordinates = {
 };
 
 export type Dialog = {
-  Component: ComponentType;
+  applicationId: Application["id"];
   id: ID;
-  title: string;
-  windowId?: Window["id"];
 };
 
 export type File = Readonly<{

@@ -1,26 +1,24 @@
 "use client";
 
 import "./TextEditor.css";
-import { AboutTextEditor } from "./AboutTextEditor";
-import { title } from "./utils";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import * as files from "@/files";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import type { Application } from "@/types";
-import { useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useRef, useState } from "react";
 import Markdown from "react-markdown";
 
 export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
   const closeApplication = useStore((store) => store.closeApplication);
   const closeWindow = useStore((store) => store.closeWindow);
-  const openDialog = useStore((store) => store.openDialog);
   const openFile = useStore((store) => store.openFile);
   const openWindow = useStore((store) => store.openWindow);
   const theme = useTheme();
   const file = fileId
     ? Object.values(files).find(({ id }) => id === fileId)
     : undefined;
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [content, setContent] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
@@ -128,26 +126,6 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
             />
           </Menu>
         </Menuitem>
-        <Menuitem title="Help">
-          <Menu>
-            <Menuitem
-              onClick={() =>
-                theme === "mac-os-classic"
-                  ? openWindow({
-                      Component: AboutTextEditor,
-                      id: "application-text-editor",
-                      title: `About ${title(theme)}`,
-                    })
-                  : openDialog({
-                      Component: AboutTextEditor,
-                      title: `About ${title(theme)}`,
-                      windowId,
-                    })
-              }
-              title={`About ${title(theme)}…`}
-            />
-          </Menu>
-        </Menuitem>
       </Menubar>
       <Content scrollable>
         {Boolean(isLoading) && "loading…"}
@@ -158,6 +136,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
             className="text-editor"
             cols={numInputCols}
             onInput={({ currentTarget }) => setInput(currentTarget.value)}
+            ref={textareaRef}
             rows={numInputRows}
             value={input}
           />

@@ -16,6 +16,7 @@ const MIN_WIDTH: Pixels = 16 * 10; // 10rem
 export const Window: FunctionComponent<
   PropsWithChildren<
     {
+      applicationId?: ID;
       current?: boolean;
       hasMenubar?: boolean;
       hidden?: boolean;
@@ -29,6 +30,7 @@ export const Window: FunctionComponent<
       Size
   >
 > = ({
+  applicationId,
   children,
   current = false,
   hasMenubar,
@@ -169,6 +171,7 @@ export const Window: FunctionComponent<
           tabIndex={-1}>
           <WindowContext.Provider
             value={{
+              applicationId,
               current,
               id,
               width,

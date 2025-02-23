@@ -7,6 +7,13 @@ export const FILE_README_MD: File = {
   url: (theme) => `/themes/${theme}/README.md`,
 };
 
+export const FILE_RECENT_PROJECTS_MD: File = {
+  id: "file-recent-projects.md",
+  mimetype: "text/markdown",
+  title: "Recent Projects",
+  url: () => "/files/recent-projects.md",
+};
+
 export const FILE_RESUME_PDF: File = {
   id: "file-resume.pdf",
   mimetype: "application/pdf",

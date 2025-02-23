@@ -3,7 +3,6 @@
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "./PdfViewer.css";
-import { AboutPdfViewer } from "./AboutPdfViewer";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import * as files from "@/files";
 import { useTheme } from "@/hooks";
@@ -19,7 +18,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
   const closeApplication = useStore((store) => store.closeApplication);
   const closeWindow = useStore((store) => store.closeWindow);
-  const openDialog = useStore((store) => store.openDialog);
   const openFile = useStore((store) => store.openFile);
   const openWindow = useStore((store) => store.openWindow);
   const theme = useTheme();
@@ -77,26 +75,6 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
             <Menuitem
               onClick={() => closeApplication({ id: "application-pdf-viewer" })}
               title="Quit"
-            />
-          </Menu>
-        </Menuitem>
-        <Menuitem title="Help">
-          <Menu>
-            <Menuitem
-              onClick={() =>
-                theme === "mac-os-classic"
-                  ? openWindow({
-                      Component: AboutPdfViewer,
-                      id: "application-pdf-viewer",
-                      title: "About PDF Viewer",
-                    })
-                  : openDialog({
-                      Component: AboutPdfViewer,
-                      title: "About PDF Viewer",
-                      windowId,
-                    })
-              }
-              title="About PDF Viewer…"
             />
           </Menu>
         </Menuitem>

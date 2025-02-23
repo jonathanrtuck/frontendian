@@ -109,34 +109,9 @@ export const useStore = create(
         ),
       closeDialog: (payload) =>
         set(
-          (prevState) => {
-            const dialog = prevState.dialogs.find(
-              ({ id }) => id === payload.id
-            );
-
-            if (!dialog) {
-              return prevState;
-            }
-
-            return {
-              dialogs: prevState.dialogs.filter(({ id }) => id !== payload.id),
-              stackingOrder: dialog.windowId
-                ? [
-                    ...prevState.stackingOrder.filter(
-                      (id) => id !== dialog.windowId
-                    ),
-                    dialog.windowId,
-                  ]
-                : prevState.stackingOrder,
-              windows: dialog.windowId
-                ? prevState.windows.map((window) => ({
-                    ...window,
-                    focused: window.id === dialog.windowId,
-                    hidden: window.hidden && window.id !== dialog.windowId,
-                  }))
-                : prevState.windows,
-            };
-          },
+          (prevState) => ({
+            dialogs: prevState.dialogs.filter(({ id }) => id !== payload.id),
+          }),
           undefined,
           {
             payload,
@@ -528,7 +503,7 @@ export const useStore = create(
             dialogs: [
               ...prevState.dialogs,
               {
-                ...payload,
+                applicationId: payload.id,
                 id: `dialog-${uuid()}`,
               },
             ],
@@ -678,36 +653,6 @@ export const useStore = create(
               payload.id
             );
             const windowId = `window-${uuid()}`;
-
-            if (payload.Component) {
-              const window: Window = {
-                ...DEFAULT_WINDOW,
-                applicationId: application.id,
-                Component: payload.Component,
-                height: 200, // @todo
-                id: windowId,
-                resizable: false,
-                title: payload.title ?? DEFAULT_WINDOW.title,
-                width: 400, // @todo
-                x: 400, // @todo
-                y: 200, // @todo
-              };
-
-              return {
-                openApplicationIds: isApplicationOpen
-                  ? prevState.openApplicationIds
-                  : [...prevState.openApplicationIds, payload.id],
-                stackingOrder: [...prevState.stackingOrder, window.id],
-                windows: [
-                  ...prevState.windows.map((window) => ({
-                    ...window,
-                    focused: false,
-                  })),
-                  window,
-                ],
-              };
-            }
-
             const windowPosition = getFirstOpenWindowPosition(
               prevState.windows
             );

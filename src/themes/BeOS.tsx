@@ -212,13 +212,14 @@ export const BeOS: FunctionComponent = () => {
             y,
             ...window
           }) => {
-            const { Component } = Object.values(applications).find(
+            const application = Object.values(applications).find(
               ({ id }) => id === applicationId
             )!;
             const fileId = "fileId" in window ? window.fileId : undefined;
 
             return (
               <Window
+                applicationId={applicationId}
                 current={focused}
                 hasMenubar
                 height={height}
@@ -273,29 +274,35 @@ export const BeOS: FunctionComponent = () => {
                       </footer>
                     </Dialog>
                   }>
-                  <Component fileId={fileId} windowId={id} />
+                  <application.Component fileId={fileId} windowId={id} />
                 </ErrorBoundary>
               </Window>
             );
           }
         )}
-        {dialogs.map(({ Component, id, title }) => (
-          <Dialog id={id} key={id}>
-            <TitleBar className="visually-hidden">
-              <Title text={title} />
-            </TitleBar>
-            <Info />
-            <Component />
-            <footer>
-              <Button
-                formMethod="dialog"
-                onClick={() => closeDialog({ id })}
-                type="reset">
-                Close
-              </Button>
-            </footer>
-          </Dialog>
-        ))}
+        {dialogs.map(({ applicationId, id }) => {
+          const application = Object.values(applications).find(
+            ({ id }) => id === applicationId
+          )!;
+
+          return (
+            <Dialog id={id} key={id}>
+              <TitleBar className="visually-hidden">
+                <Title text={`About ${application.title("beos")}`} />
+              </TitleBar>
+              <Info />
+              <application.About />
+              <footer>
+                <Button
+                  formMethod="dialog"
+                  onClick={() => closeDialog({ id })}
+                  type="reset">
+                  Close
+                </Button>
+              </footer>
+            </Dialog>
+          );
+        })}
       </ErrorBoundary>
     </>
   );

@@ -247,10 +247,10 @@ body {
   align-items: start;
   direction: rtl;
   display: grid;
-  gap: 1rem;
+  gap: 2rem 1rem;
   grid-auto-flow: column;
-  grid-template-columns: repeat(auto-fill, 5.5rem);
-  grid-template-rows: repeat(auto-fill, 5.5rem);
+  grid-template-columns: repeat(auto-fill, 7rem);
+  grid-template-rows: repeat(auto-fill, 3.75rem);
   justify-items: center;
   padding: 1rem;
   position: relative;
@@ -295,8 +295,8 @@ body {
 
   > svg {
     aspect-ratio: 1 / 1;
-    margin: 0 25%;
-    width: 50%;
+    margin: 0 30%;
+    width: 40%;
   }
 
   &:focus > svg {
