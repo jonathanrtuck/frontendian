@@ -452,6 +452,7 @@
     > .menuitem-button {
       align-items: center;
       color: inherit;
+      cursor: var(--cursor--default);
       display: flex;
       font-size: 0.875rem;
       font-weight: 500;

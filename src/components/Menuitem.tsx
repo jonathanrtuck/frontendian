@@ -314,7 +314,11 @@ export const Menuitem: FunctionComponent<
       }
       ref={rootRef}
       role="none">
-      {href ? <Link {...anchorProps} href={href} /> : <a {...anchorProps} />}
+      {href ? (
+        <Link {...anchorProps} href={href} scroll={false} />
+      ) : (
+        <a {...anchorProps} />
+      )}
       {children}
     </li>
   );
