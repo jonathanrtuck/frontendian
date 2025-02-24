@@ -14,6 +14,7 @@ export const Icon: FunctionComponent<{
     onKeyDown={({ key }) =>
       key === "Enter" || key === " " ? onDoubleClick() : undefined
     }
+    tabIndex={0}
     title={title}
     type="button">
     <Icon />
