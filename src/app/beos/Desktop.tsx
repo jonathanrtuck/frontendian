@@ -90,7 +90,6 @@ export const Desktop: FunctionComponent = () => {
                 onClick={() => openFile({ id: files.FILE_README_MD.id })}
                 title={files.FILE_README_MD.title}
               />
-              <Menuitem separator />
               <Menuitem title="Theme">
                 <Menu>
                   <Menuitem checked href="beos" title="BeOS" type="radio" />
@@ -101,6 +100,16 @@ export const Desktop: FunctionComponent = () => {
                   />
                 </Menu>
               </Menuitem>
+              <Menuitem separator />
+              <Menuitem
+                onClick={() =>
+                  setTimeout(() => {
+                    useStore.persist.clearStorage();
+                    window.location.reload();
+                  }, 0)
+                }
+                title="Restart"
+              />
               <Menuitem separator />
               {Object.values(applications)
                 .filter(

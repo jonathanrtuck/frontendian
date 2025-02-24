@@ -8,6 +8,7 @@ import type {
   AnchorHTMLAttributes,
   FunctionComponent,
   PropsWithChildren,
+  UIEvent,
 } from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { EmptyObject } from "type-fest";
@@ -89,14 +90,10 @@ export const Menuitem: FunctionComponent<
       ),
     []
   );
-  const getTopMenuitem = useCallback(
-    () => rootRef.current?.closest<HTMLElement>('[role="menubar"] > .menuitem'),
-    []
-  );
-  const collapseAll = () => {
+  const collapseAll = ({ currentTarget }: UIEvent<HTMLElement>) => {
     if (expandedMenuitemIds.length !== 0) {
       collapseMenuitem({ id: expandedMenuitemIds.at(0)! });
-      getButton(getTopMenuitem())?.focus();
+      currentTarget.blur();
     }
   };
 
@@ -144,14 +141,14 @@ export const Menuitem: FunctionComponent<
   const href = "href" in props ? props.href : undefined;
   const type = "type" in props ? props.type : undefined;
   const haspopup = Boolean(children);
-  const onClick = () => {
+  const onClick = (e: UIEvent<HTMLElement>) => {
     if ("onClick" in props && !checked && !disabled) {
       props.onClick?.();
     }
     if (haspopup && !expanded) {
       expandMenuitem({ id });
     } else {
-      collapseAll();
+      collapseAll(e);
     }
   };
   const anchorProps: AnchorHTMLAttributes<HTMLAnchorElement> = {
@@ -269,7 +266,7 @@ export const Menuitem: FunctionComponent<
         case "Enter":
         case " ":
           e.preventDefault();
-          onClick();
+          onClick(e);
           break;
         case "Escape":
           e.preventDefault();
