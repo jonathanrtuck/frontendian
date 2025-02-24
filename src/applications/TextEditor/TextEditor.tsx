@@ -8,6 +8,7 @@ import { useStore } from "@/store";
 import type { Application } from "@/types";
 import { useDeferredValue, useEffect, useRef, useState } from "react";
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
   const closeApplication = useStore((store) => store.closeApplication);
@@ -143,7 +144,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
         )}
         {Boolean(!isLoading && !error && view === "preview") && (
           <samp className="text-editor">
-            <Markdown>{deferredInput}</Markdown>
+            <Markdown remarkPlugins={[remarkGfm]}>{deferredInput}</Markdown>
           </samp>
         )}
       </Content>

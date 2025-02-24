@@ -44,6 +44,24 @@
       font-size: 1.33em;
       margin: 2.5rem 0 0;
     }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    tr {
+      border-top: var(--border-width) solid var(---border-color--light);
+
+      &:nth-child(2n) {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+
+    th,
+    td {
+      border: var(--border-width) solid var(--border-color--light);
+      padding: 0.5rem 0.75rem;
+    }
   }
 }
 
