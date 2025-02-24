@@ -95,6 +95,7 @@ export const Desktop: FunctionComponent = () => {
                   title={files.FILE_README_MD.title}
                 />
               )}
+              <Menuitem separator />
               <Menuitem title="Theme">
                 <Menu>
                   <Menuitem href="beos" title="BeOS" type="radio" />
@@ -106,16 +107,6 @@ export const Desktop: FunctionComponent = () => {
                   />
                 </Menu>
               </Menuitem>
-              <Menuitem separator />
-              <Menuitem
-                onClick={() =>
-                  setTimeout(() => {
-                    useStore.persist.clearStorage();
-                    window.location.reload();
-                  }, 0)
-                }
-                title="Restart"
-              />
               <Menuitem separator />
               {Object.values(applications)
                 .filter(
@@ -129,6 +120,16 @@ export const Desktop: FunctionComponent = () => {
                     title={title("mac-os-classic")}
                   />
                 ))}
+              <Menuitem separator />
+              <Menuitem
+                onClick={() =>
+                  setTimeout(() => {
+                    useStore.persist.clearStorage();
+                    window.location.reload();
+                  }, 0)
+                }
+                title="Restart"
+              />
             </Menu>
           </Menuitem>
         </Menu>

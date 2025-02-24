@@ -287,10 +287,10 @@
     align-items: start;
     direction: rtl;
     display: grid;
-    gap: 2rem 1rem;
+    gap: 1.5rem 1rem;
     grid-auto-flow: column;
     grid-template-columns: repeat(auto-fill, 7rem);
-    grid-template-rows: repeat(auto-fill, 3.75rem);
+    grid-template-rows: repeat(auto-fill, 4.25rem);
     justify-items: center;
     padding: 1rem;
     position: relative;
@@ -328,15 +328,13 @@
     border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
-    font-family: inherit;
     gap: 0.25rem;
     max-height: 100%;
-    width: 100%;
+    padding: 0.25rem;
 
     > svg {
       aspect-ratio: 1 / 1;
-      margin: 0 30%;
-      width: 40%;
+      width: 3rem;
     }
 
     &:focus > svg {
