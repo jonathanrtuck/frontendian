@@ -26,9 +26,9 @@ export const Menu: FunctionComponent<
     <>
       {"collapsible" in props && props.collapsible ? (
         <button
+          aria-hidden
           className="menu-button"
           onClick={() => setIsCollapsed((prevState) => !prevState)}
-          role="presentation"
           type="button"
         />
       ) : null}

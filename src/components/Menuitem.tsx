@@ -156,10 +156,11 @@ export const Menuitem: FunctionComponent<
     ["aria-disabled"]: disabled || undefined,
     ["aria-expanded"]: haspopup ? expanded : undefined,
     ["aria-haspopup"]: haspopup ? "menu" : undefined,
+    ["aria-label"]: title,
     children: (
       <>
         {Icon ? <Icon /> : null}
-        {title ? <label>{title}</label> : null}
+        <label aria-hidden>{title}</label>
       </>
     ),
     className: "menuitem-button",
