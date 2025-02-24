@@ -1,13 +1,10 @@
 # components
 
-## state
+all _components_ used in the UI
 
-the `useStore` hook (from `/src/store.ts`) can be used to read the current state
+## note
 
-## styles
-
-the component’s root element should have a `className="component-[component-name-in-kebab-case]"` prop, which can be used in CSS selectors
-
-### themes
-
-styles for each theme should be defined in `[component.displayName].[theme.id].css` and use the `:root.[theme.id]` ancestor selector
+- _components_ SHOULD add `className="[component-name]"` to their root html element
+- conditional `className`s MAY be used, but MUST be prefixed with _is_ or _has_
+- _components_ SHOULD avoid referencing the current theme (e.g. `useTheme` from `@/hooks`). instead prefer to move conditional rendering to `Desktop.tsx`s
+- _components_ SHOULD avoid referencing the store (e.g. `useStore` from `@/store`). instead prefer to move conditional rendering and actions to `Desktop.tsx`s

@@ -1,37 +1,184 @@
 "use client";
 
-import styles from "./Minesweeper.module.css";
-import { ApplicationComponent } from "@/types";
+import "./Minesweeper.css";
+import { Content, Menu, Menubar, Menuitem } from "@/components";
+import { useStore } from "@/store";
+import type { Application } from "@/types";
 import clsx from "clsx";
-import type { CSSProperties } from "react";
+import localFont from "next/font/local";
 import { useEffect, useRef, useState } from "react";
-import {
-  BORDER_SIZE,
-  DEFAULT_LEVEL,
-  DEFAULT_STATE,
-  HEADER_HEIGHT,
-  LEVELS,
-  PADDING_SIZE,
-  SQUARE_SIZE,
-} from "./constants";
-import type { Coordinates, Level, Square } from "./types";
-import {
-  getAdjacentSquareCoordinates,
-  getMineCoordinates,
-  isEqualCoordinates,
-  revealSquare,
-} from "./utils";
+
+const FONT_DIGITAL_DISMAY = localFont({
+  src: "./DigitalDismay.otf",
+  variable: "--font-family--digital-dismay",
+});
+
+const FONT_MINE_SWEEPER = localFont({
+  src: "./MineSweeper.otf",
+  variable: "--font-family--mine-sweeper",
+});
+
+type Coordinates = [rowIndex: number, columnIndex: number];
+type Level = "beginner" | "expert" | "intermediate";
+type Square = {
+  hasFlag: boolean;
+  hasMine: boolean;
+  isRevealed: boolean;
+  numAdjacentMines: number | undefined;
+};
+
+const getAdjacentSquareCoordinates = (
+  numRows: number,
+  numColumns: number,
+  coordinates: Coordinates
+): Coordinates[] =>
+  [
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+  ]
+    // adjecent squares' coordinates
+    .map(
+      ([rowOffset, columnOffset]): Coordinates => [
+        coordinates[0] + rowOffset,
+        coordinates[1] + columnOffset,
+      ]
+    )
+    // remove coordinates outside of the board
+    .filter(
+      ([rowIndex, columnIndex]) =>
+        rowIndex !== -1 &&
+        rowIndex !== numRows &&
+        columnIndex !== -1 &&
+        columnIndex !== numColumns
+    );
+
+export const getInitialSquares = (
+  numRows: number,
+  numColumns: number
+): Square[][] =>
+  new Array(numRows).fill(
+    new Array(numColumns).fill({
+      hasFlag: false,
+      hasMine: false,
+      isRevealed: false,
+      numAdjacentMines: undefined,
+    })
+  );
+const isEqualCoordinates =
+  ([rowA, columnA]: Coordinates) =>
+  ([rowB, columnB]: Coordinates) =>
+    rowA === rowB && columnA === columnB;
+const getMineCoordinates = (
+  numRows: number,
+  numColumns: number,
+  numMines: number,
+  avoidCoordinates: Coordinates
+): Coordinates[] => {
+  const arr: Coordinates[] = [];
+
+  while (arr.length < numMines) {
+    const coordinates: Coordinates = [
+      Math.floor(Math.random() * numRows),
+      Math.floor(Math.random() * numColumns),
+    ];
+    const isEqualWith = isEqualCoordinates(coordinates);
+
+    // square to avoid or already has mine
+    if (isEqualWith(avoidCoordinates) || arr.some(isEqualWith)) {
+      continue;
+    }
+
+    arr.push(coordinates);
+  }
+
+  return arr;
+};
+// @recursive
+const revealSquare = (
+  numRows: number,
+  numColumns: number,
+  squares: Square[][],
+  coordinates: Coordinates
+): Square[][] => {
+  const [rowIndex, columnIndex] = coordinates;
+  const square = squares[rowIndex][columnIndex];
+  const { hasMine, isRevealed, numAdjacentMines } = square;
+
+  if (isRevealed) {
+    return squares;
+  }
+
+  const isEqualCoordinatesTo = isEqualCoordinates(coordinates);
+  const nextSquares = squares.map((row, rowIndex) =>
+    row.map((square, columnIndex) => ({
+      ...square,
+      isRevealed:
+        isEqualCoordinatesTo([rowIndex, columnIndex]) || square.isRevealed,
+    }))
+  );
+
+  if (!hasMine && numAdjacentMines === 0) {
+    return getAdjacentSquareCoordinates(
+      numRows,
+      numColumns,
+      coordinates
+    ).reduce(
+      (acc, coordinates) => revealSquare(numRows, numColumns, acc, coordinates),
+      nextSquares
+    );
+  }
+
+  return nextSquares;
+};
+
+const DEFAULT_LEVEL: Level = "beginner";
+const DEFAULT_STATE: Record<
+  Level,
+  {
+    flagsRemaining: number;
+    numColumns: number;
+    numMines: number;
+    numRows: number;
+    squares: Square[][];
+  }
+> = {
+  beginner: {
+    flagsRemaining: 10,
+    numColumns: 9,
+    numMines: 10,
+    numRows: 9,
+    squares: getInitialSquares(9, 9),
+  },
+  expert: {
+    flagsRemaining: 99,
+    numColumns: 30,
+    numMines: 99,
+    numRows: 16,
+    squares: getInitialSquares(16, 30),
+  },
+  intermediate: {
+    flagsRemaining: 40,
+    numColumns: 16,
+    numMines: 40,
+    numRows: 16,
+    squares: getInitialSquares(16, 16),
+  },
+};
+const LEVELS: [key: Level, value: string][] = [
+  ["beginner", "Beginner"],
+  ["intermediate", "Intermediate"],
+  ["expert", "Expert"],
+];
 
 // @see https://github.com/jonathanrtuck/minesweeper
-export const Minesweeper: ApplicationComponent = ({
-  Content,
-  Menu,
-  Menubar,
-  Menuitem,
-  onAbout,
-  onQuit,
-  onResize,
-}) => {
+export const Minesweeper: Application["Component"] = () => {
+  const closeApplication = useStore((store) => store.closeApplication);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [flagsRemaining, setFlagsRemaining] = useState<number>(10);
@@ -48,26 +195,26 @@ export const Minesweeper: ApplicationComponent = ({
 
   useEffect(() => {
     if (elapsedTime === 1) {
-      intervalRef.current = setInterval(() => {
-        setElapsedTime((prevState) => prevState + 1);
-      }, 1000);
+      intervalRef.current = setInterval(
+        () => setElapsedTime((prevState) => prevState + 1),
+        1000
+      );
     }
 
     if (intervalRef.current && (elapsedTime === 0 || elapsedTime === 999)) {
       clearInterval(intervalRef.current);
     }
   }, [elapsedTime]);
-  useEffect(() => {
-    if (intervalRef.current && (isLost || isWon)) {
-      clearInterval(intervalRef.current);
-    }
-  }, [isLost, isWon]);
   useEffect(
-    () => () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    },
+    () =>
+      intervalRef.current && (isLost || isWon)
+        ? clearInterval(intervalRef.current)
+        : undefined,
+    [isLost, isWon]
+  );
+  useEffect(
+    () => () =>
+      intervalRef.current ? clearInterval(intervalRef.current) : undefined,
     []
   );
 
@@ -76,7 +223,12 @@ export const Minesweeper: ApplicationComponent = ({
       <Menubar>
         <Menuitem title="File">
           <Menu>
-            <Menuitem onClick={onQuit} title="Quit" />
+            <Menuitem
+              onClick={() =>
+                closeApplication({ id: "application-minesweeper" })
+              }
+              title="Quit"
+            />
           </Menu>
         </Menuitem>
         <Menuitem title="Game">
@@ -86,11 +238,6 @@ export const Minesweeper: ApplicationComponent = ({
                 setElapsedTime(0);
                 setFlagsRemaining(DEFAULT_STATE[level].flagsRemaining);
                 setSquares(DEFAULT_STATE[level].squares);
-                // reset window dimensions
-                onResize(
-                  DEFAULT_STATE[level].height,
-                  DEFAULT_STATE[level].width
-                );
               }}
               title="New"
             />
@@ -100,15 +247,12 @@ export const Minesweeper: ApplicationComponent = ({
                 checked={level === lvl}
                 key={lvl}
                 onClick={() => {
-                  const { flagsRemaining, height, squares, width } =
-                    DEFAULT_STATE[lvl];
+                  const { flagsRemaining, squares } = DEFAULT_STATE[lvl];
 
                   setElapsedTime(0);
                   setFlagsRemaining(flagsRemaining);
                   setLevel(lvl);
                   setSquares(squares);
-                  // update window dimensions
-                  onResize(height, width);
                 }}
                 title={title}
                 type="radio"
@@ -116,53 +260,24 @@ export const Minesweeper: ApplicationComponent = ({
             ))}
           </Menu>
         </Menuitem>
-        <Menuitem title="Help">
-          <Menu>
-            <Menuitem
-              onClick={() => {
-                onAbout(
-                  <>
-                    <p>
-                      Recreation of{" "}
-                      <a href="https://en.wikipedia.org/wiki/Minesweeper_(video_game)">
-                        Minesweeper
-                      </a>
-                      .
-                    </p>
-                    <p>
-                      Difficulty can be selected from the <b>Game</b> menu.
-                    </p>
-                    <h4>Notes</h4>
-                    <p>Custom boards not yet supported.</p>
-                  </>
-                );
-              }}
-              title="About Minesweeper…"
-            />
-          </Menu>
-        </Menuitem>
       </Menubar>
       <Content>
         <div
-          className={styles.root}
-          onContextMenu={(e) => e.preventDefault()}
-          style={
-            {
-              "--application-minesweeper-border-size": `${BORDER_SIZE}px`,
-              "--application-minesweeper-header-height": `${HEADER_HEIGHT}px`,
-              "--application-minesweeper-padding-size": `${PADDING_SIZE}px`,
-              "--application-minesweeper-square-size": `${SQUARE_SIZE}px`,
-            } as CSSProperties
-          }>
-          <header className={styles.header}>
-            <data className={styles.ticker} value={flagsRemaining}>
+          className={clsx(
+            "minesweeper",
+            FONT_DIGITAL_DISMAY.variable,
+            FONT_MINE_SWEEPER.variable
+          )}
+          onContextMenu={(e) => e.preventDefault()}>
+          <header>
+            <data value={flagsRemaining}>
               {flagsRemaining.toString().padStart(3, "0")}
             </data>
             <button
               aria-label="Reset"
-              className={clsx(styles.reset, {
-                [styles.lost]: isLost,
-                [styles.won]: isWon,
+              className={clsx({
+                isLost,
+                isWon,
               })}
               onClick={() => {
                 setElapsedTime(0);
@@ -171,16 +286,14 @@ export const Minesweeper: ApplicationComponent = ({
               }}
               type="reset"
             />
-            <time className={styles.ticker} dateTime={`PT${elapsedTime}S`}>
+            <time dateTime={`PT${elapsedTime}S`}>
               {elapsedTime.toString().padStart(3, "0")}
             </time>
           </header>
-          <div className={styles.grid}>
+          <div>
             {squares.map((row, rowIndex) => (
-              <div
-                className={styles.row}
-                key={rowIndex} // eslint-disable-line react/no-array-index-key
-              >
+              // eslint-disable-next-line react/no-array-index-key
+              <div key={rowIndex}>
                 {row.map((_, columnIndex) => {
                   const { hasFlag, hasMine, isRevealed, numAdjacentMines } =
                     squares[rowIndex][columnIndex];
@@ -192,15 +305,14 @@ export const Minesweeper: ApplicationComponent = ({
                   return (
                     <button
                       aria-disabled={isRevealed || isGameOver}
-                      className={clsx(styles.square, {
-                        [styles[`number-${numAdjacentMines}`]]: isRevealed,
-                        [styles.button]: !isRevealed && !isRevealedMine,
-                        [styles.flag]: hasFlag,
-                        [styles.gameOver]: isGameOver,
-                        [styles.mine]: hasMine,
-                        [styles.number]: isRevealed,
-                        [styles.revealed]: isRevealed,
+                      className={clsx({
+                        hasFlag,
+                        hasMine,
+                        isButton: !isRevealed && !isRevealedMine,
+                        isGameOver,
+                        isRevealed,
                       })}
+                      data-number={isRevealed ? numAdjacentMines : undefined}
                       key={columnIndex} // eslint-disable-line react/no-array-index-key
                       onClick={
                         isRevealed || isGameOver || hasFlag

@@ -2,7 +2,7 @@
 
 import type { IconComponent } from "@/types";
 
-export const BeOS: IconComponent = ({ theme, ...props }) => (
+export const BeOS: IconComponent = (props) => (
   <svg
     {...props}
     version="1.1"

@@ -1,9 +1,25 @@
 # src
 
+## contexts
+
+all contexts used in the UI
+
 ## files
 
-files are placed in `/public/files/`, and `/src/files.ts` exports each `File`
+all _files_ openable by _applications_
 
-## themes
+### note
 
-theme CSS variables are defined in `/src/css`, and `/src/theme.ts` exports each `Theme`
+- this file MUST only export `File`s (from `@/types`)
+
+## ids
+
+html element ids
+
+## store
+
+zustand store including state and actions. utilizes [redux devtools](https://github.com/reduxjs/redux-devtools)
+
+## types
+
+common types used throughout `/src`

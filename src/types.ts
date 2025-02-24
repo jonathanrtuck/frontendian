@@ -1,86 +1,69 @@
-import { Menu, Menuitem } from "@/components";
-import type {
-  ComponentProps,
-  ComponentType,
-  PropsWithChildren,
-  ReactNode,
-  RefObject,
-  SVGAttributes,
-} from "react";
-import { EmptyObject } from "type-fest";
+import type { ComponentType, SVGProps } from "react";
+import type { EmptyObject, SimplifyDeep } from "type-fest";
 
 export type Actions = Readonly<{
   blurWindow(payload: PayloadWithID): void;
   closeApplication(payload: PayloadWithID): void;
+  closeDialog(payload: PayloadWithID): void;
   closeWindow(payload: PayloadWithID): void;
+  collapseMenuitem(payload: PayloadWithID): void;
   collapseWindow(payload: PayloadWithID): void;
+  expandMenuitem(payload: PayloadWithID): void;
   expandWindow(payload: PayloadWithID): void;
   focusSystemBar(): void;
   focusWindow(payload: PayloadWithID): void;
   hideWindow(payload: PayloadWithID): void;
-  moveWindow(payload: PayloadWithID<{ left: Pixels; top: Pixels }>): void;
-  moveWindowTitlebar(payload: PayloadWithID<{ left: Pixels }>): void;
+  maximizeWindow(payload: PayloadWithID): void;
+  moveTitlebar(payload: PayloadWithID<{ left: Percentage }>): void;
+  moveWindow(payload: PayloadWithID<Coordinates>): void;
   openApplication(payload: PayloadWithID): void;
-  openFile(payload: PayloadWithID<{ windowId?: ID }>): void;
+  openDialog(payload: PayloadWithID<{ type: Dialog["type"] }>): void;
+  openFile(payload: PayloadWithID<{ windowId?: Window["id"] }>): void;
   openWindow(payload: PayloadWithID): void;
-  resizeWindow(payload: PayloadWithID<{ height: Pixels; width: Pixels }>): void;
-  setTheme(payload: PayloadWithID<{ id: Theme["id"] }>): void;
+  resizeWindow(payload: PayloadWithID<Size>): void;
   showWindow(payload: PayloadWithID): void;
   zoomWindow(payload: PayloadWithID): void;
 }>;
 
-export type Application = ApplicationConfiguration & {
-  windowIds: Window["id"][];
-};
-
-export type ApplicationComponent = ComponentType<ApplicationComponentProps>;
-
-export type ApplicationComponentProps = {
-  Content: ComponentType<PropsWithChildren>;
-  Menu: ComponentType<ComponentProps<typeof Menu>>;
-  Menubar: ComponentType<PropsWithChildren>;
-  Menuitem: ComponentType<ComponentProps<typeof Menuitem>>;
-  file?: File;
-  onAbout(node: ReactNode): void;
-  onClose(): void;
-  onNew(): void;
-  onOpen(fileId: ID): void;
-  onQuit(): void;
-  onResize(height: Pixels, width: Pixels): void;
-  openableFiles: File[];
-  theme: Theme;
-};
-
-export type ApplicationConfiguration = Readonly<{
-  Component: ApplicationComponent;
-  getTitle(theme: Theme): string;
-  getWindow?(theme: Theme, file?: File): Partial<Window>;
-  Icon?: IconComponent;
+export type Application = Readonly<{
+  About: ComponentType;
+  Component: ComponentType<{
+    fileId?: File["id"];
+    windowId: Window["id"];
+  }>;
+  getWindow?(
+    fileId?: File["id"]
+  ): Partial<
+    Pick<
+      Window,
+      "collapsed" | "height" | "hidden" | "resizable" | "title" | "width"
+    >
+  >;
+  Icon: IconComponent;
   id: ID;
+  mimetypes: MimeType[];
+  title(theme: Theme): string;
 }>;
 
-export type File = Readonly<
-  {
-    getTitle(theme: Theme): string;
-    getUrl(theme: Theme): URL;
-    id: ID;
-  } & (
-    | {
-        type: "application/pdf";
-        width: Pixels; // page width
-      }
-    | {
-        type: "text/markdown";
-      }
-  )
->;
+export type Coordinates = {
+  x: Pixels;
+  y: Pixels;
+};
 
-export type IconComponent = ComponentType<
-  SVGAttributes<SVGSVGElement> & {
-    ref?: RefObject<SVGSVGElement>;
-    theme?: Theme;
-  }
->;
+export type Dialog = {
+  applicationId: Application["id"];
+  id: ID;
+  type: "about" | "error";
+};
+
+export type File = Readonly<{
+  id: ID;
+  mimetype: MimeType;
+  title: string;
+  url(theme: Theme): string;
+}>;
+
+export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
 export type ID = string;
 
@@ -100,50 +83,44 @@ export type Percentage = number;
 
 export type Pixels = number;
 
+export type Size = {
+  height: Pixels | "auto";
+  width: Pixels | "auto";
+};
+
 export type State = {
-  applications: Application[]; // the order is used as the display order in the SystemBar MainMenu
-  currentThemeId: Theme["id"];
-  desktop: (Application["id"] | File["id"])[]; // the order is used as the display order on the Desktop
-  files: File[];
-  openApplicationIds: Application["id"][]; // the order is used as the display order in the SystemBar Applications Menu
-  stackingOrder: Application["id"][];
-  systemBarId: ID;
-  themes: Theme[];
-  types: Partial<
-    Record<
-      MimeType,
-      {
-        application?: Application["id"];
-        Icon: IconComponent;
-      }
-    >
-  >;
+  dialogs: Dialog[];
+  expandedMenuitemIds: ID[];
+  openApplicationIds: Application["id"][];
+  stackingOrder: (Application["id"] | ID)[];
   windows: Window[];
 };
 
-export type Theme = Readonly<{
-  Icon: IconComponent;
-  id: "theme-beos" | "theme-mac-os-classic";
-  isDefault?: boolean;
-  title: string;
-}>;
+export type Theme = "beos" | "mac-os-classic";
 
 export type URL = string;
 
-export interface Window {
-  collapsed: boolean;
-  fileId?: File["id"];
-  focused: boolean;
-  height: Pixels;
-  hidden: boolean;
-  id: ID;
-  left: Pixels;
-  prev?: Pick<this, "height" | "left" | "top" | "width">;
-  resizable: boolean;
-  scrollable: boolean;
-  title: string;
-  titlebarLeft: Percentage;
-  top: Pixels;
-  width: Pixels;
-  zoomed: boolean;
-}
+export type Window = SimplifyDeep<
+  Coordinates &
+    Size & {
+      applicationId: Application["id"];
+      collapsed: boolean;
+      focused: boolean;
+      hidden: boolean;
+      id: ID;
+      prev?: Coordinates & Size;
+      resizable: boolean;
+      title: string;
+      titlebar: {
+        left: Percentage;
+      };
+    }
+> &
+  (
+    | {
+        Component: ComponentType;
+      }
+    | {
+        fileId?: File["id"];
+      }
+  );

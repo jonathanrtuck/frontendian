@@ -1,18 +1,19 @@
-import { ApplicationConfiguration } from "@/types";
-import { DEFAULT_LEVEL, DEFAULT_STATE } from "./constants";
+import { AboutMinesweeper } from "./AboutMinesweeper";
 import { Minesweeper } from "./Minesweeper";
 import { MinesweeperIcon } from "./MinesweeperIcon";
+import type { Application } from "@/types";
 
-export const APPLICATION_MINESWEEPER: ApplicationConfiguration = {
+export const APPLICATION_MINESWEEPER: Application = {
+  About: AboutMinesweeper,
   Component: Minesweeper,
-  getTitle: () => "Minesweeper",
   getWindow: () => ({
-    height: DEFAULT_STATE[DEFAULT_LEVEL].height,
+    height: "auto",
     resizable: false,
-    scrollable: false,
     title: "Minesweeper",
-    width: DEFAULT_STATE[DEFAULT_LEVEL].width,
+    width: "auto",
   }),
   Icon: MinesweeperIcon,
   id: "application-minesweeper",
+  mimetypes: [],
+  title: () => "Minesweeper",
 };

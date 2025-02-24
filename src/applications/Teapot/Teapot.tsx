@@ -1,19 +1,15 @@
 "use client";
 
-import styles from "./Teapot.module.css";
-import { ApplicationComponent } from "@/types";
-import { useEffect, useRef } from "react";
+import "./Teapot.css";
 import { main } from "./webgl";
+import { Content, Menu, Menubar, Menuitem } from "@/components";
+import { useStore } from "@/store";
+import type { Application } from "@/types";
+import { useEffect, useRef } from "react";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
-export const Teapot: ApplicationComponent = ({
-  Content,
-  Menu,
-  Menubar,
-  Menuitem,
-  onAbout,
-  onQuit,
-}) => {
+export const Teapot: Application["Component"] = () => {
+  const closeApplication = useStore((store) => store.closeApplication);
   const rootRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -27,30 +23,15 @@ export const Teapot: ApplicationComponent = ({
       <Menubar>
         <Menuitem title="File">
           <Menu>
-            <Menuitem onClick={onQuit} title="Quit" />
-          </Menu>
-        </Menuitem>
-        <Menuitem title="Help">
-          <Menu>
             <Menuitem
-              onClick={() => {
-                onAbout(
-                  <p>
-                    WebGL rendering of the{" "}
-                    <a href="https://en.wikipedia.org/wiki/Utah_teapot">
-                      Utah Teapot
-                    </a>
-                    .
-                  </p>
-                );
-              }}
-              title="About Teapot…"
+              onClick={() => closeApplication({ id: "application-teapot" })}
+              title="Quit"
             />
           </Menu>
         </Menuitem>
       </Menubar>
       <Content>
-        <canvas className={styles.root} ref={rootRef} />
+        <canvas className="teapot" ref={rootRef} />
       </Content>
     </>
   );

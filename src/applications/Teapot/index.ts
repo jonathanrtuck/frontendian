@@ -1,16 +1,18 @@
-import { ApplicationConfiguration } from "@/types";
+import { AboutTeapot } from "./AboutTeapot";
 import { Teapot } from "./Teapot";
 import { TeapotIcon } from "./TeapotIcon";
+import type { Application } from "@/types";
 
-export const APPLICATION_TEAPOT: ApplicationConfiguration = {
+export const APPLICATION_TEAPOT: Application = {
+  About: AboutTeapot,
   Component: Teapot,
-  getTitle: () => "Teapot",
   getWindow: () => ({
-    height: 300,
-    scrollable: false,
+    height: 336,
     title: "Teapot",
-    width: 300,
+    width: 312,
   }),
   Icon: TeapotIcon,
   id: "application-teapot",
+  mimetypes: [],
+  title: () => "Teapot",
 };

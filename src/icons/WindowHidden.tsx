@@ -2,7 +2,7 @@
 
 import type { IconComponent } from "@/types";
 
-export const WindowHidden: IconComponent = ({ theme, ...props }) => (
+export const WindowHidden: IconComponent = (props) => (
   <svg
     {...props}
     version="1.1"

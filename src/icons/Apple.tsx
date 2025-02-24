@@ -2,7 +2,7 @@
 
 import type { IconComponent } from "@/types";
 
-export const Apple: IconComponent = ({ theme, ...props }) => (
+export const Apple: IconComponent = (props) => (
   <svg
     {...props}
     version="1.1"
