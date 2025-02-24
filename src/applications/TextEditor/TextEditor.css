@@ -42,7 +42,12 @@
 
     h2 {
       font-size: 1.33em;
-      margin: 2.5rem 0 0;
+      margin: 4rem 0 0;
+    }
+
+    h3 {
+      font-size: 1.125em;
+      margin: 2rem 0 1rem;
     }
 
     img {
