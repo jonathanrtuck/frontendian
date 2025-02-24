@@ -33,7 +33,7 @@ const ICONS: Partial<Record<MimeType, IconComponent>> = {
   "text/markdown": Text,
 };
 
-export const MacOSClassic: FunctionComponent = () => {
+export const Desktop: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
   const closeApplication = useStore((store) => store.closeApplication);
   const closeDialog = useStore((store) => store.closeDialog);
@@ -330,4 +330,4 @@ export const MacOSClassic: FunctionComponent = () => {
   );
 };
 
-MacOSClassic.displayName = "MacOSClassic";
+Desktop.displayName = "Desktop";

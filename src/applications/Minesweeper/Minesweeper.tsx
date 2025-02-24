@@ -5,7 +5,18 @@ import { Content, Menu, Menubar, Menuitem } from "@/components";
 import { useStore } from "@/store";
 import type { Application } from "@/types";
 import clsx from "clsx";
+import localFont from "next/font/local";
 import { useEffect, useRef, useState } from "react";
+
+const FONT_DIGITAL_DISMAY = localFont({
+  src: "./DigitalDismay.otf",
+  variable: "--font-family--digital-dismay",
+});
+
+const FONT_MINE_SWEEPER = localFont({
+  src: "./MineSweeper.otf",
+  variable: "--font-family--mine-sweeper",
+});
 
 type Coordinates = [rowIndex: number, columnIndex: number];
 type Level = "beginner" | "expert" | "intermediate";
@@ -251,7 +262,13 @@ export const Minesweeper: Application["Component"] = () => {
         </Menuitem>
       </Menubar>
       <Content>
-        <div className="minesweeper" onContextMenu={(e) => e.preventDefault()}>
+        <div
+          className={clsx(
+            "minesweeper",
+            FONT_DIGITAL_DISMAY.variable,
+            FONT_MINE_SWEEPER.variable
+          )}
+          onContextMenu={(e) => e.preventDefault()}>
           <header>
             <data value={flagsRemaining}>
               {flagsRemaining.toString().padStart(3, "0")}

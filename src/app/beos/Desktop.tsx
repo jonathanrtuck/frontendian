@@ -46,7 +46,7 @@ const ICONS: Partial<Record<MimeType, IconComponent>> = {
   "text/markdown": Text,
 };
 
-export const BeOS: FunctionComponent = () => {
+export const Desktop: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
   const closeApplication = useStore((store) => store.closeApplication);
   const closeDialog = useStore((store) => store.closeDialog);
@@ -306,4 +306,4 @@ export const BeOS: FunctionComponent = () => {
   );
 };
 
-BeOS.displayName = "BeOS";
+Desktop.displayName = "Desktop";
