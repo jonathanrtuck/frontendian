@@ -756,7 +756,11 @@
       > .content {
         height: 0;
         margin-bottom: calc((var(--window-padding) + var(--border-width)) * -1);
-        visibility: hidden;
+        overflow: hidden;
+
+        &.isScrollable {
+          padding-right: var(--scrollbar-width);
+        }
       }
     }
 
