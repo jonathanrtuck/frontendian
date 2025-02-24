@@ -45,8 +45,21 @@
       margin: 2.5rem 0 0;
     }
 
+    img {
+      &[alt="Apple"] {
+        vertical-align: text-top;
+        width: 1rem;
+      }
+    }
+
     table {
       border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: var(--border-width) solid var(--border-color--light);
+      padding: 0.5rem 0.75rem;
     }
 
     tr {
@@ -55,12 +68,6 @@
       &:nth-child(2n) {
         background-color: rgba(0, 0, 0, 0.05);
       }
-    }
-
-    th,
-    td {
-      border: var(--border-width) solid var(--border-color--light);
-      padding: 0.5rem 0.75rem;
     }
   }
 }

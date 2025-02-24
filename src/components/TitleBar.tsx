@@ -2,19 +2,17 @@
 
 import { WindowContext } from "@/contexts";
 import type { Percentage, Pixels } from "@/types";
-import clsx from "clsx";
 import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
 import { useContext, useLayoutEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 
 export const TitleBar: FunctionComponent<
   PropsWithChildren<{
-    className?: string;
     left?: Percentage;
     onDoubleClick?(): void;
     onDrag?(left: Percentage): void;
   }>
-> = ({ children, className, left = 0, onDoubleClick, onDrag }) => {
+> = ({ children, left = 0, onDoubleClick, onDrag }) => {
   const { width = "auto" } = useContext(WindowContext);
   const rootRef = useRef<HTMLElement>(null);
   const [maxLeft, setMaxLeft] = useState<Pixels>(0);
@@ -43,7 +41,7 @@ export const TitleBar: FunctionComponent<
         y: 0,
       }}>
       <header
-        className={clsx("title-bar", className)}
+        className="title-bar"
         onDoubleClick={
           onDoubleClick
             ? ({ target }) =>

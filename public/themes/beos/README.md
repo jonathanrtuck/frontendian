@@ -7,7 +7,7 @@ This site was inspired by [BeOS](https://en.wikipedia.org/wiki/BeOS).
 ## Tips
 
 - Applications can be launched from the *BeOS* menu in the Deskbar (top right)
-- Double-click desktop icons to open certain files/applications
+- Double-click desktop icons to open files
 - Grab and drag the yellow window titlebar to move windows
   - Drag while holding `Shift` to move the titlebar along the top of the window
 - Grab and drag the bottom right corner of a window to resize
