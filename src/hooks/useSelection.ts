@@ -1,8 +1,7 @@
 "use client";
 
-import type { Coordinates } from "@/types";
-import type { RefObject } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { type Coordinates } from "@/types";
+import { type RefObject, useCallback, useEffect, useState } from "react";
 
 type Selection = {
   from?: Coordinates;

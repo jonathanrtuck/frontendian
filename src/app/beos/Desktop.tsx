@@ -31,9 +31,9 @@ import {
 } from "@/icons";
 import { SYSTEM_BAR_ID } from "@/ids";
 import { useStore } from "@/store";
-import type { IconComponent, MimeType } from "@/types";
+import { type IconComponent, type MimeType } from "@/types";
 import dynamic from "next/dynamic";
-import type { FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 // @see https://nextjs.org/docs/messages/react-hydration-error
 const Clock = dynamic(
@@ -314,5 +314,3 @@ export const Desktop: FunctionComponent = () => {
     </>
   );
 };
-
-Desktop.displayName = "Desktop";

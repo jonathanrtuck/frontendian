@@ -1,7 +1,7 @@
 import styles from "./Desktop.module.css";
 import clsx from "clsx";
 import localFont from "next/font/local";
-import type { FunctionComponent, PropsWithChildren } from "react";
+import { type FunctionComponent, type PropsWithChildren } from "react";
 
 const FONT_COURIER_10_PITCH = localFont({
   src: "./Courier10Pitch.otf",

@@ -1,7 +1,7 @@
 import { AboutTeapot } from "./AboutTeapot";
 import { Teapot } from "./Teapot";
 import { TeapotIcon } from "./TeapotIcon";
-import type { Application } from "@/types";
+import { type Application } from "@/types";
 
 export const APPLICATION_TEAPOT: Application = {
   About: AboutTeapot,

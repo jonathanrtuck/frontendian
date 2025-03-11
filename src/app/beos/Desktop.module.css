@@ -1,10 +1,10 @@
 :local .theme {
-  --background-color--dark: rgb(184, 184, 184);
-  --background-color--default: rgb(222, 222, 222);
-  --background-color--inactive: rgb(232, 232, 232);
-  --border-color--dark: rgb(96, 96, 96);
+  --background-color--dark: rgb(184 184 184);
+  --background-color--default: rgb(222 222 222);
+  --background-color--inactive: rgb(232 232 232);
+  --border-color--dark: rgb(96 96 96);
   --border-color--default: var(--border-color--dark);
-  --border-color--light: rgb(153, 153, 153);
+  --border-color--light: rgb(153 153 153);
   --border-width: 0.0625rem;
   --box-shadow--high: var(--border-width) var(--border-width)
       var(--color--lowlight),
@@ -22,8 +22,8 @@
       var(--color--lowlight),
     inset calc(var(--border-width) * -1) calc(var(--border-width) * -1)
       var(--color--highlight);
-  --color--highlight: rgba(255, 255, 255, 0.6);
-  --color--lowlight: rgba(0, 0, 0, 0.2);
+  --color--highlight: rgb(255 255 255 / 60%);
+  --color--lowlight: rgb(0 0 0 / 20%);
   --cursor--default: url("/themes/beos/default.svg") 1 0, default;
   --cursor--pointer: url("/themes/beos/pointer.svg") 2 0, pointer;
   --cursor--text: url("/themes/beos/text.svg") 7 10, text;
@@ -31,23 +31,23 @@
   --font-family--monospace: var(--font-family--courier-10-pitch);
   --scrollbar-width: 1rem;
   --system-bar-width: 11rem;
-  --text-color--dark: rgb(0, 0, 0);
+  --text-color--dark: rgb(0 0 0);
   --text-color--default: var(--text-color--dark);
-  --text-color--disabled: rgb(160, 160, 160);
-  --text-color--light: rgb(255, 255, 255);
+  --text-color--disabled: rgb(160 160 160);
+  --text-color--light: rgb(255 255 255);
   --title-bar-height: 1.6875rem;
   --window-padding: 0.1875rem;
 
   body {
-    background: rgb(51, 102, 152);
+    background: rgb(51 102 152);
   }
 
   ::backdrop {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgb(0 0 0 / 10%);
   }
 
   ::selection {
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(0 0 0);
     color: var(--text-color--light);
   }
 
@@ -99,7 +99,7 @@
   }
 
   .content {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(255 255 255);
     color: var(--text-color--default);
     flex: 1 1 auto;
     isolation: isolate;
@@ -111,13 +111,13 @@
 
       &::-webkit-scrollbar {
         appearance: none;
-        background-color: rgb(240, 240, 240);
+        background-color: rgb(240 240 240);
         height: var(--scrollbar-width);
         width: var(--scrollbar-width);
       }
       [aria-current="true"] &.isHorizontal::-webkit-scrollbar:horizontal,
       [aria-current="true"] &.isVertical::-webkit-scrollbar:vertical {
-        background-color: rgb(200, 200, 200);
+        background-color: rgb(200 200 200);
       }
       &::-webkit-scrollbar-button {
         background-position: center;
@@ -178,7 +178,7 @@
         &.isHorizontal::-webkit-scrollbar-button:horizontal:active,
       [aria-current="true"]
         &.isVertical::-webkit-scrollbar-button:vertical:active {
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: rgb(0 0 0 / 20%);
         background-blend-mode: darken;
         box-shadow: var(--box-shadow--low--inset);
       }
@@ -379,7 +379,7 @@
     }
 
     &:focus > label {
-      background-color: rgb(0, 0, 0);
+      background-color: rgb(0 0 0);
     }
   }
 
@@ -479,7 +479,7 @@
       }
 
       &[aria-expanded="true"] {
-        background-color: rgb(160, 160, 160);
+        background-color: rgb(160 160 160);
       }
 
       > svg {
@@ -525,13 +525,13 @@
       > .menuitem-button {
         &:not([aria-checked="true"], [aria-disabled="true"]) {
           &:hover {
-            background-color: rgb(160, 160, 160);
+            background-color: rgb(160 160 160);
           }
         }
 
         &[aria-haspopup="menu"] {
           &::after {
-            color: rgb(240, 240, 240);
+            color: rgb(240 240 240);
             content: "▶︎";
             font-size: 0.75rem;
             position: absolute;
@@ -544,7 +544,7 @@
 
           &[aria-expanded="true"] {
             &::after {
-              color: rgb(200, 200, 200);
+              color: rgb(200 200 200);
             }
           }
         }
@@ -620,7 +620,7 @@
     top: calc(var(--title-bar-height) * -1);
 
     [aria-current="true"] & {
-      background-color: rgb(240, 202, 68);
+      background-color: rgb(240 202 68);
     }
 
     &::before,
@@ -646,13 +646,13 @@
   .title-bar-button {
     --title-bar-button-background-image: linear-gradient(
       to bottom right,
-      rgb(255, 255, 255),
-      rgb(216, 216, 216)
+      rgb(255 255 255),
+      rgb(216 216 216)
     );
     --title-bar-button-background-image--active: linear-gradient(
       to top left,
-      rgb(255, 255, 255),
-      rgb(216, 216, 216)
+      rgb(255 255 255),
+      rgb(216 216 216)
     );
 
     aspect-ratio: 1 / 1;
@@ -663,13 +663,13 @@
     [aria-current="true"] & {
       --title-bar-button-background-image: linear-gradient(
         to bottom right,
-        rgb(248, 248, 96),
-        rgb(224, 182, 60)
+        rgb(248 248 96),
+        rgb(224 182 60)
       );
       --title-bar-button-background-image--active: linear-gradient(
         to top left,
-        rgb(248, 248, 96),
-        rgb(224, 182, 60)
+        rgb(248 248 96),
+        rgb(224 182 60)
       );
     }
 
@@ -725,7 +725,7 @@
   .tray {
     align-items: center;
     background-clip: padding-box;
-    background-color: rgba(0, 0, 0, 0.175);
+    background-color: rgb(0 0 0 / 17.5%);
     border-color: transparent;
     border-width: var(--border-width);
     box-shadow: var(--box-shadow--high), var(--box-shadow--low--inset);

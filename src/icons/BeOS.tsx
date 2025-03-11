@@ -1,6 +1,4 @@
-"use client";
-
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 
 export const BeOS: IconComponent = (props) => (
   <svg
@@ -41,5 +39,3 @@ export const BeOS: IconComponent = (props) => (
     </g>
   </svg>
 );
-
-BeOS.displayName = "BeOS";

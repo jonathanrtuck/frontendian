@@ -1,6 +1,6 @@
 import { FileManager } from "./FileManager";
 import { FileManagerIcon } from "./FileManagerIcon";
-import type { Application } from "@/types";
+import { type Application } from "@/types";
 import { Fragment } from "react";
 
 export const APPLICATION_FILE_MANAGER: Application = {

@@ -2,7 +2,7 @@
 
 import { Dialog } from "@/components";
 import { Error as Icon } from "@/icons";
-import type { FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 const Error: FunctionComponent = () => (
   <Dialog Icon={Icon} id="dialog-error">

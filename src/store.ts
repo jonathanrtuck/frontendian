@@ -1,7 +1,7 @@
 import * as applications from "@/applications";
 import * as files from "@/files";
 import { SYSTEM_BAR_ID } from "@/ids";
-import type { Actions, Pixels, State, Window } from "@/types";
+import { type Actions, type Pixels, type State, type Window } from "@/types";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";

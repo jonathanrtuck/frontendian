@@ -1,6 +1,4 @@
-"use client";
-
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 import { useId } from "react";
 
 export const WindowVisible: IconComponent = (props) => {
@@ -37,5 +35,3 @@ export const WindowVisible: IconComponent = (props) => {
     </svg>
   );
 };
-
-WindowVisible.displayName = "WindowVisible";

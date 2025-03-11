@@ -1,8 +1,8 @@
 "use client";
 
 import { SYSTEM_BAR_ID } from "@/ids";
-import type { Window } from "@/types";
-import type { FunctionComponent, PropsWithChildren } from "react";
+import { type Window } from "@/types";
+import { type FunctionComponent, type PropsWithChildren } from "react";
 
 export const SystemBar: FunctionComponent<
   PropsWithChildren<{
@@ -38,5 +38,3 @@ export const SystemBar: FunctionComponent<
     {children}
   </header>
 );
-
-SystemBar.displayName = "SystemBar";

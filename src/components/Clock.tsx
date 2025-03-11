@@ -2,8 +2,7 @@
 
 import { useClock, useTheme } from "@/hooks";
 import { MS } from "@/types";
-import type { FunctionComponent } from "react";
-import { useEffect, useState } from "react";
+import { type FunctionComponent, useEffect, useState } from "react";
 
 const TIMEOUT_DELAY: MS = 4000;
 
@@ -41,5 +40,3 @@ export const Clock: FunctionComponent = () => {
     </time>
   );
 };
-
-Clock.displayName = "Clock";

@@ -1,7 +1,6 @@
 "use client";
 
-import type { RefObject } from "react";
-import { useLayoutEffect, useState } from "react";
+import { type RefObject, useLayoutEffect, useState } from "react";
 
 export const useOverflow = (
   ref: RefObject<HTMLElement | null>

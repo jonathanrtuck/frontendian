@@ -2,16 +2,20 @@
 
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 import Link, { LinkProps } from "next/link";
-import type {
-  AnchorHTMLAttributes,
-  FunctionComponent,
-  PropsWithChildren,
-  UIEvent,
+import {
+  type AnchorHTMLAttributes,
+  type FunctionComponent,
+  type PropsWithChildren,
+  type UIEvent,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
 } from "react";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
-import type { EmptyObject } from "type-fest";
+import { type EmptyObject } from "type-fest";
 
 // @see https://refine.dev/blog/react-createportal/#mismatch-between-location-in-the-dom-and-event-bubbling
 export const Menuitem: FunctionComponent<
@@ -321,5 +325,3 @@ export const Menuitem: FunctionComponent<
     </li>
   );
 };
-
-Menuitem.displayName = "Menuitem";

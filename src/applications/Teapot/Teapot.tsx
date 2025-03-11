@@ -4,7 +4,7 @@ import "./Teapot.css";
 import { main } from "./webgl";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import { useStore } from "@/store";
-import type { Application } from "@/types";
+import { type Application } from "@/types";
 import { useEffect, useRef } from "react";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
@@ -36,5 +36,3 @@ export const Teapot: Application["Component"] = () => {
     </>
   );
 };
-
-Teapot.displayName = "Teapot";

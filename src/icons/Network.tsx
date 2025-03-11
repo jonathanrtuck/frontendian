@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "@/hooks";
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 import { useId } from "react";
 
 export const Network: IconComponent = (props) => {
@@ -108,5 +108,3 @@ export const Network: IconComponent = (props) => {
       );
   }
 };
-
-Network.displayName = "Network";

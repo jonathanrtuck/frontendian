@@ -2,8 +2,12 @@
 
 import { WindowContext } from "@/contexts";
 import { IconComponent, ID } from "@/types";
-import type { FunctionComponent, PropsWithChildren } from "react";
-import { useEffect, useRef } from "react";
+import {
+  type FunctionComponent,
+  type PropsWithChildren,
+  useEffect,
+  useRef,
+} from "react";
 
 export const Dialog: FunctionComponent<
   PropsWithChildren<{
@@ -26,5 +30,3 @@ export const Dialog: FunctionComponent<
     </dialog>
   );
 };
-
-Dialog.displayName = "Dialog";

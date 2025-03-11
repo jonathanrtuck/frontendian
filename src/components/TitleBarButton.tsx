@@ -1,6 +1,6 @@
 "use client";
 
-import type { FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const TitleBarButton: FunctionComponent<{
   onClick(): void;
@@ -15,5 +15,3 @@ export const TitleBarButton: FunctionComponent<{
     type="button"
   />
 );
-
-TitleBarButton.displayName = "TitleBarButton";

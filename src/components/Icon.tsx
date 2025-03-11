@@ -1,7 +1,7 @@
 "use client";
 
-import type { IconComponent } from "@/types";
-import type { FunctionComponent } from "react";
+import { type IconComponent } from "@/types";
+import { type FunctionComponent } from "react";
 
 export const Icon: FunctionComponent<{
   Icon: IconComponent;
@@ -21,5 +21,3 @@ export const Icon: FunctionComponent<{
     <label>{title}</label>
   </button>
 );
-
-Icon.displayName = "Icon";

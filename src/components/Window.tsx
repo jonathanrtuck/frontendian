@@ -3,10 +3,16 @@
 import { WindowContext } from "@/contexts";
 import { useFocus } from "@/hooks";
 import { SYSTEM_BAR_ID } from "@/ids";
-import type { Coordinates, ID, Pixels, Size } from "@/types";
+import { type Coordinates, type ID, type Pixels, type Size } from "@/types";
 import clsx from "clsx";
-import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  type FunctionComponent,
+  type PropsWithChildren,
+  type RefObject,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
 
@@ -183,5 +189,3 @@ export const Window: FunctionComponent<
     </Draggable>
   );
 };
-
-Window.displayName = "Window";

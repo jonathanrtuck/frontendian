@@ -1,6 +1,4 @@
-"use client";
-
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 
 export const WindowHidden: IconComponent = (props) => (
   <svg
@@ -15,5 +13,3 @@ export const WindowHidden: IconComponent = (props) => (
     <path d="M32 4V8H36V4H32z" fill="#000000" />
   </svg>
 );
-
-WindowHidden.displayName = "WindowHidden";

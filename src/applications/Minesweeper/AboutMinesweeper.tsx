@@ -1,6 +1,4 @@
-"use client";
-
-import type { FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const AboutMinesweeper: FunctionComponent = () => (
   <>
@@ -18,5 +16,3 @@ export const AboutMinesweeper: FunctionComponent = () => (
     <p>Custom boards not yet supported.</p>
   </>
 );
-
-AboutMinesweeper.displayName = "AboutMinesweeper";

@@ -1,7 +1,7 @@
 "use client";
 
 import { Error as ErrorIcon } from "@/icons";
-import type { FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 const Error: FunctionComponent = () => (
   <dialog id="dialog-error" open>

@@ -1,6 +1,4 @@
-"use client";
-
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 
 export const Apple: IconComponent = (props) => (
   <svg
@@ -15,5 +13,3 @@ export const Apple: IconComponent = (props) => (
     />
   </svg>
 );
-
-Apple.displayName = "Apple";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "@/hooks";
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 import { useId } from "react";
 
 export const Text: IconComponent = (props) => {
@@ -114,5 +114,3 @@ export const Text: IconComponent = (props) => {
       );
   }
 };
-
-Text.displayName = "Text";

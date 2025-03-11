@@ -1,28 +1,28 @@
 {
   "dependencies": {
-    "clsx": "^2",
-    "gl-matrix": "^3",
-    "next": "15.1",
-    "react": "^19",
-    "react-dom": "^19",
-    "react-draggable": "^4",
-    "react-markdown": "^10",
-    "react-pdf": "^9",
-    "react-resizable": "^3",
-    "remark-gfm": "^4",
-    "uuid": "^11",
-    "zustand": "^5"
+    "clsx": "2",
+    "gl-matrix": "3",
+    "next": "15",
+    "react": "19",
+    "react-dom": "19",
+    "react-draggable": "4",
+    "react-markdown": "10",
+    "react-pdf": "9",
+    "react-resizable": "3",
+    "remark-gfm": "4",
+    "uuid": "11",
+    "zustand": "5"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/react-resizable": "^3",
-    "eslint": "^9",
-    "eslint-config-next": "15.1",
-    "type-fest": "^4",
-    "typescript": "^5"
+    "@eslint/eslintrc": "3",
+    "@types/node": "20",
+    "@types/react": "19",
+    "@types/react-dom": "19",
+    "@types/react-resizable": "3",
+    "eslint": "9",
+    "eslint-config-next": "15",
+    "type-fest": "4",
+    "typescript": "5"
   },
   "name": "frontendian",
   "scripts": {
@@ -31,5 +31,5 @@
     "lint": "next lint",
     "start": "next start"
   },
-  "version": "4.0.0"
+  "version": "4.0.1"
 }

@@ -6,8 +6,13 @@ import { WindowContext } from "@/contexts";
 import { useTheme } from "@/hooks";
 import { MENU_BAR_ID } from "@/ids";
 import { useStore } from "@/store";
-import type { FunctionComponent, PropsWithChildren } from "react";
-import { useContext, useLayoutEffect, useState } from "react";
+import {
+  type FunctionComponent,
+  type PropsWithChildren,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 
 export const Menubar: FunctionComponent<PropsWithChildren> = ({ children }) => {
@@ -45,5 +50,3 @@ export const Menubar: FunctionComponent<PropsWithChildren> = ({ children }) => {
     </Menu>
   );
 };
-
-Menubar.displayName = "Menubar";

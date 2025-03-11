@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "@/hooks";
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 import { useId } from "react";
 
 export const FileManagerIcon: IconComponent = (props) => {
@@ -95,5 +95,3 @@ export const FileManagerIcon: IconComponent = (props) => {
       );
   }
 };
-
-FileManagerIcon.displayName = "FileManagerIcon";

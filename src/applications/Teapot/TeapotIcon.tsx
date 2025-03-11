@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "@/hooks";
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 import { useId } from "react";
 
 export const TeapotIcon: IconComponent = (props) => {
@@ -218,5 +218,3 @@ export const TeapotIcon: IconComponent = (props) => {
       );
   }
 };
-
-TeapotIcon.displayName = "TeapotIcon";

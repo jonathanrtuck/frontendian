@@ -7,7 +7,7 @@ import { Content, Menu, Menubar, Menuitem } from "@/components";
 import * as files from "@/files";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
-import type { Application } from "@/types";
+import { type Application } from "@/types";
 import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
@@ -99,5 +99,3 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
     </>
   );
 };
-
-PdfViewer.displayName = "PdfViewer";

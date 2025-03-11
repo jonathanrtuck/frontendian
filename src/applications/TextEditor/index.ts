@@ -1,7 +1,7 @@
 import { AboutTextEditor } from "./AboutTextEditor";
 import { TextEditor } from "./TextEditor";
 import { TextEditorIcon } from "./TextEditorIcon";
-import type { Application } from "@/types";
+import { type Application } from "@/types";
 
 export const APPLICATION_TEXT_EDITOR: Application = {
   About: AboutTextEditor,

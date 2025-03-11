@@ -1,6 +1,4 @@
-"use client";
-
-import type { FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const AboutTeapot: FunctionComponent = () => (
   <p>
@@ -8,5 +6,3 @@ export const AboutTeapot: FunctionComponent = () => (
     <a href="https://en.wikipedia.org/wiki/Utah_teapot">Utah Teapot</a>.
   </p>
 );
-
-AboutTeapot.displayName = "AboutTeapot";

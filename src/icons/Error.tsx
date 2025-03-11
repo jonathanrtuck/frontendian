@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "@/hooks";
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 import { useId } from "react";
 
 export const Error: IconComponent = (props) => {
@@ -263,5 +263,3 @@ export const Error: IconComponent = (props) => {
       );
   }
 };
-
-Error.displayName = "Error";

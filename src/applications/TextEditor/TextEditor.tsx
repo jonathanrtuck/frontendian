@@ -5,7 +5,7 @@ import { Content, Menu, Menubar, Menuitem } from "@/components";
 import * as files from "@/files";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
-import type { Application } from "@/types";
+import { type Application } from "@/types";
 import { useDeferredValue, useEffect, useRef, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -151,5 +151,3 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
     </>
   );
 };
-
-TextEditor.displayName = "TextEditor";

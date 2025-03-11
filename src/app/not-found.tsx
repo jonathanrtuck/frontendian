@@ -1,6 +1,6 @@
 import { Press_Start_2P } from "next/font/google";
 import Link from "next/link";
-import type { FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 const FONT_PRESS_START_2P = Press_Start_2P({
   subsets: ["latin"],
@@ -22,7 +22,7 @@ const NotFound: FunctionComponent = () => (
 }
 a {
   align-items: center;
-  color: rgb(255, 0, 0);
+  color: rgb(255 0 0);
   display: flex;
   flex-direction: column;
   inset: 0;

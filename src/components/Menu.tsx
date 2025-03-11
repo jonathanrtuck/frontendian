@@ -1,9 +1,12 @@
 "use client";
 
 import clsx from "clsx";
-import type { FunctionComponent, PropsWithChildren } from "react";
-import { useState } from "react";
-import type { EmptyObject } from "type-fest";
+import {
+  type FunctionComponent,
+  type PropsWithChildren,
+  useState,
+} from "react";
+import { type EmptyObject } from "type-fest";
 
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu: FunctionComponent<
@@ -26,9 +29,9 @@ export const Menu: FunctionComponent<
     <>
       {"collapsible" in props && props.collapsible ? (
         <button
-          aria-hidden
           className="menu-button"
           onClick={() => setIsCollapsed((prevState) => !prevState)}
+          tabIndex={-1}
           type="button"
         />
       ) : null}
@@ -45,5 +48,3 @@ export const Menu: FunctionComponent<
     </>
   );
 };
-
-Menu.displayName = "Menu";

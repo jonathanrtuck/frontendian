@@ -1,9 +1,16 @@
 "use client";
 
 import { WindowContext } from "@/contexts";
-import type { Percentage, Pixels } from "@/types";
-import type { FunctionComponent, PropsWithChildren, RefObject } from "react";
-import { useContext, useLayoutEffect, useRef, useState } from "react";
+import { type Percentage, type Pixels } from "@/types";
+import {
+  type FunctionComponent,
+  type PropsWithChildren,
+  type RefObject,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Draggable from "react-draggable";
 
 export const TitleBar: FunctionComponent<
@@ -56,5 +63,3 @@ export const TitleBar: FunctionComponent<
     </Draggable>
   );
 };
-
-TitleBar.displayName = "TitleBar";

@@ -1,11 +1,9 @@
-"use client";
-
 import clsx from "clsx";
-import type {
-  ButtonHTMLAttributes,
-  DetailedHTMLProps,
-  FunctionComponent,
-  PropsWithChildren,
+import {
+  type ButtonHTMLAttributes,
+  type DetailedHTMLProps,
+  type FunctionComponent,
+  type PropsWithChildren,
 } from "react";
 
 export const Button: FunctionComponent<
@@ -22,5 +20,3 @@ export const Button: FunctionComponent<
     type={type} // eslint-disable-line react/button-has-type
   />
 );
-
-Button.displayName = "Button";

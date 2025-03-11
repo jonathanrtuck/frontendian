@@ -1,8 +1,7 @@
 "use client";
 
 import { useSelection } from "@/hooks";
-import type { FunctionComponent, PropsWithChildren } from "react";
-import { useRef } from "react";
+import { type FunctionComponent, type PropsWithChildren, useRef } from "react";
 
 export const Grid: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -26,5 +25,3 @@ export const Grid: FunctionComponent<PropsWithChildren> = ({ children }) => {
     </div>
   );
 };
-
-Grid.displayName = "Grid";

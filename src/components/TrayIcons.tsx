@@ -1,7 +1,8 @@
-"use client";
-
-import type { FunctionComponent, PropsWithChildren } from "react";
-import { Children } from "react";
+import {
+  Children,
+  type FunctionComponent,
+  type PropsWithChildren,
+} from "react";
 
 export const TrayIcons: FunctionComponent<PropsWithChildren> = ({
   children,
@@ -12,5 +13,3 @@ export const TrayIcons: FunctionComponent<PropsWithChildren> = ({
     ))}
   </menu>
 );
-
-TrayIcons.displayName = "TrayIcons";

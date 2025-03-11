@@ -3,7 +3,7 @@
 import "./Minesweeper.css";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import { useStore } from "@/store";
-import type { Application } from "@/types";
+import { type Application } from "@/types";
 import clsx from "clsx";
 import localFont from "next/font/local";
 import { useEffect, useRef, useState } from "react";
@@ -431,5 +431,3 @@ export const Minesweeper: Application["Component"] = () => {
     </>
   );
 };
-
-Minesweeper.displayName = "Minesweeper";

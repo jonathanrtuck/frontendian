@@ -1,8 +1,7 @@
 "use client";
 
 import { WindowContext } from "@/contexts";
-import type { FunctionComponent } from "react";
-import { useContext } from "react";
+import { type FunctionComponent, useContext } from "react";
 
 export const Title: FunctionComponent<{
   text: string;
@@ -15,5 +14,3 @@ export const Title: FunctionComponent<{
     </h1>
   );
 };
-
-Title.displayName = "Title";

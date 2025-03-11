@@ -1,6 +1,4 @@
-"use client";
-
-import type { FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const AboutTextEditor: FunctionComponent = () => (
   <>
@@ -13,5 +11,3 @@ export const AboutTextEditor: FunctionComponent = () => (
     </p>
   </>
 );
-
-AboutTextEditor.displayName = "AboutTextEditor";

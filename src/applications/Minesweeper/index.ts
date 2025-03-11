@@ -1,7 +1,7 @@
 import { AboutMinesweeper } from "./AboutMinesweeper";
 import { Minesweeper } from "./Minesweeper";
 import { MinesweeperIcon } from "./MinesweeperIcon";
-import type { Application } from "@/types";
+import { type Application } from "@/types";
 
 export const APPLICATION_MINESWEEPER: Application = {
   About: AboutMinesweeper,

@@ -1,7 +1,11 @@
 "use client";
 
-import type { ErrorInfo, PropsWithChildren, ReactNode } from "react";
-import { Component } from "react";
+import {
+  Component,
+  type ErrorInfo,
+  type PropsWithChildren,
+  type ReactNode,
+} from "react";
 
 export class ErrorBoundary extends Component<
   PropsWithChildren<{

@@ -2,8 +2,7 @@
 
 import { useOverflow } from "@/hooks";
 import clsx from "clsx";
-import type { FunctionComponent, PropsWithChildren } from "react";
-import { useRef } from "react";
+import { type FunctionComponent, type PropsWithChildren, useRef } from "react";
 
 export const Content: FunctionComponent<
   PropsWithChildren<{
@@ -32,5 +31,3 @@ export const Content: FunctionComponent<
     </div>
   );
 };
-
-Content.displayName = "Content";

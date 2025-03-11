@@ -1,6 +1,4 @@
-"use client";
-
-import type { FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const AboutPdfViewer: FunctionComponent = () => (
   <>
@@ -12,5 +10,3 @@ export const AboutPdfViewer: FunctionComponent = () => (
     </p>
   </>
 );
-
-AboutPdfViewer.displayName = "AboutPdfViewer";

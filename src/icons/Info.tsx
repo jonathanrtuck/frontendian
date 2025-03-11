@@ -1,6 +1,4 @@
-"use client";
-
-import type { IconComponent } from "@/types";
+import { type IconComponent } from "@/types";
 import { useId } from "react";
 
 export const Info: IconComponent = (props) => {
@@ -144,5 +142,3 @@ export const Info: IconComponent = (props) => {
     </svg>
   );
 };
-
-Info.displayName = "Info";
