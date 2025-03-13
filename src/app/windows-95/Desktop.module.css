@@ -1,0 +1,22 @@
+:local .theme {
+  --cursor--default: url("/themes/windows-95/default.svg") 0 0, default;
+  --cursor--pointer: url("/themes/windows-95/pointer.svg") 0 0, pointer;
+  --cursor--text: url("/themes/windows-95/text.svg") 0 0, text;
+  --font-family--default: var(--font-family--w95fa);
+  --text-color--dark: rgb(0 0 0);
+  --text-color--default: var(--text-color--dark);
+  --text-color--light: rgb(255 255 255);
+
+  body {
+    background: rgb(0 128 128);
+  }
+
+  ::backdrop {
+    background-color: rgb(0 0 0 / 10%);
+  }
+
+  ::selection {
+    background-color: rgb(0 0 128);
+    color: var(--text-color--light);
+  }
+}

@@ -12,5 +12,6 @@ export * from "./Title";
 export * from "./TitleBar";
 export * from "./TitleBarButton";
 export * from "./Tray";
+export * from "./TrayIcon";
 export * from "./TrayIcons";
 export * from "./Window";

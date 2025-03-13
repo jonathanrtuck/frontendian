@@ -96,7 +96,7 @@ export type State = {
   windows: Window[];
 };
 
-export type Theme = "beos" | "mac-os-classic";
+export type Theme = "beos" | "mac-os-classic" | "windows-95";
 
 export type URL = string;
 

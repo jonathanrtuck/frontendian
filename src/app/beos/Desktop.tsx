@@ -14,6 +14,7 @@ import {
   TitleBar,
   TitleBarButton,
   Tray,
+  TrayIcon,
   TrayIcons,
   Window,
 } from "@/components";
@@ -98,6 +99,7 @@ export const Desktop: FunctionComponent = () => {
                     title="Mac OS Classic"
                     type="radio"
                   />
+                  <Menuitem href="windows-95" title="Windows 95" type="radio" />
                 </Menu>
               </Menuitem>
               <Menuitem separator />
@@ -128,7 +130,7 @@ export const Desktop: FunctionComponent = () => {
         </Menu>
         <Tray>
           <TrayIcons>
-            <Network />
+            <TrayIcon Icon={Network} />
           </TrayIcons>
           <Clock />
         </Tray>

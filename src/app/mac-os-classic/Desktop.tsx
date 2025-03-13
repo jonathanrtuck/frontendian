@@ -105,6 +105,7 @@ export const Desktop: FunctionComponent = () => {
                     title="Mac OS Classic"
                     type="radio"
                   />
+                  <Menuitem href="windows-95" title="Windows 95" type="radio" />
                 </Menu>
               </Menuitem>
               <Menuitem separator />
