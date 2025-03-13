@@ -15,6 +15,8 @@ export const APPLICATION_FILE_MANAGER: Application = {
         return "Tracker";
       case "mac-os-classic":
         return "Finder";
+      case "windows-95":
+        return "Windows Explorer";
     }
   },
 };

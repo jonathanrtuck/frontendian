@@ -3,13 +3,13 @@ import clsx from "clsx";
 import localFont from "next/font/local";
 import { type FunctionComponent, type PropsWithChildren } from "react";
 
-const FONT_W95FA = localFont({
-  src: "./w95fa.woff2",
-  variable: "--font-family--w95fa",
+const MS_SANS_SERIF = localFont({
+  src: "./MSSansSerif.ttf",
+  variable: "--font-family--ms-sans-serif",
 });
 
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => (
-  <html className={clsx(styles.theme, FONT_W95FA.variable)} lang="en">
+  <html className={clsx(styles.theme, MS_SANS_SERIF.variable)} lang="en">
     <body>{children}</body>
   </html>
 );

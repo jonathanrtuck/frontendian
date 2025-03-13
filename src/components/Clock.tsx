@@ -23,8 +23,11 @@ export const Clock: FunctionComponent = () => {
     <time
       className="clock"
       dateTime={date.toISOString().replace(/\.\d+/, "")} // remove milliseconds to prevent (more) frequent dom updates
-      onClick={() =>
-        setFormat((prevState) => (prevState === "time" ? "date" : "time"))
+      onClick={
+        theme === "windows-95"
+          ? undefined
+          : () =>
+              setFormat((prevState) => (prevState === "time" ? "date" : "time"))
       }
       title={date.toLocaleDateString(navigator.language, {
         dateStyle: "full",

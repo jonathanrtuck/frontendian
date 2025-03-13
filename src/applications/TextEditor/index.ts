@@ -15,6 +15,8 @@ export const APPLICATION_TEXT_EDITOR: Application = {
         return "StyledEdit";
       case "mac-os-classic":
         return "SimpleText";
+      case "windows-95":
+        return "Notepad";
     }
   },
 };

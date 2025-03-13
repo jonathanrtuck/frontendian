@@ -106,5 +106,19 @@ export const Network: IconComponent = (props) => {
           />
         </svg>
       );
+    case "windows-95":
+      return (
+        <svg
+          {...props}
+          version="1.1"
+          viewBox="0 0 48 48"
+          xmlns="http://www.w3.org/2000/svg">
+          <image
+            height="48"
+            href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAJ1BMVEUAAACAgIDAwMD///8AAAAAAIAAAP8A//8AgIAA/wAAgACAgAD//wBbydPPAAAAAXRSTlMAQObYZgAAARpJREFUOMvNkzGuwjAMhhOJA+DSjYUWNhaajnSgUCEkJoS4AkdA7whvfttbGbkCR+ilcEhjJwYkBgb+MZ9iO//vKKWUBpKKlORexSI813Q+hggMSq8iAtrQjUwA33kgQdNpL8H66PQITp8Dxy8AuzgXbQ6dRC7aeNNFLmS7zIUSl7n0OtNrkQuvCOXiAFUuzObXqQNU2Gx+noAMS0nw/4dggs0luJx9qZc93gPsqAD+4bZ5BOxWT5z9L8HDDntAtkvAtqfQDwDPB3WSMqDxUJAxCC9AAgw48XvoqerD8HqtccY8UIZgVs6rdlWWnAtWsmCUT6t2icvjc0EtLVg026q1G0C5gCt1nzO0X374GKS89BAp+A7hw5tGqRv9tbM5U7tEcwAAAABJRU5ErkJggg=="
+            width="48"
+          />
+        </svg>
+      );
   }
 };
