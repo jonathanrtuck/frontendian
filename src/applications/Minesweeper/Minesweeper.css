@@ -79,7 +79,7 @@
     }
 
     button {
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1;
       appearance: none;
       border: var(--minesweeper-border-size) solid transparent;
       box-sizing: border-box;

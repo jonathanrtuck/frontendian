@@ -361,7 +361,7 @@
     padding: 0.25rem;
 
     > svg {
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1;
       width: 3rem;
     }
 
@@ -655,7 +655,7 @@
       rgb(216 216 216)
     );
 
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1;
     flex: 0 0 auto;
     height: 100%;
     position: relative;

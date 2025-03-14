@@ -333,7 +333,7 @@
     padding: 0.25rem;
 
     > svg {
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1;
       width: 3rem;
     }
 
@@ -619,7 +619,7 @@
     }
 
     > svg {
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1;
       flex-grow: 0;
       flex-shrink: 0;
       height: 100%;
@@ -628,7 +628,7 @@
   }
 
   .title-bar-button {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1;
     background-clip: content-box;
     background-image: linear-gradient(
       to bottom right,
