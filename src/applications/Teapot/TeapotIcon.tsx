@@ -216,5 +216,19 @@ export const TeapotIcon: IconComponent = (props) => {
           />
         </svg>
       );
+    case "windows-95":
+      return (
+        <svg
+          {...props}
+          version="1.1"
+          viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg">
+          <image
+            height="32"
+            href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAbUExURQAAAAAAAP///4CAgP8AAP//AAD/AAAA/8DAwPrCRoQAAAABdFJOUwBA5thmAAAAAWJLR0QCZgt8ZAAAAAd0SU1FB+kDDhAiJapw3B4AAACeSURBVCjPZdCxDcMgEIXh8wZ+ziGlTTZANGmpUjMCUhZIxQBpGDuAJd8dvM6fflsGIoJsp7bteF7DgIcU/gSeAREpIauCnYMGxBYgZwFugYGUogHnmKcCMZoCaIkuUMq7lPIV6IkpzkRDSz7ZAnKcgSeQ49/CtXFjy50KnY8bzHZSd97n6ahmHUZ6VxCCD+GloNaffWX5xgzBzC8/9gchR1TgWGzwsAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNS0wMy0xNFQxNjozNDozNyswMDowMFEfUeIAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjUtMDMtMTRUMTY6MzQ6MzcrMDA6MDAgQuleAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI1LTAzLTE0VDE2OjM0OjM3KzAwOjAwd1fIgQAAAABJRU5ErkJggg=="
+            width="32"
+          />
+        </svg>
+      );
   }
 };

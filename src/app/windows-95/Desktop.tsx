@@ -13,7 +13,9 @@ import {
 } from "@/components";
 import * as files from "@/files";
 import {
+  Apple,
   Applications,
+  BeOS,
   File,
   Network,
   Pdf,
@@ -60,6 +62,9 @@ export const Desktop: FunctionComponent = () => {
         <Menu bar horizontal>
           <Menuitem Icon={Logo} title="Start">
             <Menu>
+              <header aria-hidden>
+                <b>Windows</b>95
+              </header>
               <Menuitem
                 Icon={Text}
                 onClick={() => openFile({ id: files.FILE_README_MD.id })}
@@ -73,25 +78,30 @@ export const Desktop: FunctionComponent = () => {
                       ({ id }) =>
                         id !== applications.APPLICATION_FILE_MANAGER.id
                     )
+                    .sort((a, b) =>
+                      a.title("windows-95").localeCompare(b.title("windows-95"))
+                    )
                     .map(({ Icon, id, title }) => (
                       <Menuitem
                         Icon={Icon}
                         key={id}
                         onClick={() => openApplication({ id })}
-                        title={title("beos")}
+                        title={title("windows-95")}
                       />
                     ))}
                 </Menu>
               </Menuitem>
               <Menuitem Icon={Settings} title="Theme">
                 <Menu>
-                  <Menuitem href="beos" title="BeOS" type="radio" />
+                  <Menuitem Icon={BeOS} href="beos" title="BeOS" type="radio" />
                   <Menuitem
+                    Icon={Apple}
                     href="mac-os-classic"
                     title="Mac OS Classic"
                     type="radio"
                   />
                   <Menuitem
+                    Icon={Logo}
                     checked
                     href="windows-95"
                     title="Windows 95"
@@ -114,24 +124,11 @@ export const Desktop: FunctionComponent = () => {
           </Menuitem>
         </Menu>
         <Menu bar horizontal>
-          {openApplicationIds
-            .map(
-              (openApplicationId) =>
-                Object.values(applications).find(
-                  ({ id }) => id === openApplicationId
-                )!
-            )
-            .map(({ Icon, id, title }) => {
-              const applicationWindows = windows.filter(
-                ({ applicationId }) => applicationId === id
-              );
-
-              return (
-                <Menuitem Icon={Icon} key={id} title={title("windows-95")}>
-                  <Menu></Menu>
-                </Menuitem>
-              );
-            })}
+          {windows.map(({ id, title }) => (
+            <Menuitem Icon={undefined} key={id} title={title}>
+              <Menu></Menu>
+            </Menuitem>
+          ))}
         </Menu>
         <Tray>
           <TrayIcons>

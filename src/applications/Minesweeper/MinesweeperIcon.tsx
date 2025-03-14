@@ -157,6 +157,7 @@ export const MinesweeperIcon: IconComponent = (props) => {
         </svg>
       );
     case "mac-os-classic":
+    case "windows-95":
       return (
         <svg
           {...props}

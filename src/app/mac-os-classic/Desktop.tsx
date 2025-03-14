@@ -113,6 +113,11 @@ export const Desktop: FunctionComponent = () => {
                 .filter(
                   ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
                 )
+                .sort((a, b) =>
+                  a
+                    .title("mac-os-classic")
+                    .localeCompare(b.title("mac-os-classic"))
+                )
                 .map(({ Icon, id, title }) => (
                   <Menuitem
                     Icon={Icon}

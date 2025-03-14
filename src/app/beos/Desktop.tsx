@@ -117,6 +117,7 @@ export const Desktop: FunctionComponent = () => {
                 .filter(
                   ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
                 )
+                .sort((a, b) => a.title("beos").localeCompare(b.title("beos")))
                 .map(({ Icon, id, title }) => (
                   <Menuitem
                     Icon={Icon}
