@@ -1,5 +1,6 @@
 export * from "./Button";
 export * from "./Content";
+export * from "./Desktop";
 export * from "./Dialog";
 export * from "./ErrorBoundary";
 export * from "./Grid";
@@ -7,6 +8,7 @@ export * from "./Icon";
 export * from "./Menu";
 export * from "./Menubar";
 export * from "./Menuitem";
+export * from "./Selection";
 export * from "./SystemBar";
 export * from "./Title";
 export * from "./TitleBar";

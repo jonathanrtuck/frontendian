@@ -1,19 +1,22 @@
 "use client";
 
+import { Selection } from "@/components";
 import { useSelection } from "@/hooks";
-import { type FunctionComponent, type PropsWithChildren, useRef } from "react";
+import clsx from "clsx";
+import { type FunctionComponent, type HTMLAttributes, useRef } from "react";
 
-export const Grid: FunctionComponent<PropsWithChildren> = ({ children }) => {
+export const Grid: FunctionComponent<HTMLAttributes<HTMLDivElement>> = ({
+  children,
+  ...props
+}) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const selection = useSelection(rootRef);
 
   return (
-    <div className="grid" ref={rootRef}>
+    <div {...props} className={clsx("grid", props.className)} ref={rootRef}>
       {children}
       {selection.from && selection.to ? (
-        <mark
-          aria-hidden
-          role="presentation"
+        <Selection
           style={{
             height: Math.abs(selection.from.y - selection.to.y),
             left: Math.min(selection.from.x, selection.to.x),

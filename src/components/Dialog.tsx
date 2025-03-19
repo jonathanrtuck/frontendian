@@ -1,6 +1,5 @@
 "use client";
 
-import { WindowContext } from "@/contexts";
 import { IconComponent, ID } from "@/types";
 import {
   type FunctionComponent,
@@ -26,7 +25,7 @@ export const Dialog: FunctionComponent<
       id={id}
       ref={rootRef}>
       {Icon ? <Icon className="dialog-icon" role="presentation" /> : null}
-      <WindowContext.Provider value={{ id }}>{children}</WindowContext.Provider>
+      {children}
     </dialog>
   );
 };

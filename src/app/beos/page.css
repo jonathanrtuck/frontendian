@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-highlight: rgb(255 255 255 / 60%);
+  --color-lowlight: rgb(0 0 0 / 20%);
+  --font-sans: Helvetica;
+  --font-mono: var(--font-courier-10-pitch);
+  --inset-shadow-high: inset 1px 1px var(--color-highlight),
+    inset -1px -1px var(--color-lowlight);
+  --inset-shadow-low: inset 1px 1px var(--color-lowlight),
+    inset -1px -1px var(--color-highlight);
+  --shadow-high: 1px 1px var(--color-lowlight), -1px -1px var(--color-highlight);
+  --shadow-low: 1px 1px var(--color-highlight), -1px -1px var(--color-lowlight);
+}
+
+@utility border-dark {
+  border-color: rgb(96 96 96);
+}
+@utility border-light {
+  border-color: rgb(153 153 153);
+}
+@utility cursor-default {
+  cursor: url(/themes/beos/default.svg) 1 0, default;
+}
+@utility cursor-pointer {
+  cursor: url(/themes/beos/pointer.svg) 2 0, pointer;
+}
+@utility cursor-text {
+  cursor: url(/themes/beos/text.svg) 7 10, text;
+}

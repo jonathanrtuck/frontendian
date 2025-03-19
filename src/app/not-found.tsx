@@ -8,10 +8,9 @@ const FONT_PRESS_START_2P = Press_Start_2P({
 });
 
 const NotFound: FunctionComponent = () => (
-  <html className={FONT_PRESS_START_2P.className} lang="en">
-    <head>
-      <style>
-        {`
+  <>
+    <style>
+      {`
 @keyframes blink {
   0% {
     border-color: currentColor;
@@ -30,6 +29,9 @@ a {
   position: fixed;
   text-decoration: none;
 }
+body {
+  background-color: rgb(0 0 0);
+}
 div {
   animation: blink 1s step-end infinite;
   border-color: currentColor;
@@ -44,21 +46,18 @@ p {
   text-align: center;
   user-select: none;
 }
-        `}
-      </style>
-    </head>
-    <body>
-      <Link href="/" scroll={false}>
-        <div>
-          <p>
-            Page not found. &nbsp; Press left mouse button to continue.
-            <br />
-            Guru Meditation &nbsp;#00000083.409AD600
-          </p>
-        </div>
-      </Link>
-    </body>
-  </html>
+      `}
+    </style>
+    <Link className={FONT_PRESS_START_2P.className} href="/" scroll={false}>
+      <div>
+        <p>
+          Page not found. &nbsp; Press left mouse button to continue.
+          <br />
+          Guru Meditation &nbsp;#00000083.409AD600
+        </p>
+      </div>
+    </Link>
+  </>
 );
 
 export default NotFound;

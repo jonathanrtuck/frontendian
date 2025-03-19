@@ -1,4 +1,3 @@
-import "./globals.css";
 import { type Metadata, type Viewport } from "next";
 import { type FunctionComponent, type PropsWithChildren } from "react";
 
@@ -10,6 +9,9 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
-const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => children;
-
+const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => (
+  <html lang="en">
+    <body className="antialiased bg-black">{children}</body>
+  </html>
+);
 export default Layout;

@@ -1,6 +1,5 @@
 "use client";
 
-import { WindowContext } from "@/contexts";
 import { useFocus } from "@/hooks";
 import { SYSTEM_BAR_ID } from "@/ids";
 import { type Coordinates, type ID, type Pixels, type Size } from "@/types";
@@ -36,7 +35,6 @@ export const Window: FunctionComponent<
       Size
   >
 > = ({
-  applicationId,
   children,
   current = false,
   hasMenubar,
@@ -175,15 +173,7 @@ export const Window: FunctionComponent<
             zIndex: z,
           }}
           tabIndex={-1}>
-          <WindowContext.Provider
-            value={{
-              applicationId,
-              current,
-              id,
-              width,
-            }}>
-            {children}
-          </WindowContext.Provider>
+          {children}
         </section>
       </Resizable>
     </Draggable>
