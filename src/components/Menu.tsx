@@ -4,11 +4,14 @@ import clsx from "clsx";
 import {
   type FunctionComponent,
   type MenuHTMLAttributes,
+  useCallback,
   useId,
   useLayoutEffect,
   useRef,
 } from "react";
 
+// @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
+// @todo ^^^
 export const Menu: FunctionComponent<MenuHTMLAttributes<HTMLElement>> = ({
   children,
   className,
@@ -16,11 +19,24 @@ export const Menu: FunctionComponent<MenuHTMLAttributes<HTMLElement>> = ({
   ...props
 }) => {
   const uniqueId = useId();
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const rootRef = useRef<HTMLElement>(null);
   const id = props.id ?? uniqueId;
+  const close = useCallback(() => {
+    let element: HTMLElement | null = rootRef.current;
+    while (element) {
+      if (element.popover) {
+        element.hidePopover();
+      }
+      element = element.parentElement;
+    }
+  }, []);
 
   useLayoutEffect(
-    () => menuButtonRef.current?.setAttribute("popovertarget", id),
+    () =>
+      rootRef.current?.previousElementSibling?.setAttribute(
+        "popovertarget",
+        id
+      ),
     [id]
   );
 
@@ -30,26 +46,18 @@ export const Menu: FunctionComponent<MenuHTMLAttributes<HTMLElement>> = ({
       className={clsx("menu", className)}
       id={id}
       onClick={(e) => {
-        let parentElement: HTMLElement | null = e.currentTarget;
-        while (parentElement) {
-          if (parentElement.popover) {
-            parentElement.hidePopover();
-          }
-          parentElement = parentElement.parentElement;
-        }
+        close();
         props.onClick?.(e);
       }}
+      onPointerUp={close}
       onToggle={({ newState }) =>
-        menuButtonRef.current?.setAttribute(
+        rootRef.current?.previousElementSibling?.setAttribute(
           "aria-expanded",
           String(newState === "open")
         )
       }
       popover={popover}
-      ref={(node) => {
-        menuButtonRef.current =
-          node?.previousElementSibling as HTMLButtonElement;
-      }}>
+      ref={rootRef}>
       {children}
     </menu>
   );

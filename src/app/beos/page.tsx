@@ -10,7 +10,6 @@ import {
   Menubar,
   MenuButton,
   Menuitem,
-  Selection,
   Separator,
   SystemBar,
   Tray,
@@ -31,7 +30,7 @@ import { SYSTEM_BAR_ID } from "@/ids";
 import { useStore } from "@/store";
 import { type IconComponent, type MimeType } from "@/types";
 import localFont from "next/font/local";
-import { type FunctionComponent, useRef } from "react";
+import { type FunctionComponent } from "react";
 
 const FONT_COURIER_10_PITCH = localFont({
   src: "./Courier10Pitch.otf",
@@ -62,11 +61,10 @@ const Page: FunctionComponent = () => {
   const stackingOrder = useStore((store) => store.stackingOrder);
   const windows = useStore((store) => store.windows);
   const zoomWindow = useStore((store) => store.zoomWindow);
-  const gridRef = useRef<HTMLDivElement>(null);
 
   return (
     <main className="bg-[rgb(51,102,152)] cursor-default h-screen w-screen">
-      <Grid ref={gridRef}>
+      <Grid>
         {Object.values(files).map(({ id, mimetype, title }) => (
           <Icon
             Icon={ICONS[mimetype] ?? File}
@@ -75,7 +73,6 @@ const Page: FunctionComponent = () => {
             title={title}
           />
         ))}
-        <Selection ref={gridRef} />
       </Grid>
       <SystemBar
         aria-label="Deskbar"
@@ -131,15 +128,63 @@ const Page: FunctionComponent = () => {
                   ({ id }) => id === openApplicationId
                 )!
             )
-            .map(({ Icon, id, title }) => (
-              <Menuitem
-                Icon={Icon}
-                key={id}
-                onClick={undefined}
-                title={title("beos")}>
-                <Menu>…</Menu>
-              </Menuitem>
-            ))}
+            .map(({ Icon, id, title }) => {
+              const applicationWindows = windows.filter(
+                ({ applicationId }) => applicationId === id
+              );
+
+              return (
+                <Menuitem
+                  Icon={Icon}
+                  key={id}
+                  onClick={undefined}
+                  title={title("beos")}>
+                  <Menu>
+                    {applicationWindows.length === 0 ? (
+                      <Menuitem disabled title="No windows" />
+                    ) : (
+                      <>
+                        {applicationWindows.map(({ hidden, id, title }) => (
+                          <Menuitem
+                            Icon={hidden ? WindowHidden : WindowVisible}
+                            key={id}
+                            onClick={() => focusWindow({ id })}
+                            title={title}
+                          />
+                        ))}
+                        <Separator />
+                        <Menuitem
+                          disabled={applicationWindows.every(
+                            ({ hidden }) => hidden
+                          )}
+                          onClick={() =>
+                            applicationWindows
+                              .map(({ id }) => ({ id }))
+                              .forEach(hideWindow)
+                          }
+                          title="Hide all"
+                        />
+                        <Menuitem
+                          disabled={applicationWindows.every(
+                            ({ hidden }) => !hidden
+                          )}
+                          onClick={() =>
+                            applicationWindows
+                              .map(({ id }) => ({ id }))
+                              .forEach(showWindow)
+                          }
+                          title="Show all"
+                        />
+                        <Menuitem
+                          onClick={() => closeApplication({ id })}
+                          title="Close all"
+                        />
+                      </>
+                    )}
+                  </Menu>
+                </Menuitem>
+              );
+            })}
         </Menubar>
       </SystemBar>
     </main>

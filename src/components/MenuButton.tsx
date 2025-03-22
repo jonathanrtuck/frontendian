@@ -2,6 +2,8 @@ import { type IconComponent } from "@/types";
 import clsx from "clsx";
 import { type ButtonHTMLAttributes, type FunctionComponent } from "react";
 
+// @see https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/
+// @todo ^^^
 export const MenuButton: FunctionComponent<
   ButtonHTMLAttributes<HTMLButtonElement> & {
     classes?: Partial<{

@@ -15,6 +15,7 @@ export const Menuitem: FunctionComponent<
   (ButtonHTMLAttributes<HTMLButtonElement> | HTMLAttributes<HTMLElement>) & {
     classes?: Partial<{
       button: string;
+      caret: string;
       icon: string;
       root: string;
       text: string;
@@ -55,6 +56,9 @@ export const Menuitem: FunctionComponent<
         <span aria-hidden className={clsx("menuitem-text", classes.text)}>
           {title}
         </span>
+      ) : null}
+      {hasPopup ? (
+        <span aria-hidden className={clsx("menuitem-caret", classes.caret)} />
       ) : null}
     </>
   );
