@@ -3,6 +3,7 @@ export * from "./Grid";
 export * from "./Icon";
 export * from "./Menu";
 export * from "./Menubar";
+export * from "./MenuButton";
 export * from "./Menuitem";
 export * from "./Selection";
 export * from "./Separator";

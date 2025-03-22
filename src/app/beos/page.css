@@ -65,11 +65,23 @@
     @apply bg-default border border-dark inset-auto inset-shadow-high max-w-80 min-w-20 right-[anchor(left)] top-[anchor(top)] z-100;
   }
 
-  .menuitem {
+  .menu-button {
     @apply aria-expanded:bg-neutral-400 flex font-medium gap-2 not-aria-expanded:inset-shadow-high items-center px-2 py-1 select-none text-sm/4 w-full;
+  }
+
+  .menu-button-icon {
+    @apply flex-none h-6;
+  }
+
+  .menuitem-button {
+    @apply aria-expanded:bg-neutral-400 flex font-medium gap-2 items-center px-2 py-1 select-none text-sm/4 w-full;
 
     .menu & {
       @apply hover:bg-neutral-400;
+    }
+
+    .menubar & {
+      @apply not-aria-expanded:inset-shadow-high;
     }
   }
 

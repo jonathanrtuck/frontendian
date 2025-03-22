@@ -8,6 +8,7 @@ import {
   Icon,
   Menu,
   Menubar,
+  MenuButton,
   Menuitem,
   Selection,
   Separator,
@@ -69,10 +70,6 @@ const Page: FunctionComponent = () => {
         {Object.values(files).map(({ id, mimetype, title }) => (
           <Icon
             Icon={ICONS[mimetype] ?? File}
-            classes={{
-              icon: "icon-icon",
-              text: "icon-text",
-            }}
             key={id}
             onDoubleClick={() => openFile({ id })}
             title={title}
@@ -83,12 +80,10 @@ const Page: FunctionComponent = () => {
       <SystemBar
         aria-label="Deskbar"
         style={{ zIndex: stackingOrder.indexOf(SYSTEM_BAR_ID) }}>
-        <Menuitem
+        <MenuButton
           Icon={BeOS}
           aria-label="BeOS Menu"
-          className="justify-center p-[0.125rem]"
-          classes={{ icon: "h-6" }}
-          standalone>
+          className="justify-center p-[0.125rem]">
           <Menu>
             <Menuitem
               onClick={() => openFile({ id: files.FILE_README_MD.id })}
@@ -113,14 +108,13 @@ const Page: FunctionComponent = () => {
               .map(({ Icon, id, title }) => (
                 <Menuitem
                   Icon={Icon}
-                  classes={{ icon: "menuitem-icon" }}
                   key={id}
                   onClick={() => openApplication({ id })}
                   title={title("beos")}
                 />
               ))}
           </Menu>
-        </Menuitem>
+        </MenuButton>
         <Tray>
           <menu className="flex gap-1">
             <li className="flex-none h-4 w-4">
@@ -140,7 +134,6 @@ const Page: FunctionComponent = () => {
             .map(({ Icon, id, title }) => (
               <Menuitem
                 Icon={Icon}
-                classes={{ icon: "menuitem-icon" }}
                 key={id}
                 onClick={undefined}
                 title={title("beos")}>

@@ -42,7 +42,7 @@ export const Icon: FunctionComponent<
     tabIndex={tabIndex}
     // eslint-disable-next-line react/button-has-type
     type={type}>
-    <Icon className={classes.icon} />
-    <span className={classes.text}>{title}</span>
+    <Icon className={clsx("icon-icon", classes.icon)} />
+    <span className={clsx("icon-text", classes.text)}>{title}</span>
   </button>
 );
