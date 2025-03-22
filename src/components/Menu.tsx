@@ -1,50 +1,34 @@
 "use client";
 
-import clsx from "clsx";
-import {
-  type FunctionComponent,
-  type PropsWithChildren,
-  useState,
-} from "react";
-import { type EmptyObject } from "type-fest";
+import { type FunctionComponent, type MenuHTMLAttributes } from "react";
 
-// @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
-export const Menu: FunctionComponent<
-  PropsWithChildren<
-    {
-      id?: string;
-    } & (
-      | {
-          bar: true;
-          collapsible?: boolean;
-          horizontal?: boolean;
-        }
-      | EmptyObject
-    )
-  >
-> = ({ children, id, ...props }) => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+export const Menu: FunctionComponent<MenuHTMLAttributes<HTMLElement>> = ({
+  children,
+  popover = "auto",
+  ...props
+}) => (
+  <menu
+    {...props}
+    onClick={(e) => {
+      let parentElement: HTMLElement | null = e.currentTarget;
 
-  return (
-    <>
-      {"collapsible" in props && props.collapsible ? (
-        <button
-          className="menu-button"
-          onClick={() => setIsCollapsed((prevState) => !prevState)}
-          tabIndex={-1}
-          type="button"
-        />
-      ) : null}
-      <menu
-        aria-orientation={
-          "horizontal" in props && props.horizontal ? "horizontal" : "vertical"
+      while (parentElement) {
+        if (parentElement.popover) {
+          parentElement.hidePopover();
         }
-        className={clsx("menu", { isCollapsed })}
-        draggable={false}
-        id={id}
-        role={"bar" in props && props.bar ? "menubar" : "menu"}>
-        {children}
-      </menu>
-    </>
-  );
-};
+
+        parentElement = parentElement.parentElement;
+      }
+
+      props.onClick?.(e);
+    }}
+    popover={popover}
+    ref={(node) =>
+      node?.setAttribute(
+        "id",
+        node?.previousElementSibling?.getAttribute("popovertarget") ?? ""
+      )
+    }>
+    {children}
+  </menu>
+);

@@ -6,9 +6,7 @@ export type Actions = Readonly<{
   closeApplication(payload: PayloadWithID): void;
   closeDialog(payload: PayloadWithID): void;
   closeWindow(payload: PayloadWithID): void;
-  collapseMenuitem(payload: PayloadWithID): void;
   collapseWindow(payload: PayloadWithID): void;
-  expandMenuitem(payload: PayloadWithID): void;
   expandWindow(payload: PayloadWithID): void;
   focusSystemBar(): void;
   focusWindow(payload: PayloadWithID): void;

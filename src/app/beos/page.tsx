@@ -1,7 +1,8 @@
 "use client";
 
 import "./page.css";
-import { Clock, Selection } from "./_components";
+import * as applications from "@/applications";
+import { Clock, Menu, Menuitem, Selection } from "@/components";
 import * as files from "@/files";
 import {
   BeOS,
@@ -22,13 +23,15 @@ import localFont from "next/font/local";
 import { type FunctionComponent, useRef } from "react";
 
 const FONT_COURIER_10_PITCH = localFont({
-  src: "./_fonts/Courier10Pitch.otf",
+  src: "./Courier10Pitch.otf",
   variable: "--font-courier-10-pitch",
 });
 const ICONS: Partial<Record<MimeType, IconComponent>> = {
   "application/pdf": Pdf,
   "text/markdown": Text,
 };
+const MENUITEM_CLASSNAME =
+  "aria-expanded:bg-neutral-400 hover:bg-neutral-400 flex font-medium gap-2 items-center px-2 py-1 select-none text-sm/4 w-full";
 
 const Page: FunctionComponent = () => {
   const blurWindow = useStore((store) => store.blurWindow);
@@ -86,19 +89,100 @@ const Page: FunctionComponent = () => {
       </div>
       <header
         aria-label="Deskbar"
-        className="bg-[rgb(222,222,222)] border border-dark fixed flex flex-col inset-shadow-high max-h-dvh right-0 top-0 w-44"
+        className="bg-default border border-dark fixed flex flex-col inset-shadow-high max-h-dvh right-0 top-0 w-44"
         id={SYSTEM_BAR_ID}
         role="banner"
         style={{ zIndex: stackingOrder.indexOf(SYSTEM_BAR_ID) }}
         tabIndex={-1}>
+        <Menuitem
+          Icon={BeOS}
+          aria-label="BeOS Menu"
+          classes={{
+            button:
+              "aria-expanded:bg-neutral-400 flex not-aria-expanded:inset-shadow-high items-center justify-center p-[0.125rem] w-full",
+            icon: "h-6",
+          }}
+          standalone>
+          <Menu className="bg-default border border-dark inset-auto inset-shadow-high max-w-80 min-w-20 right-[anchor(left)] top-[anchor(top)] z-100">
+            <Menuitem
+              className={MENUITEM_CLASSNAME}
+              onClick={() => openFile({ id: files.FILE_README_MD.id })}
+              title={files.FILE_README_MD.title}
+            />
+            <Menuitem className={MENUITEM_CLASSNAME} title="Theme">
+              <Menu>…</Menu>
+            </Menuitem>
+            <Menuitem
+              className="border-b-(--color-highlight) border-t-(--color-lowlight) border-y my-1 mx-[0.125rem]"
+              role="separator"
+            />
+            <Menuitem
+              className={MENUITEM_CLASSNAME}
+              onClick={() => {
+                useStore.persist.clearStorage();
+                window.location.reload();
+              }}
+              title="Restart"
+            />
+            <Menuitem
+              className="border-b-(--color-highlight) border-t-(--color-lowlight) border-y my-1 mx-[0.125rem]"
+              role="separator"
+            />
+            {Object.values(applications)
+              .filter(
+                ({ id }) => id !== applications.APPLICATION_FILE_MANAGER.id
+              )
+              .map(({ Icon, id, title }) => (
+                <Menuitem
+                  Icon={Icon}
+                  className={MENUITEM_CLASSNAME}
+                  classes={{ icon: "flex-none h-4 w-4" }}
+                  key={id}
+                  onClick={() => openApplication({ id })}
+                  title={title("beos")}
+                />
+              ))}
+          </Menu>
+        </Menuitem>
         <aside className="bg-black/17.5 bg-clip-padding border border-transparent flex gap-1 inset-shadow-low items-center justify-between m-px px-2 py-1 shadow-high">
           <menu className="flex gap-1">
             <li className="flex-none h-4 w-4">
               <Network />
             </li>
           </menu>
-          <Clock className="font-medium -mr-1 px-1 select-none text-[0.8125rem]" />
+          <Clock className="font-medium -mr-1 px-1 select-none text-[0.8125rem]/4" />
         </aside>
+        <menu
+          aria-orientation="horizontal"
+          className="flex flex-col"
+          role="menubar">
+          {openApplicationIds
+            .map(
+              (openApplicationId) =>
+                Object.values(applications).find(
+                  ({ id }) => id === openApplicationId
+                )!
+            )
+            .map(({ Icon, id, title }) => (
+              <li key={id} onBlur={undefined} role="none">
+                <button
+                  aria-expanded={false}
+                  aria-haspopup="menu"
+                  aria-label={title("beos")}
+                  className="flex font-medium gap-2 inset-shadow-high items-center px-2 py-1 select-none text-sm/4 w-full"
+                  onClick={undefined}
+                  onKeyDown={undefined}
+                  onMouseEnter={undefined}
+                  onPointerDown={undefined}
+                  role="menuitem"
+                  tabIndex={undefined}
+                  type="button">
+                  <Icon className="flex-none h-4 w-4" />
+                  <span className="">{title("beos")}</span>
+                </button>
+              </li>
+            ))}
+        </menu>
       </header>
     </main>
   );

@@ -13,6 +13,9 @@
   --shadow-low: 1px 1px var(--color-highlight), -1px -1px var(--color-lowlight);
 }
 
+@utility bg-default {
+  background-color: rgb(222 222 222);
+}
 @utility border-dark {
   border-color: rgb(96 96 96);
 }
