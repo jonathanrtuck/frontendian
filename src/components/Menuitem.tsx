@@ -25,7 +25,7 @@ export const Menuitem: FunctionComponent<
     component?: ElementType;
     Icon?: IconComponent;
     standalone?: boolean;
-  } & ({ title: string } | { "aria-label": string } | { role: "separator" })
+  } & ({ title: string } | { "aria-label": string })
 > = ({
   children,
   classes = {},
@@ -45,47 +45,42 @@ export const Menuitem: FunctionComponent<
   const hasPopup = Children.count(children) !== 0;
   const elementType: ElementType =
     component ?? "href" in props ? "a" : "button";
-  const isSeparator = role === "separator";
 
   return createElement(
     standalone ? "div" : "li",
     {
-      className: clsx(classes.root, isSeparator && className),
-      onToggle: isSeparator
-        ? undefined
-        : ({ newState, target }: ToggleEvent) =>
-            "id" in target && target.id === id
-              ? setExpanded(newState === "open")
-              : undefined,
-      role: isSeparator ? "separator" : "none",
+      className: classes.root,
+      onToggle: ({ newState, target }: ToggleEvent) =>
+        "id" in target && target.id === id
+          ? setExpanded(newState === "open")
+          : undefined,
+      role: "none",
     },
-    isSeparator ? null : (
-      <>
-        {createElement(
-          elementType,
-          {
-            ...props,
-            "aria-expanded": expanded,
-            "aria-haspopup": hasPopup,
-            "aria-label": props["aria-label"] ?? title,
-            className: clsx(className, classes.button),
-            popoverTarget: hasPopup ? popoverTarget ?? id : undefined,
-            role,
-            title,
-            type:
-              elementType === "button" && "type" in props
-                ? props.type ?? "button"
-                : undefined,
-          },
-          <>
-            {Icon ? <Icon className={classes.icon} /> : null}
-            <span aria-hidden className={classes.text}>
-              {title}
-            </span>
-          </>
-        )}
-        {children}
-      </>
-    )
+    <>
+      {createElement(
+        elementType,
+        {
+          ...props,
+          "aria-expanded": expanded,
+          "aria-haspopup": hasPopup,
+          "aria-label": props["aria-label"] ?? title,
+          className: clsx("menuitem", className, classes.button),
+          popoverTarget: hasPopup ? popoverTarget ?? id : undefined,
+          role,
+          title,
+          type:
+            elementType === "button" && "type" in props
+              ? props.type ?? "button"
+              : undefined,
+        },
+        <>
+          {Icon ? <Icon className={classes.icon} /> : null}
+          <span aria-hidden className={classes.text}>
+            {title}
+          </span>
+        </>
+      )}
+      {children}
+    </>
   );
 };

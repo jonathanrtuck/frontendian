@@ -31,3 +31,65 @@
 @utility cursor-text {
   cursor: url(/themes/beos/text.svg) 7 10, text;
 }
+
+@layer components {
+  .clock {
+    @apply font-medium -mr-1 px-1 select-none text-[0.8125rem]/4;
+  }
+
+  .grid {
+    @apply fixed gap-x-4 gap-y-8 grid grid-cols-[repeat(auto-fill,6.75rem)] grid-rows-[repeat(auto-fill,4.75rem)] inset-0 items-start mr-44 overflow-hidden p-4 text-white;
+  }
+
+  .icon {
+    @apply flex flex-col gap-1 items-center justify-center p-1 rounded-lg;
+  }
+
+  .icon-icon {
+    @apply aspect-square w-12;
+
+    .icon:focus & {
+      @apply brightness-60;
+    }
+  }
+
+  .icon-text {
+    @apply leading-4 max-w-full text-sm truncate;
+
+    .icon:focus & {
+      @apply bg-black;
+    }
+  }
+
+  .menu {
+    @apply bg-default border border-dark inset-auto inset-shadow-high max-w-80 min-w-20 right-[anchor(left)] top-[anchor(top)] z-100;
+  }
+
+  .menuitem {
+    @apply aria-expanded:bg-neutral-400 flex font-medium gap-2 not-aria-expanded:inset-shadow-high items-center px-2 py-1 select-none text-sm/4 w-full;
+
+    .menu & {
+      @apply hover:bg-neutral-400;
+    }
+  }
+
+  .menuitem-icon {
+    @apply flex-none h-4 w-4;
+  }
+
+  .selection {
+    @apply absolute bg-transparent border border-dotted;
+  }
+
+  .separator {
+    @apply border-b-(--color-highlight) border-t-(--color-lowlight) border-y my-1 mx-[0.125rem];
+  }
+
+  .system-bar {
+    @apply bg-default border border-dark fixed flex flex-col inset-shadow-high max-h-dvh right-0 top-0 w-44;
+  }
+
+  .tray {
+    @apply bg-black/17.5 bg-clip-padding border border-transparent flex gap-1 inset-shadow-low items-center justify-between m-px px-2 py-1 shadow-high;
+  }
+}

@@ -1,14 +1,17 @@
 "use client";
 
+import clsx from "clsx";
 import { type FunctionComponent, type MenuHTMLAttributes } from "react";
 
 export const Menu: FunctionComponent<MenuHTMLAttributes<HTMLElement>> = ({
   children,
+  className,
   popover = "auto",
   ...props
 }) => (
   <menu
     {...props}
+    className={clsx("menu", className)}
     onClick={(e) => {
       let parentElement: HTMLElement | null = e.currentTarget;
 

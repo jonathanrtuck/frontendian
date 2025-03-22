@@ -2,6 +2,7 @@
 
 import { useClock, useTheme } from "@/hooks";
 import { MS } from "@/types";
+import clsx from "clsx";
 import {
   type FunctionComponent,
   type TimeHTMLAttributes,
@@ -11,9 +12,10 @@ import {
 
 const TIMEOUT_DELAY: MS = 4000;
 
-export const Clock: FunctionComponent<TimeHTMLAttributes<HTMLTimeElement>> = (
-  props
-) => {
+export const Clock: FunctionComponent<TimeHTMLAttributes<HTMLTimeElement>> = ({
+  className,
+  ...props
+}) => {
   const theme = useTheme();
   const date = useClock();
   const [format, setFormat] = useState<"date" | "time">("time");
@@ -29,6 +31,7 @@ export const Clock: FunctionComponent<TimeHTMLAttributes<HTMLTimeElement>> = (
   return (
     <time
       {...props}
+      className={clsx("clock", className)}
       dateTime={date.toISOString().replace(/\.\d+/, "")} // remove milliseconds to prevent (more) frequent dom updates
       onClick={() =>
         setFormat((prevState) => (prevState === "time" ? "date" : "time"))
