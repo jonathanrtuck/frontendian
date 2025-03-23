@@ -4,7 +4,7 @@ import { type IconComponent } from "@/types";
 import clsx from "clsx";
 import { type ButtonHTMLAttributes, type FunctionComponent } from "react";
 
-export const Icon: FunctionComponent<
+export const IconButton: FunctionComponent<
   ButtonHTMLAttributes<HTMLButtonElement> & {
     classes?: Partial<{
       icon: string;
@@ -28,12 +28,11 @@ export const Icon: FunctionComponent<
 }) => (
   <button
     {...props}
-    className={clsx("icon", className, classes.root)}
+    className={clsx("icon-button", className, classes.root)}
     onKeyDown={(e) => {
       switch (e.key) {
         case "Enter":
         case " ":
-          props.onClick?.();
           props.onDoubleClick?.();
           break;
       }
@@ -42,7 +41,7 @@ export const Icon: FunctionComponent<
     tabIndex={tabIndex}
     // eslint-disable-next-line react/button-has-type
     type={type}>
-    <Icon className={clsx("icon-icon", classes.icon)} />
-    <span className={clsx("icon-text", classes.text)}>{title}</span>
+    <Icon className={clsx("icon-button-icon", classes.icon)} />
+    <span className={clsx("icon-button-text", classes.text)}>{title}</span>
   </button>
 );

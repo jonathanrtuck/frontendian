@@ -1,24 +1,34 @@
 @import "tailwindcss";
 @theme {
+  --bg-default: rgb(222 222 222);
+  --bg-inactive: rgb(232 232 232);
+  --border-dark: rgb(96 96 96);
+  --border-light: rgb(153 153 153);
   --color-highlight: rgb(255 255 255 / 60%);
   --color-lowlight: rgb(0 0 0 / 20%);
   --font-sans: Helvetica;
   --font-mono: var(--font-courier-10-pitch);
+  --h-title-bar: 1.6875rem;
   --inset-shadow-high: inset 1px 1px var(--color-highlight),
     inset -1px -1px var(--color-lowlight);
   --inset-shadow-low: inset 1px 1px var(--color-lowlight),
     inset -1px -1px var(--color-highlight);
+  --p-window: 0.1875rem;
   --shadow-high: 1px 1px var(--color-lowlight), -1px -1px var(--color-highlight);
   --shadow-low: 1px 1px var(--color-highlight), -1px -1px var(--color-lowlight);
 }
+@custom-variant aria-current (&[aria-current="true"], [aria-current="true"] &);
 @utility bg-default {
-  background-color: rgb(222 222 222);
+  background-color: var(--bg-default);
+}
+@utility bg-inactive {
+  background-color: var(--bg-inactive);
 }
 @utility border-dark {
-  border-color: rgb(96 96 96);
+  border-color: var(--border-dark);
 }
 @utility border-light {
-  border-color: rgb(153 153 153);
+  border-color: var(--border-light);
 }
 @utility cursor-default {
   cursor: url(/themes/beos/default.svg) 1 0, default;
@@ -30,6 +40,12 @@
   cursor: url(/themes/beos/text.svg) 7 10, text;
 }
 @layer base {
+  dialog::backdrop {
+    @apply bg-black/10;
+  }
+  ::selection {
+    @apply bg-black text-white;
+  }
   button {
     cursor: inherit;
   }
@@ -38,26 +54,23 @@
   .clock {
     @apply font-medium -mr-1 px-1 select-none text-[0.8125rem]/4;
   }
+  .desktop {
+    @apply bg-[rgb(51,102,152)] cursor-default h-screen w-screen;
+  }
   .grid {
     @apply fixed gap-x-4 gap-y-8 grid grid-cols-[repeat(auto-fill,6.75rem)] grid-rows-[repeat(auto-fill,4.75rem)] inset-0 items-start mr-44 overflow-hidden p-4 text-white;
   }
   .grid-selection {
     @apply absolute bg-transparent border border-dotted;
   }
-  .icon {
+  .icon-button {
     @apply flex flex-col gap-1 items-center justify-center p-1 rounded-lg;
   }
-  .icon-icon {
-    @apply aspect-square w-12;
-    .icon:focus & {
-      @apply brightness-60;
-    }
+  .icon-button-icon {
+    @apply [:focus>&]:brightness-60 size-12;
   }
-  .icon-text {
-    @apply leading-4 max-w-full text-sm truncate;
-    .icon:focus & {
-      @apply bg-black;
-    }
+  .icon-button-text {
+    @apply [:focus>&]:bg-black leading-4 max-w-full text-sm truncate;
   }
   .menu {
     @apply bg-default border border-dark inset-auto inset-shadow-high max-w-80 min-w-20 right-[anchor(left)] top-[anchor(top)] z-100;
@@ -69,21 +82,10 @@
     @apply flex-none h-6;
   }
   .menuitem-button {
-    @apply aria-expanded:bg-neutral-400 flex font-medium gap-2 items-center px-2 py-1 select-none disabled:text-neutral-400 text-sm/4 w-full;
-    .menu &:not(:disabled) {
-      @apply hover:bg-neutral-400;
-    }
-    .menubar > .menuitem > & {
-      @apply not-aria-expanded:inset-shadow-high;
-    }
+    @apply aria-expanded:bg-neutral-400 [.menu_&:not(:disabled)]:hover:bg-neutral-400 flex font-medium gap-2 [.menubar>.menuitem>&]:not-aria-expanded:inset-shadow-high items-center px-2 py-1 select-none disabled:text-neutral-400 text-sm/4 w-full;
   }
   .menuitem-caret {
-    .menu & {
-      @apply align-middle scale-y-75 text-xs text-[rgb(240,240,240)] [text-shadow:rgb(96,96,96)_0_0_1px,_rgb(96,96,96)_1px_1px_1px] after:content-['▶︎'];
-    }
-    .menu .menu-button[aria-expanded="true"] & {
-      @apply text-[rgb(200,200,200)];
-    }
+    @apply [.menu_&]:align-middle [.menu_&]:scale-y-75 [.menu_&]:text-xs [.menu_&]:text-neutral-100 [.menu_.menu-button[aria-expanded="true"]_&]:text-neutral-300 [.menu_&]:[text-shadow:var(--border-dark)_0_0_1px,_var(--border-dark)_1px_1px_1px] [.menu_&]:after:content-['▶︎'];
   }
   .menuitem-icon {
     @apply flex-none h-4 w-4;
@@ -97,7 +99,19 @@
   .system-bar {
     @apply bg-default border border-dark fixed flex flex-col inset-shadow-high max-h-dvh right-0 top-0 w-44;
   }
+  .title {
+    @apply flex-auto h-5 px-3 select-none text-base/normal truncate;
+  }
+  .title-bar {
+    @apply absolute bg-inactive aria-current:bg-[rgb(240,202,68)] border-t border-x flex gap-2 h-(--h-title-bar) max-w-fit -top-(--h-title-bar) w-full;
+  }
+  .title-bar-button {
+    @apply aspect-square flex-none h-full relative;
+  }
   .tray {
     @apply bg-black/17.5 bg-clip-padding border border-transparent flex gap-1 inset-shadow-low items-center justify-between m-px px-2 py-1 shadow-high;
+  }
+  .window {
+    @apply before:absolute before:bg-inactive aria-current:before:bg-default before:border before:border-b-(--border-dark) before:border-l-(--border-light) before:border-r-(--border-dark) before:border-t-(--border-light) before:inset-0 before:inset-shadow-high before:-z-[2] bg-inactive aria-current:bg-default fixed flex flex-col left-0 mt-(--h-title-bar) focus:outline-0 top-0 after:absolute after:border after:border-b-(--color-highlight) after:border-l-(--color-lowlight) after:border-r-(--color-highlight) after:border-t-(--color-lowlight) after:inset-[calc(1px+var(--p-window))] after:inset-shadow-[0_0_0_1px_var(--border-light)] after:-z-[1];
   }
 }

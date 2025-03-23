@@ -1,7 +1,7 @@
 "use client";
 
 import { useClock, useTheme } from "@/hooks";
-import { MS } from "@/types";
+import { type MS } from "@/types";
 import clsx from "clsx";
 import {
   type FunctionComponent,

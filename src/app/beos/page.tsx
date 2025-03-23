@@ -4,15 +4,20 @@ import "./page.css";
 import * as applications from "@/applications";
 import {
   Clock,
+  Desktop,
   Grid,
-  Icon,
+  IconButton,
   Menu,
   Menubar,
   MenuButton,
   Menuitem,
   Separator,
   SystemBar,
+  Title,
+  TitleBar,
+  TitleBarButton,
   Tray,
+  Window,
 } from "@/components";
 import * as files from "@/files";
 import {
@@ -63,10 +68,10 @@ const Page: FunctionComponent = () => {
   const zoomWindow = useStore((store) => store.zoomWindow);
 
   return (
-    <main className="bg-[rgb(51,102,152)] cursor-default h-screen w-screen">
+    <Desktop>
       <Grid>
         {Object.values(files).map(({ id, mimetype, title }) => (
-          <Icon
+          <IconButton
             Icon={ICONS[mimetype] ?? File}
             key={id}
             onDoubleClick={() => openFile({ id })}
@@ -187,7 +192,44 @@ const Page: FunctionComponent = () => {
             })}
         </Menubar>
       </SystemBar>
-    </main>
+      {windows.map(
+        ({ focused, height, hidden, id, resizable, title, width, x, y }) => (
+          <Window
+            current={focused}
+            height={height}
+            hidden={hidden}
+            id={id}
+            key={id}
+            onBlur={() => blurWindow({ id })}
+            onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
+            onFocus={() => focusWindow({ id })}
+            onResize={
+              resizable ? (size) => resizeWindow({ id, ...size }) : undefined
+            }
+            width={width}
+            x={x}
+            y={y}
+            z={stackingOrder.indexOf(id)}>
+            <TitleBar
+              onDoubleClick={() => hideWindow({ id })}
+              onDrag={(left) => moveTitlebar({ id, left })}>
+              <TitleBarButton
+                onClick={() => closeWindow({ id })}
+                title="Close"
+              />
+              <Title>{title}</Title>
+              {resizable ? (
+                <TitleBarButton
+                  onClick={() => zoomWindow({ id })}
+                  title="Zoom"
+                />
+              ) : null}
+            </TitleBar>
+            window…
+          </Window>
+        )
+      )}
+    </Desktop>
   );
 };
 
