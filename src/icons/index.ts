@@ -1,10 +1,1 @@
-export * from "./Apple";
-export * from "./BeOS";
-export * from "./Error";
-export * from "./File";
-export * from "./Info";
-export * from "./Network";
-export * from "./Pdf";
-export * from "./Text";
-export * from "./WindowHidden";
-export * from "./WindowVisible";
+export { default as BeOS } from "./BeOS.svg";

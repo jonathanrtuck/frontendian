@@ -1,7 +1,7 @@
 import * as applications from "@/applications";
 import * as files from "@/files";
 import { SYSTEM_BAR_ID } from "@/ids";
-import { type Actions, type Pixels, type State, type Window } from "@/types";
+import type { Actions, Pixels, State, Window } from "@/types";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
@@ -224,28 +224,6 @@ export const useStore = create(
               type: "closeWindow",
             }
           ),
-        collapseMenuitem: (payload) =>
-          set(
-            (prevState) => {
-              const index = prevState.expandedMenuitemIds.indexOf(payload.id);
-
-              if (index === -1) {
-                return prevState;
-              }
-
-              return {
-                expandedMenuitemIds: prevState.expandedMenuitemIds.slice(
-                  0,
-                  index
-                ),
-              };
-            },
-            undefined,
-            {
-              payload,
-              type: "collapseMenuitem",
-            }
-          ),
         collapseWindow: (payload) =>
           set(
             (prevState) => ({
@@ -262,56 +240,6 @@ export const useStore = create(
             {
               payload,
               type: "collapseWindow",
-            }
-          ),
-        expandMenuitem: (payload) =>
-          set(
-            (prevState) => {
-              const menuitem = document.getElementById(payload.id);
-
-              if (!menuitem) {
-                return prevState;
-              }
-
-              const siblingIds = Array.from(
-                menuitem.parentElement?.children ?? []
-              )
-                .filter((element) => element !== menuitem)
-                .map(({ id }) => id);
-
-              for (const id of siblingIds) {
-                const index = prevState.expandedMenuitemIds.indexOf(id);
-
-                if (index !== -1) {
-                  return {
-                    expandedMenuitemIds: [
-                      ...prevState.expandedMenuitemIds.slice(0, index),
-                      payload.id,
-                    ],
-                  };
-                }
-              }
-
-              const parentId = menuitem.parentElement?.closest(".menuitem")?.id;
-
-              if (
-                !parentId ||
-                !prevState.expandedMenuitemIds.includes(parentId)
-              ) {
-                return { expandedMenuitemIds: [payload.id] };
-              }
-
-              return {
-                expandedMenuitemIds: [
-                  ...prevState.expandedMenuitemIds,
-                  payload.id,
-                ],
-              };
-            },
-            undefined,
-            {
-              payload,
-              type: "expandMenuitem",
             }
           ),
         expandWindow: (payload) =>

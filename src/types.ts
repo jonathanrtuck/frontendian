@@ -1,14 +1,12 @@
-import { type ComponentType, type SVGProps } from "react";
-import { type EmptyObject, type SimplifyDeep } from "type-fest";
+import type { ComponentType, SVGProps } from "react";
+import type { EmptyObject, SimplifyDeep } from "type-fest";
 
 export type Actions = Readonly<{
   blurWindow(payload: PayloadWithID): void;
   closeApplication(payload: PayloadWithID): void;
   closeDialog(payload: PayloadWithID): void;
   closeWindow(payload: PayloadWithID): void;
-  collapseMenuitem(payload: PayloadWithID): void;
   collapseWindow(payload: PayloadWithID): void;
-  expandMenuitem(payload: PayloadWithID): void;
   expandWindow(payload: PayloadWithID): void;
   focusSystemBar(): void;
   focusWindow(payload: PayloadWithID): void;

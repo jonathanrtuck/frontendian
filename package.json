@@ -1,35 +1,40 @@
 {
+  "browserslist": ["defaults"],
   "dependencies": {
     "clsx": "2",
     "gl-matrix": "3",
-    "next": "15",
     "react": "19",
     "react-dom": "19",
     "react-draggable": "4",
     "react-markdown": "10",
     "react-pdf": "9",
     "react-resizable": "3",
+    "react-router": "7",
     "remark-gfm": "4",
     "uuid": "11",
     "zustand": "5"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "3",
-    "@types/node": "20",
+    "@biomejs/biome": "1",
+    "@rsbuild/core": "1",
+    "@rsbuild/plugin-react": "1",
+    "@rsbuild/plugin-svgr": "1",
+    "@types/node": "22",
     "@types/react": "19",
     "@types/react-dom": "19",
-    "@types/react-resizable": "3",
-    "eslint": "9",
-    "eslint-config-next": "15",
+    "rsbuild-plugin-html-minifier-terser": "1",
     "type-fest": "4",
     "typescript": "5"
   },
-  "name": "frontendian",
+  "name": "frontedian",
+  "private": true,
   "scripts": {
-    "build": "next build",
-    "dev": "next dev",
-    "lint": "next lint",
-    "start": "next start"
+    "build": "rsbuild build",
+    "check": "biome check --write",
+    "dev": "rsbuild dev --open",
+    "format": "biome format --write",
+    "preview": "rsbuild preview"
   },
-  "version": "4.0.1"
+  "type": "module",
+  "version": "5.0.0"
 }
