@@ -31,7 +31,7 @@ const getFirstOpenWindowPosition = (windows: Window[]): Pixels => {
     const position =
       DEFAULT_WINDOW_POSITION_OFFSET + i * DEFAULT_WINDOW_POSITION_INCREMENT;
     const isPositionOpen = windows.every(
-      ({ x, y }) => x !== position || y !== position
+      ({ x, y }) => x !== position || y !== position,
     );
 
     if (isPositionOpen) {
@@ -64,20 +64,20 @@ export const useStore = create(
                       ...window,
                       focused: false,
                     }
-                  : window
+                  : window,
               ),
             }),
             undefined,
             {
               payload,
               type: "blurWindow",
-            }
+            },
           ),
         closeApplication: (payload) =>
           set(
             (prevState) => {
               const application = Object.values(applications).find(
-                ({ id }) => id === payload.id
+                ({ id }) => id === payload.id,
               );
 
               if (!application) {
@@ -92,13 +92,13 @@ export const useStore = create(
                 openApplicationIds: prevState.openApplicationIds.filter(
                   (id) =>
                     id === applications.APPLICATION_FILE_MANAGER.id ||
-                    id !== payload.id
+                    id !== payload.id,
                 ),
                 stackingOrder: prevState.stackingOrder.filter(
-                  (id) => !applicationWindowIds.includes(id)
+                  (id) => !applicationWindowIds.includes(id),
                 ),
                 windows: prevState.windows.filter(
-                  ({ id }) => !applicationWindowIds.includes(id)
+                  ({ id }) => !applicationWindowIds.includes(id),
                 ),
               };
             },
@@ -106,13 +106,13 @@ export const useStore = create(
             {
               payload,
               type: "closeApplication",
-            }
+            },
           ),
         closeDialog: (payload) =>
           set(
             (prevState) => {
               const dialog = prevState.dialogs.find(
-                ({ id }) => id === payload.id
+                ({ id }) => id === payload.id,
               );
 
               if (!dialog) {
@@ -121,12 +121,12 @@ export const useStore = create(
 
               const nextState = {
                 dialogs: prevState.dialogs.filter(
-                  ({ id }) => id !== payload.id
+                  ({ id }) => id !== payload.id,
                 ),
               };
 
               const application = Object.values(applications).find(
-                ({ id }) => id === dialog.applicationId
+                ({ id }) => id === dialog.applicationId,
               );
 
               if (!application) {
@@ -153,7 +153,7 @@ export const useStore = create(
                 ...nextState,
                 stackingOrder: [
                   ...prevState.stackingOrder.filter(
-                    (id) => id !== highestWindowId
+                    (id) => id !== highestWindowId,
                   ),
                   highestWindowId,
                 ],
@@ -168,13 +168,13 @@ export const useStore = create(
             {
               payload,
               type: "closeDialog",
-            }
+            },
           ),
         closeWindow: (payload) =>
           set(
             (prevState) => {
               const window = prevState.windows.find(
-                ({ id }) => id === payload.id
+                ({ id }) => id === payload.id,
               );
 
               if (!window) {
@@ -182,16 +182,16 @@ export const useStore = create(
               }
 
               const application = Object.values(applications).find(
-                ({ id }) => id === window.applicationId
+                ({ id }) => id === window.applicationId,
               );
 
               if (!application) {
                 return {
                   stackingOrder: prevState.stackingOrder.filter(
-                    (id) => id !== payload.id
+                    (id) => id !== payload.id,
                   ),
                   windows: prevState.windows.filter(
-                    ({ id }) => id !== payload.id
+                    ({ id }) => id !== payload.id,
                   ),
                 };
               }
@@ -207,14 +207,14 @@ export const useStore = create(
                 openApplicationIds:
                   isLastApplicationWindow && !isFileManager
                     ? prevState.openApplicationIds.filter(
-                        (id) => id !== application.id
+                        (id) => id !== application.id,
                       )
                     : prevState.openApplicationIds,
                 stackingOrder: prevState.stackingOrder.filter(
-                  (id) => id !== payload.id
+                  (id) => id !== payload.id,
                 ),
                 windows: prevState.windows.filter(
-                  ({ id }) => id !== payload.id
+                  ({ id }) => id !== payload.id,
                 ),
               };
             },
@@ -222,7 +222,7 @@ export const useStore = create(
             {
               payload,
               type: "closeWindow",
-            }
+            },
           ),
         collapseWindow: (payload) =>
           set(
@@ -233,14 +233,14 @@ export const useStore = create(
                       ...window,
                       collapsed: true,
                     }
-                  : window
+                  : window,
               ),
             }),
             undefined,
             {
               payload,
               type: "collapseWindow",
-            }
+            },
           ),
         expandWindow: (payload) =>
           set(
@@ -251,14 +251,14 @@ export const useStore = create(
                       ...window,
                       collapsed: false,
                     }
-                  : window
+                  : window,
               ),
             }),
             undefined,
             {
               payload,
               type: "expandWindow",
-            }
+            },
           ),
         focusSystemBar: () =>
           set(
@@ -276,7 +276,7 @@ export const useStore = create(
             {
               payload: undefined,
               type: "focusSystemBar",
-            }
+            },
           ),
         focusWindow: (payload) =>
           set(
@@ -295,7 +295,7 @@ export const useStore = create(
             {
               payload,
               type: "focusWindow",
-            }
+            },
           ),
         hideWindow: (payload) =>
           set(
@@ -311,14 +311,14 @@ export const useStore = create(
                       focused: false,
                       hidden: true,
                     }
-                  : window
+                  : window,
               ),
             }),
             undefined,
             {
               payload,
               type: "hideWindow",
-            }
+            },
           ),
         maximizeWindow: (payload) =>
           set(
@@ -372,7 +372,7 @@ export const useStore = create(
             {
               payload,
               type: "maximizeWindow",
-            }
+            },
           ),
         moveTitlebar: (payload) =>
           set(
@@ -385,14 +385,14 @@ export const useStore = create(
                         left: payload.left,
                       },
                     }
-                  : window
+                  : window,
               ),
             }),
             undefined,
             {
               payload,
               type: "moveTitlebar",
-            }
+            },
           ),
         moveWindow: (payload) =>
           set(
@@ -404,20 +404,20 @@ export const useStore = create(
                       x: payload.x,
                       y: payload.y,
                     }
-                  : window
+                  : window,
               ),
             }),
             undefined,
             {
               payload,
               type: "moveWindow",
-            }
+            },
           ),
         openApplication: (payload) =>
           set(
             (prevState) => {
               const application = Object.values(applications).find(
-                ({ id }) => id === payload.id
+                ({ id }) => id === payload.id,
               );
 
               if (!application) {
@@ -425,21 +425,21 @@ export const useStore = create(
               }
 
               const isApplicationOpen = prevState.openApplicationIds.includes(
-                payload.id
+                payload.id,
               );
 
               // if the application is already open, raise and focus its first visible window
               if (isApplicationOpen) {
                 const firstVisibleWindow = prevState.windows.find(
                   ({ applicationId, hidden }) =>
-                    applicationId === application.id && !hidden
+                    applicationId === application.id && !hidden,
                 );
 
                 if (firstVisibleWindow) {
                   return {
                     stackingOrder: [
                       ...prevState.stackingOrder.filter(
-                        (id) => id !== firstVisibleWindow.id
+                        (id) => id !== firstVisibleWindow.id,
                       ),
                       firstVisibleWindow.id,
                     ],
@@ -455,7 +455,7 @@ export const useStore = create(
 
               const windowId = `window-${uuid()}`;
               const windowPosition = getFirstOpenWindowPosition(
-                prevState.windows
+                prevState.windows,
               );
               const window: Window = {
                 ...DEFAULT_WINDOW,
@@ -486,7 +486,7 @@ export const useStore = create(
             {
               payload,
               type: "openApplication",
-            }
+            },
           ),
         openDialog: (payload) =>
           set(
@@ -504,13 +504,13 @@ export const useStore = create(
             {
               payload,
               type: "openDialog",
-            }
+            },
           ),
         openFile: (payload) =>
           set(
             (prevState) => {
               const file = Object.values(files).find(
-                ({ id }) => id === payload.id
+                ({ id }) => id === payload.id,
               );
 
               if (!file) {
@@ -518,7 +518,7 @@ export const useStore = create(
               }
 
               const fileWindow = prevState.windows.find(
-                (window) => "fileId" in window && window.fileId === file.id
+                (window) => "fileId" in window && window.fileId === file.id,
               );
 
               // if the file is already open, unhide and/or focus its window
@@ -526,7 +526,7 @@ export const useStore = create(
                 return {
                   stackingOrder: [
                     ...prevState.stackingOrder.filter(
-                      (id) => id !== fileWindow.id
+                      (id) => id !== fileWindow.id,
                     ),
                     fileWindow.id,
                   ],
@@ -539,7 +539,7 @@ export const useStore = create(
               }
 
               const application = Object.values(applications).find(
-                ({ mimetypes }) => mimetypes.includes(file.mimetype)
+                ({ mimetypes }) => mimetypes.includes(file.mimetype),
               );
 
               if (!application) {
@@ -555,7 +555,7 @@ export const useStore = create(
                 return {
                   stackingOrder: [
                     ...prevState.stackingOrder.filter(
-                      (id) => id !== existingWindow.id
+                      (id) => id !== existingWindow.id,
                     ),
                     existingWindow.id,
                   ],
@@ -571,17 +571,17 @@ export const useStore = create(
                       : {
                           ...window,
                           focused: false,
-                        }
+                        },
                   ),
                 };
               }
 
               const isApplicationOpen = prevState.openApplicationIds.includes(
-                application.id
+                application.id,
               );
               const windowId = `window-${uuid()}`;
               const windowPosition = getFirstOpenWindowPosition(
-                prevState.windows
+                prevState.windows,
               );
               const window: Window = {
                 ...DEFAULT_WINDOW,
@@ -613,13 +613,13 @@ export const useStore = create(
             {
               payload,
               type: "openFile",
-            }
+            },
           ),
         openWindow: (payload) =>
           set(
             (prevState) => {
               const application = Object.values(applications).find(
-                ({ id }) => id === payload.id
+                ({ id }) => id === payload.id,
               );
 
               if (!application) {
@@ -627,11 +627,11 @@ export const useStore = create(
               }
 
               const isApplicationOpen = prevState.openApplicationIds.includes(
-                payload.id
+                payload.id,
               );
               const windowId = `window-${uuid()}`;
               const windowPosition = getFirstOpenWindowPosition(
-                prevState.windows
+                prevState.windows,
               );
               const window: Window = {
                 ...DEFAULT_WINDOW,
@@ -661,7 +661,7 @@ export const useStore = create(
             {
               payload,
               type: "openWindow",
-            }
+            },
           ),
         resizeWindow: (payload) =>
           set(
@@ -673,14 +673,14 @@ export const useStore = create(
                       height: payload.height,
                       width: payload.width,
                     }
-                  : window
+                  : window,
               ),
             }),
             undefined,
             {
               payload,
               type: "resizeWindow",
-            }
+            },
           ),
         showWindow: (payload) =>
           set(
@@ -699,14 +699,14 @@ export const useStore = create(
                   : {
                       ...window,
                       focused: false,
-                    }
+                    },
               ),
             }),
             undefined,
             {
               payload,
               type: "showWindow",
-            }
+            },
           ),
         zoomWindow: (payload) =>
           set(
@@ -747,14 +747,14 @@ export const useStore = create(
             {
               payload,
               type: "zoomWindow",
-            }
+            },
           ),
       }),
-      { enabled: process.env.NODE_ENV === "development" }
+      { enabled: process.env.NODE_ENV === "development" },
     ),
     {
       name: "store",
       version: 4,
-    }
-  )
+    },
+  ),
 );
