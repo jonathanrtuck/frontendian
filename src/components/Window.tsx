@@ -1,15 +1,9 @@
-"use client";
-
-import { WindowContext } from "@/contexts";
-import { useFocus } from "@/hooks";
-import { SYSTEM_BAR_ID } from "@/ids";
 import { type Coordinates, type ID, type Pixels, type Size } from "@/types";
 import clsx from "clsx";
 import {
   type FunctionComponent,
-  type PropsWithChildren,
+  type HTMLAttributes,
   type RefObject,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -20,76 +14,34 @@ const MIN_HEIGHT: Pixels = 16 * 7; // 7rem
 const MIN_WIDTH: Pixels = 16 * 10; // 10rem
 
 export const Window: FunctionComponent<
-  PropsWithChildren<
-    {
-      applicationId?: ID;
+  Omit<HTMLAttributes<HTMLElement>, "onDrag" | "onResize"> &
+    Coordinates &
+    Size & {
       current?: boolean;
-      hasMenubar?: boolean;
-      hidden?: boolean;
       id: ID;
-      onBlur?(): void;
       onDrag?(coordinates: Coordinates): void;
-      onFocus?(): void;
       onResize?(size: Size): void;
       z: number;
-    } & Coordinates &
-      Size
-  >
+    }
 > = ({
-  applicationId,
-  children,
+  className,
   current = false,
-  hasMenubar,
-  hidden,
+  height,
   id,
-  onBlur,
   onDrag,
-  onFocus,
   onResize,
+  style,
+  width,
   x,
   y,
   z,
   ...props
 }) => {
   const rootRef = useRef<HTMLElement>(null);
-  const [height, setHeight] = useState<Size["height"]>(props.height);
-  const [width, setWidth] = useState<Size["width"]>(props.width);
-
-  useFocus({
-    deps: [current],
-    ref: rootRef,
+  const [size, setSize] = useState<Size>({
+    height,
+    width,
   });
-
-  useLayoutEffect(() => {
-    const root = rootRef.current;
-
-    if (root && props.height === "auto") {
-      const resizeObserver = new ResizeObserver(() => {
-        setHeight(root.getBoundingClientRect().height ?? 0);
-      });
-
-      resizeObserver.observe(root);
-
-      return () => resizeObserver.unobserve(root);
-    } else {
-      setHeight(props.height);
-    }
-  }, [props.height]);
-  useLayoutEffect(() => {
-    const root = rootRef.current;
-
-    if (root && props.width === "auto") {
-      const resizeObserver = new ResizeObserver(() => {
-        setWidth(root.getBoundingClientRect().width ?? 0);
-      });
-
-      resizeObserver.observe(root);
-
-      return () => resizeObserver.unobserve(root);
-    } else {
-      setWidth(props.width);
-    }
-  }, [props.width]);
 
   return (
     <Draggable
@@ -108,83 +60,39 @@ export const Window: FunctionComponent<
       }}>
       <Resizable
         axis="both"
-        handle={onResize ? undefined : <span hidden />}
-        height={height === "auto" ? 0 : height}
+        handle={onResize ? undefined : <span aria-hidden />}
+        height={size.height === "auto" ? 0 : size.height}
         minConstraints={[MIN_WIDTH, MIN_HEIGHT]}
-        onResize={
-          onResize
-            ? (_, { size }) => {
-                setHeight(size.height);
-                setWidth(size.width);
-              }
-            : undefined
-        }
+        onResize={onResize ? (_, data) => setSize(data.size) : undefined}
         onResizeStart={
           onResize
-            ? () =>
-                (props.height === "auto" || props.width === "auto") &&
-                onResize?.({
-                  height,
-                  width,
-                })
+            ? () => (height === "auto" || width === "auto") && onResize?.(size)
             : undefined
         }
         onResizeStop={
           onResize
-            ? (_, { size }) =>
-                (size.height !== props.height || size.width !== props.width) &&
+            ? (_, data) =>
+                (data.size.height !== height || data.size.width !== width) &&
                 onResize(size)
             : undefined
         }
-        width={width === "auto" ? 0 : width}>
+        width={size.width === "auto" ? 0 : size.width}>
         <section
+          {...props}
           aria-current={current}
-          aria-labelledby={`${id}-title`}
-          className={clsx("window", { isCollapsed: props.height === 0 })}
-          hidden={hidden}
+          className={clsx("window", className)}
           id={id}
-          onBlur={
-            onBlur
-              ? ({ currentTarget, relatedTarget }) =>
-                  current &&
-                  document.hasFocus() &&
-                  !currentTarget?.contains(relatedTarget) &&
-                  (hasMenubar ||
-                    !document
-                      .getElementById(SYSTEM_BAR_ID)
-                      ?.contains(relatedTarget)) &&
-                  onBlur()
-              : undefined
-          }
-          onFocus={
-            onFocus
-              ? ({ currentTarget, relatedTarget }) =>
-                  !current &&
-                  (!relatedTarget || !currentTarget.contains(relatedTarget)) &&
-                  onFocus()
-              : undefined
-          }
           ref={rootRef}
-          role="dialog"
           style={{
+            ...style,
             height:
-              props.height === 0 || props.height === "auto" || height === 0
+              height === 0 || height === "auto" || size.height === 0
                 ? "auto"
-                : height,
-            width: props.width === "auto" ? "auto" : width,
+                : size.height,
+            width: width === "auto" ? "auto" : size.width,
             zIndex: z,
           }}
-          tabIndex={-1}>
-          <WindowContext.Provider
-            value={{
-              applicationId,
-              current,
-              id,
-              width,
-            }}>
-            {children}
-          </WindowContext.Provider>
-        </section>
+        />
       </Resizable>
     </Draggable>
   );

@@ -1,5 +1,3 @@
-"use client";
-
 import "./Teapot.css";
 import { main } from "./webgl";
 import { Content, Menu, Menubar, Menuitem } from "@/components";

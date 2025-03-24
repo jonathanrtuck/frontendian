@@ -1,5 +1,3 @@
-"use client";
-
 import "./TextEditor.css";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import * as files from "@/files";

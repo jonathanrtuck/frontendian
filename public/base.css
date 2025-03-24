@@ -1,0 +1,72 @@
+@layer base, theme, components;
+
+@layer base {
+  html {
+    background-color: black;
+    color: var(--text-color--default, black);
+    height: 100dvh;
+    overflow: hidden;
+    width: 100dvw;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: var(--cursor--default, default);
+    font-family: var(
+      --font-family--default,
+      ui-sans-serif,
+      system-ui,
+      sans-serif
+    );
+    inset: 0;
+    margin: 0;
+    overflow: hidden;
+    position: fixed;
+  }
+
+  *,
+  *::before,
+  *::after {
+    border: 0 solid var(--border-color--default, black);
+    box-sizing: border-box;
+  }
+
+  :any-link {
+    cursor: var(--cursor--pointer, pointer);
+  }
+
+  button {
+    appearance: button;
+    background: none;
+    border-radius: 0;
+    border-width: 0;
+    color: inherit;
+    cursor: inherit;
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    margin: 0;
+    opacity: 1;
+    padding: 0;
+    user-select: none;
+  }
+
+  code,
+  pre {
+    font-family: var(--font-family--monospace, monospace);
+  }
+
+  .sr-only {
+    border-width: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+}

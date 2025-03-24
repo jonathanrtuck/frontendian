@@ -1,6 +1,4 @@
-"use client";
-
 import { type Theme } from "@/types";
-import { usePathname } from "next/navigation";
+import { useMatches } from "react-router";
 
-export const useTheme = (): Theme => usePathname().slice(1) as Theme;
+export const useTheme = (): Theme => useMatches()[0].handle as Theme;

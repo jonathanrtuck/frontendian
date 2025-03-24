@@ -1,5 +1,3 @@
-"use client";
-
 import { useTheme } from "@/hooks";
 import { type IconComponent } from "@/types";
 import { useId } from "react";

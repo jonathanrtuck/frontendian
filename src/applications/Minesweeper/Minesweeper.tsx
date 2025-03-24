@@ -1,5 +1,3 @@
-"use client";
-
 import "./Minesweeper.css";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import { useStore } from "@/store";

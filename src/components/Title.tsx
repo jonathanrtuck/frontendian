@@ -1,16 +1,12 @@
-"use client";
+import clsx from "clsx";
+import { type FunctionComponent, type HTMLAttributes, useId } from "react";
 
-import { WindowContext } from "@/contexts";
-import { type FunctionComponent, useContext } from "react";
+export const Title: FunctionComponent<HTMLAttributes<HTMLHeadingElement>> = ({
+  className,
+  ...props
+}) => {
+  const uniqueId = useId();
+  const id = props.id ?? uniqueId;
 
-export const Title: FunctionComponent<{
-  text: string;
-}> = ({ text }) => {
-  const { id } = useContext(WindowContext);
-
-  return (
-    <h1 className="title" id={`${id}-title`} title={text}>
-      {text}
-    </h1>
-  );
+  return <h1 {...props} className={clsx("title", className)} id={id} />;
 };

@@ -1,36 +1,23 @@
-"use client";
-
-import { WindowContext } from "@/contexts";
 import { type Percentage, type Pixels } from "@/types";
+import clsx from "clsx";
 import {
   type FunctionComponent,
-  type PropsWithChildren,
+  type HTMLAttributes,
   type RefObject,
-  useContext,
-  useLayoutEffect,
-  useRef,
   useState,
+  useRef,
 } from "react";
 import Draggable from "react-draggable";
 
 export const TitleBar: FunctionComponent<
-  PropsWithChildren<{
+  Omit<HTMLAttributes<HTMLElement>, "onDoubleClick" | "onDrag"> & {
     left?: Percentage;
     onDoubleClick?(): void;
     onDrag?(left: Percentage): void;
-  }>
-> = ({ children, left = 0, onDoubleClick, onDrag }) => {
-  const { width = "auto" } = useContext(WindowContext);
+  }
+> = ({ className, left = 0, onDoubleClick, onDrag, ...props }) => {
   const rootRef = useRef<HTMLElement>(null);
   const [maxLeft, setMaxLeft] = useState<Pixels>(0);
-
-  useLayoutEffect(
-    () =>
-      width !== "auto" && rootRef.current
-        ? setMaxLeft(width - rootRef.current.getBoundingClientRect().width)
-        : undefined,
-    [children, width]
-  );
 
   return (
     <Draggable
@@ -48,7 +35,8 @@ export const TitleBar: FunctionComponent<
         y: 0,
       }}>
       <header
-        className="title-bar"
+        {...props}
+        className={clsx("title-bar", className)}
         onDoubleClick={
           onDoubleClick
             ? ({ target }) =>
@@ -57,9 +45,8 @@ export const TitleBar: FunctionComponent<
                   : undefined
             : undefined
         }
-        ref={rootRef}>
-        {children}
-      </header>
+        ref={rootRef}
+      />
     </Draggable>
   );
 };

@@ -1,50 +1,62 @@
-"use client";
-
 import clsx from "clsx";
 import {
   type FunctionComponent,
-  type PropsWithChildren,
-  useState,
+  type MenuHTMLAttributes,
+  useCallback,
+  useId,
+  useLayoutEffect,
+  useRef,
 } from "react";
-import { type EmptyObject } from "type-fest";
 
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
-export const Menu: FunctionComponent<
-  PropsWithChildren<
-    {
-      id?: string;
-    } & (
-      | {
-          bar: true;
-          collapsible?: boolean;
-          horizontal?: boolean;
-        }
-      | EmptyObject
-    )
-  >
-> = ({ children, id, ...props }) => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+// @todo ^^^
+export const Menu: FunctionComponent<MenuHTMLAttributes<HTMLElement>> = ({
+  children,
+  className,
+  popover = "auto",
+  ...props
+}) => {
+  const uniqueId = useId();
+  const rootRef = useRef<HTMLElement>(null);
+  const id = props.id ?? uniqueId;
+  const close = useCallback(() => {
+    let element: HTMLElement | null = rootRef.current;
+    while (element) {
+      if (element.popover) {
+        element.hidePopover();
+      }
+      element = element.parentElement;
+    }
+  }, []);
+
+  useLayoutEffect(
+    () =>
+      rootRef.current?.previousElementSibling?.setAttribute(
+        "popovertarget",
+        id
+      ),
+    [id]
+  );
 
   return (
-    <>
-      {"collapsible" in props && props.collapsible ? (
-        <button
-          className="menu-button"
-          onClick={() => setIsCollapsed((prevState) => !prevState)}
-          tabIndex={-1}
-          type="button"
-        />
-      ) : null}
-      <menu
-        aria-orientation={
-          "horizontal" in props && props.horizontal ? "horizontal" : "vertical"
-        }
-        className={clsx("menu", { isCollapsed })}
-        draggable={false}
-        id={id}
-        role={"bar" in props && props.bar ? "menubar" : "menu"}>
-        {children}
-      </menu>
-    </>
+    <menu
+      {...props}
+      className={clsx("menu", className)}
+      id={id}
+      onClick={(e) => {
+        close();
+        props.onClick?.(e);
+      }}
+      onPointerUp={close}
+      onToggle={({ newState }) =>
+        rootRef.current?.previousElementSibling?.setAttribute(
+          "aria-expanded",
+          String(newState === "open")
+        )
+      }
+      popover={popover}
+      ref={rootRef}>
+      {children}
+    </menu>
   );
 };

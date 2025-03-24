@@ -1,5 +1,3 @@
-"use client";
-
 import { type RefObject, useLayoutEffect, useState } from "react";
 
 export const useOverflow = (

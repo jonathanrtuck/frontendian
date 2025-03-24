@@ -1,5 +1,3 @@
-"use client";
-
 import { type Coordinates } from "@/types";
 import { type RefObject, useCallback, useEffect, useState } from "react";
 

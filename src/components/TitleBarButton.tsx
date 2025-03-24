@@ -1,17 +1,15 @@
-"use client";
+import clsx from "clsx";
+import { type ButtonHTMLAttributes, type FunctionComponent } from "react";
 
-import { type FunctionComponent } from "react";
-
-export const TitleBarButton: FunctionComponent<{
-  onClick(): void;
-  title: string;
-}> = ({ onClick, title }) => (
+export const TitleBarButton: FunctionComponent<
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "title"> & { title: string }
+> = ({ className, title, type = "button", ...props }) => (
   <button
-    aria-label={title}
-    className="title-bar-button"
-    draggable={false}
-    onClick={onClick}
+    {...props}
+    aria-label={props["aria-label"] ?? title}
+    className={clsx("title-bar-button", className)}
     title={title}
-    type="button"
+    // eslint-disable-next-line react/button-has-type
+    type={type}
   />
 );
