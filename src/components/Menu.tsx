@@ -47,7 +47,7 @@ export const Menu: FunctionComponent<MenuHTMLAttributes<HTMLElement>> = ({
         close();
         props.onClick?.(e);
       }}
-      onPointerUp={close}
+      //onPointerUp={close}
       onToggle={({ newState }) =>
         rootRef.current?.previousElementSibling?.setAttribute(
           "aria-expanded",

@@ -1,14 +1,23 @@
 import "./TextEditor.css";
-import { Content, Menu, Menubar, Menuitem } from "@/components";
+import { Content, Menu, Menubar, Menuitem, Separator } from "@/components";
 import * as files from "@/files";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import { type Application } from "@/types";
-import { useDeferredValue, useEffect, useRef, useState } from "react";
+import {
+  type FunctionComponent,
+  type ComponentProps,
+  useDeferredValue,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
+export const TextEditor: FunctionComponent<
+  ComponentProps<Application["Component"]>
+> = ({ fileId, windowId }) => {
   const closeApplication = useStore((store) => store.closeApplication);
   const closeWindow = useStore((store) => store.closeWindow);
   const openFile = useStore((store) => store.openFile);
@@ -96,7 +105,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
                 ))}
               </Menu>
             </Menuitem>
-            <Menuitem separator />
+            <Separator />
             <Menuitem
               onClick={() => closeWindow({ id: windowId })}
               title="Close"

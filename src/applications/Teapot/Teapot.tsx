@@ -3,10 +3,17 @@ import { main } from "./webgl";
 import { Content, Menu, Menubar, Menuitem } from "@/components";
 import { useStore } from "@/store";
 import { type Application } from "@/types";
-import { useEffect, useRef } from "react";
+import {
+  type FunctionComponent,
+  type ComponentProps,
+  useEffect,
+  useRef,
+} from "react";
 
 // @see https://en.wikipedia.org/wiki/Utah_teapot
-export const Teapot: Application["Component"] = () => {
+export const Teapot: FunctionComponent<
+  ComponentProps<Application["Component"]>
+> = () => {
   const closeApplication = useStore((store) => store.closeApplication);
   const rootRef = useRef<HTMLCanvasElement>(null);
 

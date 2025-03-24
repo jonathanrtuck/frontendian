@@ -8,6 +8,7 @@ import {
   Children,
   createElement,
 } from "react";
+import { type EmptyObject } from "type-fest";
 
 export const Menuitem: FunctionComponent<
   (ButtonHTMLAttributes<HTMLButtonElement> | HTMLAttributes<HTMLElement>) & {
@@ -20,7 +21,14 @@ export const Menuitem: FunctionComponent<
     }>;
     component?: ElementType;
     Icon?: IconComponent;
-  } & ({ title: string } | { "aria-label": string })
+  } & ({ title: string } | { "aria-label": string }) &
+    (
+      | {
+          checked?: boolean;
+          type: "checkbox" | "radio";
+        }
+      | EmptyObject
+    )
 > = ({
   children,
   classes = {},

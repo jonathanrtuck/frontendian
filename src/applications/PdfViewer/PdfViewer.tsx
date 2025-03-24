@@ -1,19 +1,26 @@
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "./PdfViewer.css";
-import { Content, Menu, Menubar, Menuitem } from "@/components";
+import { Content, Menu, Menubar, Menuitem, Separator } from "@/components";
 import * as files from "@/files";
 import { useTheme } from "@/hooks";
 import { useStore } from "@/store";
 import { type Application } from "@/types";
-import { useRef, useState } from "react";
+import {
+  type FunctionComponent,
+  type ComponentProps,
+  useRef,
+  useState,
+} from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
 // @see https://github.com/wojtekmaj/react-pdf/tree/main#use-external-cdn
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 // @see https://github.com/wojtekmaj/react-pdf
-export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
+export const PdfViewer: FunctionComponent<
+  ComponentProps<Application["Component"]>
+> = ({ fileId, windowId }) => {
   const closeApplication = useStore((store) => store.closeApplication);
   const closeWindow = useStore((store) => store.closeWindow);
   const openFile = useStore((store) => store.openFile);
@@ -55,7 +62,7 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
                 ))}
               </Menu>
             </Menuitem>
-            <Menuitem separator />
+            <Separator />
             <Menuitem
               disabled={!url}
               onClick={
@@ -65,7 +72,7 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
               }
               title="Print"
             />
-            <Menuitem separator />
+            <Separator />
             <Menuitem
               onClick={() => closeWindow({ id: windowId })}
               title="Close"
@@ -90,7 +97,7 @@ export const PdfViewer: Application["Component"] = ({ fileId, windowId }) => {
                 <Page key={i} pageIndex={i} scale={1.25} />
               ))}
             </Document>
-            <iframe hidden ref={iframeRef} src={url} />
+            <iframe hidden ref={iframeRef} src={url} title={file.title} />
           </>
         ) : null}
       </Content>

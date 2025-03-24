@@ -1,20 +1,15 @@
 import "./Minesweeper.css";
-import { Content, Menu, Menubar, Menuitem } from "@/components";
+import { Content, Menu, Menubar, Menuitem, Separator } from "@/components";
 import { useStore } from "@/store";
 import { type Application } from "@/types";
 import clsx from "clsx";
-import localFont from "next/font/local";
-import { useEffect, useRef, useState } from "react";
-
-const FONT_DIGITAL_DISMAY = localFont({
-  src: "./DigitalDismay.otf",
-  variable: "--font-family--digital-dismay",
-});
-
-const FONT_MINE_SWEEPER = localFont({
-  src: "./MineSweeper.otf",
-  variable: "--font-family--mine-sweeper",
-});
+import {
+  type FunctionComponent,
+  type ComponentProps,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 type Coordinates = [rowIndex: number, columnIndex: number];
 type Level = "beginner" | "expert" | "intermediate";
@@ -56,10 +51,7 @@ const getAdjacentSquareCoordinates = (
         columnIndex !== numColumns
     );
 
-export const getInitialSquares = (
-  numRows: number,
-  numColumns: number
-): Square[][] =>
+const getInitialSquares = (numRows: number, numColumns: number): Square[][] =>
   new Array(numRows).fill(
     new Array(numColumns).fill({
       hasFlag: false,
@@ -175,7 +167,9 @@ const LEVELS: [key: Level, value: string][] = [
 ];
 
 // @see https://github.com/jonathanrtuck/minesweeper
-export const Minesweeper: Application["Component"] = () => {
+export const Minesweeper: FunctionComponent<
+  ComponentProps<Application["Component"]>
+> = () => {
   const closeApplication = useStore((store) => store.closeApplication);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
@@ -239,7 +233,7 @@ export const Minesweeper: Application["Component"] = () => {
               }}
               title="New"
             />
-            <Menuitem separator />
+            <Separator />
             {LEVELS.map(([lvl, title]) => (
               <Menuitem
                 checked={level === lvl}
@@ -260,13 +254,7 @@ export const Minesweeper: Application["Component"] = () => {
         </Menuitem>
       </Menubar>
       <Content>
-        <div
-          className={clsx(
-            "minesweeper",
-            FONT_DIGITAL_DISMAY.variable,
-            FONT_MINE_SWEEPER.variable
-          )}
-          onContextMenu={(e) => e.preventDefault()}>
+        <div className="minesweeper" onContextMenu={(e) => e.preventDefault()}>
           <header>
             <data value={flagsRemaining}>
               {flagsRemaining.toString().padStart(3, "0")}
