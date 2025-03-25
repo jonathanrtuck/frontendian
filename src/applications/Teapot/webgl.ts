@@ -124,8 +124,8 @@ export const main = (canvas: HTMLCanvasElement): void => {
     gl.drawElements(gl.TRIANGLES, INDICES.length, gl.UNSIGNED_SHORT, 0);
   };
 
-  const frameRequestCallback = (now: number): void => {
-    now *= 0.001;
+  const frameRequestCallback = (prev: number): void => {
+    const now = prev * 0.001;
     deltaTime = now - then;
     then = now;
 

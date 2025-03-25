@@ -6,11 +6,9 @@ import { pluginHtmlMinifierTerser } from "rsbuild-plugin-html-minifier-terser";
 
 export default defineConfig({
   html: { template: "./index.html" },
-
   output: {
-    distPath: {
-      js: "scripts",
-    },
+    distPath: { js: "scripts" },
+    sourceMap: { js: "source-map" },
   },
   plugins: [
     pluginHtmlMinifierTerser(),

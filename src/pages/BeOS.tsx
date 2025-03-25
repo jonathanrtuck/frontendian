@@ -47,7 +47,7 @@ export const BeOS: FunctionComponent = () => {
 
   return (
     <>
-      <link href="/themes/mac-os-classic/styles.css" rel="stylesheet" />
+      <link href="/themes/beos/styles.css" rel="stylesheet" />
       <Grid>
         {Object.values(files).map(({ id, mimetype, title }) => (
           <IconButton

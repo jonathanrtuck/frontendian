@@ -30,7 +30,7 @@ export type Application = Readonly<{
     windowId: Window["id"];
   }>;
   getWindow?(
-    fileId?: File["id"]
+    fileId?: File["id"],
   ): Partial<
     Pick<
       Window,
@@ -76,7 +76,7 @@ export type PayloadWithID<
   T extends {
     [x: string]: unknown;
     id?: ID;
-  } = EmptyObject
+  } = EmptyObject,
 > = { id: ID } & T;
 
 export type Percentage = number;

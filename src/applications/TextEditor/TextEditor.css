@@ -8,7 +8,7 @@
   padding: 0.5rem;
   resize: none;
 
-  textarea& {
+  &textarea {
     font-size: inherit;
     min-height: 100%;
 
@@ -24,7 +24,7 @@
     }
   }
 
-  samp& {
+  &samp {
     outline: 0;
 
     code {

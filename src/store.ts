@@ -328,7 +328,12 @@ export const useStore = create(
                   return window;
                 }
 
-                const windowElement = document.getElementById(window.id)!;
+                const windowElement = document.getElementById(window.id);
+
+                if (!windowElement) {
+                  return window;
+                }
+
                 const { marginBottom, marginLeft, marginRight, marginTop } =
                   getComputedStyle(windowElement);
                 const marginX =
