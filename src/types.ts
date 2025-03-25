@@ -30,14 +30,14 @@ export type Application = Readonly<{
     windowId: Window["id"];
   }>;
   getWindow?(
-    fileId?: File["id"],
+    fileId?: File["id"]
   ): Partial<
     Pick<
       Window,
       "collapsed" | "height" | "hidden" | "resizable" | "title" | "width"
     >
   >;
-  Icon: IconComponent;
+  Icon(theme: Theme): IconComponent;
   id: ID;
   mimetypes: MimeType[];
   title(theme: Theme): string;
@@ -76,7 +76,7 @@ export type PayloadWithID<
   T extends {
     [x: string]: unknown;
     id?: ID;
-  } = EmptyObject,
+  } = EmptyObject
 > = { id: ID } & T;
 
 export type Percentage = number;

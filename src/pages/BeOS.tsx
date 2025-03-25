@@ -16,7 +16,7 @@ import {
   Window,
 } from "@/components";
 import * as files from "@/files";
-import { BeOSFile, BeOSLogo } from "@/icons";
+import { FileBeOS, LogoBeOS } from "@/icons";
 import { SYSTEM_BAR_ID } from "@/ids";
 import { useStore } from "@/store";
 import type { IconComponent, MimeType } from "@/types";
@@ -51,7 +51,7 @@ export const BeOS: FunctionComponent = () => {
       <Grid>
         {Object.values(files).map(({ id, mimetype, title }) => (
           <IconButton
-            Icon={ICONS[mimetype] ?? BeOSFile}
+            Icon={ICONS[mimetype] ?? FileBeOS}
             key={id}
             onDoubleClick={() => openFile({ id })}
             title={title}
@@ -62,11 +62,7 @@ export const BeOS: FunctionComponent = () => {
         aria-label="Deskbar"
         style={{ zIndex: stackingOrder.indexOf(SYSTEM_BAR_ID) }}
       >
-        <MenuButton
-          Icon={BeOSLogo}
-          aria-label="BeOS Menu"
-          className="justify-center p-[0.125rem]"
-        >
+        <MenuButton Icon={LogoBeOS} aria-label="BeOS Menu">
           <Menu>
             <Menuitem
               onClick={() => openFile({ id: files.FILE_README_MD.id })}
@@ -90,7 +86,7 @@ export const BeOS: FunctionComponent = () => {
               )
               .map(({ Icon, id, title }) => (
                 <Menuitem
-                  Icon={Icon}
+                  Icon={Icon("beos")}
                   key={id}
                   onClick={() => openApplication({ id })}
                   title={title("beos")}
@@ -99,12 +95,12 @@ export const BeOS: FunctionComponent = () => {
           </Menu>
         </MenuButton>
         <Tray>
-          <menu className="flex gap-1">
-            <li className="flex-none h-4 w-4">…</li>
+          <menu>
+            <li>…</li>
           </menu>
           <Clock />
         </Tray>
-        <Menubar className="flex flex-col">
+        <Menubar>
           {openApplicationIds
             .map((openApplicationId) =>
               Object.values(applications).find(
@@ -119,7 +115,7 @@ export const BeOS: FunctionComponent = () => {
 
               return (
                 <Menuitem
-                  Icon={Icon}
+                  Icon={Icon("beos")}
                   key={id}
                   onClick={undefined}
                   title={title("beos")}

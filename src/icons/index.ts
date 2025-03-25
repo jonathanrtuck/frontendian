@@ -1,2 +1,2 @@
-export { ReactComponent as BeOSLogo } from "./beos_logo.svg";
-export { ReactComponent as BeOSFile } from "./beos_file.svg";
+export { ReactComponent as FileBeOS } from "./file-beos.svg";
+export { ReactComponent as LogoBeOS } from "./logo-beos.svg";

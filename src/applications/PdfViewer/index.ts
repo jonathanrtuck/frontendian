@@ -1,7 +1,8 @@
 import type { Application } from "@/types";
 import { AboutPdfViewer } from "./AboutPdfViewer";
 import { PdfViewer } from "./PdfViewer";
-import { PdfViewerIcon } from "./PdfViewerIcon";
+import { ReactComponent as PDFViewerBeOS } from "./pdf-viewer-beos.svg";
+import { ReactComponent as PDFViewerMacOSClassic } from "./pdf-viewer-mac-os-classic.svg";
 
 export const APPLICATION_PDF_VIEWER: Application = {
   About: AboutPdfViewer,
@@ -13,7 +14,14 @@ export const APPLICATION_PDF_VIEWER: Application = {
           width: "auto",
         }
       : {},
-  Icon: PdfViewerIcon,
+  Icon: (theme) => {
+    switch (theme) {
+      case "beos":
+        return PDFViewerBeOS;
+      case "mac-os-classic":
+        return PDFViewerMacOSClassic;
+    }
+  },
   id: "application-pdf-viewer",
   mimetypes: ["application/pdf"],
   title: () => "PDF Viewer",
