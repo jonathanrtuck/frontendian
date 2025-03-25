@@ -1,5 +1,5 @@
 export * from "./Clock";
-export * from "./Desktop";
+export * from "./Content";
 export * from "./Grid";
 export * from "./IconButton";
 export * from "./Menu";

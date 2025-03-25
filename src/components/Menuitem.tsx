@@ -2,15 +2,19 @@ import type { IconComponent } from "@/types";
 import clsx from "clsx";
 import {
   type ButtonHTMLAttributes,
+  Children,
   type ElementType,
   type FunctionComponent,
   type HTMLAttributes,
-  Children,
   createElement,
 } from "react";
+import type { EmptyObject, RequireAtLeastOne } from "type-fest";
 
 export const Menuitem: FunctionComponent<
-  (ButtonHTMLAttributes<HTMLButtonElement> | HTMLAttributes<HTMLElement>) & {
+  RequireAtLeastOne<
+    ButtonHTMLAttributes<HTMLButtonElement> | HTMLAttributes<HTMLElement>,
+    "aria-label" | "title"
+  > & {
     classes?: Partial<{
       button: string;
       caret: string;
@@ -20,7 +24,13 @@ export const Menuitem: FunctionComponent<
     }>;
     component?: ElementType;
     Icon?: IconComponent;
-  } & ({ title: string } | { "aria-label": string })
+  } & (
+      | {
+          checked?: boolean;
+          type: "checkbox" | "radio";
+        }
+      | EmptyObject
+    )
 > = ({
   children,
   classes = {},
@@ -49,7 +59,9 @@ export const Menuitem: FunctionComponent<
           : undefined,
     },
     <>
-      {Icon ? <Icon className={clsx("menuitem-icon", classes.icon)} /> : null}
+      {Icon ? (
+        <Icon aria-hidden className={clsx("menuitem-icon", classes.icon)} />
+      ) : null}
       {title ? (
         <span aria-hidden className={clsx("menuitem-text", classes.text)}>
           {title}

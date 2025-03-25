@@ -2,7 +2,7 @@ import { BeOS, MacOSClassic } from "@/pages";
 import type { Theme } from "@/types";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router";
 
 const router = createBrowserRouter([
   {

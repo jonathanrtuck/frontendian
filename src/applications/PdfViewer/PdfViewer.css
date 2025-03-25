@@ -1,0 +1,15 @@
+.pdf-viewer {
+  &.isLoading {
+    width: round(down, 1.25 * 612px, 1px);
+  }
+
+  .react-pdf__Page {
+    & + & {
+      border-width: var(--border-width) 0 0;
+    }
+
+    .textLayer :where(span, br) {
+      cursor: var(--cursor--text);
+    }
+  }
+}

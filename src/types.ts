@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
-import type { EmptyObject, SimplifyDeep } from "type-fest";
+import type { EmptyObject, RequireAtLeastOne, SimplifyDeep } from "type-fest";
 
 export type Actions = Readonly<{
   blurWindow(payload: PayloadWithID): void;
@@ -61,7 +61,9 @@ export type File = Readonly<{
   url(theme: Theme): string;
 }>;
 
-export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
+export type IconComponent = ComponentType<
+  RequireAtLeastOne<SVGProps<SVGSVGElement>, "aria-hidden" | "aria-label">
+>;
 
 export type ID = string;
 

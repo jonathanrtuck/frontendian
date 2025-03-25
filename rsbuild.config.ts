@@ -1,7 +1,7 @@
+import path from "node:path";
 import { defineConfig } from "@rsbuild/core";
 import { pluginReact } from "@rsbuild/plugin-react";
 import { pluginSvgr } from "@rsbuild/plugin-svgr";
-import path from "node:path";
 import { pluginHtmlMinifierTerser } from "rsbuild-plugin-html-minifier-terser";
 
 export default defineConfig({
@@ -15,7 +15,7 @@ export default defineConfig({
   plugins: [
     pluginHtmlMinifierTerser(),
     pluginReact(),
-    pluginSvgr({ svgrOptions: { exportType: "default" } }),
+    pluginSvgr({ svgrOptions: { exportType: "named" } }),
   ],
   resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
 });

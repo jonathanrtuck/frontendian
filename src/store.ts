@@ -332,9 +332,11 @@ export const useStore = create(
                 const { marginBottom, marginLeft, marginRight, marginTop } =
                   getComputedStyle(windowElement);
                 const marginX =
-                  parseFloat(marginLeft) + parseFloat(marginRight);
+                  Number.parseFloat(marginLeft) +
+                  Number.parseFloat(marginRight);
                 const marginY =
-                  parseFloat(marginBottom) + parseFloat(marginTop);
+                  Number.parseFloat(marginBottom) +
+                  Number.parseFloat(marginTop);
                 const maxHeight = document.body.offsetHeight - marginY;
                 const maxWidth = document.body.offsetWidth - marginX;
                 const isMaximized =
