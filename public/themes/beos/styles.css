@@ -1,3 +1,94 @@
-body {
-  background-color: pink;
+@layer base {
+  dialog::backdrop {
+    background-color: rgb(0 0 0 / 10%);
+  }
+  ::selection {
+    background-color: rgb(0 0 0);
+    color: rgb(255 255 255);
+  }
+  button {
+    cursor: inherit;
+  }
+}
+
+@layer theme {
+  :root {
+    --bg-default: rgb(222 222 222);
+    --bg-inactive: rgb(232 232 232);
+    --border-dark: rgb(96 96 96);
+    --border-light: rgb(153 153 153);
+    --border: rgb(153 153 153);
+    --color-highlight: rgb(255 255 255 / 60%);
+    --color-lowlight: rgb(0 0 0 / 20%);
+    --font-sans: Helvetica;
+    --font-mono: var(--font-courier-10-pitch);
+    --h-title-bar: 1.6875rem;
+    --inset-shadow-high: inset 1px 1px var(--color-highlight),
+      inset -1px -1px var(--color-lowlight);
+    --inset-shadow-low: inset 1px 1px var(--color-lowlight),
+      inset -1px -1px var(--color-highlight);
+    --p-window: 0.1875rem;
+    --shadow-high: 1px 1px var(--color-lowlight),
+      -1px -1px var(--color-highlight);
+    --shadow-low: 1px 1px var(--color-highlight),
+      -1px -1px var(--color-lowlight);
+    --w-system-bar: 11rem;
+  }
+
+  body {
+    background-color: rgb(51 102 152);
+  }
+}
+
+@layer components {
+  .clock {
+  }
+  .desktop {
+  }
+  .grid {
+    inset: 0;
+    position: fixed;
+  }
+  .grid-selection {
+  }
+  .icon-button {
+  }
+  .icon-button-icon {
+  }
+  .icon-button-text {
+  }
+  .menu {
+  }
+  .menu-button {
+  }
+  .menu-button-icon {
+  }
+  .menuitem-button {
+  }
+  .menuitem-caret {
+  }
+  .menuitem-icon {
+  }
+  .menuitem-text {
+  }
+  .separator {
+  }
+  .system-bar {
+    max-height: 100dvh;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: var(--w-system-bar);
+  }
+  .title {
+  }
+  .title-bar {
+  }
+  .title-bar-button {
+  }
+  .tray {
+  }
+  .window {
+    position: fixed;
+  }
 }
