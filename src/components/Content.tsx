@@ -5,17 +5,15 @@ import clsx from "clsx";
 import { type FunctionComponent, type PropsWithChildren, useRef } from "react";
 
 export const Content: FunctionComponent<
-  PropsWithChildren<{
-    scrollable?: boolean;
-  }>
+  PropsWithChildren<{ scrollable?: boolean }>
 > = ({ children, scrollable = false }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isHorizontal, isVertical] = useOverflow(contentRef);
 
-  if (scrollable) {
+  if (scrollable)
     return (
       <div
-        className={clsx("content", "isScrollable", {
+        className={clsx("content isScrollable", {
           isHorizontal,
           isVertical,
         })}
@@ -23,7 +21,6 @@ export const Content: FunctionComponent<
         <div ref={contentRef}>{children}</div>
       </div>
     );
-  }
 
   return (
     <div className="content" draggable={false}>

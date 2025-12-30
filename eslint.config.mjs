@@ -1,13 +1,11 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypeScript from "eslint-config-next/typescript";
 
-const compat = new FlatCompat({
-  baseDirectory: dirname(fileURLToPath(import.meta.url)),
-});
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-  ...compat.config({
+  { ignores: [".next/**", "out/**", "node_modules/**"] },
+  ...nextCoreWebVitals,
+  ...nextTypeScript,
+  {
     rules: {
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
@@ -39,7 +37,7 @@ const eslintConfig = [
         },
       ],
     },
-  }),
+  },
 ];
 
 export default eslintConfig;

@@ -30,9 +30,7 @@ export const Clock: FunctionComponent = () => {
         dateStyle: "full",
       })}>
       {format === "date" &&
-        date.toLocaleDateString(navigator.language, {
-          dateStyle: "short",
-        })}
+        date.toLocaleDateString(navigator.language, { dateStyle: "short" })}
       {format === "time" &&
         date.toLocaleTimeString(navigator.language, {
           timeStyle: theme === "beos" ? "medium" : "short",

@@ -24,7 +24,6 @@ export type Actions = Readonly<{
   showWindow(payload: PayloadWithID): void;
   zoomWindow(payload: PayloadWithID): void;
 }>;
-
 export type Application = Readonly<{
   About: ComponentType;
   Component: ComponentType<{
@@ -44,50 +43,38 @@ export type Application = Readonly<{
   mimetypes: MimeType[];
   title(theme: Theme): string;
 }>;
-
 export type Coordinates = {
   x: Pixels;
   y: Pixels;
 };
-
 export type Dialog = {
   applicationId: Application["id"];
   id: ID;
   type: "about" | "error";
 };
-
 export type File = Readonly<{
   id: ID;
   mimetype: MimeType;
   title: string;
   url(theme: Theme): string;
 }>;
-
 export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
-
 export type ID = string;
-
 // add others as needed
 export type MimeType = "application/pdf" | "text/markdown";
-
 export type MS = number;
-
 export type PayloadWithID<
   T extends {
     [x: string]: unknown;
     id?: ID;
   } = EmptyObject
 > = { id: ID } & T;
-
 export type Percentage = number;
-
 export type Pixels = number;
-
 export type Size = {
   height: Pixels | "auto";
   width: Pixels | "auto";
 };
-
 export type State = {
   dialogs: Dialog[];
   expandedMenuitemIds: ID[];
@@ -95,11 +82,8 @@ export type State = {
   stackingOrder: (Application["id"] | ID)[];
   windows: Window[];
 };
-
 export type Theme = "beos" | "mac-os-classic";
-
 export type URL = string;
-
 export type Window = SimplifyDeep<
   Coordinates &
     Size & {
@@ -111,16 +95,7 @@ export type Window = SimplifyDeep<
       prev?: Coordinates & Size;
       resizable: boolean;
       title: string;
-      titlebar: {
-        left: Percentage;
-      };
+      titlebar: { left: Percentage };
     }
 > &
-  (
-    | {
-        Component: ComponentType;
-      }
-    | {
-        fileId?: File["id"];
-      }
-  );
+  ({ Component: ComponentType } | { fileId?: File["id"] });

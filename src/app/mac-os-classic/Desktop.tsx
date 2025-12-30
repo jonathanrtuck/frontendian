@@ -187,11 +187,10 @@ export const Desktop: FunctionComponent = () => {
                     checked={applicationId === activeApplication.id}
                     key={applicationId}
                     onClick={() => {
-                      if (firstApplicationWindow) {
+                      if (firstApplicationWindow)
                         focusWindow({ id: firstApplicationWindow.id });
-                      } else if (focusedWindow) {
+                      else if (focusedWindow)
                         blurWindow({ id: focusedWindow.id });
-                      }
                     }}
                     title={application.title("mac-os-classic")}
                     type="radio"
@@ -247,11 +246,20 @@ export const Desktop: FunctionComponent = () => {
               id={id}
               key={id}
               onBlur={() => blurWindow({ id })}
-              onDrag={(coordinates) => moveWindow({ id, ...coordinates })}
+              onDrag={(coordinates) =>
+                moveWindow({
+                  ...coordinates,
+                  id,
+                })
+              }
               onFocus={() => focusWindow({ id })}
               onResize={
                 resizable && !collapsed
-                  ? (size) => resizeWindow({ id, ...size })
+                  ? (size) =>
+                      resizeWindow({
+                        ...size,
+                        id,
+                      })
                   : undefined
               }
               width={width}

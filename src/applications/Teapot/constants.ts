@@ -2,7 +2,6 @@ type Color = [red: number, green: number, blue: number, alpha: number];
 
 export const COLOR_BLACK: Color = [0, 0, 0, 1];
 export const COLOR_RED: Color = [1, 0, 0, 1];
-
 // @see https://people.sc.fsu.edu/%7Ejburkardt/data/obj/teapot.obj
 // face vertices
 export const INDICES = [
@@ -203,7 +202,6 @@ export const INDICES = [
   530, 529, 525, 525, 526, 530, 467, 406, 466, 466, 527, 467, 468, 467, 527,
   527, 528, 468, 469, 468, 528, 528, 529, 469, 470, 469, 529, 529, 530, 470,
 ].map((x) => x - 1);
-
 // normals
 export const NORMALS = [
   -0.966742, -0.255752, 9.97231e-9, -0.966824, 0.255443, 3.11149e-8, -0.092052,
@@ -435,7 +433,6 @@ export const NORMALS = [
   0.217978, 0.971775, -0.0902162, 0.15959, 0.984977, -0.0659615, 0.350498,
   0.925312, -0.14474, 0.48559, 0.850653, -0.201474,
 ];
-
 // vertex positions
 export const POSITIONS = [
   1.3542200000000002, 0.9448566666666667, -0.036934666666666664,
@@ -877,7 +874,6 @@ export const POSITIONS = [
   -0.34375, 1.0383566666666666, 1.0292433333333333, -0.4669433333333333,
   1.1640066666666666, 0.9448566666666667, -0.5204033333333333,
 ];
-
 export const SOURCE_FS = `
   varying lowp vec4 vColor;
   varying highp vec3 vLighting;
@@ -886,7 +882,6 @@ export const SOURCE_FS = `
     gl_FragColor = vec4(vColor.rgb * vLighting, vColor.a);
   }
 `;
-
 export const SOURCE_VS = `
   attribute vec3 aVertexNormal;
   attribute vec4 aVertexPosition;

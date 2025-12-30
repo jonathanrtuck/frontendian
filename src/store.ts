@@ -17,9 +17,7 @@ const DEFAULT_WINDOW: Window = {
   id: "",
   resizable: true,
   title: "Untitled",
-  titlebar: {
-    left: 0,
-  },
+  titlebar: { left: 0 },
   width: 600,
   x: DEFAULT_WINDOW_POSITION_OFFSET,
   y: DEFAULT_WINDOW_POSITION_OFFSET,
@@ -34,9 +32,7 @@ const getFirstOpenWindowPosition = (windows: Window[]): Pixels => {
       ({ x, y }) => x !== position || y !== position
     );
 
-    if (isPositionOpen) {
-      return position;
-    }
+    if (isPositionOpen) return position;
   }
 
   return (
@@ -80,9 +76,7 @@ export const useStore = create(
                 ({ id }) => id === payload.id
               );
 
-              if (!application) {
-                return prevState;
-              }
+              if (!application) return prevState;
 
               const applicationWindowIds = prevState.windows
                 .filter(({ applicationId }) => applicationId === application.id)
@@ -115,9 +109,7 @@ export const useStore = create(
                 ({ id }) => id === payload.id
               );
 
-              if (!dialog) {
-                return prevState;
-              }
+              if (!dialog) return prevState;
 
               const nextState = {
                 dialogs: prevState.dialogs.filter(
@@ -129,25 +121,19 @@ export const useStore = create(
                 ({ id }) => id === dialog.applicationId
               );
 
-              if (!application) {
-                return nextState;
-              }
+              if (!application) return nextState;
 
               const applicationWindowIds = prevState.windows
                 .filter(({ applicationId }) => applicationId === application.id)
                 .map(({ id }) => id);
 
-              if (applicationWindowIds.length === 0) {
-                return nextState;
-              }
+              if (applicationWindowIds.length === 0) return nextState;
 
               const highestWindowId = prevState.stackingOrder
                 .toReversed()
                 .find((id) => applicationWindowIds.includes(id));
 
-              if (!highestWindowId) {
-                return nextState;
-              }
+              if (!highestWindowId) return nextState;
 
               return {
                 ...nextState,
@@ -177,15 +163,13 @@ export const useStore = create(
                 ({ id }) => id === payload.id
               );
 
-              if (!window) {
-                return prevState;
-              }
+              if (!window) return prevState;
 
               const application = Object.values(applications).find(
                 ({ id }) => id === window.applicationId
               );
 
-              if (!application) {
+              if (!application)
                 return {
                   stackingOrder: prevState.stackingOrder.filter(
                     (id) => id !== payload.id
@@ -194,7 +178,6 @@ export const useStore = create(
                     ({ id }) => id !== payload.id
                   ),
                 };
-              }
 
               const applicationWindowIds = prevState.windows
                 .filter(({ applicationId }) => applicationId === application.id)
@@ -229,9 +212,7 @@ export const useStore = create(
             (prevState) => {
               const index = prevState.expandedMenuitemIds.indexOf(payload.id);
 
-              if (index === -1) {
-                return prevState;
-              }
+              if (index === -1) return prevState;
 
               return {
                 expandedMenuitemIds: prevState.expandedMenuitemIds.slice(
@@ -269,9 +250,7 @@ export const useStore = create(
             (prevState) => {
               const menuitem = document.getElementById(payload.id);
 
-              if (!menuitem) {
-                return prevState;
-              }
+              if (!menuitem) return prevState;
 
               const siblingIds = Array.from(
                 menuitem.parentElement?.children ?? []
@@ -297,9 +276,8 @@ export const useStore = create(
               if (
                 !parentId ||
                 !prevState.expandedMenuitemIds.includes(parentId)
-              ) {
+              )
                 return { expandedMenuitemIds: [payload.id] };
-              }
 
               return {
                 expandedMenuitemIds: [
@@ -396,9 +374,7 @@ export const useStore = create(
           set(
             (prevState) => ({
               windows: prevState.windows.map((window) => {
-                if (window.id !== payload.id) {
-                  return window;
-                }
+                if (window.id !== payload.id) return window;
 
                 const windowElement = document.getElementById(window.id)!;
                 const { marginBottom, marginLeft, marginRight, marginTop } =
@@ -417,13 +393,12 @@ export const useStore = create(
                   window.width >= maxWidth - WINDOW_DIMENSION_BUFFER &&
                   window.width <= maxWidth + WINDOW_DIMENSION_BUFFER;
 
-                if (isMaximized) {
+                if (isMaximized)
                   return {
                     ...window,
                     ...window.prev,
                     prev: undefined,
                   };
-                }
 
                 return {
                   ...window,
@@ -492,9 +467,7 @@ export const useStore = create(
                 ({ id }) => id === payload.id
               );
 
-              if (!application) {
-                return prevState;
-              }
+              if (!application) return prevState;
 
               const isApplicationOpen = prevState.openApplicationIds.includes(
                 payload.id
@@ -507,7 +480,7 @@ export const useStore = create(
                     applicationId === application.id && !hidden
                 );
 
-                if (firstVisibleWindow) {
+                if (firstVisibleWindow)
                   return {
                     stackingOrder: [
                       ...prevState.stackingOrder.filter(
@@ -520,7 +493,6 @@ export const useStore = create(
                       focused: window.id === firstVisibleWindow.id,
                     })),
                   };
-                }
 
                 return prevState;
               }
@@ -585,16 +557,14 @@ export const useStore = create(
                 ({ id }) => id === payload.id
               );
 
-              if (!file) {
-                return prevState;
-              }
+              if (!file) return prevState;
 
               const fileWindow = prevState.windows.find(
                 (window) => "fileId" in window && window.fileId === file.id
               );
 
               // if the file is already open, unhide and/or focus its window
-              if (fileWindow) {
+              if (fileWindow)
                 return {
                   stackingOrder: [
                     ...prevState.stackingOrder.filter(
@@ -608,22 +578,19 @@ export const useStore = create(
                     hidden: window.hidden && window.id !== fileWindow.id,
                   })),
                 };
-              }
 
               const application = Object.values(applications).find(
                 ({ mimetypes }) => mimetypes.includes(file.mimetype)
               );
 
-              if (!application) {
-                return prevState;
-              }
+              if (!application) return prevState;
 
               const existingWindow = payload.windowId
                 ? prevState.windows.find(({ id }) => id === payload.windowId)
                 : undefined;
 
               // if opening file in an existing window
-              if (existingWindow) {
+              if (existingWindow)
                 return {
                   stackingOrder: [
                     ...prevState.stackingOrder.filter(
@@ -646,7 +613,6 @@ export const useStore = create(
                         }
                   ),
                 };
-              }
 
               const isApplicationOpen = prevState.openApplicationIds.includes(
                 application.id
@@ -694,9 +660,7 @@ export const useStore = create(
                 ({ id }) => id === payload.id
               );
 
-              if (!application) {
-                return prevState;
-              }
+              if (!application) return prevState;
 
               const isApplicationOpen = prevState.openApplicationIds.includes(
                 payload.id
@@ -784,14 +748,12 @@ export const useStore = create(
           set(
             (prevState) => ({
               windows: prevState.windows.map((window) => {
-                if (window.id !== payload.id) {
-                  return window;
-                }
+                if (window.id !== payload.id) return window;
 
                 const isZoomed =
                   window.height === "auto" && window.width === "auto";
 
-                if (isZoomed) {
+                if (isZoomed)
                   return {
                     ...window,
                     collapsed: false,
@@ -799,7 +761,6 @@ export const useStore = create(
                     prev: undefined,
                     width: window.prev?.width ?? window.width,
                   };
-                }
 
                 return {
                   ...window,

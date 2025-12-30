@@ -11,9 +11,7 @@ import { type EmptyObject } from "type-fest";
 // @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 export const Menu: FunctionComponent<
   PropsWithChildren<
-    {
-      id?: string;
-    } & (
+    { id?: string } & (
       | {
           bar: true;
           collapsible?: boolean;

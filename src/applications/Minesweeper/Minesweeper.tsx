@@ -8,16 +8,6 @@ import clsx from "clsx";
 import localFont from "next/font/local";
 import { useEffect, useRef, useState } from "react";
 
-const FONT_DIGITAL_DISMAY = localFont({
-  src: "./DigitalDismay.otf",
-  variable: "--font-family--digital-dismay",
-});
-
-const FONT_MINE_SWEEPER = localFont({
-  src: "./MineSweeper.otf",
-  variable: "--font-family--mine-sweeper",
-});
-
 type Coordinates = [rowIndex: number, columnIndex: number];
 type Level = "beginner" | "expert" | "intermediate";
 type Square = {
@@ -26,6 +16,15 @@ type Square = {
   isRevealed: boolean;
   numAdjacentMines: number | undefined;
 };
+
+const FONT_DIGITAL_DISMAY = localFont({
+  src: "./DigitalDismay.otf",
+  variable: "--font-family--digital-dismay",
+});
+const FONT_MINE_SWEEPER = localFont({
+  src: "./MineSweeper.otf",
+  variable: "--font-family--mine-sweeper",
+});
 
 const getAdjacentSquareCoordinates = (
   numRows: number,
@@ -57,11 +56,7 @@ const getAdjacentSquareCoordinates = (
         columnIndex !== -1 &&
         columnIndex !== numColumns
     );
-
-export const getInitialSquares = (
-  numRows: number,
-  numColumns: number
-): Square[][] =>
+const getInitialSquares = (numRows: number, numColumns: number): Square[][] =>
   new Array(numRows).fill(
     new Array(numColumns).fill({
       hasFlag: false,
@@ -90,9 +85,7 @@ const getMineCoordinates = (
     const isEqualWith = isEqualCoordinates(coordinates);
 
     // square to avoid or already has mine
-    if (isEqualWith(avoidCoordinates) || arr.some(isEqualWith)) {
-      continue;
-    }
+    if (isEqualWith(avoidCoordinates) || arr.some(isEqualWith)) continue;
 
     arr.push(coordinates);
   }
@@ -110,9 +103,7 @@ const revealSquare = (
   const square = squares[rowIndex][columnIndex];
   const { hasMine, isRevealed, numAdjacentMines } = square;
 
-  if (isRevealed) {
-    return squares;
-  }
+  if (isRevealed) return squares;
 
   const isEqualCoordinatesTo = isEqualCoordinates(coordinates);
   const nextSquares = squares.map((row, rowIndex) =>
@@ -123,7 +114,7 @@ const revealSquare = (
     }))
   );
 
-  if (!hasMine && numAdjacentMines === 0) {
+  if (!hasMine && numAdjacentMines === 0)
     return getAdjacentSquareCoordinates(
       numRows,
       numColumns,
@@ -132,7 +123,6 @@ const revealSquare = (
       (acc, coordinates) => revealSquare(numRows, numColumns, acc, coordinates),
       nextSquares
     );
-  }
 
   return nextSquares;
 };
@@ -194,16 +184,14 @@ export const Minesweeper: Application["Component"] = () => {
     .every(({ hasMine, isRevealed }) => isRevealed !== hasMine);
 
   useEffect(() => {
-    if (elapsedTime === 1) {
+    if (elapsedTime === 1)
       intervalRef.current = setInterval(
         () => setElapsedTime((prevState) => prevState + 1),
         1000
       );
-    }
 
-    if (intervalRef.current && (elapsedTime === 0 || elapsedTime === 999)) {
+    if (intervalRef.current && (elapsedTime === 0 || elapsedTime === 999))
       clearInterval(intervalRef.current);
-    }
   }, [elapsedTime]);
   useEffect(
     () =>
@@ -342,6 +330,7 @@ export const Minesweeper: Application["Component"] = () => {
                                         ),
                                       }))
                                   );
+
                                   const nextSquares = squaresWithMines.map(
                                     (row, rowIndex) =>
                                       row.map((square, columnIndex) => ({
@@ -373,7 +362,7 @@ export const Minesweeper: Application["Component"] = () => {
                                     coordinates
                                   );
                                 });
-                              } else {
+                              } else
                                 setSquares((prevState) =>
                                   revealSquare(
                                     DEFAULT_STATE[level].numRows,
@@ -382,7 +371,6 @@ export const Minesweeper: Application["Component"] = () => {
                                     coordinates
                                   )
                                 );
-                              }
                             }
                       }
                       onContextMenu={

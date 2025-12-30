@@ -23,9 +23,7 @@ export const Menubar: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
   useLayoutEffect(() => setRoot(document.getElementById(MENU_BAR_ID)), [theme]);
 
-  if (root) {
-    return current ? createPortal(children, root) : null;
-  }
+  if (root) return current ? createPortal(children, root) : null;
 
   return (
     <Menu bar horizontal>

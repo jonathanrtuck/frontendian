@@ -26,9 +26,7 @@ export const Menuitem: FunctionComponent<
     } & (
       | PropsWithChildren
       | Pick<LinkProps, "href"> // add others as needed
-      | ({
-          onClick?(): void;
-        } & (
+      | ({ onClick?(): void } & (
           | {
               checked?: boolean;
               type: "checkbox" | "radio";
@@ -97,6 +95,7 @@ export const Menuitem: FunctionComponent<
   const collapseAll = ({ currentTarget }: UIEvent<HTMLElement>) => {
     if (expandedMenuitemIds.length !== 0) {
       collapseMenuitem({ id: expandedMenuitemIds.at(0)! });
+
       currentTarget.blur();
     }
   };
@@ -122,7 +121,7 @@ export const Menuitem: FunctionComponent<
     [expanded, getButton, getChildMenuitems]
   );
 
-  if ("separator" in props) {
+  if ("separator" in props)
     return (
       <li
         className="menuitem"
@@ -137,7 +136,6 @@ export const Menuitem: FunctionComponent<
         tabIndex={-1}
       />
     );
-  }
 
   const { disabled = false, Icon, title } = props;
   const checked = "checked" in props && props.checked;
@@ -146,14 +144,10 @@ export const Menuitem: FunctionComponent<
   const type = "type" in props ? props.type : undefined;
   const haspopup = Boolean(children);
   const onClick = (e: UIEvent<HTMLElement>) => {
-    if ("onClick" in props && !checked && !disabled) {
-      props.onClick?.();
-    }
-    if (haspopup && !expanded) {
-      expandMenuitem({ id });
-    } else {
-      collapseAll(e);
-    }
+    if ("onClick" in props && !checked && !disabled) props.onClick?.();
+
+    if (haspopup && !expanded) expandMenuitem({ id });
+    else collapseAll(e);
   };
   const anchorProps: AnchorHTMLAttributes<HTMLAnchorElement> = {
     ["aria-checked"]: type ? checked : undefined,
@@ -174,9 +168,7 @@ export const Menuitem: FunctionComponent<
       switch (e.key) {
         case "ArrowDown":
           if (getIsTopMenuitem() && getIsParentMenuHorizontal()) {
-            if (haspopup && !expanded) {
-              expandMenuitem({ id });
-            }
+            if (haspopup && !expanded) expandMenuitem({ id });
           } else {
             const siblingMenuitemButtons = getSiblingMenuitemButtons();
             const index = siblingMenuitemButtons.indexOf(e.currentTarget);
@@ -212,9 +204,7 @@ export const Menuitem: FunctionComponent<
                 : -1;
 
               parentMenuitemButtons.at(parentIndex - 1)?.focus();
-            } else {
-              getButton(getParentMenuitem())?.focus();
-            }
+            } else getButton(getParentMenuitem())?.focus();
           }
           break;
         case "ArrowRight":
@@ -226,14 +216,10 @@ export const Menuitem: FunctionComponent<
               siblingMenuitemButtons
                 .at((index + 1) % siblingMenuitemButtons.length)
                 ?.focus();
-            } else if (haspopup && !expanded) {
-              expandMenuitem({ id });
-            }
+            } else if (haspopup && !expanded) expandMenuitem({ id });
           } else {
             if (haspopup) {
-              if (!expanded) {
-                expandMenuitem({ id });
-              }
+              if (!expanded) expandMenuitem({ id });
             } else {
               const parentMenuitem = getParentMenuitem();
               const grandparentMenu = parentMenuitem?.parentElement;
@@ -258,9 +244,7 @@ export const Menuitem: FunctionComponent<
           break;
         case "ArrowUp":
           if (getIsTopMenuitem() && getIsParentMenuHorizontal()) {
-            if (haspopup && !expanded) {
-              expandMenuitem({ id });
-            }
+            if (haspopup && !expanded) expandMenuitem({ id });
           } else {
             const siblingMenuitemButtons = getSiblingMenuitemButtons();
             const index = siblingMenuitemButtons.indexOf(e.currentTarget);
@@ -283,14 +267,9 @@ export const Menuitem: FunctionComponent<
     onMouseEnter: ({ currentTarget }) => {
       if (document.hasFocus() && getMenubarHasFocus()) {
         if (getIsTopMenuitem()) {
-          if (theme === "mac-os-classic") {
-            expandMenuitem({ id });
-          }
-        } else if (haspopup) {
-          expandMenuitem({ id });
-        } else {
-          currentTarget.focus();
-        }
+          if (theme === "mac-os-classic") expandMenuitem({ id });
+        } else if (haspopup) expandMenuitem({ id });
+        else currentTarget.focus();
       }
     },
     onPointerDown: (e) =>

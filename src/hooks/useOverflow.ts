@@ -12,9 +12,7 @@ export const useOverflow = (
     const element = ref.current;
     const parent = element?.parentElement;
 
-    if (!element || !parent) {
-      return;
-    }
+    if (!element || !parent) return;
 
     const setOverflow = () => {
       setHorizontal(element.scrollWidth > parent.clientWidth);
@@ -24,6 +22,7 @@ export const useOverflow = (
 
     resizeObserver.observe(parent);
     resizeObserver.observe(element);
+
     setOverflow();
 
     return () => {

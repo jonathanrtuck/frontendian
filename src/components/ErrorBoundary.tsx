@@ -12,27 +12,19 @@ export class ErrorBoundary extends Component<
     fallback?: ReactNode;
     onError?(error: Error): void;
   }>,
-  {
-    hasError: boolean;
-  }
+  { hasError: boolean }
 > {
   static displayName = "ErrorBoundary";
 
-  state = {
-    hasError: false,
-  };
+  state = { hasError: false };
 
   static getDerivedStateFromError() {
-    return {
-      hasError: true,
-    };
+    return { hasError: true };
   }
 
   componentDidCatch(error: Error, { componentStack }: ErrorInfo) {
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
+    if (process.env.NODE_ENV === "development")
       console.error(error, componentStack);
-    }
 
     this.props.onError?.(error);
   }
@@ -41,9 +33,7 @@ export class ErrorBoundary extends Component<
     const { children, fallback } = this.props;
     const { hasError } = this.state;
 
-    if (hasError) {
-      return fallback;
-    }
+    if (hasError) return fallback;
 
     return children;
   }

@@ -54,6 +54,7 @@ export const TextEditor: Application["Component"] = ({ fileId, windowId }) => {
 
       return () => {
         controller.abort();
+
         setIsLoading(false);
       };
     }

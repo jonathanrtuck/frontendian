@@ -13,9 +13,7 @@ export const Teapot: Application["Component"] = () => {
   const rootRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (rootRef.current) {
-      main(rootRef.current);
-    }
+    if (rootRef.current) main(rootRef.current);
   }, []);
 
   return (

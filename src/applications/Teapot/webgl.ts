@@ -14,9 +14,7 @@ import {
 export const main = (canvas: HTMLCanvasElement): void => {
   const gl = canvas.getContext("webgl");
 
-  if (gl === null) {
-    return;
-  }
+  if (gl === null) return;
 
   const shaderProgram = gl.createProgram();
   const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
@@ -26,9 +24,8 @@ export const main = (canvas: HTMLCanvasElement): void => {
     shaderProgram === null ||
     fragmentShader === null ||
     vertexShader === null
-  ) {
+  )
     return;
-  }
 
   const indexBuffer = gl.createBuffer();
   const normalBuffer = gl.createBuffer();

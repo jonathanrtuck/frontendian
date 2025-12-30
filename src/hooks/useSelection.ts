@@ -34,6 +34,7 @@ export const useSelection = (ref: RefObject<HTMLElement | null>): Selection => {
   const onMouseUp = useCallback(() => {
     document.removeEventListener("mousemove", onMouseMove);
     document.removeEventListener("mouseup", onMouseUp);
+
     setUserSelect(true);
     setSelection({});
   }, [onMouseMove]);
@@ -49,6 +50,7 @@ export const useSelection = (ref: RefObject<HTMLElement | null>): Selection => {
       if ((button === 0 || buttons === 1) && target === currentTarget) {
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
+
         setUserSelect(false);
         setSelection({
           from: {
@@ -71,6 +73,7 @@ export const useSelection = (ref: RefObject<HTMLElement | null>): Selection => {
         document.removeEventListener("mouseup", onMouseUp);
         document.removeEventListener("mousemove", onMouseMove);
         element.removeEventListener("mousedown", onMouseDown);
+
         setUserSelect(true);
       };
     }

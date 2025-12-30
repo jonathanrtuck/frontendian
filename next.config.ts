@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -9,7 +8,7 @@ const nextConfig: NextConfig = {
     config.module.rules
       .find(({ oneOf }: any) => Array.isArray(oneOf))
       ?.oneOf.filter(({ use }: any) => Array.isArray(use))
-      .forEach(({ use }: any) => {
+      .forEach(({ use }: any) =>
         use.forEach((moduleLoader: any) => {
           if (
             moduleLoader.loader &&
@@ -17,7 +16,7 @@ const nextConfig: NextConfig = {
             !moduleLoader.loader.includes("postcss-loader") &&
             typeof moduleLoader.options.modules === "object" &&
             !moduleLoader.options.fontLoader
-          ) {
+          )
             moduleLoader.options = {
               ...moduleLoader.options,
               modules: {
@@ -25,9 +24,8 @@ const nextConfig: NextConfig = {
                 mode: "global",
               },
             };
-          }
-        });
-      });
+        })
+      );
 
     return config;
   },

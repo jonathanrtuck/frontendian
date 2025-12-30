@@ -18,9 +18,8 @@ export const useFocus = ({
           ? ref.current.querySelector<HTMLElement>(selector)
           : ref.current;
 
-        if (element && !element.contains(document.activeElement)) {
+        if (element && !element.contains(document.activeElement))
           element.focus();
-        }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

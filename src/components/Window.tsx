@@ -64,31 +64,27 @@ export const Window: FunctionComponent<
     const root = rootRef.current;
 
     if (root && props.height === "auto") {
-      const resizeObserver = new ResizeObserver(() => {
-        setHeight(root.getBoundingClientRect().height ?? 0);
-      });
+      const resizeObserver = new ResizeObserver(() =>
+        setHeight(root.getBoundingClientRect().height ?? 0)
+      );
 
       resizeObserver.observe(root);
 
       return () => resizeObserver.unobserve(root);
-    } else {
-      setHeight(props.height);
-    }
+    } else setHeight(props.height);
   }, [props.height]);
   useLayoutEffect(() => {
     const root = rootRef.current;
 
     if (root && props.width === "auto") {
-      const resizeObserver = new ResizeObserver(() => {
-        setWidth(root.getBoundingClientRect().width ?? 0);
-      });
+      const resizeObserver = new ResizeObserver(() =>
+        setWidth(root.getBoundingClientRect().width ?? 0)
+      );
 
       resizeObserver.observe(root);
 
       return () => resizeObserver.unobserve(root);
-    } else {
-      setWidth(props.width);
-    }
+    } else setWidth(props.width);
   }, [props.width]);
 
   return (
