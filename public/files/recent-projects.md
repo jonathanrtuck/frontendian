@@ -1,5 +1,13 @@
 # Recent Projects
 
+## [os](https://github.com/jonathanrtuck/os)
+
+- A design exploration for a document-centric operating system
+- Inverts the traditional model: _OS → Document → Tool_ instead of _OS → App → File_
+- Fully content-aware through [mimetypes](https://developer.mozilla.org/en-US/docs/Web/HTTP/MIME_types) and rich queryable metadata
+
+So far, the project has produced a bare-metal [aarch64](https://en.wikipedia.org/wiki/AArch64) microkernel written in [Rust](https://www.rust-lang.org/) that boots in [QEMU](https://www.qemu.org/). Notably, the kernel is a well-documented, general-purpose implementation — not coupled to the document-centric design above.
+
 ## [BankX](https://bankx.io/)
 
 Redesign of the BankX website ([previous design](/images/bankx-before.png)) using [NextJS](https://nextjs.org/docs) and [web3](https://docs.ethers.org/v6/).
