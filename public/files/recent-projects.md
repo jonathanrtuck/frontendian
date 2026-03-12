@@ -8,10 +8,6 @@
 
 So far, the project has produced a bare-metal [aarch64](https://en.wikipedia.org/wiki/AArch64) microkernel written in [Rust](https://www.rust-lang.org/) that boots in [QEMU](https://www.qemu.org/). Notably, the kernel is a well-documented, general-purpose implementation — not coupled to the document-centric design above.
 
-## [BankX](https://bankx.io/)
-
-Redesign of the BankX website ([previous design](/images/bankx-before.png)) using [NextJS](https://nextjs.org/docs) and [web3](https://docs.ethers.org/v6/).
-
 ## [Mario](https://jonathanrtuck.github.io/mario/) ([Repo](https://github.com/jonathanrtuck/mario))
 
 Recreation of World 1 Level 1 from [Super Mario Bros.](https://en.wikipedia.org/wiki/Super_Mario_Bros.) using [canvas](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas).
