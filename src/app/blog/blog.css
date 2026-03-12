@@ -1,0 +1,20 @@
+:root {
+  background-color: rgb(255 255 255);
+  height: initial;
+  overflow: initial;
+  width: initial;
+}
+
+body {
+  color: rgb(0 0 0);
+  cursor: initial;
+  font-family: system-ui;
+  overflow: initial;
+  position: initial;
+}
+
+article {
+  margin-inline: auto;
+  max-width: 56rem;
+  padding: 1rem;
+}

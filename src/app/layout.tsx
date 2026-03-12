@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "frontendian",
 };
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#000",
 };
 
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => children;

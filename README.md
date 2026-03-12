@@ -2,7 +2,7 @@
 
 Portfolio site for Jonathan Tucker
 
-## Todo
+## todo
 
 - mac os classic theme
   - only drag/resize window outline

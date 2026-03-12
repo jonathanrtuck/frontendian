@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import nextMdx from "@next/mdx";
 import { type NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const nextConfig: NextConfig = nextMdx({
+  extension: /\.mdx?$/,
+})({
   output: "export",
+  pageExtensions: ["md", "mdx", "ts", "tsx"],
   productionBrowserSourceMaps: true,
   reactStrictMode: true,
   webpack: (config) => {
@@ -31,6 +35,6 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-};
+});
 
 export default nextConfig;
